@@ -1,27 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head><meta name="generator" content="Hexo 3.8.0">
-    
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    
-    
-    <title>Django基础学习Ⅰ | 生活如此欠揍</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="django, python">
-    <meta name="description" content="一、Django简介 Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手Django Reinhardt来命名的。   Django是一个处理网络请求的">
+  <meta charset="utf-8">
+  
+  <title>Django基础学习Ⅰ | 生活如此欠揍</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="MinHow,MinHow's Blog">
+  
+  <meta name="description" content="一、Django简介 Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手Django Reinhardt来命名的。   Django是一个处理网络请求的">
 <meta name="keywords" content="django, python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django基础学习Ⅰ">
@@ -43,170 +30,132 @@
 <meta name="twitter:title" content="Django基础学习Ⅰ">
 <meta name="twitter:description" content="一、Django简介 Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手Django Reinhardt来命名的。   Django是一个处理网络请求的">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/180725/D3jDggcidI.png?imageslim">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
 
-    <!-- custom head -->
-    
+  
+  
 
 </head>
-
+</html>
 <body>
-    <div id="loading" class="active"></div>
-
-    <aside id="menu" class="hide">
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Zhdya</h5>
-          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
-        </hgroup>
-      </div>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">MinHow&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        MinHow&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 WEB 开发的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="MinHow" target="_blank" href="//minhow.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/wongminho">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/WongMinHo">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/huangminhow">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Django 基础学习Ⅰ" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
         
-            <li class="waves-block waves-effect">
-              <a href="/">
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives">
-                <i class="icon icon-lg icon-archives"></i>
-                Archives
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags">
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories">
-                <i class="icon icon-lg icon-th-list"></i>
-                Categories
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/yscoder" target="_blank">
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="http://www.weibo.com/ysweb" target="_blank">
-                <i class="icon icon-lg icon-weibo"></i>
-                Weibo
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/custom">
-                <i class="icon icon-lg icon-link"></i>
-                测试
-              </a>
-            </li>
-        
+  
+    <h1 class="post-title" itemprop="name">
+      Django基础学习Ⅰ
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Python3/">Python3</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-02-09
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
       </ul>
     </div>
-  </div>
-</aside>
+  
 
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Django基础学习Ⅰ</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Django基础学习Ⅰ</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2019-02-09T01:26:55.151Z" itemprop="datePublished" class="page-time">
-  2019-02-09
-</time>
-
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python3/">Python3</a></li></ul>
-
-            
-        </h5>
-    </div>
-
+          
+      </header>
     
-
-
-</header>
-
-
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、Django简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">一、Django简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、Django特点"><span class="post-toc-number">2.</span> <span class="post-toc-text">二、Django特点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、安装Django"><span class="post-toc-number">3.</span> <span class="post-toc-text">三、安装Django</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、创建项目"><span class="post-toc-number">4.</span> <span class="post-toc-text">四、创建项目</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-1、项目目录结构"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">4.1、项目目录结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#setting-py"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">setting.py</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#五、创建app"><span class="post-toc-number">5.</span> <span class="post-toc-text">五、创建app</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#六、Django的解析顺序"><span class="post-toc-number">6.</span> <span class="post-toc-text">六、Django的解析顺序</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-1、创建urls-py文件"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">6.1、创建urls.py文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置-view-py文件"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">配置 view.py文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-2、如果再次增加内容："><span class="post-toc-number">6.3.</span> <span class="post-toc-text">6.2、如果再次增加内容：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#urls-py"><span class="post-toc-number">6.3.1.</span> <span class="post-toc-text">urls.py</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#views-py"><span class="post-toc-number">6.3.2.</span> <span class="post-toc-text">views.py</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-3、urls捕获参数（匹配正则表达式）"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">6.3、urls捕获参数（匹配正则表达式）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#url参数的捕获有两种方式："><span class="post-toc-number">6.5.</span> <span class="post-toc-text">url参数的捕获有两种方式：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#七、urls重定向"><span class="post-toc-number">7.</span> <span class="post-toc-text">七、urls重定向</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#修改urls-py"><span class="post-toc-number">7.0.1.</span> <span class="post-toc-text">修改urls.py</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#修改views-py"><span class="post-toc-number">7.0.2.</span> <span class="post-toc-text">修改views.py</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-
-
-<article id="post-Django 基础学习Ⅰ" class="post-article article-type-post fade" itemprop="blogPost">
-
-    <div class="post-card">
-        <h1 class="post-card-title">Django基础学习Ⅰ</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2019-02-09 09:26:55" datetime="2019-02-09T01:26:55.151Z" itemprop="datePublished">2019-02-09</time>
-
+    <div class="article-entry post-content" itemprop="articleBody">
+      
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python3/">Python3</a></li></ul>
-
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style="display:none">
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
             <h3 id="一、Django简介"><a href="#一、Django简介" class="headerlink" title="一、Django简介"></a>一、Django简介</h3><blockquote>
 <p>Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手Django Reinhardt来命名的。</p>
 </blockquote>
@@ -230,44 +179,20 @@
 <p>然后在当前目录下就自动生成了一个firstproject的项目<br>然后就可以启动这个项目了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># python manage.py runserver 127.0.0.1:8080</span><br></pre></td></tr></table></figure></p>
 <p>默认不写ip绑定的是本机的所以ip地址，端口默认为8000</p>
 <p><strong>也可以通过在pycharm中直接创建一个Django项目</strong>，就自动创建好了文件，然后配置manage.py脚本的参数。</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180725/D3jDggcidI.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/D3jDggcidI.png?imageslim" alt="mark"></p>
 <p>直接再次运行manage.py文件就好。</p>
 <p>然后访问url：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:8080</span><br></pre></td></tr></table></figure></p>
 <p>有一个欢迎的首页</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180725/mi76HkFJEd.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/mi76HkFJEd.png?imageslim" alt="mark"></p>
 <h4 id="4-1、项目目录结构"><a href="#4-1、项目目录结构" class="headerlink" title="4.1、项目目录结构"></a>4.1、项目目录结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">第一层：DjangoTest    项目名称</span><br><span class="line"></span><br><span class="line">第二层： DjangoTest目录和__init__.py文件，声明是一个包，表示项目实际的python包，不要随意更改该目录，与配置有关联</span><br><span class="line"></span><br><span class="line">settings.py    	项目的全局（所有项目）配置中心</span><br><span class="line"></span><br><span class="line">urls.py      	项目的url配置中心</span><br><span class="line"></span><br><span class="line">wsgi.py      	项目的wsgi配置中心</span><br><span class="line"></span><br><span class="line">templates	模板目录</span><br><span class="line"></span><br><span class="line">manage.py	django命令管理脚本</span><br></pre></td></tr></table></figure>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180725/LIB0BALa1a.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/LIB0BALa1a.png?imageslim" alt="mark"></p>
 <h4 id="setting-py"><a href="#setting-py" class="headerlink" title="setting.py"></a>setting.py</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))      ## 类似于环境变量</span><br><span class="line"></span><br><span class="line">SECRET_KEY =        ##密钥</span><br><span class="line"></span><br><span class="line">DEBUG = True        ##当报错时显示的错误信息</span><br><span class="line"></span><br><span class="line">ALLOWED_HOSTS = []       ##允许哪些机器可以访问</span><br></pre></td></tr></table></figure>
 <h3 id="五、创建app"><a href="#五、创建app" class="headerlink" title="五、创建app"></a>五、创建app</h3><p>打个比方，jd网站：<a href="http://www.jd.com/，上面有各种各样的不同模块，我们划分为不同的app，那我们就需要在django里面创建不通的app啦。接下来，我们就来看看如何创建app" target="_blank" rel="noopener">http://www.jd.com/，上面有各种各样的不同模块，我们划分为不同的app，那我们就需要在django里面创建不通的app啦。接下来，我们就来看看如何创建app</a><br>如果是命令行模式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#python manage.py startapp linux</span><br><span class="line">#python manage.py startapp python</span><br></pre></td></tr></table></figure>
 <p>如果是<strong>pycharm</strong>，你就需要点击：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tools-&gt;&gt;Run manage.py Task</span><br></pre></td></tr></table></figure></p>
 <p>然后出现的交互命令行上输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">startapp newapp</span><br></pre></td></tr></table></figure></p>
 <p>这样就创建了newapp的app。</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180725/1Adim9ijfG.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/1Adim9ijfG.png?imageslim" alt="mark"></p>
 <h3 id="六、Django的解析顺序"><a href="#六、Django的解析顺序" class="headerlink" title="六、Django的解析顺序"></a>六、Django的解析顺序</h3><p>既然我们知道Django是使用的MVC的架构，那我们先来聊聊MVC是什么样的原理，首先，通过MVC中的C就是control，用来接收url请求，对应我们django中的url.py模块，M就代表Model，调用数据库的Model层，就是Django的model.py模块，然后经过业务逻辑层的处理，最后渲染到前端界面。前端就是MVC中的view层，对应django的view模块。</p>
 <p>其实所有的参数定义都是以setting.py为准，++首先django先去setting.py中找到ROOT_URLCONF = ‘firstproject.urls’找到总url++。然后在firstproject下的urls.py文件中的urlpatterns列表变量，然后根据里面的URL的正则表达式进行解析，如果解析到，就调用第二个参数，第二个参数对应一个类或者一个函数，或者直接是一个前端页面，在经过类或者函数处理完以后，在展现在前端界面。而前端是单独的html文件，前端界面和后端处理分开，架构更加清晰。</p>
 <p>在上面的目录结构中，每一个app都会有一个view.py， model.py，我们自己还要在创建一个url.py，通过include函数，在firstproject项目中的总url.py分出去，把属于各自的app的url分配到不通的APP的urls.py文件中，这样可以降低耦合度，增加代码的健壮性。<br>。</p>
@@ -279,26 +204,14 @@
 <h4 id="配置-view-py文件"><a href="#配置-view-py文件" class="headerlink" title="配置 view.py文件"></a>配置 view.py文件</h4><p>而以上：<a href="http://127.0.0.1:8080/newapp的url对应的就是view模块中的index函数，在linux的view.py中定义index函数" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp的url对应的就是view模块中的index函数，在linux的view.py中定义index函数</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    return HttpResponse(&quot;This is a test Django index!!!&quot;)</span><br></pre></td></tr></table></figure>
 <p>然后在浏览器上访问：<a href="http://127.0.0.1:8080/newapp/，如下图所示：" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/，如下图所示：</a></p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180725/iF56db0A93.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/iF56db0A93.png?imageslim" alt="mark"></p>
 <h4 id="6-2、如果再次增加内容："><a href="#6-2、如果再次增加内容：" class="headerlink" title="6.2、如果再次增加内容："></a>6.2、如果再次增加内容：</h4><h5 id="urls-py"><a href="#urls-py" class="headerlink" title="urls.py"></a>urls.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url, include</span><br><span class="line"></span><br><span class="line">from newapp import views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&quot;^$&quot;, views.index),</span><br><span class="line">    url(r&apos;newapp/&apos;, views.index),</span><br><span class="line">    url(r&apos;hello/&apos;, views.hello)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 <h5 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a>views.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    return HttpResponse(&quot;This is a test Django index!!!&quot;)</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">    return HttpResponse(&quot;&lt;h1 style=&apos;text-align:center&apos;&gt; hheello world!!!&lt;/h1&gt;&quot;)</span><br></pre></td></tr></table></figure>
 <p>当访问：<a href="http://127.0.0.1:8000/newapp/hello/" target="_blank" rel="noopener">http://127.0.0.1:8000/newapp/hello/</a></p>
 <p>这会出现一个一级标题且居中的字体。</p>
 <h4 id="6-3、urls捕获参数（匹配正则表达式）"><a href="#6-3、urls捕获参数（匹配正则表达式）" class="headerlink" title="6.3、urls捕获参数（匹配正则表达式）"></a>6.3、urls捕获参数（匹配正则表达式）</h4><p>在urls.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;hello/p1(\w+)p2(.+)/$&apos;, views.hello, name=hello),</span><br></pre></td></tr></table></figure></p>
 <p>在views.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def hello(request, p1, p2):</span><br><span class="line">    return HttpResponse(&quot;hello &#123;0&#125;, hello &#123;1&#125;&quot;.format(p1, p2))</span><br></pre></td></tr></table></figure></p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180725/72fac163f6.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/72fac163f6.png?imageslim" alt="mark"></p>
 <h4 id="url参数的捕获有两种方式："><a href="#url参数的捕获有两种方式：" class="headerlink" title="url参数的捕获有两种方式："></a>url参数的捕获有两种方式：</h4><p>b 捕获关键字参数：在url函数中，正则表达是用（?P<keyword>）进行捕获，然后在views.py中定义即可</keyword></p>
 <p>在urls.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url(r&apos;keyword/(?P&lt;ip&gt;\S+)/$&apos;, views.keyword, name=keyword),</span><br></pre></td></tr></table></figure></p>
 <p>在views.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def keyword(request, ip):</span><br><span class="line">	return HttpResponse(&quot;the ip is &#123;0&#125;&quot;.format(ip))</span><br></pre></td></tr></table></figure></p>
@@ -311,324 +224,294 @@
 <p>在views.py中增加如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def test(request, **kwargs):</span><br><span class="line">    return HttpResponse(&quot;the name is : &#123;0&#125;&quot;.format(kwargs.get(&quot;name&quot;)))</span><br></pre></td></tr></table></figure>
 <p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/test/" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/test/</a></p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180726/3cfmb1HhgB.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180726/3cfmb1HhgB.png?imageslim" alt="mark"></p>
 <p>既然已经知道name属性的用法，现在我们就来说重定向，重定向常用name属性来进行重定向</p>
 <h5 id="修改urls-py"><a href="#修改urls-py" class="headerlink" title="修改urls.py"></a>修改urls.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">url(r&quot;^$&quot;, views.index, name=&quot;index&quot;),</span><br><span class="line">url(r&quot;redirect/$&quot;, view=views.redirect,  name=&quot;redirect&quot;),</span><br></pre></td></tr></table></figure>
 <h5 id="修改views-py"><a href="#修改views-py" class="headerlink" title="修改views.py"></a>修改views.py</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponse, HttpResponseRedirect</span><br><span class="line">from django.urls import reverse</span><br><span class="line">def redirect(request):</span><br><span class="line">    return HttpResponseRedirect(reverse(&quot;index&quot;))</span><br></pre></td></tr></table></figure>
 <p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/redirect，直接跳转到http://127.0.0.1:8080/newapp/，" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/redirect，直接跳转到http://127.0.0.1:8080/newapp/，</a></p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180726/BHLAEfGfHD.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180726/BHLAEfGfHD.png?imageslim" alt="mark"></p>
 <p>当然也可以指定返回数据的具体类型，例如：Json格式返回</p>
 <p>urls.py<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url, include</span><br><span class="line"></span><br><span class="line">from newapp import views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&quot;^$&quot;, views.index, name=&quot;index&quot;),</span><br><span class="line">    # url(r&apos;hello/&apos;, views.hello)</span><br><span class="line">    url(r&apos;hello/p1(\w+)p2(.+)/$&apos;, views.hello, name=&quot;hello&quot;),</span><br><span class="line">    url(r&apos;test/$&apos;, view=views.test, kwargs=&#123;&quot;name&quot;: &quot;zhdya&quot;&#125;, name=&quot;test&quot;),</span><br><span class="line">    url(r&quot;redirect/$&quot;, view=views.redirect, name=&quot;redirect&quot;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <p>在views.py中修改主页为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def index(request):</span><br><span class="line">    test = dict()</span><br><span class="line">    test[&apos;name&apos;] = &quot;zhdya&quot;</span><br><span class="line">    test[&apos;sex&apos;] = &quot;man&quot;</span><br><span class="line">    test[&apos;age&apos;] = 28</span><br><span class="line">    # return HttpResponse(&quot;This is a test Django index!!!&quot;)</span><br><span class="line">    return HttpResponse(json.dumps(test))</span><br></pre></td></tr></table></figure></p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://myimage.okay686.cn/okay686cn/180726/EFdI506ah8.png?imageslim" alt="mark" title="">
-                </div>
-                <div class="image-caption">mark</div>
-            </figure>
-        </div>
+<p><img src="http://myimage.okay686.cn/okay686cn/180726/EFdI506ah8.png?imageslim" alt="mark"></p>
 
-        <blockquote class="post-copyright">
-    
+            <div class="post-copyright">
     <div class="content">
-        
-<span class="post-time">
-    Last updated: <time datetime="2019-02-09T07:12:37.898Z" itemprop="dateUpdated">2019-02-09 15:12:37</time>
-</span><br>
-
-
-        
-        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2019/02/09/Django 基础学习Ⅰ/" target="_blank" rel="external">http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/</a>
-        
+        <p>最后更新： 2019年02月09日 15:12</p>
+        <p>原始链接： <a class="post-url" href="/2019/02/09/Django 基础学习Ⅰ/" title="Django基础学习Ⅰ">http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
     </div>
-    
-    <footer>
-        <a href="http://zhdya.okay686.cn">
-            <img src="/img/avatar.jpg" alt="Zhdya">
-            Zhdya
-        </a>
-    </footer>
-</blockquote>
+</div>
 
+      
         
+            
 <div class="page-reward">
-    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+    <a id="rewardBtn" href="javascript:;">赏</a>
 </div>
 
-
-
-        <div class="post-footer">
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django-python/">django, python</a></li></ul>
-
-
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
             
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&title=《Django基础学习Ⅰ》 — 生活如此欠揍&pic=http://zhdya.okay686.cn/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&title=《Django基础学习Ⅰ》 — 生活如此欠揍&source=Tough times never last, but tough people do." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django基础学习Ⅰ》 — 生活如此欠揍&url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&via=http://zhdya.okay686.cn" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
         </div>
     </div>
+</div>
 
-    
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
-  
 
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2019/02/07/hello-world/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Hello World</h4>
-      </a>
+        
     </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&title=《Django基础学习Ⅰ》 — 生活如此欠揍&pic=http://zhdya.okay686.cnimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&title=《Django基础学习Ⅰ》 — 生活如此欠揍&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django基础学习Ⅰ》 — 生活如此欠揍&url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/django,python/" class="color5">django, python</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、Django简介"><span class="post-toc-text">一、Django简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、Django特点"><span class="post-toc-text">二、Django特点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、安装Django"><span class="post-toc-text">三、安装Django</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、创建项目"><span class="post-toc-text">四、创建项目</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-1、项目目录结构"><span class="post-toc-text">4.1、项目目录结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#setting-py"><span class="post-toc-text">setting.py</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#五、创建app"><span class="post-toc-text">五、创建app</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#六、Django的解析顺序"><span class="post-toc-text">六、Django的解析顺序</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-1、创建urls-py文件"><span class="post-toc-text">6.1、创建urls.py文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置-view-py文件"><span class="post-toc-text">配置 view.py文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-2、如果再次增加内容："><span class="post-toc-text">6.2、如果再次增加内容：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#urls-py"><span class="post-toc-text">urls.py</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#views-py"><span class="post-toc-text">views.py</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#6-3、urls捕获参数（匹配正则表达式）"><span class="post-toc-text">6.3、urls捕获参数（匹配正则表达式）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#url参数的捕获有两种方式："><span class="post-toc-text">url参数的捕获有两种方式：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#七、urls重定向"><span class="post-toc-text">七、urls重定向</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#修改urls-py"><span class="post-toc-text">修改urls.py</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#修改views-py"><span class="post-toc-text">修改views.py</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/07/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Hello World</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
   
 </nav>
 
 
 
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</article>
-
-<div id="reward" class="page-modal reward-lay">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <h3 class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        谢谢大爷~
-        <i class="icon icon-quote-right"></i>
-    </h3>
-    <div class="reward-content">
+</section>
         
-        <div class="reward-code">
-            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
-        </div>
-        
-        <label class="reward-toggle">
-            <input id="rewardToggle" type="checkbox" class="reward-toggle-check" data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
-            <div class="reward-toggle-ctrol">
-                <span class="reward-toggle-item wechat">微信</span>
-                <span class="reward-toggle-label"></span>
-                <span class="reward-toggle-item alipay">支付宝</span>
-            </div>
-        </label>
-        
-    </div>
-</div>
-
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
-        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
 <p>
     <span id="busuanzi_container_site_uv" style="display:none">
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
     </span>
     <span id="busuanzi_container_site_pv" style="display:none">
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
     </span>
 </p>
 
 
-        <p>
-            
-            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
-        </p>
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
     </div>
-    <div class="bottom">
-        <p><span>Zhdya &copy; 2015 - 2019</span>
-            <span>
-                
-                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-            </span>
-        </p>
-    </div>
+  </div>
 </footer>
-
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
-
-
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&title=《Django基础学习Ⅰ》 — 生活如此欠揍&pic=http://zhdya.okay686.cn/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&title=《Django基础学习Ⅰ》 — 生活如此欠揍&source=Tough times never last, but tough people do." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django基础学习Ⅰ》 — 生活如此欠揍&url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/&via=http://zhdya.okay686.cn" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/02/09/Django 基础学习Ⅰ/" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
-
-
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
 </script>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
 </div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Python3/">Python3</a>
         </div>
-    </a>
-</li>
-</template>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/django-python/" style="font-size: 10px;">django, python</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/django-python/" style="font-size: 10px;">django, python</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
 
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
 
 
 
 
 
 
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
 
 
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
 
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '死鬼去哪里了！';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '(つェ⊂)咦!又好了!';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
-</script>
-
-
-
+  </div>
 </body>
 </html>
