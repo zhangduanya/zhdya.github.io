@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>CMDB项目需求分析 | 结果不会给你开玩笑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。 在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件，写入下面的代码： ==&amp;lt;如下打印data的语句，是为了调试查看输出，可以去掉&amp;gt;==123456789101112131415161718192021">
+<meta name="keywords" content="django,python,CMDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMDB项目需求分析">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/index.html">
+<meta property="og:site_name" content="结果不会给你开玩笑">
+<meta property="og:description" content="一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。 在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件，写入下面的代码： ==&amp;lt;如下打印data的语句，是为了调试查看输出，可以去掉&amp;gt;==123456789101112131415161718192021">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190303/wNHqtOQNReIs.png?imageslim">
+<meta property="og:updated_time" content="2019-03-03T03:19:43.685Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMDB项目需求分析">
+<meta name="twitter:description" content="一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。 在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件，写入下面的代码： ==&amp;lt;如下打印data的语句，是为了调试查看输出，可以去掉&amp;gt;==123456789101112131415161718192021">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190303/wNHqtOQNReIs.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">结果不会给你开玩笑</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        结果不会给你开玩笑
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        2019一步一个脚印
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="博客" target="_blank" href="//www.okay686.cn">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-4、Windows下收集数据" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      CMDB项目需求分析
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Python3/">Python3</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-03-03
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="一、windows中收集硬件信息"><a href="#一、windows中收集硬件信息" class="headerlink" title="一、windows中收集硬件信息"></a>一、windows中收集硬件信息</h3><p>为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。</p>
+<p>在Pycharm的<strong>Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件</strong>，写入下面的代码：</p>
+<p>==&lt;如下打印data的语句，是为了调试查看输出，可以去掉&gt;==<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-2 16:41</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : sys_info.py</span><br><span class="line"></span><br><span class="line">import platform</span><br><span class="line">import win32com</span><br><span class="line">import wmi</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">本模块基于windows操作系统，依赖wmi和win32com库，需要提前使用pip进行安装，</span><br><span class="line">或者下载安装包手动安装。</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def collect():</span><br><span class="line">    data = &#123;</span><br><span class="line">        &apos;os_type&apos;: platform.system(),</span><br><span class="line">        &apos;os_release&apos;: &quot;%s %s  %s &quot; % (platform.release(), platform.architecture()[0], platform.version()),</span><br><span class="line">        &apos;os_distribution&apos;: &apos;Microsoft&apos;,</span><br><span class="line">        &apos;asset_type&apos;: &apos;server&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 分别获取各种硬件信息</span><br><span class="line">    win32obj = Win32Info()</span><br><span class="line">    data.update(win32obj.get_cpu_info())</span><br><span class="line">    data.update(win32obj.get_ram_info())</span><br><span class="line">    data.update(win32obj.get_motherboard_info())</span><br><span class="line">    data.update(win32obj.get_disk_info())</span><br><span class="line">    data.update(win32obj.get_nic_info())</span><br><span class="line">    # 最后返回一个数据字典</span><br><span class="line">    print(&quot;data11&quot;, data)</span><br><span class="line">    return data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Win32Info(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        # 固定用法，更多内容请参考模块说明</span><br><span class="line">        self.wmi_obj = wmi.WMI()</span><br><span class="line">        self.wmi_service_obj = win32com.client.Dispatch(&quot;WbemScripting.SWbemLocator&quot;)</span><br><span class="line">        self.wmi_service_connector = self.wmi_service_obj.ConnectServer(&quot;.&quot;, &quot;root\cimv2&quot;)</span><br><span class="line"></span><br><span class="line">    def get_cpu_info(self):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        获取CPU的相关数据，这里只采集了三个数据，实际有更多，请自行选择需要的数据</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        data = &#123;&#125;</span><br><span class="line">        cpu_lists = self.wmi_obj.Win32_Processor()</span><br><span class="line">        cpu_core_count = 0</span><br><span class="line">        for cpu in cpu_lists:</span><br><span class="line">            cpu_core_count += cpu.NumberOfCores</span><br><span class="line"></span><br><span class="line">        cpu_model = cpu_lists[0].Name   # CPU型号（所有的CPU型号都是一样的）</span><br><span class="line">        data[&quot;cpu_count&quot;] = len(cpu_lists)      # CPU个数</span><br><span class="line">        data[&quot;cpu_model&quot;] = cpu_model</span><br><span class="line">        data[&quot;cpu_core_count&quot;] = cpu_core_count  # CPU总的核数</span><br><span class="line">        print(&quot;data22&quot;, data)</span><br><span class="line">        return data</span><br><span class="line"></span><br><span class="line">    def get_ram_info(self):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        收集内存信息</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        data = []</span><br><span class="line">        # 这个模块用SQL语言获取数据</span><br><span class="line">        ram_collections = self.wmi_service_connector.ExecQuery(&quot;Select * from Win32_PhysicalMemory&quot;)</span><br><span class="line">        for item in ram_collections:    # 主机中存在很多根内存，要循环所有的内存数据</span><br><span class="line">            ram_size = int(int(item.Capacity) / (1024**3))  # 转换内存单位为GB</span><br><span class="line">            item_data = &#123;</span><br><span class="line">                &quot;slot&quot;: item.DeviceLocator.strip(),</span><br><span class="line">                &quot;capacity&quot;: ram_size,</span><br><span class="line">                &quot;model&quot;: item.Caption,</span><br><span class="line">                &quot;manufacturer&quot;: item.Manufacturer,</span><br><span class="line">                &quot;sn&quot;: item. SerialNumber,</span><br><span class="line">            &#125;</span><br><span class="line">            data.append(item_data)  # 将每条内存的信息，添加到一个列表里</span><br><span class="line">        print(&quot;data33&quot;, data)</span><br><span class="line">        return &#123;&quot;ram&quot;: data&#125;    # 再对data列表封装一层，返回一个字典，方便上级方法的调用</span><br><span class="line"></span><br><span class="line">    def get_motherboard_info(self):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        获取主板信息</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        computer_info = self.wmi_obj.Win32_ComputerSystem()[0]</span><br><span class="line">        system_info = self.wmi_obj.Win32_OperatingSystem()[0]</span><br><span class="line">        data = dict()</span><br><span class="line">        data[&apos;manufacturer&apos;] = computer_info.Manufacturer</span><br><span class="line">        data[&apos;model&apos;] = computer_info.Model</span><br><span class="line">        data[&apos;wake_up_type&apos;] = computer_info.WakeUpType</span><br><span class="line">        data[&apos;sn&apos;] = system_info.SerialNumber</span><br><span class="line">        print(&quot;data44&quot;, data)</span><br><span class="line">        return data</span><br><span class="line"></span><br><span class="line">    def get_disk_info(self):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        硬盘信息</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        data = []</span><br><span class="line">        for disk in self.wmi_obj.Win32_DiskDrive():     # 每块硬盘都要获取相应信息</span><br><span class="line">            item_data = dict()</span><br><span class="line">            iface_choices = [&quot;SAS&quot;, &quot;SCSI&quot;, &quot;SATA&quot;, &quot;SSD&quot;]</span><br><span class="line">            for iface in iface_choices:</span><br><span class="line">                if iface in disk.Model:</span><br><span class="line">                    item_data[&apos;iface_type&apos;] = iface</span><br><span class="line">                    break</span><br><span class="line">            else:</span><br><span class="line">                item_data[&apos;iface_type&apos;] = &apos;unknown&apos;</span><br><span class="line">            item_data[&apos;slot&apos;] = disk.Index</span><br><span class="line">            item_data[&apos;sn&apos;] = disk.SerialNumber</span><br><span class="line">            item_data[&apos;model&apos;] = disk.Model</span><br><span class="line">            item_data[&apos;manufacturer&apos;] = disk.Manufacturer</span><br><span class="line">            item_data[&apos;capacity&apos;] = int(int(disk.Size) / (1024**3))</span><br><span class="line">            data.append(item_data)</span><br><span class="line">        print(&quot;data55&quot;, data)</span><br><span class="line">        return &#123;&apos;physical_disk_driver&apos;: data&#125;</span><br><span class="line"></span><br><span class="line">    def get_nic_info(self):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        网卡信息</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        data = []</span><br><span class="line">        for nic in self.wmi_obj.Win32_NetworkAdapterConfiguration():</span><br><span class="line">            if nic.MACAddress is not None:</span><br><span class="line">                item_data = dict()</span><br><span class="line">                item_data[&apos;mac&apos;] = nic.MACAddress</span><br><span class="line">                item_data[&apos;model&apos;] = nic.Caption</span><br><span class="line">                item_data[&apos;name&apos;] = nic.Index</span><br><span class="line">                if nic.IPAddress is not None:</span><br><span class="line">                    item_data[&apos;ip_address&apos;] = nic.IPAddress[0]</span><br><span class="line">                    item_data[&apos;net_mask&apos;] = nic.IPSubnet</span><br><span class="line">                else:</span><br><span class="line">                    item_data[&apos;ip_address&apos;] = &apos;&apos;</span><br><span class="line">                    item_data[&apos;net_mask&apos;] = &apos;&apos;</span><br><span class="line">                data.append(item_data)</span><br><span class="line">        print(&quot;data66&quot;, data)</span><br><span class="line">        return &#123;&apos;nic&apos;: data&#125;</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    # 测试代码(仅限于在当前页面运行获取本机的信息）</span><br><span class="line">    dic = collect()</span><br><span class="line">    print(dic)</span><br></pre></td></tr></table></figure></p>
+<p>windows中没有方便的命令可以获取硬件信息，但是有额外的模块可以帮助我们实现目的，这个模块叫做wmi。可以使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install wmi</span><br></pre></td></tr></table></figure></p>
+<p>的方式安装，当前版本是1.4.9。但是wmi安装后，import wmi依然会出错，因为它依赖一个叫做win32com的模块。</p>
+<p>我们依然可以通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pypiwin32</span><br></pre></td></tr></table></figure></p>
+<p>来安装win32com模块，但是不幸的是，据反映，有些机器无法通过pip成功安装。所以，这里我在github中提供了一个手动安装包==pywin32-220.win-amd64-py3.5(配合wmi模块，获取主机信息的模块).exe==，方便大家。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">链接：https://pan.baidu.com/s/14ZUKPJnmlwuUHsYLUUApKg </span><br><span class="line">提取码：nq5i</span><br></pre></td></tr></table></figure></p>
+<p>依赖包的问题解决后，我们来看一下==sys_info.py==脚本的代码。</p>
+<ul>
+<li>核心在于collect()方法！</li>
+<li>该方法首先通过platform模块获取平台的信息，然后保存到一个data字典中。</li>
+<li>然后创建一个Win32Info对象，并调用win32的各种功能方法，分别获取CPU、RAM、主板、硬盘和网卡的信息。</li>
+<li>类Win32Info是我们编写的封装了具体数据收集逻辑的类；</li>
+<li>该类中有很多方法，每个方法针对一项数据；</li>
+<li>其中对Win32模块的调用方式是固定的，有兴趣的可以自行学习这个模块的官方文档</li>
+<li>每一类的数据收集完成后都会作为一个新的子字典，update到开始的data字典中，最终形成完整的信息字典。</li>
+<li>最后在脚本末尾有一个测试入口。</li>
+</ul>
+<p>整个脚本的代码其实很简单，我们只要将Win32的方法调用当作透明的空气，剩下的不过就是将获得的数据，按照我们指定的格式打包成一个数据字典。</p>
+<p>==<strong>强调：数据字典的格式和键值是非常重要的，是预设的，不可以随意改变！</strong>==</p>
+<h3 id="二、信息收集测试"><a href="#二、信息收集测试" class="headerlink" title="二、信息收集测试"></a>二、信息收集测试</h3><p>单独运行一下该脚本（注意不是运行CMDB项目），查看一下生成的数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data22 &#123;&apos;cpu_core_count&apos;: 4, &apos;cpu_count&apos;: 1, &apos;cpu_model&apos;: &apos;Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz&apos;&#125;</span><br><span class="line">data33 [&#123;&apos;slot&apos;: &apos;DIMM A&apos;, &apos;capacity&apos;: 8, &apos;manufacturer&apos;: &apos;802C0000802C&apos;, &apos;model&apos;: &apos;物理内存&apos;, &apos;sn&apos;: &apos;1B458788&apos;&#125;]</span><br><span class="line">data44 &#123;&apos;sn&apos;: &apos;00330-80000-00000-AA069&apos;, &apos;manufacturer&apos;: &apos;Dell Inc.&apos;, &apos;model&apos;: &apos;Latitude 5480&apos;, &apos;wake_up_type&apos;: 6&#125;</span><br><span class="line">data55 [&#123;&apos;slot&apos;: 0, &apos;capacity&apos;: 238, &apos;manufacturer&apos;: &apos;(标准磁盘驱动器)&apos;, &apos;model&apos;: &apos;SAMSUNG SSD PM871b M.2 2280 256GB&apos;, &apos;iface_type&apos;: &apos;SSD&apos;, &apos;sn&apos;: &apos;      S3U0NY0K244546&apos;&#125;]</span><br><span class="line">data66 [&#123;&apos;name&apos;: 1, &apos;mac&apos;: &apos;00:50:56:C0:00:08&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000001] VMware Virtual Ethernet Adapter for VMnet8&apos;, &apos;ip_address&apos;: &apos;192.168.171.1&apos;&#125;, &#123;&apos;name&apos;: 2, &apos;mac&apos;: &apos;00:50:56:C0:00:01&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000002] VMware Virtual Ethernet Adapter for VMnet1&apos;, &apos;ip_address&apos;: &apos;192.168.209.1&apos;&#125;, &#123;&apos;name&apos;: 3, &apos;mac&apos;: &apos;00:FF:E2:52:B5:09&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000003] TAP-Windows Adapter V9&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 4, &apos;mac&apos;: &apos;10:65:30:11:8A:8A&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000004] Intel(R) Ethernet Connection (5) I219-LM&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 5, &apos;mac&apos;: &apos;68:EC:C5:86:F1:DC&apos;, &apos;net_mask&apos;: (&apos;255.255.240.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000005] Intel(R) Dual Band Wireless-AC 8265&apos;, &apos;ip_address&apos;: &apos;10.10.7.26&apos;&#125;, &#123;&apos;name&apos;: 6, &apos;mac&apos;: &apos;68:EC:C5:86:F1:DD&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000006] Microsoft Wi-Fi Direct Virtual Adapter&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 7, &apos;mac&apos;: &apos;68:EC:C5:86:F1:E0&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000007] Bluetooth Device (Personal Area Network)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 13, &apos;mac&apos;: &apos;14:74:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000013] WAN Miniport (IP)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 14, &apos;mac&apos;: &apos;14:FC:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000014] WAN Miniport (IPv6)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 15, &apos;mac&apos;: &apos;16:0F:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000015] WAN Miniport (Network Monitor)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 16, &apos;mac&apos;: &apos;6A:EC:C5:86:F1:DC&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000016] Microsoft Wi-Fi Direct Virtual Adapter&apos;, &apos;ip_address&apos;: &apos;192.168.137.1&apos;&#125;]</span><br><span class="line">data11 &#123;&apos;manufacturer&apos;: &apos;Dell Inc.&apos;, &apos;model&apos;: &apos;Latitude 5480&apos;, &apos;cpu_core_count&apos;: 4, &apos;os_distribution&apos;: &apos;Microsoft&apos;, &apos;asset_type&apos;: &apos;server&apos;, &apos;cpu_model&apos;: &apos;Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz&apos;, &apos;nic&apos;: [&#123;&apos;name&apos;: 1, &apos;mac&apos;: &apos;00:50:56:C0:00:08&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000001] VMware Virtual Ethernet Adapter for VMnet8&apos;, &apos;ip_address&apos;: &apos;192.168.171.1&apos;&#125;, &#123;&apos;name&apos;: 2, &apos;mac&apos;: &apos;00:50:56:C0:00:01&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000002] VMware Virtual Ethernet Adapter for VMnet1&apos;, &apos;ip_address&apos;: &apos;192.168.209.1&apos;&#125;, &#123;&apos;name&apos;: 3, &apos;mac&apos;: &apos;00:FF:E2:52:B5:09&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000003] TAP-Windows Adapter V9&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 4, &apos;mac&apos;: &apos;10:65:30:11:8A:8A&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000004] Intel(R) Ethernet Connection (5) I219-LM&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 5, &apos;mac&apos;: &apos;68:EC:C5:86:F1:DC&apos;, &apos;net_mask&apos;: (&apos;255.255.240.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000005] Intel(R) Dual Band Wireless-AC 8265&apos;, &apos;ip_address&apos;: &apos;10.10.7.26&apos;&#125;, &#123;&apos;name&apos;: 6, &apos;mac&apos;: &apos;68:EC:C5:86:F1:DD&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000006] Microsoft Wi-Fi Direct Virtual Adapter&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 7, &apos;mac&apos;: &apos;68:EC:C5:86:F1:E0&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000007] Bluetooth Device (Personal Area Network)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 13, &apos;mac&apos;: &apos;14:74:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000013] WAN Miniport (IP)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 14, &apos;mac&apos;: &apos;14:FC:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000014] WAN Miniport (IPv6)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 15, &apos;mac&apos;: &apos;16:0F:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000015] WAN Miniport (Network Monitor)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 16, &apos;mac&apos;: &apos;6A:EC:C5:86:F1:DC&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000016] Microsoft Wi-Fi Direct Virtual Adapter&apos;, &apos;ip_address&apos;: &apos;192.168.137.1&apos;&#125;], &apos;physical_disk_driver&apos;: [&#123;&apos;slot&apos;: 0, &apos;capacity&apos;: 238, &apos;manufacturer&apos;: &apos;(标准磁盘驱动器)&apos;, &apos;model&apos;: &apos;SAMSUNG SSD PM871b M.2 2280 256GB&apos;, &apos;iface_type&apos;: &apos;SSD&apos;, &apos;sn&apos;: &apos;      S3U0NY0K244546&apos;&#125;], &apos;wake_up_type&apos;: 6, &apos;sn&apos;: &apos;00330-80000-00000-AA069&apos;, &apos;cpu_count&apos;: 1, &apos;os_release&apos;: &apos; 64bit  10.0.17763 &apos;, &apos;ram&apos;: [&#123;&apos;slot&apos;: &apos;DIMM A&apos;, &apos;capacity&apos;: 8, &apos;manufacturer&apos;: &apos;802C0000802C&apos;, &apos;model&apos;: &apos;物理内存&apos;, &apos;sn&apos;: &apos;1B458788&apos;&#125;], &apos;os_type&apos;: &apos;Windows&apos;&#125;</span><br><span class="line">&#123;&apos;manufacturer&apos;: &apos;Dell Inc.&apos;, &apos;model&apos;: &apos;Latitude 5480&apos;, &apos;cpu_core_count&apos;: 4, &apos;os_distribution&apos;: &apos;Microsoft&apos;, &apos;asset_type&apos;: &apos;server&apos;, &apos;cpu_model&apos;: &apos;Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz&apos;, &apos;nic&apos;: [&#123;&apos;name&apos;: 1, &apos;mac&apos;: &apos;00:50:56:C0:00:08&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000001] VMware Virtual Ethernet Adapter for VMnet8&apos;, &apos;ip_address&apos;: &apos;192.168.171.1&apos;&#125;, &#123;&apos;name&apos;: 2, &apos;mac&apos;: &apos;00:50:56:C0:00:01&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000002] VMware Virtual Ethernet Adapter for VMnet1&apos;, &apos;ip_address&apos;: &apos;192.168.209.1&apos;&#125;, &#123;&apos;name&apos;: 3, &apos;mac&apos;: &apos;00:FF:E2:52:B5:09&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000003] TAP-Windows Adapter V9&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 4, &apos;mac&apos;: &apos;10:65:30:11:8A:8A&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000004] Intel(R) Ethernet Connection (5) I219-LM&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 5, &apos;mac&apos;: &apos;68:EC:C5:86:F1:DC&apos;, &apos;net_mask&apos;: (&apos;255.255.240.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000005] Intel(R) Dual Band Wireless-AC 8265&apos;, &apos;ip_address&apos;: &apos;10.10.7.26&apos;&#125;, &#123;&apos;name&apos;: 6, &apos;mac&apos;: &apos;68:EC:C5:86:F1:DD&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000006] Microsoft Wi-Fi Direct Virtual Adapter&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 7, &apos;mac&apos;: &apos;68:EC:C5:86:F1:E0&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000007] Bluetooth Device (Personal Area Network)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 13, &apos;mac&apos;: &apos;14:74:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000013] WAN Miniport (IP)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 14, &apos;mac&apos;: &apos;14:FC:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000014] WAN Miniport (IPv6)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 15, &apos;mac&apos;: &apos;16:0F:20:52:41:53&apos;, &apos;net_mask&apos;: &apos;&apos;, &apos;model&apos;: &apos;[00000015] WAN Miniport (Network Monitor)&apos;, &apos;ip_address&apos;: &apos;&apos;&#125;, &#123;&apos;name&apos;: 16, &apos;mac&apos;: &apos;6A:EC:C5:86:F1:DC&apos;, &apos;net_mask&apos;: (&apos;255.255.255.0&apos;, &apos;64&apos;), &apos;model&apos;: &apos;[00000016] Microsoft Wi-Fi Direct Virtual Adapter&apos;, &apos;ip_address&apos;: &apos;192.168.137.1&apos;&#125;], &apos;physical_disk_driver&apos;: [&#123;&apos;slot&apos;: 0, &apos;capacity&apos;: 238, &apos;manufacturer&apos;: &apos;(标准磁盘驱动器)&apos;, &apos;model&apos;: &apos;SAMSUNG SSD PM871b M.2 2280 256GB&apos;, &apos;iface_type&apos;: &apos;SSD&apos;, &apos;sn&apos;: &apos;      S3U0NY0K244546&apos;&#125;], &apos;wake_up_type&apos;: 6, &apos;sn&apos;: &apos;00330-80000-00000-AA069&apos;, &apos;cpu_count&apos;: 1, &apos;os_release&apos;: &apos; 64bit  10.0.17763 &apos;, &apos;ram&apos;: [&#123;&apos;slot&apos;: &apos;DIMM A&apos;, &apos;capacity&apos;: 8, &apos;manufacturer&apos;: &apos;802C0000802C&apos;, &apos;model&apos;: &apos;物理内存&apos;, &apos;sn&apos;: &apos;1B458788&apos;&#125;], &apos;os_type&apos;: &apos;Windows&apos;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的信息包含操作系统、主板、CPU、内存、硬盘、网卡等各种信息。可以看到我有1条内存，1块SSD硬盘，以及4块网卡。四块网卡有出现mac地址相同的情况，因为那是虚拟机的。</p>
+<p>你自己的数据和我的肯定不一样，但是数据格式和键值必须一样，我们后面自动分析数据、填充数据，都依靠这个固定格式的数据字典。</p>
+<p>通过测试我们发现数据可以收集到了，那么再测试一下数据能否正常发送到服务器。</p>
+<h3 id="三、数据发送测试"><a href="#三、数据发送测试" class="headerlink" title="三、数据发送测试"></a>三、数据发送测试</h3><p>由于我这里采用了Linux虚拟机作为测试用例，我们的Django服务器就不能再运行在127.0.0.1:8000上面了。</p>
+<p>查看一下当前机器的IP，发现是192.168.1.100，修改项目的settings.py文件，将ALLOWED_HOSTS修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALLOWED_HOSTS = [&quot;*&quot;]</span><br></pre></td></tr></table></figure>
+<p>这表示接收所有同一局域网内的网络访问。</p>
+<p>然后以<strong>0.0.0.0:8000的参数启动CMDB</strong>，表示对局域网内所有ip开放服务。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190303/wNHqtOQNReIs.png?imageslim" alt="mark"></p>
+<p>回到客户端，进入Client/bin目录，运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python main.py report_data</span><br></pre></td></tr></table></figure></p>
+<p>可以看到如下结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">正在将数据发送至： [http://10.10.7.26:8000/assets/report/]  ......</span><br><span class="line">handler_data_encode--&gt;&gt; b&apos;asset_data=%7B%22cpu_core_count%22%3A+4%2C+%22cpu_model%22%3A+%22Intel%28R%29+Core%28TM%29+i5-7300HQ+CPU+%40+2.50GHz%22%2C+%22wake_up</span><br><span class="line">...&lt;中间信息省略&gt;...</span><br><span class="line">71b+M.2+2280+256GB%22%2C+%22capacity%22%3A+238%7D%5D%2C+%22cpu_count%22%3A+1%2C+%22os_distribution%22%3A+%22Microsoft%22%2C+%22asset_type%22%3A+%22server%22%7D</span><br><span class="line">&apos;</span><br><span class="line">?[31;1m发送失败，HTTP Error 404: Not Found?[0m</span><br><span class="line">日志记录成功！</span><br></pre></td></tr></table></figure></p>
+<p>这是一个404错误，表示服务器地址没找到，这是因为我们还没有为Django编写接收数据的视图和路由。</p>
+<p>这时，打开log目录下的日志文件，内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">发送时间：2019-03-03 10:49:26 	 服务器地址：http://10.10.7.26:8000/assets/report/ 	 返回结果：发送失败</span><br></pre></td></tr></table></figure></p>
+<h4 id="四、接收数据"><a href="#四、接收数据" class="headerlink" title="四、接收数据"></a>四、接收数据</h4><p>进入==cmdb/urls.py==文件中，编写一个二级路由，将所有++assets相关的数据都转发到assets.urls++中，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib import admin</span><br><span class="line">from django.conf.urls import url, include</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">    url(r&apos;^assets/&apos;, include(&apos;assets.urls&apos;)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>然后，我们在assets中新建一个urls.py文件，写入下面的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from django.conf.urls import url</span><br><span class="line">from assets import views</span><br><span class="line"></span><br><span class="line">app_name = &apos;assets&apos;</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^report/&apos;, views.report, name=&apos;report&apos;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>这样，我们的路由就写好了。</p>
+<p>转过头，我们进入++assets/views.py++文件，写一个简单的视图。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render</span><br><span class="line"></span><br><span class="line"># Create your views here.</span><br><span class="line"></span><br><span class="line">from django.shortcuts import render, HttpResponse</span><br><span class="line"></span><br><span class="line">def report(request):</span><br><span class="line">    if request.method == &quot;POST&quot;:</span><br><span class="line">        asset_data = request.POST.get(&apos;asset_data&apos;)</span><br><span class="line">        print(asset_data)</span><br><span class="line">        return HttpResponse(&quot;成功收到数据！&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>代码很简单，接收POST过来的数据，打印出来，然后返回成功的消息。</p>
+<p>重新运<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">行python main.py report_data</span><br></pre></td></tr></table></figure></p>
+<p>可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">正在将数据发送至： [http://10.10.7.26:8000/assets/report/]  ......</span><br><span class="line">handler_data_encode--&gt;&gt; b&apos;asset_data=%7B%22ram%22%3A+%5B%7B%22manufacturer%22%3A+%22802C0</span><br><span class="line">...&lt;中间部分省略&gt;...</span><br><span class="line">%22%3A+%22Latitude+5480%22%2C+%22sn%22%3A+%2200330-80000-00000-AA069%22%2C+%22os_distribution%22%3A+%22Microsoft%22%2C+%22manufacturer%22%3A+%22Dell+Inc.%22%7D</span><br><span class="line">&apos;</span><br><span class="line">?[31;1m发送失败，&lt;urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。&gt;?[0m</span><br><span class="line">日志记录成功！</span><br></pre></td></tr></table></figure>
+<p>遇到拒绝服务的错误了。</p>
+<p>原因在于我们模拟浏览器发送了一个POST请求给Django，但是请求中没有携带Django需要的csrf安全令牌，所以拒绝了请求。</p>
+<p>为了解决这个问题，我们需要在这个report视图上忽略csrf验证，可以通过Django的@csrf_exempt装饰器。修改代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render, HttpResponse</span><br><span class="line">from django.views.decorators.csrf import csrf_exempt</span><br><span class="line"></span><br><span class="line"># Create your views here.</span><br><span class="line"></span><br><span class="line">@csrf_exempt</span><br><span class="line">def report(request):</span><br><span class="line">    if request.method == &quot;POST&quot;:</span><br><span class="line">        asset_data = request.POST.get(&apos;asset_data&apos;)</span><br><span class="line">        print(asset_data)</span><br><span class="line">        return HttpResponse(&quot;成功收到数据！&quot;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>重启CMDB服务器</strong>，再次从客户端报告数据，可以看到返回结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">正在将数据发送至： [http://10.10.7.26:8000/assets/report/]  ......</span><br><span class="line">handler_data_encode--&gt;&gt; b&apos;asset_data=%7B%22nic%22%3A+%5B%7B%22name%22%3A+1%2C+%22model%22%3A+%22%5B00000001%5D+VMware+Virt</span><br><span class="line">...&lt;中间部分省略&gt;...</span><br><span class="line">facturer%22%3A+%22802C0000802C%22%2C+%22slot%22%3A+%22DIMM+A%22%2C+%22sn%22%3A+%221B458788%22%2C+%22model%22%3A+%22%5Cu7269%5Cu7406%5Cu5185%5Cu5b58%22%7D%5D%7D</span><br><span class="line">&apos;</span><br><span class="line">?[31;1m发送完毕！?[0m</span><br><span class="line">返回结果：成功收到数据！</span><br><span class="line">日志记录成功！</span><br></pre></td></tr></table></figure></p>
+<p>看下日志记录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">发送时间：2019-03-03 10:49:26 	 服务器地址：http://10.10.7.26:8000/assets/report/ 	 返回结果：发送失败 </span><br><span class="line">发送时间：2019-03-03 11:00:53 	 服务器地址：http://10.10.7.26:8000/assets/report/ 	 返回结果：发送失败 </span><br><span class="line">发送时间：2019-03-03 11:05:36 	 服务器地址：http://10.10.7.26:8000/assets/report/ 	 返回结果：发送失败 </span><br><span class="line">发送时间：2019-03-03 11:06:51 	 服务器地址：http://10.10.7.26:8000/assets/report/ 	 返回结果：成功收到数据！</span><br></pre></td></tr></table></figure></p>
+<p>这表明数据发送成功了。</p>
+<p>再看Pycharm中，也打印出了接收到的数据，一切OK！</p>
+<p>CSRF验证的问题解决了，但是又带来新的安全问题。我们可以通过增加用户名、密码，或者md5验证或者自定义安全令牌的方式解决，这部分内容就不展开了。</p>
+<p>Windows下的客户端已经验证完毕了，然后我们就可以通过各种方式让脚本定时运行、收集和报告数据，一切都自动化。</p>
+<h4 id="最后补充："><a href="#最后补充：" class="headerlink" title="最后补充："></a>最后补充：</h4><p>++CMDB系统是部署在A服务器上，那么客户端CLIENT是需要部署在B服务器上的，那就意味着每台需要被采集数据的服务器都要安装PYTHON及所用到的包。++</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年03月03日 11:19</p>
+        <p>原始链接： <a class="post-url" href="/2019/03/03/4、Windows下收集数据/" title="CMDB项目需求分析">http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/&title=《CMDB项目需求分析》 — 结果不会给你开玩笑&pic=/images/13.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/&title=《CMDB项目需求分析》 — 结果不会给你开玩笑&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CMDB项目需求分析》 — 结果不会给你开玩笑&url=http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/03/03/4、Windows下收集数据/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/django/" class="color2">django</a>
+      
+    <a href="/tags/python/" class="color2">python</a>
+      
+    <a href="/tags/CMDB/" class="color5">CMDB</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、windows中收集硬件信息"><span class="post-toc-text">一、windows中收集硬件信息</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、信息收集测试"><span class="post-toc-text">二、信息收集测试</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、数据发送测试"><span class="post-toc-text">三、数据发送测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#四、接收数据"><span class="post-toc-text">四、接收数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#最后补充："><span class="post-toc-text">最后补充：</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/02/3、数据收集客户端/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">CMDB项目需求分析</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="4、Windows下收集数据"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '5b15e520dd4eea603c4d0fed9fa0dfe5';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CMDB/" style="font-size: 10px;">CMDB</a> <a href="/tags/django/" style="font-size: 20px;">django</a> <a href="/tags/python/" style="font-size: 20px;">python</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CMDB/" style="font-size: 10px;">CMDB</a> <a href="/tags/django/" style="font-size: 20px;">django</a> <a href="/tags/python/" style="font-size: 20px;">python</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
