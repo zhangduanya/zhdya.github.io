@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>CMDB-Windows下收集数据（四） | 结果不会给你开玩笑</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件：1y">
+<meta name="keywords" content="django,python,CMDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMDB-Windows下收集数据（四）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/index.html">
+<meta property="og:site_name" content="结果不会给你开玩笑">
+<meta property="og:description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件：1y">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190304/fWKMrrjIgh2p.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190304/WUx9PrE2BOMP.png?imageslim">
+<meta property="og:updated_time" content="2019-03-07T00:12:26.986Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CMDB-Windows下收集数据（四）">
+<meta name="twitter:description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件：1y">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190304/fWKMrrjIgh2p.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">结果不会给你开玩笑</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        结果不会给你开玩笑
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        2019一步一个脚印
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="博客" target="_blank" href="//www.okay686.cn">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-5、Linux下收集数据" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      CMDB-Windows下收集数据（四）
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Python3/">Python3</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-03-04
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>Linux下收集数据就有很多命令和工具了，比Windows方便多了。</p>
+<p>但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。</p>
+<p>下面，我们在<strong>Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件</strong>，写入下面的代码：</p>
+<p>前提需要现在被收集的虚机上面安装必须的组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y lsb</span><br></pre></td></tr></table></figure></p>
+<p>关于disk的获取与原著有差别，更容易理解：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">##获取厂商：</span><br><span class="line">[root@python_master pythontest]# dmidecode -s system-manufacturer</span><br><span class="line">VMware, Inc.</span><br><span class="line"></span><br><span class="line">##获取型号：</span><br><span class="line">[root@python_master pythontest]# dmidecode -s system-product-name</span><br><span class="line">VMware Virtual Platform</span><br><span class="line"></span><br><span class="line">##获取sn：</span><br><span class="line">[root@python_master pythontest]# dmidecode -s system-serial-number</span><br><span class="line">VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-3 13:16</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : sys_info.py</span><br><span class="line"></span><br><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def collect():</span><br><span class="line">    filter_keys = [&apos;Manufacturer&apos;, &apos;Serial Number&apos;, &apos;Product Name&apos;, &apos;UUID&apos;, &apos;Wake-up Type&apos;]</span><br><span class="line">    raw_data = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    for key in filter_keys:</span><br><span class="line">        try:</span><br><span class="line">            res = subprocess.Popen(&quot;sudo dmidecode -t system|grep &apos;%s&apos;&quot; % key,</span><br><span class="line">                                   stdout=subprocess.PIPE, shell=True)</span><br><span class="line">            result = res.stdout.read().decode()</span><br><span class="line">            data_list = result.split(&apos;:&apos;)</span><br><span class="line"></span><br><span class="line">            if len(data_list) &gt; 1:</span><br><span class="line">                raw_data[key] = data_list[1].strip()</span><br><span class="line">            else:</span><br><span class="line">                raw_data[key] = -1</span><br><span class="line">        except Exception as e:</span><br><span class="line">            print(e)</span><br><span class="line">            raw_data[key] = -2</span><br><span class="line"></span><br><span class="line">    data = dict()</span><br><span class="line">    data[&apos;asset_type&apos;] = &apos;server&apos;</span><br><span class="line">    data[&apos;manufacturer&apos;] = raw_data[&apos;Manufacturer&apos;]</span><br><span class="line">    data[&apos;sn&apos;] = raw_data[&apos;Serial Number&apos;]</span><br><span class="line">    data[&apos;model&apos;] = raw_data[&apos;Product Name&apos;]</span><br><span class="line">    data[&apos;uuid&apos;] = raw_data[&apos;UUID&apos;]</span><br><span class="line">    data[&apos;wake_up_type&apos;] = raw_data[&apos;Wake-up Type&apos;]</span><br><span class="line"></span><br><span class="line">    data.update(get_os_info())</span><br><span class="line">    data.update(get_cpu_info())</span><br><span class="line">    data.update(get_ram_info())</span><br><span class="line">    data.update(get_nic_info())</span><br><span class="line">    data.update(get_disk_info())</span><br><span class="line">    return data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_os_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取操作系统信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    distributor = subprocess.Popen(&quot;lsb_release -a|grep &apos;Distributor ID&apos;&quot;,</span><br><span class="line">                                   stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    distributor = distributor.stdout.read().decode().split(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">    release = subprocess.Popen(&quot;lsb_release -a|grep &apos;Description&apos;&quot;,</span><br><span class="line">                               stdout=subprocess.PIPE, shell=True)</span><br><span class="line"></span><br><span class="line">    release = release.stdout.read().decode().split(&quot;:&quot;)</span><br><span class="line">    data_dic = &#123;</span><br><span class="line">        &quot;os_distribution&quot;: distributor[1].strip() if len(distributor) &gt; 1 else &quot;&quot;,</span><br><span class="line">        &quot;os_release&quot;: release[1].strip() if len(release) &gt; 1 else &quot;&quot;,</span><br><span class="line">        &quot;os_type&quot;: &quot;Linux&quot;,</span><br><span class="line">    &#125;</span><br><span class="line">    return data_dic</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_cpu_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取cpu信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    base_cmd = &apos;cat /proc/cpuinfo&apos;</span><br><span class="line"></span><br><span class="line">    raw_data = &#123;</span><br><span class="line">        &apos;cpu_model&apos;: &quot;%s |grep &apos;model name&apos; |head -1 &quot; % base_cmd,</span><br><span class="line">        &apos;cpu_count&apos;:  &quot;%s |grep  &apos;processor&apos;|wc -l &quot; % base_cmd,</span><br><span class="line">        &apos;cpu_core_count&apos;: &quot;%s |grep &apos;cpu cores&apos; |awk -F: &apos;&#123;SUM +=$2&#125; END &#123;print SUM&#125;&apos;&quot; % base_cmd,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for key, cmd in raw_data.items():</span><br><span class="line">        try:</span><br><span class="line">            cmd_res = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">            raw_data[key] = cmd_res.stdout.read().decode().strip()</span><br><span class="line">        except ValueError as e:</span><br><span class="line">            print(e)</span><br><span class="line">            raw_data[key] = &quot;&quot;</span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">        &quot;cpu_count&quot;: raw_data[&quot;cpu_count&quot;],</span><br><span class="line">        &quot;cpu_core_count&quot;: raw_data[&quot;cpu_core_count&quot;]</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    cpu_model = raw_data[&quot;cpu_model&quot;].split(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">    if len(cpu_model) &gt; 1:</span><br><span class="line">        data[&quot;cpu_model&quot;] = cpu_model[1].strip()</span><br><span class="line">    else:</span><br><span class="line">        data[&quot;cpu_model&quot;] = -1</span><br><span class="line"></span><br><span class="line">    return data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_ram_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取内存信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    raw_data = subprocess.Popen(&quot;sudo dmidecode -t memory&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    raw_list = raw_data.stdout.read().decode().split(&quot;\n&quot;)</span><br><span class="line">    raw_ram_list = []</span><br><span class="line">    item_list = []</span><br><span class="line">    for line in raw_list:</span><br><span class="line">        if line.startswith(&quot;Memory Device&quot;):</span><br><span class="line">            raw_ram_list.append(item_list)</span><br><span class="line">            item_list = []</span><br><span class="line">        else:</span><br><span class="line">            item_list.append(line.strip())</span><br><span class="line"></span><br><span class="line">    ram_list = []</span><br><span class="line">    for item in raw_ram_list:</span><br><span class="line">        item_ram_size = 0</span><br><span class="line">        ram_item_to_dic = &#123;&#125;</span><br><span class="line">        for i in item:</span><br><span class="line">            data = i.split(&quot;:&quot;)</span><br><span class="line">            if len(data) == 2:</span><br><span class="line">                key, v = data</span><br><span class="line">                if key == &apos;Size&apos;:</span><br><span class="line">                    if v.strip() != &quot;No Module Installed&quot;:</span><br><span class="line">                        ram_item_to_dic[&apos;capacity&apos;] = v.split()[0].strip()</span><br><span class="line">                        item_ram_size = round(float(v.split()[0]))</span><br><span class="line">                    else:</span><br><span class="line">                        ram_item_to_dic[&apos;capacity&apos;] = 0</span><br><span class="line"></span><br><span class="line">                if key == &apos;Type&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;model&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Manufacturer&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;manufacturer&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Serial Number&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;sn&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Asset Tag&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;asset_tag&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Locator&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;slot&apos;] = v.strip()</span><br><span class="line"></span><br><span class="line">        if item_ram_size == 0:</span><br><span class="line">            pass</span><br><span class="line">        else:</span><br><span class="line">            ram_list.append(ram_item_to_dic)</span><br><span class="line"></span><br><span class="line">    raw_total_size = subprocess.Popen(&quot;cat /proc/meminfo|grep MemTotal &quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    raw_total_size = raw_total_size.stdout.read().decode().split(&quot;:&quot;)</span><br><span class="line">    ram_data = &#123;&apos;ram&apos;: ram_list&#125;</span><br><span class="line">    if len(raw_total_size) == 2:</span><br><span class="line">        total_gb_size = int(raw_total_size[1].split()[0]) / 1024**2</span><br><span class="line">        ram_data[&apos;ram_size&apos;] = total_gb_size</span><br><span class="line"></span><br><span class="line">    return ram_data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_nic_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取网卡信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    raw_data = subprocess.Popen(&quot;ifconfig -a&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line"></span><br><span class="line">    raw_data = raw_data.stdout.read().decode().split(&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    nic_dic = dict()</span><br><span class="line">    next_ip_line = False</span><br><span class="line">    last_mac_addr = None</span><br><span class="line"></span><br><span class="line">    for line in raw_data:</span><br><span class="line">        if next_ip_line:</span><br><span class="line">            next_ip_line = False</span><br><span class="line">            nic_name = last_mac_addr.split()[0]</span><br><span class="line">            mac_addr = last_mac_addr.split(&quot;HWaddr&quot;)[1].strip()</span><br><span class="line">            raw_ip_addr = line.split(&quot;inet addr:&quot;)</span><br><span class="line">            raw_bcast = line.split(&quot;Bcast:&quot;)</span><br><span class="line">            raw_netmask = line.split(&quot;Mask:&quot;)</span><br><span class="line">            if len(raw_ip_addr) &gt; 1:</span><br><span class="line">                ip_addr = raw_ip_addr[1].split()[0]</span><br><span class="line">                network = raw_bcast[1].split()[0]</span><br><span class="line">                netmask = raw_netmask[1].split()[0]</span><br><span class="line">            else:</span><br><span class="line">                ip_addr = None</span><br><span class="line">                network = None</span><br><span class="line">                netmask = None</span><br><span class="line">            if mac_addr not in nic_dic:</span><br><span class="line">                nic_dic[mac_addr] = &#123;&apos;name&apos;: nic_name,</span><br><span class="line">                                     &apos;mac&apos;: mac_addr,</span><br><span class="line">                                     &apos;net_mask&apos;: netmask,</span><br><span class="line">                                     &apos;network&apos;: network,</span><br><span class="line">                                     &apos;bonding&apos;: 0,</span><br><span class="line">                                     &apos;model&apos;: &apos;unknown&apos;,</span><br><span class="line">                                     &apos;ip_address&apos;: ip_addr,</span><br><span class="line">                                     &#125;</span><br><span class="line">            else:</span><br><span class="line">                if &apos;%s_bonding_addr&apos; % (mac_addr,) not in nic_dic:</span><br><span class="line">                    random_mac_addr = &apos;%s_bonding_addr&apos; % (mac_addr,)</span><br><span class="line">                else:</span><br><span class="line">                    random_mac_addr = &apos;%s_bonding_addr2&apos; % (mac_addr,)</span><br><span class="line"></span><br><span class="line">                nic_dic[random_mac_addr] = &#123;&apos;name&apos;: nic_name,</span><br><span class="line">                                            &apos;mac&apos;: random_mac_addr,</span><br><span class="line">                                            &apos;net_mask&apos;: netmask,</span><br><span class="line">                                            &apos;network&apos;: network,</span><br><span class="line">                                            &apos;bonding&apos;: 1,</span><br><span class="line">                                            &apos;model&apos;: &apos;unknown&apos;,</span><br><span class="line">                                            &apos;ip_address&apos;: ip_addr,</span><br><span class="line">                                            &#125;</span><br><span class="line"></span><br><span class="line">        if &quot;HWaddr&quot; in line:</span><br><span class="line">            next_ip_line = True</span><br><span class="line">            last_mac_addr = line</span><br><span class="line">    nic_list = []</span><br><span class="line">    for k, v in nic_dic.items():</span><br><span class="line">        nic_list.append(v)</span><br><span class="line"></span><br><span class="line">    return &#123;&apos;nic&apos;: nic_list&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_disk_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取存储信息。</span><br><span class="line">    本脚本只针对centos7.6中使用sda2，且只有一块虚拟硬盘的情况。</span><br><span class="line">    具体查看硬盘信息的命令，请根据实际情况，实际调整。</span><br><span class="line">    如果需要查看Raid信息，可以尝试MegaCli工具。</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    sn_raw_data = subprocess.Popen(&quot;sudo dmidecode -s system-serial-number&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    sn = sn_raw_data.stdout.read().decode()</span><br><span class="line">    model_raw_data = subprocess.Popen(&quot;sudo dmidecode -s system-product-name&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    model = model_raw_data.stdout.read().decode()</span><br><span class="line"></span><br><span class="line">    #size_data = subprocess.Popen(&quot;sudo fdisk -l /dev/sda2 | grep Disk|head -1&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    #size_data = size_data.stdout.read().decode()</span><br><span class="line">    #size = size_data.split(&quot;:&quot;)[1].strip().split(&quot; &quot;)[0]</span><br><span class="line"></span><br><span class="line">    size_raw_data = subprocess.Popen(&quot;sudo smartctl -a /dev/sda2 |grep Capacity&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    raw_data = size_raw_data.stdout.read().decode()</span><br><span class="line">    data_list = raw_data.split()[4]</span><br><span class="line">    size = data_list.split(&apos;[&apos;)[1]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    result = &#123;&apos;physical_disk_driver&apos;: []&#125;</span><br><span class="line">    disk_dict = dict()</span><br><span class="line">    disk_dict[&quot;model&quot;] = model</span><br><span class="line">    disk_dict[&quot;size&quot;] = size</span><br><span class="line">    disk_dict[&quot;sn&quot;] = sn</span><br><span class="line">    result[&apos;physical_disk_driver&apos;].append(disk_dict)</span><br><span class="line"></span><br><span class="line">    return result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    # 收集信息功能测试</span><br><span class="line">    d = collect()</span><br><span class="line">    print(d)</span><br></pre></td></tr></table></figure>
+<p>先来个输出在 centos7.6虚机上面的测试（可以读出所有数据）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;asset_type&apos;: &apos;server&apos;, &apos;manufacturer&apos;: &apos;VMware, Inc.&apos;, &apos;sn&apos;: &apos;VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60&apos;, &apos;model&apos;: &apos;VMware Virtual Platform&apos;, &apos;uuid&apos;: &apos;68254d56-ee5c-fbdc-a15e-776a5fe76660&apos;, &apos;wake_up_type&apos;: &apos;Power Switch&apos;, &apos;os_distribution&apos;: &apos;CentOS&apos;, &apos;os_release&apos;: &apos;CentOS Linux release 7.6.1810 (Core)&apos;, &apos;os_type&apos;: &apos;Linux&apos;, &apos;cpu_count&apos;: &apos;1&apos;, &apos;cpu_core_count&apos;: &apos;1&apos;, &apos;cpu_model&apos;: &apos;Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz&apos;, &apos;ram&apos;: [&#123;&apos;capacity&apos;: &apos;1024&apos;, &apos;slot&apos;: &apos;RAM slot #0&apos;, &apos;model&apos;: &apos;DRAM&apos;, &apos;manufacturer&apos;: &apos;Not Specified&apos;, &apos;sn&apos;: &apos;Not Specified&apos;, &apos;asset_tag&apos;: &apos;Not Specified&apos;&#125;], &apos;ram_size&apos;: 0.9497604370117188, &apos;nic&apos;: [], &apos;physical_disk_driver&apos;: [&#123;&apos;model&apos;: &apos;VMware Virtual Platform\n&apos;, &apos;size&apos;: &apos;32.2&apos;, &apos;sn&apos;: &apos;VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60\n&apos;&#125;]&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码整体没有什么难点，无非就是使用subprocess.Popen()方法执行Linux的命令，然后获取返回值，并以规定的格式打包到data字典里。</p>
+<p>需要说明的问题有：</p>
+<ul>
+<li>当Linux中存在好几个Python解释器版本时，要注意调用方式，前面已经强调过了；</li>
+<li>不同的Linux发行版，<strong>有些命令可能没有，需要额外安装</strong>；</li>
+<li>所使用的查看硬件信息的命令并不一定必须和这里的一样，只要能获得数据就行；</li>
+<li>有一些命令在ubuntu中涉及sudo的问题，需要特别对待；</li>
+<li>最终数据字典的格式一定要正确。</li>
+<li>可以在Linux下配置cronb或其它定时服务，设置定期的数据收集、报告任务。<br>下面，我们在Linux虚拟机上，测试一下客户端。</li>
+</ul>
+<p>将Pycharm中的Client客户端文件夹，拷贝到Linux虚拟机中，我这里是centos7.6</p>
+<p>进入bin目录，运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 main.py report_data</span><br></pre></td></tr></table></figure></p>
+<p>一切顺利的话应该能得到如下的反馈：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">正在将数据发送至： [http://10.101.120.34:8000/assets/report/]  ......</span><br><span class="line">handler_data_encode--&gt;&gt; b&apos;asset_data=%7B%22asset_type%22%3A+%22server%22%2C+%22manufacturer%22%3A+%22VMware%2C+Inc.%22%2C+%22sn%22%3A+%22VMware-56+4d+25+68+5c+ee+dc+fb-a1+5e+77+6a+5f+e7+66+60%22%2C+%22model%22%3A+%22VMware+Virtual+Platform%22%2C+%22uuid%22%3A+%2268254d56-ee5c-fbdc-a15e-776a5fe76660%22%2C+%22wake_up_type%22%3A+%22Power+Switch%22%2C+%22os_distribution%22%3A+%22CentOS%22%2C+%22os_release%22%3A+%22CentOS+Linux+release+7.6.1810+%28Core%29%22%2C+%22os_type%22%3A+%22Linux%22%2C+%22cpu_count%22%3A+%221%22%2C+%22cpu_core_count%22%3A+%221%22%2C+%22cpu_model%22%3A+%22Intel%28R%29+Core%28TM%29+i5-7300HQ+CPU+%40+2.50GHz%22%2C+%22ram%22%3A+%5B%7B%22capacity%22%3A+%221024%22%2C+%22slot%22%3A+%22RAM+slot+%230%22%2C+%22model%22%3A+%22DRAM%22%2C+%22manufacturer%22%3A+%22Not+Specified%22%2C+%22sn%22%3A+%22Not+Specified%22%2C+%22asset_tag%22%3A+%22Not+Specified%22%7D%5D%2C+%22ram_size%22%3A+0.9497604370117188%2C+%22nic%22%3A+%5B%5D%2C+%22physical_disk_driver%22%3A+%5B%7B%22model%22%3A+%22VMware+Virtual+Platform%5Cn%22%2C+%22size%22%3A+%2232.2%22%2C+%22sn%22%3A+%22VMware-56+4d+25+68+5c+ee+dc+fb-a1+5e+77+6a+5f+e7+66+60%5Cn%22%7D%5D%7D&apos;</span><br><span class="line">发送完毕！</span><br><span class="line">返回结果：成功收到数据！</span><br><span class="line">日志记录成功！</span><br></pre></td></tr></table></figure></p>
+<p>然后我们可以在pycharm 页面收到：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190304/fWKMrrjIgh2p.png?imageslim" alt="mark"></p>
+<p>规整如下：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190304/WUx9PrE2BOMP.png?imageslim" alt="mark"></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年03月07日 08:12</p>
+        <p>原始链接： <a class="post-url" href="/2019/03/04/5、Linux下收集数据/" title="CMDB-Windows下收集数据（四）">http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/&title=《CMDB-Windows下收集数据（四）》 — 结果不会给你开玩笑&pic=/images/14.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/&title=《CMDB-Windows下收集数据（四）》 — 结果不会给你开玩笑&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CMDB-Windows下收集数据（四）》 — 结果不会给你开玩笑&url=http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/django/" class="color2">django</a>
+      
+    <a href="/tags/python/" class="color2">python</a>
+      
+    <a href="/tags/CMDB/" class="color5">CMDB</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/03/4、Windows下收集数据/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">CMDB-Windows下收集数据（四）</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="5、Linux下收集数据"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '5b15e520dd4eea603c4d0fed9fa0dfe5';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CMDB/" style="font-size: 10px;">CMDB</a> <a href="/tags/django/" style="font-size: 20px;">django</a> <a href="/tags/python/" style="font-size: 20px;">python</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CMDB/" style="font-size: 10px;">CMDB</a> <a href="/tags/django/" style="font-size: 20px;">django</a> <a href="/tags/python/" style="font-size: 20px;">python</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
