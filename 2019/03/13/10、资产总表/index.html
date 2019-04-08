@@ -3,23 +3,26 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>urllib.parse.urlencode转换get请求参数 | 成年人的世界哪有容易二字！</title>
+  <title>CMDB-资产总表（十） | 成年人的世界哪有容易二字！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="浏览器地址栏搜索 刘若英1https://www.baidu.com/s?word=刘若英&amp;amp;tn=71069079_1_hao_pg&amp;amp;ie=utf-8 但是复制到文件中是这样的：1https://www.baidu.com/s?word=%E5%88%98%E8%8B%A5%E8%8B%B1&amp;amp;tn=71069079_1_hao_pg&amp;amp;ie=utf-8 这是因为浏览器">
-<meta name="keywords" content="python">
+  <meta name="description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句：1assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、">
+<meta name="keywords" content="django,python,CMDB">
 <meta property="og:type" content="article">
-<meta property="og:title" content="urllib.parse.urlencode转换get请求参数">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/index.html">
+<meta property="og:title" content="CMDB-资产总表（十）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/03/13/10、资产总表/index.html">
 <meta property="og:site_name" content="成年人的世界哪有容易二字！">
-<meta property="og:description" content="浏览器地址栏搜索 刘若英1https://www.baidu.com/s?word=刘若英&amp;amp;tn=71069079_1_hao_pg&amp;amp;ie=utf-8 但是复制到文件中是这样的：1https://www.baidu.com/s?word=%E5%88%98%E8%8B%A5%E8%8B%B1&amp;amp;tn=71069079_1_hao_pg&amp;amp;ie=utf-8 这是因为浏览器">
+<meta property="og:description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句：1assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-30T12:13:42.494Z">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/m7x7woCSatFa.png?imageslim">
+<meta property="og:updated_time" content="2019-04-08T13:42:37.721Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="urllib.parse.urlencode转换get请求参数">
-<meta name="twitter:description" content="浏览器地址栏搜索 刘若英1https://www.baidu.com/s?word=刘若英&amp;amp;tn=71069079_1_hao_pg&amp;amp;ie=utf-8 但是复制到文件中是这样的：1https://www.baidu.com/s?word=%E5%88%98%E8%8B%A5%E8%8B%B1&amp;amp;tn=71069079_1_hao_pg&amp;amp;ie=utf-8 这是因为浏览器">
+<meta name="twitter:title" content="CMDB-资产总表（十）">
+<meta name="twitter:description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句：1assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -104,14 +107,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-urllib.parse.urlencode转换get请求参数" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-10、资产总表" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      urllib.parse.urlencode转换get请求参数
+      CMDB-资产总表（十）
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -124,7 +127,7 @@
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2019-03-22
+          <i class="fa fa-calendar"></i>  2019-03-13
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -140,16 +143,41 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>浏览器地址栏搜索 刘若英<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.baidu.com/s?word=刘若英&amp;tn=71069079_1_hao_pg&amp;ie=utf-8</span><br></pre></td></tr></table></figure></p>
-<p>但是复制到文件中是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.baidu.com/s?word=%E5%88%98%E8%8B%A5%E8%8B%B1&amp;tn=71069079_1_hao_pg&amp;ie=utf-8</span><br></pre></td></tr></table></figure></p>
-<p>这是因为浏览器对中文请求参数进行了转码<br>用代码访问网站所发的请求中如果有中文也必须是转码之后的。这里需要用到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">urllib.parse.urlencode</span><br></pre></td></tr></table></figure></p>
-<p> 方法。<br>这个方法的作用就是将字典里面所有的键值转化为query-string格式（key=value&amp;key=value），并且将中文转码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">import urllib.request</span><br><span class="line">import urllib.parse</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">url = &apos;http://www.baidu.com/s?&apos;</span><br><span class="line"></span><br><span class="line">wd = input(&apos;请输入要搜索关键字： &apos;)</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">word=刘若英&amp;tn=71069079_1_hao_pg&amp;ie=utf-8</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">data = &#123;</span><br><span class="line">    &apos;word&apos;: wd,</span><br><span class="line">    &apos;tn&apos;: &apos;71069079_1_hao_pg&apos;,</span><br><span class="line">    &apos;ie&apos;: &apos;utf-8&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">query_string = urllib.parse.urlencode(data)</span><br><span class="line"># 拼接获取完整url</span><br><span class="line">url += query_string</span><br><span class="line"># 发起请求，获取响应</span><br><span class="line">response = urllib.request.urlopen(url=url)</span><br><span class="line"></span><br><span class="line">filename = wd + &apos;.html&apos;</span><br><span class="line"></span><br><span class="line">dirname = &apos;./html&apos;</span><br><span class="line"></span><br><span class="line">if not os.path.exists(dirname):</span><br><span class="line">    os.mkdir(dirname)</span><br><span class="line"></span><br><span class="line">filepath = dirname + &apos;/&apos; + filename</span><br><span class="line"></span><br><span class="line"># 以二进制写入文件</span><br><span class="line"># with open(filepath, &apos;wb&apos;) as fp:</span><br><span class="line">#   fp.write(response.read())</span><br><span class="line"></span><br><span class="line"># 或者以utf8编码写入文件</span><br><span class="line">with open (filepath, &apos;w&apos;, encoding=&apos;utf8&apos;) as fp:</span><br><span class="line">    fp.write(response.read().decode(&apos;utf8&apos;))</span><br></pre></td></tr></table></figure>
+            <p>当前，我们的资产总表如下图所示，还没有任何数据：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim" alt="mark"></p>
+<p>这需要我们从数据库中查询数据，然后渲染到前端页面中。</p>
+<p>数据的获取很简单，一句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assets = models.Asset.objects.all()</span><br></pre></td></tr></table></figure></p>
+<p>就搞定。当然，你也可以设置过滤条件，添加分页等等。</p>
+<p>而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 <strong>datatables</strong>，是一个非常好的表格插件，功能强大、配置简单。</p>
+<p>其官网为：<a href="https://datatables.net/" target="_blank" rel="noopener">https://datatables.net/</a> 中文网站：<a href="http://datatables.club/" target="_blank" rel="noopener">http://datatables.club/</a></p>
+<p>在AdminLTE中，集成了datatables插件，无需额外下载和安装，直接引入使用就可以。</p>
+<p>下面给出一个完整的index.html模板代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">index.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html</span><br></pre></td></tr></table></figure></p>
+<p>主要是新增了表格相关的html代码和初始化表格的js代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;table id=&quot;assets_table&quot; class=&quot;table table-bordered table-striped&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>id属性非常重要，用于关联相应的初始化js代码。</p>
+<p>表格中，循环每一个资产：</p>
+<ul>
+<li>首先生成一个排序的列；</li>
+<li>再根据资产类型的不同，用不同的颜色生成不同的资产类型名和子类型名；</li>
+<li>通过asset.get_asset_type_display的模板语法，拿到资产类型的直观名称，比如‘服务器’，而不是显示呆板的‘server’；</li>
+<li>通过asset.server.get_sub_asset_type_display，获取资产对应类型的子类型。这是Django特有的模板语法，非常类似其ORM的语法；</li>
+<li>在资产名的栏目，增加了超级链接，用于显示资产的详细内容。这里只实现了服务器类型资产的详细页面，其它类型请自行完善；</li>
+<li>根据资产状态的不同，用不同的颜色显示；</li>
+<li>利用asset.m_time|date:”Y/m/d [H:m:s]”调整时间的显示格式；</li>
+<li>由于资产和tas标签属于多对多的关系，所以需要一个循环，遍历每个tas并打印其名称；</li>
+<li>通过asset.tags.all可以获取一个资产对应的多对多字段的全部对象，很类似ORM的做法。</li>
+</ul>
+<p>表格的初始化JS代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  $(function () &#123;</span><br><span class="line">    $(&apos;#assets_table&apos;).DataTable(&#123;</span><br><span class="line">      &quot;paging&quot;: true,       &lt;!-- 允许分页 --&gt;</span><br><span class="line">      &quot;lengthChange&quot;: true, &lt;!-- 允许改变每页显示的行数 --&gt;</span><br><span class="line">      &quot;searching&quot;: true,    &lt;!-- 允许内容搜索 --&gt;</span><br><span class="line">      &quot;ordering&quot;: true,     &lt;!-- 允许排序 --&gt;</span><br><span class="line">      &quot;info&quot;: true,         &lt;!-- 显示信息 --&gt;</span><br><span class="line">      &quot;autoWidth&quot;: false    &lt;!-- 固定宽度 --&gt;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中可定义是否允许分页、改变显示的行数、搜索、排序、显示信息、固定宽度等等，通过表格的id进行关联。</p>
+<p>下面，我们通过后台admin界面，多增加几个服务器实例，并修改其类型、业务线、状态、厂商、机房、标签，再刷新资产总表，可以看到效果如下：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/m7x7woCSatFa.png?imageslim" alt="mark"></p>
+<p>试着使用一下排序和搜索功能吧！datatables还是相当强大的！</p>
+<p>现在点击资产名称，可以链接到资产详细页面，但没有任何数据显示，在下一节中，我们来实现它。</p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年03月30日 20:13</p>
-        <p>原始链接： <a class="post-url" href="/2019/03/22/urllib.parse.urlencode转换get请求参数/" title="urllib.parse.urlencode转换get请求参数">http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/</a></p>
+        <p>最后更新： 2019年04月08日 21:42</p>
+        <p>原始链接： <a class="post-url" href="/2019/03/13/10、资产总表/" title="CMDB-资产总表（十）">http://zhdya.okay686.cn/2019/03/13/10、资产总表/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -206,7 +234,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/&title=《urllib.parse.urlencode转换get请求参数》 — 成年人的世界哪有容易二字！&pic=/images/22.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/03/13/10、资产总表/&title=《CMDB-资产总表（十）》 — 成年人的世界哪有容易二字！&pic=/images/20.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -216,22 +244,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/&title=《urllib.parse.urlencode转换get请求参数》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/03/13/10、资产总表/&title=《CMDB-资产总表（十）》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/03/13/10、资产总表/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《urllib.parse.urlencode转换get请求参数》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CMDB-资产总表（十）》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/03/13/10、资产总表/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/03/13/10、资产总表/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -241,7 +269,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/03/22/urllib.parse.urlencode转换get请求参数/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/03/13/10、资产总表/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -253,7 +281,11 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
+    <a href="/tags/django/" class="color2">django</a>
+      
     <a href="/tags/python/" class="color2">python</a>
+      
+    <a href="/tags/CMDB/" class="color5">CMDB</a>
       
   </li>
 
@@ -267,19 +299,19 @@
 
 <nav id="article-nav">
   
-    <a href="/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/22/urllib.parse.urlencode转换get请求参数/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          【Python3爬虫】常见反爬虫措施及解决办法
+          urllib.parse.urlencode转换get请求参数
         
       </span>
     </a>
   
   
-    <a href="/2019/03/13/10、资产总表/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">CMDB-资产总表（十）</span>
+    <a href="/2019/03/12/9、前端框架AdminLTE/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">CMDB-前端框架AdminLTE（九）</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -288,7 +320,7 @@
 
 
     
-        <div id="SOHUCS" sid="urllib.parse.urlencode转换get请求参数"></div>
+        <div id="SOHUCS" sid="10、资产总表"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';
