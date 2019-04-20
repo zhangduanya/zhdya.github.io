@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title></title>
+    <url>%2F2019%2F04%2F20%2F%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。 blog的功能相对比较简单，主要以文章为主。 ==从功能需求来看==，这个Blog的功能分为：网站首页、文章分类、文章内容、幻灯图片、文章推荐、文章排行、热门推荐、文章搜索、友情链接。 1、网站首页：网站首页是整个网站的主界面，也是网站入口界面，里面主要展示Blog的动态信息及Blog功能导。网站动态信息以文章为主，如最新文章、幻灯图片、推荐阅读、文章排行、热门推荐、友情链接等。导航栏主要是将文章的分类的链接展示在首页，方便用户浏览。 2、文章分类：主要展示文章分类信息及链接，方便用户按需查看。文章分类可以在后台添加删除。 3、文章内容：主要展示文章所属分类、文章所属标签、文章内容、作者信息，发布时间信息。可以通过后台增、删、改。 4、幻灯图片：在网站首页，通过图片和文字展示一些重要信息，可以通过后台添加图片、图片描述、图片链接。 5、文章推荐：推荐一些重要的文章，可以在后台进行推荐。 6、文章排行：可根据文章浏览数，按时间段进行查询，然后展示出来。具体可根据自己的需求修改。 7、热门推荐：同样的推荐一些需要推荐的文章，可以在后台按需求或推荐位进行设置。 8、文章搜索：通过关键词搜索文章。 9、友情链接：展示相互链接的网站的名称与链接，可以通过后台添加与删除。 10、单页面：展示网站介绍，作者联系方式等信息，此类信息不经常变动，可以通过后台实现修改，也可以通过修改模板实现。 了解需求之后，就由UI设计师根据网站需求来设计网站页面，然后由前端工程师根据设计好的页面进行切图，实现HTML静态页面，最后由后端根据HTML页面和需求实现数据库构建和网站后台开发。 从设计方面来看，Blog主要分为六个页面，分别是：网站首页、文章分类列表页、文章内容页、搜索列表页、标签列表页、单页面。 1、网站首页：信息聚合的地方，展示多种信息； 2、文章分类列表页：点击分类，进入一个同一分类文章展示的列表页面； 3、文章内容页：文章内容展示页面，对应演示站这个地址； 4、搜索列表页：通过首页搜索按钮，展示出与搜索 词相关的文章列表； 5、标签列表页：展示同一个标签下的所有文章； 6、单页面：展示网站介绍、作者介绍或者联系方式等信息；]]></content>
+  </entry>
+  <entry>
+    <title><![CDATA[Django博客开发：欢迎页面（五）]]></title>
+    <url>%2F2019%2F04%2F09%2F%E4%BA%94%E3%80%81%E6%AC%A2%E8%BF%8E%E9%A1%B5%E9%9D%A2%2F</url>
+    <content type="text"><![CDATA[基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 12python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： 1python manage.py createsuperuser 最后，我们设置下启动命令，启动我们的Django项目： 启动后登陆 http://0.0.0.0:8000/ 就可以看到我们的欢迎页。 另外一点，我们当然也可以设置自定义的主页： 首先，打开打开bolg目录下的views.py文件，在里面输入： 123456myblog/blog/views.pyfrom django.http import HttpResponsedef hello(request): return HttpResponse(&apos;Welcome to Django Zone！&apos;) 再打开myblog目录下的urls.py文件，在文件里添加两行代码： 123456789myblog/myblog/urls.pyfrom django.contrib import adminfrom django.urls import pathfrom blog import viewsurlpatterns = [ path(&apos;admin/&apos;, admin.site.urls), path(&apos;&apos;, views.hello),] 再次刷新启动后，即可看到新的欢迎页面。 当然，我们在浏览器里面访问：http://127.0.0.1:8000/admin 就可以进入Django自带的后台管理。]]></content>
+      <categories>
+        <category>Django2</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>django2.0</tag>
+        <tag>django_blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Django博客开发：基础配置（四）]]></title>
+    <url>%2F2019%2F04%2F08%2F%E5%9B%9B%E3%80%81%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%2F</url>
+    <content type="text"><![CDATA[打开myblog目录下的settings.py文件： 一、设置域名访问权限123456myblog/settings.pyALLOWED_HOSTS = [] #修改前ALLOWED_HOSTS = [&apos;*&apos;]#修改后，表示任何域名都能访问。如果指定域名的话，在&apos;&apos;里放入指定的域名即可 二、设置TEMPLATES里的’DIRS’添加模板目录templates的路径，后面我们做网站模板的时候用得着。 123456789myblog/settings.py#修改前&apos;DIRS&apos;: []#修改后&apos;DIRS&apos;: [os.path.join(BASE_DIR, &apos;templates&apos;)]注：使用pycharm创建的话会自动添加 三、找到DATABASES设置网站数据库类型。这里使用默认的sqlite3。四、在INSTALLED_APPS添加APP应用名称。12345678myblog/settings.pyINSTALLED_APPS = [ &apos;django.contrib.admin&apos;, .... &apos;blog.apps.BlogConfig&apos;,#注册APP应用]#使用pycharm创建的话，这里自动添加了，如果是终端命令创建的话，需要手动添加应用名称如&apos;blog&apos;, 五、修改项目语言和时区123456789myblog/settings.py#修改前为英文LANGUAGE_CODE = &apos;en-us&apos;#修改后LANGUAGE_CODE = &apos;zh-hans&apos; #语言修改为中文#时区，修改前TIME_ZONE = &apos;UTC&apos;#修改后TIME_ZONE = &apos;Asia/Shanghai&apos; 六、在项目根目录里创建static和mediastatic用来存放模板CSS、JS、图片等静态资源，media用来存放上传的文件，后面我们在讲解数据库创建的时候有说明。 1234567891011121314myblog/settings.py#设置静态文件目录和名称STATIC_URL = &apos;/static/&apos;#加入下面代码#这个是设置静态文件夹目录的路径STATICFILES_DIRS = ( os.path.join(BASE_DIR, &apos;static&apos;),)#设置文件上传路径，图片上传、文件上传都会存放在此目录里MEDIA_URL = &apos;/media/&apos;MEDIA_ROOT = os.path.join(BASE_DIR, &apos;media&apos;)]]></content>
+      <categories>
+        <category>Django2</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>django2.0</tag>
+        <tag>django_blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Django博客开发：创建项目（三）]]></title>
+    <url>%2F2019%2F04%2F07%2F%E4%B8%89%E3%80%81%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%2F</url>
+    <content type="text"><![CDATA[基础环境： Python3.6 django2.1.1 开发工具为Pycharm 说明：1、为项目保存路径，myblog为项目名。 2、为选择使用的虚拟环境软件，这里选virtualenv。 3、为虚拟环境保存目录，我把它保存在项目里，虚拟环境默认名为env，我系统里有多个项目为了区分出来命名为myblogenv 4、为使用的模板语言，我们默认用django模板语言。 5、为创建项目的时候建立一个模板文件目录，用来存放模板文件。用CMD命令创建项目的话，模板目录需要自己手动创建。 6、为创建一个名为blog的APP应用。同样的用CMD命令创建的话，需要手动通过python manage.py startapp blog命令来进行创建。 点击创建之后，Pycharm自动帮我们完成Django软件下载安装和Django的项目创建。 注意：如果对需要指定Django版本的话，不能直接使用这个方法，这个方法会直接下载最新版本的Django。指定版本的话，请使用CMD通过命令如：1pip install django==2.0.1 第一个黑色的 myblog 为项目文件夹目录。 blog为APP应用目录，也是我们上面设置第6项才创建的。myblog为项目配置目录，myblogvenv为Pycharm创建的虚拟环境目录，与项目无关，不用理会。 目录里的文件含义如下：12345678910111213141516171819blog #APP应用名和目录│ admin.py #对应应用后台管理配置文件。│ apps.py #对应应用的配置文件。│ models.py #数据模块，数据库设计就在此文件中设计。后面重点讲解│ tests.py #自动化测试模块，可在里面编写测试脚本自动化测试│ views.py #视图文件，用来执行响应代码的。你在浏览器所见所得都是它处理的。│ __init__.py│├─migrations #数据迁移、移植文目录，记录数据库操作记录，内容自动生成。│ │ __init__.pymyblog #项目配置目录│ __init__.py #初始化文件，一般情况下不用做任何修改。│ settings.py #项目配置文件，具体如何配置后面有介绍。│ url.py #项目URL设置文件，可理解为路由，可以控制你访问去处。│ wsgi.py #为Python服务器网关接口，是Python与WEB服务器之间的接口。myblogvenv #Pycharm创建的虚拟环境目录，和项目无关，不需要管它。templates #项目模板文件目录，用来存放模板文件manage.py #命令行工具，通过可以与项目与行交互。在终端输入python manege.py help，可以查看功能。]]></content>
+      <categories>
+        <category>Django2</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>django2.0</tag>
+        <tag>django_blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Django博客开发：数据库设计分析（二）]]></title>
+    <url>%2F2019%2F04%2F06%2F%E4%BA%8C%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++ 从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。 这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多的关系，多对多简单理解就是，一篇文章可以有多个标签，一个标签里同样可以有多篇文章。 我们将文章表命名为Article，通过前面的分析得出文章信息表Article的数据库结构如下： 表字段 字段类型 备注 id int类型，长度为11 主键，由系统自动生成 title CharField类型，长度为100 文章标题 category ForeignKey 外键，关联文章分类表 tags ManyToManyField 多对多，关联标签列表 body TextField 文章内容 user ForeignKey 外键，文章作者关联用户模型，系统自带的 views PositiveIntegerField 文章浏览数，正的整数，不能为负 tui ForeignKey 外键，关联推荐位表 created_time DateTimeField 文章发布时间 从文章表里，我们关联了一个分类表，我们把这个分类表命名为category，category表的数据库结构如下： 表字段 字段类型 备注 id int类型，长度为11 主键，由系统自动生成 name CharField类型，长度为30 分类名 文章关联的标签表，我们命名为tag，结构如下： 表字段 字段类型 备注 id int类型，长度为11 主键，由系统自动生成 name CharField类型，长度为30 标签名 文章关联的推荐位表，命名为tui，结构如下： 表字段 字段类型 备注 id int类型，长度为11 主键，由系统自动生成 name CharField类型，长度为30 标签名 除此之外，我们还有两个独立的表，和文章没有关联的，一个是幻灯图片的表，一个是友情链接的表。 幻灯图表，命名为banner，数据库结构如下： 表字段 字段类型 备注 id int类型，长度为11 主键，由系统自动生成 text_info CharField类型，长度为100 标题，图片文本信息 img ImageField类型 图片类型，保存传图片的路径 link_url URLField类型 图片链接的URL is_active BooleanField布尔类型 有True 和False两个值，意思为是否激活 友情链接表命名为link，结构如下： 表字段 字段类型 备注 id int类型，长度为11 主键，由系统自动生成 name CharField类型，长度为70 友情链接的名称 linkurl URLField类型 友情链接的URL 至此，我们的数据库构造大致完成，后期如果还有其它的需求，我们可以在这基础上进行增加或者删除。下面我们就开始进行项目的创建与开发。]]></content>
+      <categories>
+        <category>Django2</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>django2.0</tag>
+        <tag>django_blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[BeautifulSoup中find和find_all的用法]]></title>
     <url>%2F2019%2F04%2F04%2FBeautifulSoup%E4%B8%ADfind%E5%92%8Cfind_all%E7%9A%84%E7%94%A8%E6%B3%95%2F</url>
     <content type="text"><![CDATA[在爬取网页中有用的信息时，通常是对存在于网页中的文本或各种不同标签的属性值进行查找，Beautiful Soup中内置了一些查找方式，最常用的是 find() 和 find_all() 函数。 同时通过soup.find_all()得到的所有符合条件的结果和soup.select()一样都是列表list，而soup.find()只返回第一个符合条件的结果，所以soup.find()后面可以直接接.text或者get_text()来获得标签中的文本。 一、find()用法1find(name,attrs,recursive,text,**wargs) 例子：12345678910&lt;ul id=&quot;producers&quot;&gt; &lt;li class=&quot;producerlist&quot;&gt; &lt;div class=&quot;name&quot;&gt;plants&lt;/div&gt; &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt; &lt;/li&gt; &lt;li class=&quot;producerlist&quot;&gt; &lt;div class=&quot;name&quot;&gt;algae&lt;/div&gt; &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt; &lt;/li&gt; &lt;/ul&gt; (1)ul,li,div这些就是标签； 用法p=soup.find(&apos;ul&apos;) ，那么返回结果是第一个ul标签以及&lt;xx&gt;...&lt;/xx&gt;的所有内容，即上面的代码；注意若用p=soup.find(&apos;ul&apos;).get_text()那么结果不是...的所有内 容，而应该是plants 10000 algae 10000，即...中的标签不算text文本。 (2)…之间的内容就是文本；基于文本内容的查找也可以用soup.find()，但必须用到参数text， 用法p=soup.find(text=&apos;algae&apos;)，print(p)得到的结果就是algae (3)正则表达式后面自己另外去学习； (4)ul id=”producers”&gt;中的id即标签属性，那么我们可以查找具有特定标签的属性； 用法p=soup.find(&apos;ul&apos;, id=&quot;producers&quot;)，那么可以得到&lt;xx&gt;...&lt;/xx&gt;的所有结果，其特点是把标签更一步精确化以便于查找。 对于大多数的情况可以用上面的方法解决，但是有两种情况则要用到参数attrs:一是标签字符中带有-，比如data-custom;二是class不能看作标签属性。解决的办法是在attrs属性用字典进行传递参数： 123soup.find(attrs=&#123;&apos;data-custom&apos;:&apos;xxx&apos;&#125;)以及：soup.find(attrs=&#123;&apos;class&apos;:&apos;xxx&apos;&#125;) 二、find_all()用法应用到find()中的不同过滤参数同理可以用到find_all()中，相比find()，find_all()有个额外的参数limit； 如下所示： 123p=soup.find_all(text=&apos;algae&apos;,limit=2)实际上find()也就是当limit=1时的find_all()。 [参考文档引自]]]></content>

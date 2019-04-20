@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Django博客开发：数据库设计分析（二） | 成年人的世界哪有容易二字！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++ 从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。  这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多">
+<meta name="keywords" content="python,django2.0,django_blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django博客开发：数据库设计分析（二）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/index.html">
+<meta property="og:site_name" content="成年人的世界哪有容易二字！">
+<meta property="og:description" content="++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++ 从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。  这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190411/lNu2QfqNYDQF.png?imageslim">
+<meta property="og:updated_time" content="2019-04-20T05:31:24.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django博客开发：数据库设计分析（二）">
+<meta name="twitter:description" content="++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++ 从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。  这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190411/lNu2QfqNYDQF.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">结果不会给你开玩笑</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        结果不会给你开玩笑
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        2019一步一个脚印
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="博客" target="_blank" href="//www.okay686.cn">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-二、数据库设计分析" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Django博客开发：数据库设计分析（二）
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Django2/">Django2</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-06
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++</p>
+<p>从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190411/lNu2QfqNYDQF.png?imageslim" alt="mark"></p>
+<p>这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多的关系，多对多简单理解就是，一篇文章可以有多个标签，一个标签里同样可以有多篇文章。</p>
+<p>我们将文章表命名为<strong>Article</strong>，通过前面的分析得出文章信息表Article的数据库结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>表字段</th>
+<th>字段类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>int类型，长度为11</td>
+<td>主键，由系统自动生成</td>
+</tr>
+<tr>
+<td>title</td>
+<td>CharField类型，长度为100</td>
+<td>文章标题</td>
+</tr>
+<tr>
+<td>category</td>
+<td>ForeignKey</td>
+<td>外键，关联文章分类表</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>ManyToManyField</td>
+<td>多对多，关联标签列表</td>
+</tr>
+<tr>
+<td>body</td>
+<td>TextField</td>
+<td>文章内容</td>
+</tr>
+<tr>
+<td>user</td>
+<td>ForeignKey</td>
+<td>外键，文章作者关联用户模型，系统自带的</td>
+</tr>
+<tr>
+<td>views</td>
+<td>PositiveIntegerField</td>
+<td>文章浏览数，正的整数，不能为负</td>
+</tr>
+<tr>
+<td>tui</td>
+<td>ForeignKey</td>
+<td>外键，关联推荐位表</td>
+</tr>
+<tr>
+<td>created_time</td>
+<td>DateTimeField</td>
+<td>文章发布时间</td>
+</tr>
+</tbody>
+</table>
+<p>从文章表里，我们关联了一个<strong>分类表</strong>，我们把这个分类表命名为category，category表的数据库结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>表字段</th>
+<th>字段类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>int类型，长度为11</td>
+<td>主键，由系统自动生成</td>
+</tr>
+<tr>
+<td>name</td>
+<td>CharField类型，长度为30</td>
+<td>分类名</td>
+</tr>
+</tbody>
+</table>
+<p>文章关联的<strong>标签表</strong>，我们命名为tag，结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>表字段</th>
+<th>字段类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>int类型，长度为11</td>
+<td>主键，由系统自动生成</td>
+</tr>
+<tr>
+<td>name</td>
+<td>CharField类型，长度为30</td>
+<td>标签名</td>
+</tr>
+</tbody>
+</table>
+<p>文章关联的<strong>推荐位表</strong>，命名为tui，结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>表字段</th>
+<th>字段类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>int类型，长度为11</td>
+<td>主键，由系统自动生成</td>
+</tr>
+<tr>
+<td>name</td>
+<td>CharField类型，长度为30</td>
+<td>标签名</td>
+</tr>
+</tbody>
+</table>
+<p>除此之外，我们还有两个独立的表，和文章没有关联的，一个是幻灯图片的表，一个是友情链接的表。</p>
+<p><strong>幻灯图表</strong>，命名为banner，数据库结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>表字段</th>
+<th>字段类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>int类型，长度为11</td>
+<td>主键，由系统自动生成</td>
+</tr>
+<tr>
+<td>text_info</td>
+<td>CharField类型，长度为100</td>
+<td>标题，图片文本信息</td>
+</tr>
+<tr>
+<td>img</td>
+<td>ImageField类型</td>
+<td>图片类型，保存传图片的路径</td>
+</tr>
+<tr>
+<td>link_url</td>
+<td>URLField类型</td>
+<td>图片链接的URL</td>
+</tr>
+<tr>
+<td>is_active</td>
+<td>BooleanField布尔类型</td>
+<td>有True 和False两个值，意思为是否激活</td>
+</tr>
+</tbody>
+</table>
+<p><strong>友情链接表</strong>命名为link，结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>表字段</th>
+<th>字段类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>int类型，长度为11</td>
+<td>主键，由系统自动生成</td>
+</tr>
+<tr>
+<td>name</td>
+<td>CharField类型，长度为70</td>
+<td>友情链接的名称</td>
+</tr>
+<tr>
+<td>linkurl</td>
+<td>URLField类型</td>
+<td>友情链接的URL</td>
+</tr>
+</tbody>
+</table>
+<p>至此，我们的数据库构造大致完成，后期如果还有其它的需求，我们可以在这基础上进行增加或者删除。下面我们就开始进行项目的创建与开发。</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年04月20日 13:31</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/06/二、数据库设计分析/" title="Django博客开发：数据库设计分析（二）">http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/&title=《Django博客开发：数据库设计分析（二）》 — 成年人的世界哪有容易二字！&pic=/images/d47.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/&title=《Django博客开发：数据库设计分析（二）》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django博客开发：数据库设计分析（二）》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/04/06/二、数据库设计分析/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/python/" class="color2">python</a>
+      
+    <a href="/tags/django2.0/" class="color5">django2.0</a>
+      
+    <a href="/tags/django_blog/" class="color2">django_blog</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+
+<nav id="article-nav">
+  
+    <a href="/2019/04/07/三、创建项目/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Django博客开发：创建项目（三）
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/04/04/BeautifulSoup中find和find_all的用法/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">BeautifulSoup中find和find_all的用法</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="二、数据库设计分析"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '5b15e520dd4eea603c4d0fed9fa0dfe5';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 13.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 13.33px;">Kubernets</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 15px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 15px;">django_blog</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 13.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 13.33px;">Kubernets</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 15px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 15px;">django_blog</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
