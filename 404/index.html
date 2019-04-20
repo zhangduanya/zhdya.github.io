@@ -38,7 +38,7 @@
         <div id="header-menu" class="header-menu-pos animated">
             <div class="header-menu-container">
                 <a href="/" class="left">
-                    <span class="site-title">结果不会给你开玩笑</span>
+                    <span class="site-title">五谷杂粮，百味人生。</span>
                 </a>
                 <nav id="header-menu-nav" class="right">
                     
@@ -73,14 +73,14 @@
                 <div id="header-title">
                     
                     <h2>
-                        结果不会给你开玩笑
+                        五谷杂粮，百味人生。
                     </h2>
                     
                 </div>
                 <div id="header-description">
                     
                     <h3>
-                        2019一步一个脚印
+                        2019：别自己给自己作秀，结果不会给你开玩笑！
                     </h3>
                     
                 </div>
@@ -237,14 +237,22 @@
 
 
     
-        <div id="SOHUCS" sid=""></div>
-<script type="text/javascript">
-    (function(){
-        var appid = 'cyu4TKmA0';
-        var conf = '5b15e520dd4eea603c4d0fed9fa0dfe5';
-        var width = window.innerWidth || document.documentElement.clientWidth;
-        if (width < 960) {
-            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+        <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <div id="comments">
+        <script>
+            var gitment = new Gitment({
+                owner: 'zhangduanya',
+                repo: 'https://github.com/zhangduanya/Python_learn',
+                oauth: {
+                    client_id: '1b4b806f28cd58808b74',
+                    client_secret: '834fae8a2e50f15f45208ffec74a093a85a512f9',
+                },
+            })
+            gitment.render('comments')
+        </script>
+    </div>
+
     
 </section>
         
