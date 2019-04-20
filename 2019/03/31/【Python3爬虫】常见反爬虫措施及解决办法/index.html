@@ -89,7 +89,7 @@
                 <div id="header-description">
                     
                     <h3>
-                        2019别自己给自己作秀，结果不会给你开玩笑！
+                        别自己给自己作秀，结果不会给你开玩笑！
                     </h3>
                     
                 </div>
@@ -317,22 +317,19 @@
 
 
     
-        <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
-    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
-    <div id="comments">
-        <script>
-            var gitment = new Gitment({
-                owner: 'zhangduanya',
-                repo: 'https://github.com/zhangduanya/Python_learn',
-                oauth: {
-                    client_id: '1b4b806f28cd58808b74',
-                    client_secret: '834fae8a2e50f15f45208ffec74a093a85a512f9',
-                },
-            })
-            gitment.render('comments')
-        </script>
-    </div>
-
+        <section id="comments">
+            <div id="disqus_thread">
+                <script type="text/javascript">
+                    var disqus_shortname = 'true';
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </div>
+        </section>
     
 </section>
         
