@@ -3,26 +3,26 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Django博客开发：欢迎页面（五） | 成年人的世界哪有容易二字！</title>
+  <title>Django博客开发：URL与视图函数（八） | 成年人的世界哪有容易二字！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 12python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： 1python manage.py createsupe">
+  <meta name="description" content="在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做">
 <meta name="keywords" content="python,django2.0,django_blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Django博客开发：欢迎页面（五）">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/index.html">
+<meta property="og:title" content="Django博客开发：URL与视图函数（八）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/index.html">
 <meta property="og:site_name" content="成年人的世界哪有容易二字！">
-<meta property="og:description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 12python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： 1python manage.py createsupe">
+<meta property="og:description" content="在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190417/EfVJ0Ar9T6Tt.png?imageslim">
-<meta property="og:updated_time" content="2019-04-20T05:31:46.906Z">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190420/ceRYC42787YO.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190420/06SOp1CAFwPa.png?imageslim">
+<meta property="og:updated_time" content="2019-04-20T05:35:47.234Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Django博客开发：欢迎页面（五）">
-<meta name="twitter:description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 12python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： 1python manage.py createsupe">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim">
+<meta name="twitter:title" content="Django博客开发：URL与视图函数（八）">
+<meta name="twitter:description" content="在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190420/ceRYC42787YO.png?imageslim">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -107,14 +107,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-五、欢迎页面" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-九、URL与视图函数" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Django博客开发：欢迎页面（五）
+      Django博客开发：URL与视图函数（八）
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -127,7 +127,7 @@
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2019-04-09
+          <i class="fa fa-calendar"></i>  2019-04-13
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -143,27 +143,36 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
-<p>迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。</p>
-<p>之后输入下面命令创建管理帐号和密码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py createsuperuser</span><br></pre></td></tr></table></figure>
-<p>最后，我们设置下启动命令，启动我们的Django项目：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim" alt="mark"></p>
-<p>启动后登陆 <a href="http://0.0.0.0:8000/" target="_blank" rel="noopener">http://0.0.0.0:8000/</a> 就可以看到我们的欢迎页。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190417/EfVJ0Ar9T6Tt.png?imageslim" alt="mark"></p>
-<p>另外一点，我们当然也可以设置自定义的主页：</p>
-<p>首先，打开打开bolg目录下的views.py文件，在里面输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">myblog/blog/views.py</span><br><span class="line"></span><br><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">    return HttpResponse(&apos;Welcome to Django Zone！&apos;)</span><br></pre></td></tr></table></figure>
-<p>再打开myblog目录下的urls.py文件，在文件里添加两行代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">myblog/myblog/urls.py</span><br><span class="line"></span><br><span class="line">from django.contrib import admin</span><br><span class="line">from django.urls import path</span><br><span class="line">from blog import views</span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">    path(&apos;&apos;, views.hello),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>再次刷新启动后，即可看到新的欢迎页面。</p>
-<p>当然，我们在浏览器里面访问：<a href="http://127.0.0.1:8000/admin" target="_blank" rel="noopener">http://127.0.0.1:8000/admin</a>  就可以进入Django自带的后台管理。</p>
+            <p>在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做出一个响应，这个响应就是把对应的内容通过浏览器渲染出来，呈现给我们看++。这个过程就是请求与响应。</p>
+<p>下图，就是请求响应的过程。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/ceRYC42787YO.png?imageslim" alt="mark"></p>
+<p>上面我们提到了URL，这个URL在我们的Django中，其实是由我们自己构造的。(这个说法不太严谨，但为了方便大家理解之后的内容，先当这说辞是正确的。)</p>
+<p>Django中，我们约定URL是在项目同名目录下的urls.py文件里urlpatterns列表构造的。</p>
+<p>myblog/myblog/urls.py</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/06SOp1CAFwPa.png?imageslim" alt="mark"></p>
+<p>表现形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    path(正则表达式, views视图函数，参数，别名),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">括号里的参数说明：</span><br><span class="line">1、一个正则表达式字符串</span><br><span class="line">2、一个可调用对象，通常为一个视图函数或一个指定视图函数路径的字符串</span><br><span class="line">3、可选的要传递给视图函数的默认参数（字典形式）</span><br><span class="line">4、一个可选的name参数(别名)</span><br></pre></td></tr></table></figure>
+<p>完整的URL应该要这么写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">path(正则表达式, views视图函数，参数，别名)</span><br><span class="line">：</span><br><span class="line">里面的正则表达式, views视图函数，是必须要写的，而参数，别名是可选的。我们在有特殊需要的时候才写。</span><br></pre></td></tr></table></figure></p>
+<p>通过上面我们可以看到，每个URL都对应一个views视图函数名，视图函数名不能相同，否则会报错。视图函数，Django中约定写在APP应用里的views.py文件里。然后在urls.py文件里通过下面的方式导入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from APP应用名 import views</span><br><span class="line">from APP应用名.vews import 函数名或类名</span><br></pre></td></tr></table></figure></p>
+<p>视图函数是一个简单的Python 函数，它接受Web请求并且返回Web响应。响应可以是一张网页的HTML内容，一个重定向，一个404错误，一个XML文档，或者一张图片. . . 是任何东西都可以。无论视图本身包含什么逻辑，都要返回响应。这个视图函数代码一般约定是放置在项目或应用程序目录中的名为views.py的文件中。</p>
+<p>http请求中产生两个核心对象：</p>
+<ul>
+<li>1、http请求—-&gt;HttpRequest对象，用户请求相关的所有信息（对象）</li>
+<li>2、http响应—-&gt;HttpResponse对象，响应字符串</li>
+</ul>
+<p>首先，打开打开bolg目录下的views.py文件，写一个hello视图函数，在里面输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">  &quot;&quot;&quot;</span><br><span class="line">  写一个hello函数，通过request接收URL或者说是http请求信息，</span><br><span class="line">  然后给这个请求返回一个HttpResponse对象</span><br><span class="line">  &quot;&quot;&quot;</span><br><span class="line">    return HttpResponse(&apos;欢迎使用Django！&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>例子里，我们用到的request，就是HttpRequest对象。HttpResponse(“欢迎使用Django！”)，就是HttpRequest对象，它向http请求响应了一段字符串对象。</p>
+<p>我们打开myblog目录下的urls.py文件中先导入视图函数，然后构造一个URL，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from blog import views  #导入视图函数</span><br><span class="line">urlpatterns = [</span><br><span class="line">    ...</span><br><span class="line">    path(&apos;&apos;, views.hello),   #这个是我们构造的URL</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>代码写完之后，启动项目就可以在浏览器里看到视图函数返回的字符串”欢迎使用Django！”</p>
+<p>每一个URL都会对应一个视图函数，当一个用户请求访问Django站点的一个页面时，然后就由Django路由系统（URL配置文件）去决定要执行哪个视图函数使用的算法。</p>
+<p>通过URL对应关系匹配 -&gt;找到对应的函数（或者类）-&gt;返回字符串(或者读取Html之后返回渲染的字符串）这个过程也就是我们Django请求的生命周期。</p>
+<p>视图函数，就是围绕着HttpRequest和HttpResponse这两个对象进行的。</p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年04月20日 13:31</p>
-        <p>原始链接： <a class="post-url" href="/2019/04/09/五、欢迎页面/" title="Django博客开发：欢迎页面（五）">http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/</a></p>
+        <p>最后更新： 2019年04月20日 13:35</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/13/九、URL与视图函数/" title="Django博客开发：URL与视图函数（八）">http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -220,7 +229,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/&title=《Django博客开发：欢迎页面（五）》 — 成年人的世界哪有容易二字！&pic=/images/d47.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/&title=《Django博客开发：URL与视图函数（八）》 — 成年人的世界哪有容易二字！&pic=/images/d47.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -230,22 +239,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/&title=《Django博客开发：欢迎页面（五）》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/&title=《Django博客开发：URL与视图函数（八）》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django博客开发：欢迎页面（五）》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django博客开发：URL与视图函数（八）》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -255,7 +264,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/04/13/九、URL与视图函数/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -285,19 +294,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2019/04/10/六、创建数据库模型/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          Django博客开发：创建数据库模型（六）
-        
-      </span>
-    </a>
   
-  
-    <a href="/2019/04/08/四、基础配置/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Django博客开发：基础配置（四）</span>
+    <a href="/2019/04/12/八、使用富文本编辑器添加数据/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Django博客开发：使用富文本编辑器（八）</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -306,7 +305,7 @@
 
 
     
-        <div id="SOHUCS" sid="五、欢迎页面"></div>
+        <div id="SOHUCS" sid="九、URL与视图函数"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';

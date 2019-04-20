@@ -3,22 +3,25 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>成年人的世界哪有容易二字！</title>
+  <title>Django博客开发：用Admin管理后台数据（七） | 成年人的世界哪有容易二字！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。 blog的功能相对比较简单，主要以文章为主。 ==从功能需求来看==，这个Blog的功能分为：网站首页、文章分类、文章内容、幻灯图片、文章推荐、文章排行、热门推荐、文章搜索、友情链接。 1、网站首页：网站首页是整个网站的主界面，也是网站入口界面">
+  <meta name="description" content="django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。 注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们">
+<meta name="keywords" content="python,django2.0,django_blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="成年人的世界哪有容易二字！">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/index.html">
+<meta property="og:title" content="Django博客开发：用Admin管理后台数据（七）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/index.html">
 <meta property="og:site_name" content="成年人的世界哪有容易二字！">
-<meta property="og:description" content="当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。 blog的功能相对比较简单，主要以文章为主。 ==从功能需求来看==，这个Blog的功能分为：网站首页、文章分类、文章内容、幻灯图片、文章推荐、文章排行、热门推荐、文章搜索、友情链接。 1、网站首页：网站首页是整个网站的主界面，也是网站入口界面">
+<meta property="og:description" content="django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。 注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-11T14:01:59.263Z">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190420/GWW02Dwk8eGI.png?imageslim">
+<meta property="og:updated_time" content="2019-04-20T05:34:51.850Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="成年人的世界哪有容易二字！">
-<meta name="twitter:description" content="当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。 blog的功能相对比较简单，主要以文章为主。 ==从功能需求来看==，这个Blog的功能分为：网站首页、文章分类、文章内容、幻灯图片、文章推荐、文章排行、热门推荐、文章搜索、友情链接。 1、网站首页：网站首页是整个网站的主界面，也是网站入口界面">
+<meta name="twitter:title" content="Django博客开发：用Admin管理后台数据（七）">
+<meta name="twitter:description" content="django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。 注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190420/GWW02Dwk8eGI.png?imageslim">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -103,38 +106,53 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-一、项目需求分析" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-七、用Admin管理后台管理数据" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Django博客开发：用Admin管理后台数据（七）
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Django2/">Django2</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-11
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
     
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。</p>
-<p>blog的功能相对比较简单，主要以文章为主。</p>
-<p>==从功能需求来看==，这个Blog的功能分为：网站首页、文章分类、文章内容、幻灯图片、文章推荐、文章排行、热门推荐、文章搜索、友情链接。</p>
-<p><strong>1、网站首页</strong>：网站首页是整个网站的主界面，也是网站入口界面，里面主要展示Blog的动态信息及Blog功能导。网站动态信息以文章为主，如最新文章、幻灯图片、推荐阅读、文章排行、热门推荐、友情链接等。导航栏主要是将文章的分类的链接展示在首页，方便用户浏览。</p>
-<p><strong>2、文章分类</strong>：主要展示文章分类信息及链接，方便用户按需查看。文章分类可以在后台添加删除。</p>
-<p><strong>3、文章内容</strong>：主要展示文章所属分类、文章所属标签、文章内容、作者信息，发布时间信息。可以通过后台增、删、改。</p>
-<p><strong>4、幻灯图片</strong>：在网站首页，通过图片和文字展示一些重要信息，可以通过后台添加图片、图片描述、图片链接。</p>
-<p><strong>5、文章推荐</strong>：推荐一些重要的文章，可以在后台进行推荐。</p>
-<p><strong>6、文章排行</strong>：可根据文章浏览数，按时间段进行查询，然后展示出来。具体可根据自己的需求修改。</p>
-<p><strong>7、热门推荐</strong>：同样的推荐一些需要推荐的文章，可以在后台按需求或推荐位进行设置。</p>
-<p><strong>8、文章搜索</strong>：通过关键词搜索文章。</p>
-<p><strong>9、友情链接</strong>：展示相互链接的网站的名称与链接，可以通过后台添加与删除。</p>
-<p><strong>10、单页面</strong>：展示网站介绍，作者联系方式等信息，此类信息不经常变动，可以通过后台实现修改，也可以通过修改模板实现。</p>
-<p>了解需求之后，就由UI设计师根据网站需求来设计网站页面，然后由前端工程师根据设计好的页面进行切图，实现HTML静态页面，最后由后端根据HTML页面和需求实现数据库构建和网站后台开发。</p>
-<p>从设计方面来看，Blog主要分为六个页面，分别是：网站首页、文章分类列表页、文章内容页、搜索列表页、标签列表页、单页面。</p>
-<p><strong>1、网站首页</strong>：信息聚合的地方，展示多种信息；</p>
-<p><strong>2、文章分类列表页</strong>：点击分类，进入一个同一分类文章展示的列表页面；</p>
-<p><strong>3、文章内容页</strong>：文章内容展示页面，对应演示站这个地址；</p>
-<p><strong>4、搜索列表页</strong>：通过首页搜索按钮，展示出与搜索 词相关的文章列表；</p>
-<p><strong>5、标签列表页</strong>：展示同一个标签下的所有文章；</p>
-<p><strong>6、单页面</strong>：展示网站介绍、作者介绍或者联系方式等信息；</p>
+            <p>django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。</p>
+<p>注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们的APP应用是blog，所以我们需要在blog/admin.py文件里进行注册：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">blog/admin.py</span><br><span class="line"></span><br><span class="line">from django.contrib import admin</span><br><span class="line">from .models import Banner, Category, Tag, Tui, Article, Link </span><br><span class="line">#导入需要管理的数据库表</span><br><span class="line"></span><br><span class="line">@admin.register(Article)</span><br><span class="line">class ArticleAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;category&apos;, &apos;title&apos;, &apos;tui&apos;, &apos;user&apos;, &apos;views&apos;, &apos;created_time&apos;)</span><br><span class="line">    # 文章列表里显示想要显示的字段</span><br><span class="line">    list_per_page = 50</span><br><span class="line">    # 满50条数据就自动分页</span><br><span class="line">    ordering = (&apos;-created_time&apos;,)</span><br><span class="line">    #后台数据列表排序方式</span><br><span class="line">    list_display_links = (&apos;id&apos;, &apos;title&apos;)</span><br><span class="line">    # 设置哪些字段可以点击进入编辑界面</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@admin.register(Banner)</span><br><span class="line">class BannerAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;text_info&apos;, &apos;img&apos;, &apos;link_url&apos;, &apos;is_active&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Category)</span><br><span class="line">class CategoryAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;, &apos;index&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Tag)</span><br><span class="line">class TagAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Tui)</span><br><span class="line">class TuiAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Link)</span><br><span class="line">class LinkAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;,&apos;linkurl&apos;)</span><br></pre></td></tr></table></figure>
+<p>登录管理后台 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">http://127.0.0.1:8000/admin/</a></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/GWW02Dwk8eGI.png?imageslim" alt="mark"></p>
+<p>多出了之前我们在models里创建的表。我们可以在后台里面对这些表进行增、删、改方面的操作。</p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年04月11日 22:01</p>
-        <p>原始链接： <a class="post-url" href="/2019/04/20/一、项目需求分析/" title="">http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/</a></p>
+        <p>最后更新： 2019年04月20日 13:34</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/11/七、用Admin管理后台管理数据/" title="Django博客开发：用Admin管理后台数据（七）">http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -191,7 +209,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/&title=成年人的世界哪有容易二字！&pic=http://zhdya.okay686.cnimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/&title=《Django博客开发：用Admin管理后台数据（七）》 — 成年人的世界哪有容易二字！&pic=/images/d47.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -201,22 +219,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/&title=成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/&title=《Django博客开发：用Admin管理后台数据（七）》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Django博客开发：用Admin管理后台数据（七）》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -226,7 +244,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/04/20/一、项目需求分析/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/04/11/七、用Admin管理后台管理数据/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -235,6 +253,17 @@
         <ul class="article-footer-menu">
             
             
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/python/" class="color2">python</a>
+      
+    <a href="/tags/django2.0/" class="color5">django2.0</a>
+      
+    <a href="/tags/django_blog/" class="color2">django_blog</a>
+      
+  </li>
+
         </ul>
         
     </footer>
@@ -245,9 +274,19 @@
 
 <nav id="article-nav">
   
+    <a href="/2019/04/12/八、使用富文本编辑器添加数据/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Django博客开发：使用富文本编辑器（八）
+        
+      </span>
+    </a>
   
-    <a href="/2019/04/09/五、欢迎页面/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Django博客开发：欢迎页面（五）</span>
+  
+    <a href="/2019/04/10/六、创建数据库模型/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Django博客开发：创建数据库模型（六）</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -256,7 +295,7 @@
 
 
     
-        <div id="SOHUCS" sid="一、项目需求分析"></div>
+        <div id="SOHUCS" sid="七、用Admin管理后台管理数据"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';
