@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>容器网络 calico 基本原理和模拟 | 成年人的世界哪有容易二字！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。 简介Calico 官方定义如下：1234">
+<meta name="keywords" content="calico,k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="容器网络 calico 基本原理和模拟">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/index.html">
+<meta property="og:site_name" content="成年人的世界哪有容易二字！">
+<meta property="og:description" content="摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。 简介Calico 官方定义如下：1234">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190425/qKz7i8J6CIl7.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190425/RRwiuSjn4cYW.png?imageslim">
+<meta property="og:updated_time" content="2019-04-25T13:24:13.043Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="容器网络 calico 基本原理和模拟">
+<meta name="twitter:description" content="摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。 简介Calico 官方定义如下：1234">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190425/qKz7i8J6CIl7.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        别自己给自己作秀，结果不会给你开玩笑！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="博客" target="_blank" href="//www.okay686.cn">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-容器网络 calico 基本原理和模拟" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      容器网络 calico 基本原理和模拟
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8S/">K8S</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-22
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h4 id="Calico-官方定义如下："><a href="#Calico-官方定义如下：" class="headerlink" title="Calico 官方定义如下："></a>Calico 官方定义如下：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Calico provides secure network connectivity for containers and virtual machine workloads.</span><br><span class="line"></span><br><span class="line">Calico creates and manages a flat layer 3 network, assigning each workload a fully routable IP address. Workloads can communicate without IP encapsulation or network address translation for bare metal performance, easier troubleshooting, and better interoperability. In environments that require an overlay, Calico uses IP-in-IP tunneling or can work with other overlay networking such as flannel.</span><br><span class="line"></span><br><span class="line">Calico also provides dynamic enforcement of network security rules. Using Calico’s simple policy language, you can achieve fine-grained control over communications between containers, virtual machine workloads, and bare metal host endpoints.</span><br></pre></td></tr></table></figure>
+<p>总结如下：</p>
+<p>Calico 为容器和 vm 等提供一个安全的网路互联方法，我们把 VM、Container、白盒等实例统称为 workloads，通过给 workload 分配一个扁平的三层路由可达 IP 地址实现转发，是一种纯三层转发的方案，workload 之间不使用隧道或 NAT 技术，这种方式提供更好的网络性能，提高易维护和可交互性。同时也支持 IPIP 隧道和与 Flannel 集成能力。Calico 提供动态实施的网络安全策略，可使用简单的安全模型语言实现细粒度的安全控制。</p>
+<h4 id="相对-Overlay，为什么用-Calico？"><a href="#相对-Overlay，为什么用-Calico？" class="headerlink" title="相对 Overlay，为什么用 Calico？"></a>相对 Overlay，为什么用 Calico？</h4><p>Calico 是一种 workloads 之间互通的网络方案，并支持以上任意一种场景。在虚拟化平台中，比如 OpenStack、Docker 等都需要实现 workloads 之间互连，但同时也需要对 workloads 做隔离控制，就像在 Internet 中的服务仅开放80端口、公有云的多租户一样，提供隔离和管控机制。</p>
+<p>而在多数的虚拟化平台实现中，通常都使用二层隔离技术来实现 workloads 的网络，这些二层的技术有一些弊端，比如需要依赖 VLAN、bridge 和隧道等技术，其中 bridge 带来了复杂性，vlan 隔离和 tunnel 隧道则消耗更多的资源并对物理环境有要求，随着网络规模的增大，整体会变得越加复杂。</p>
+<p>那么有更好的方案吗？我们在审视了二层方案并思考如何支持大型网络时从 Internet 网络实现中获得了灵感。我们知道在 Internet 的网络中，路由器作为网关连接着自己的子网络，之间通过 BGP 相互学习，并使用防火墙控制不同子网之间安全策略，所有这些子网络共同组成了 Internet 网络，那么，这种方式能否也应用到虚拟化基础平台中呢？</p>
+<p>借鉴这种思路，我们尝试把 Host 当作 Internet 中的路由器，同样使用 BGP 同步路由，并使用 iptables 来做安全访问策略，最终设计出了 Calico 方案，整个方案的优势为：</p>
+<ul>
+<li>更优的资源利用：</li>
+</ul>
+<p>二层网络通讯需要依赖广播消息机制，广播消息的开销与 host 的数量呈指数级增长，Calico 使用的三层路由方法，则完全抑制了二层广播，减少了资源开销。</p>
+<p>另外，二层网络使用 VLAN 隔离技术，天生有 4096 个规格限制，即便可以使用 vxlan 解决，但 vxlan 又带来了隧道开销的新问题。而 Calico 不使用 vlan 或 vxlan 技术，使资源利用率更高。</p>
+<ul>
+<li>可扩展性：</li>
+</ul>
+<p>Calico 使用与 Internet 类似的方案，Internet 的网络比任何数据中心都大，Calico 同样天然具有可扩展性。</p>
+<ul>
+<li>简单而更容易 debug：</li>
+</ul>
+<p>因为没有隧道，意味着 workloads 之间路径更短更简单，配置更少，在 host 上更容易进行 debug 调试。</p>
+<ul>
+<li>更少的依赖：</li>
+</ul>
+<p>Calico 仅依赖三层路由可达。</p>
+<ul>
+<li>可适配性：</li>
+</ul>
+<p>Calico 较少的依赖性使它能适配所有 VM、Container、白盒或者混合环境场景。</p>
+<p>除了以上，还有更多其他优势，因此，如果你在为 OpenStack 或 docker 构建虚拟化网络环境的话，可以好好考虑下 Calico 的方案。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190425/qKz7i8J6CIl7.png?imageslim" alt="mark"></p>
+<p>Calico 由 5 部分组件组成，整体构架如下：</p>
+<ul>
+<li>Felix：运行在每一台 Host 的 agent 进程，主要负责网络接口管理和监听、路由、ARP 管理、ACL 管理和同步、状态上报等</li>
+<li>Orchestrator Plugin：编排插件，并不是独立运行的某些进程，而是设计与 k8s、OpenStack 等平台集成的插件，如 Neutron’s ML2 plugin 用于用户使用 Neutron API 来管理 Calico，本质是要解决模型和 API 间的兼容性问题。</li>
+<li>Etcd：Calico 模型的存储引擎。</li>
+<li>BGP Client（BIRD）：Calico 为每一台 Host 部署一个 BGP Client，使用 BIRD 实现，BIRD 是一个单独的持续发展的项目，实现了众多动态路由协议比如 BGP、OSPF、RIP 等。在 Calico 的角色是监听 Host 上由 Felix 注入的路由信息，然后通过 BGP 协议广播告诉剩余 Host 节点，从而实现网络互通。</li>
+<li>BGP Route Reflector(BIRD)：在大型网络规模中，如果仅仅使用 BGP client 形成 mesh 全网互联的方案就会导致规模限制，因为所有节点之间俩俩互联，需要 N^2 个连接，为了解决这个规模问题，可以采用 BGP 的 Router Reflector 的方法，使所有 BGP Client 仅与特定 RR 节点互联并做路由同步，从而大大减少连接数。</li>
+</ul>
+<h3 id="模拟组网"><a href="#模拟组网" class="headerlink" title="模拟组网"></a>模拟组网</h3><p>组网如下：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190425/RRwiuSjn4cYW.png?imageslim" alt="mark"></p>
+<ul>
+<li>guest 配置 169.254.1.1 的默认路由；</li>
+<li>host 上配置 10.20.2.0/24 和 10.20.1.3/32 路由；</li>
+<li>开启 arp proxy 和 ip_forward 能力；</li>
+</ul>
+<p>网络连通性测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># HOST0</span><br><span class="line">[root@i-7dlclo08 ~]# ip netns exec ns0 ping 10.20.2.2</span><br><span class="line">PING 10.20.2.2 (10.20.2.2) 56(84) bytes of data.</span><br><span class="line"> bytes from 10.20.2.2: icmp_seq=1 ttl=62 time=0.774 ms</span><br><span class="line"> bytes from 10.20.2.2: icmp_seq=2 ttl=62 time=0.332 ms</span><br></pre></td></tr></table></figure>
+<p>10.20.1.2 与跨 Host 跨子网 10.20.2.2 互通成功<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># HOST0</span><br><span class="line">[root@i-7dlclo08 ~]# ip netns exec ns0 ping 10.20.1.3</span><br><span class="line">PING 10.20.1.3 (10.20.1.3) 56(84) bytes of data.</span><br><span class="line"> bytes from 10.20.1.3: icmp_seq=1 ttl=62 time=957 ms</span><br><span class="line"> bytes from 10.20.1.3: icmp_seq=2 ttl=62 time=0.432 ms</span><br><span class="line"> bytes from 10.20.1.3: icmp_seq=3 ttl=62 time=0.563 ms</span><br></pre></td></tr></table></figure></p>
+<p>10.20.1.2 与跨 Host 同子网 10.20.1.3 互通成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@i-7dlclo08 ~]# ip netns exec ns0 ping 192.168.100.3</span><br><span class="line">PING 192.168.100.3 (192.168.100.3) 56(84) bytes of data.</span><br><span class="line"> bytes from 192.168.100.3: icmp_seq=1 ttl=63 time=1.00 ms</span><br><span class="line"> bytes from 192.168.100.3: icmp_seq=2 ttl=63 time=0.695 ms</span><br></pre></td></tr></table></figure>
+<p>在未做安全策略下，10.20.1.2 与 Host 192.168.100.3 互通成功</p>
+<p>转发过程：</p>
+<ul>
+<li>guest0 本地所有数据包都转发到一个虚假的地址 169.254.1.1，发送 ARP Req。</li>
+<li>Host0 的 veth 端收到 ARP Req 时通过开启网卡的 proxy arp 代理功能直接把自己的 MAC 地址返回给 guest0</li>
+<li>guest0 发送目的地址为 guest1 的 IP 数据包</li>
+<li>因为使用了 169.254.1.1 这样的地址，Host 判断为三层路由转发，查询本地路由 10.20.2.0/24 via 192.168.0.3 dev eth0 发送给对端 host1，如果配置 BGP，这里会看到 proto 协议为 BIRD</li>
+<li>在发送之前匹配本地的 iptables 规则进行安全策略控制，这里略</li>
+<li>当 host1 收到 10.20.2.2 的数据包时查找本地路由表匹配 10.20.2.2/32 dev veth0 scope link 转发到对应的 veth0 端从而到达 guest1</li>
+<li>回程类似，略</li>
+</ul>
+<p>整体转发流程简单清晰。因此可以看到，Calico 需要给所有 guest 配置一条特别的路由并利用 veth 的 proxy arp 的能力让 guest 出来的所有转发都变成三层路由转发，再利用 host 的路由表进行转发，这种方式不仅仅实现了同 host 的二三层转发，也能实现跨 host 的转发。</p>
+<h3 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h3><ul>
+<li>1、租户隔离问题</li>
+</ul>
+<p>Calico 的三层方案是直接在 host 上进行路由寻址，那么对于多租户如果使用同一个 CIDR 网络就面临着地址冲突的问题。</p>
+<ul>
+<li>2、路由规模问题</li>
+</ul>
+<p>通过路由规则可以看出，路由规模和 guest 分布有关，如果 guest 离散分布在 host 集群中，势必会产生较多的路由项。</p>
+<ul>
+<li>3、iptables 规则规模问题</li>
+</ul>
+<p>1台 Host 上可能虚拟化十几或几十个容器实例，过多的 iptables 规则造成复杂性和不可调试性，同时也存在性能损耗。</p>
+<ul>
+<li>4、跨子网时的网关路由问题</li>
+</ul>
+<p>当对端网络不为二层可达时，需要通过三层路由机时，需要网关支持自定义路由配置，即 guest 的目的地址为本网段的网关地址，再由网关进行跨三层转发。</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><ul>
+<li>1、Calico 通过巧妙的引导 workload 所有的流量至一个特殊的网关 169.254.1.1，从而引流到 host 的 calixxx 网络设备上，形成了二三层流量全部转换 host 的三层流量转发。</li>
+<li>2、在 Host 上通过开启 arp proxy 的能力实现 arp 代答，arp 广播被抑制在 host 里，arp 记录变成“无效记录”，抑制了广播风暴和不会有 arp 表膨胀的问题。</li>
+<li>3、使用 iptables 在 host 做 policy 实现的复杂的安全模型，安全策略应用在每一台虚拟路由器上，最终形成了一个分布式的安全系统。</li>
+</ul>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年04月25日 21:24</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/22/容器网络 calico 基本原理和模拟/" title="容器网络 calico 基本原理和模拟">http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/&title=《容器网络 calico 基本原理和模拟》 — 成年人的世界哪有容易二字！&pic=/images/save.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/&title=《容器网络 calico 基本原理和模拟》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《容器网络 calico 基本原理和模拟》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/04/22/容器网络 calico 基本原理和模拟/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/calico/" class="color2">calico</a>
+      
+    <a href="/tags/k8s/" class="color4">k8s</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#摘要"><span class="post-toc-text">摘要</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-text">简介</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Calico-官方定义如下："><span class="post-toc-text">Calico 官方定义如下：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#相对-Overlay，为什么用-Calico？"><span class="post-toc-text">相对 Overlay，为什么用 Calico？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#模拟组网"><span class="post-toc-text">模拟组网</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#遗留问题"><span class="post-toc-text">遗留问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结："><span class="post-toc-text">总结：</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/13/九、URL与视图函数/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Django博客开发：URL与视图函数（九）</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <section id="comments">
+            <div id="disqus_thread">
+                <script type="text/javascript">
+                    var disqus_shortname = 'true';
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </div>
+        </section>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 13.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 13.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 15px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 15px;">django_blog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 13.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 13.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 15px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 15px;">django_blog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
