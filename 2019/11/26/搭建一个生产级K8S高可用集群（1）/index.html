@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>搭建一个生产级K8S高可用集群（1） | 成年人的世界哪有容易二字！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="1不多说了，2019年底再开始~~ 一、K8S特性①自我修复在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。 ②弹性伸缩使用命令、UI管控或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行业务。 ③自动部署和回滚K8S采用滚动更">
+<meta name="keywords" content="Kubernets,K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建一个生产级K8S高可用集群（1）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/index.html">
+<meta property="og:site_name" content="成年人的世界哪有容易二字！">
+<meta property="og:description" content="1不多说了，2019年底再开始~~ 一、K8S特性①自我修复在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。 ②弹性伸缩使用命令、UI管控或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行业务。 ③自动部署和回滚K8S采用滚动更">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191127/ugJ3GH6QGA99.png?imageslim">
+<meta property="og:updated_time" content="2019-11-27T14:18:45.191Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建一个生产级K8S高可用集群（1）">
+<meta name="twitter:description" content="1不多说了，2019年底再开始~~ 一、K8S特性①自我修复在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。 ②弹性伸缩使用命令、UI管控或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行业务。 ③自动部署和回滚K8S采用滚动更">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191127/ugJ3GH6QGA99.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        别自己给自己作秀，结果不会给你开玩笑！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="博客" target="_blank" href="//www.okay686.cn">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-搭建一个生产级K8S高可用集群（1）" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      搭建一个生产级K8S高可用集群（1）
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s/">K8s</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-11-26
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不多说了，2019年底再开始~~</span><br></pre></td></tr></table></figure>
+<h3 id="一、K8S特性"><a href="#一、K8S特性" class="headerlink" title="一、K8S特性"></a>一、K8S特性</h3><h4 id="①自我修复"><a href="#①自我修复" class="headerlink" title="①自我修复"></a>①自我修复</h4><p>在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。</p>
+<h4 id="②弹性伸缩"><a href="#②弹性伸缩" class="headerlink" title="②弹性伸缩"></a>②弹性伸缩</h4><p>使用命令、UI管控或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行业务。</p>
+<h4 id="③自动部署和回滚"><a href="#③自动部署和回滚" class="headerlink" title="③自动部署和回滚"></a>③自动部署和回滚</h4><p>K8S采用滚动更新策略更新应用，一次更新一个Pod，而不是同时删除所有Pod，如果更新过程中出现问题，将回滚更改，确保升级不影响业务。</p>
+<h4 id="④服务发现和负载均衡"><a href="#④服务发现和负载均衡" class="headerlink" title="④服务发现和负载均衡"></a>④服务发现和负载均衡</h4><p>K8S为多个容器提供一个统一的访问入口（内部IP地址和一个DNS名称），并且负载均衡关联的所有容器，使得用户无需考虑容器IP问题。</p>
+<h4 id="⑤机密和配置管理"><a href="#⑤机密和配置管理" class="headerlink" title="⑤机密和配置管理"></a>⑤机密和配置管理</h4><p>管理机密数据和应用程序配置，而不需要把敏感数据暴露在镜像里，提高敏感数据安全性。并可以将一些常用的配置存储在K8S中，方便应用程序使用。</p>
+<h4 id="⑥存储编排"><a href="#⑥存储编排" class="headerlink" title="⑥存储编排"></a>⑥存储编排</h4><p>挂载外部存储系统，无论是来自本地存储，公有云（如AWS），还是网路存储（如NFS，ClusterFS，Ceph）都作为集群资源的一部分使用，极大提高存储使用灵活性。</p>
+<h4 id="⑦批处理"><a href="#⑦批处理" class="headerlink" title="⑦批处理"></a>⑦批处理</h4><p>提供一次性任务，定时任务；满足批量数据处理和分析的场景。</p>
+<h3 id="二、K8S集群架构和组件"><a href="#二、K8S集群架构和组件" class="headerlink" title="二、K8S集群架构和组件"></a>二、K8S集群架构和组件</h3><p><img src="http://myimage.okay686.cn/okay686cn/20191127/ugJ3GH6QGA99.png?imageslim" alt="mark"></p>
+<ul>
+<li>Master</li>
+</ul>
+<p>Master主要负责资源调度，控制副本，和提供统一访问集群的入口。</p>
+<ul>
+<li>Node</li>
+</ul>
+<p>Node由Master管理，并汇报容器状态给Master，同时根据Master要求管理容器生命周期。</p>
+<ul>
+<li>Pod</li>
+</ul>
+<p>Docker最小部署单元是容器，而Kubernetes最小部署单元是Pod，一个Pod有一个或多个容器组成，Pod中容器共享存储和网络，一个Pod在同一台Node上运行。</p>
+<ul>
+<li>Service</li>
+</ul>
+<p>Service一个应用服务抽象，定义了Pod逻辑集合和访问这个Pod集合的策略。Service代理Pod集合对外表现是为一个访问入口，分配一个集群IP地址，来自这个IP的请求将负载均衡转发到后端Pod中的容器。<br>用过负载均衡器的朋友可能很好理解，其实Service就是一个抽象的负载均衡器。<br>Service通过Lable Selector选择一组Pod提供服务。</p>
+<ul>
+<li>Lable</li>
+</ul>
+<p>标签是一个key=value的键值对，附加在某个资源上，每个对象可以有多个标签，然后根据这个lable关联、查询和筛选。<br>就像Service与Pod，当多个Service、多个Pod情况下，访问某个Service怎么就知道转发到指定Pod呢？</p>
+<ul>
+<li>Volume</li>
+</ul>
+<p>数据卷，挂载宿主机文件、目录或者外部存储到Pod中，为应用服务提供存储，也可以Pod中容器之间共享数据。</p>
+<ul>
+<li>Namespace</li>
+</ul>
+<p>命名空间将资源对象逻辑上分配到不同Namespace，可以是不同的项目、用户等区分管理，并设定控制策略，从而实现多租户。命名空间也称为虚拟集群。</p>
+<h4 id="2-1、Master组件"><a href="#2-1、Master组件" class="headerlink" title="2.1、Master组件"></a>2.1、Master组件</h4><ul>
+<li>kube-apiserver</li>
+</ul>
+<p>Kubernetes API，集群的统一入口，各组件协调者，以RESTful API提供接口服务，所有对象资源的增删改查和监听操作都交给APIServer处理后再提交给Etcd存储。</p>
+<ul>
+<li>kube-controller-manager</li>
+</ul>
+<p>处理集群中常规后台任务，一个资源对应一个控制器，而ControllerManager就是负责管理这些控制器的。</p>
+<ul>
+<li>kube-scheduler</li>
+</ul>
+<p>根据调度算法为新创建的Pod选择一个Node节点，可以任意部署,可以部署在同一个节点上,也可以部署在不同的节点上。</p>
+<ul>
+<li>etcd</li>
+</ul>
+<p>分布式键值存储系统。用于保存集群状态数据，比如Pod、Service等对象信息。</p>
+<h4 id="2-2、Node组件"><a href="#2-2、Node组件" class="headerlink" title="2.2、Node组件"></a>2.2、Node组件</h4><ul>
+<li>kubelet</li>
+</ul>
+<p>kubelet是Master在Node节点上的Agent，管理本机运行容器的生命周期，比如创建容器、Pod挂载数据卷、下载secret、获取容器和节点状态等工作。kubelet将每个Pod转换成一组容器。<br>cadvise:监控容器和节点资源</p>
+<ul>
+<li>kube-proxy</li>
+</ul>
+<p>service 在逻辑上代表了后端的多个 Pod，外界通过 service 访问 Pod。service 接收到的请求是如何转发到 Pod 的呢？这就是 kube-proxy 要完成的工作。<br>每个 Node 都会运行 kube-proxy 服务，它负责将访问 service 的 TCP/UPD 数据流转发到后端的容器。如果有多个副本，kube-proxy 会实现负载均衡。</p>
+<h3 id="三、下面是更高层次抽象对象："><a href="#三、下面是更高层次抽象对象：" class="headerlink" title="三、下面是更高层次抽象对象："></a>三、下面是更高层次抽象对象：</h3><ul>
+<li>ReplicaSet（确保预期的Pod副本数量）</li>
+</ul>
+<p>确保任何给定时间指定的Pod副本数量，并提供声明式更新等功能。</p>
+<ul>
+<li>Deployment（无状态应用部署）</li>
+</ul>
+<p>Deployment是一个更高层次的API对象，它管理ReplicaSets和Pod，并提供声明式更新等功能。<br>官方建议使用Deployment管理ReplicaSets，而不是直接使用ReplicaSets，这就意味着可能永远不需要直接操作ReplicaSet对象，因此Deployment将会是使用最频繁的资源对象。</p>
+<ul>
+<li>StatefulSet（有状态应用部署）</li>
+</ul>
+<p>StatefulSet适合持久性的应用程序，有唯一的网络标识符（IP），持久存储，有序的部署、扩展、删除和滚动更新。<br><strong>典型场景</strong>：++Zookeper集群++</p>
+<ul>
+<li>DaemonSet（确保所有Node运行同一个Pod）</li>
+</ul>
+<p>DaemonSet确保所有节点运行同一个Pod。当节点加入Kubernetes集群中，Pod会被调度到该节点上运行，当节点从集群中移除时，DaemonSet的Pod会被删除。删除DaemonSet会清理它所有创建的Pod。<br><strong>典型场景</strong>：++在每个节点部署日志收集程序（如filebeat），监控程序（agent）++</p>
+<ul>
+<li>Job（一次性任务）</li>
+</ul>
+<p>一次性任务，运行完成后Pod销毁，不再重新启动新容器。还可以任务定时运行。</p>
+<ul>
+<li>Cron Job（定时任务）</li>
+</ul>
+<p>定时任务，一个CronJob对象就像一个crontab文件的一行。给定时间定期运行，以Cron格式编写。<br>典型场景：数据库备份，发送邮件</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年11月27日 22:18</p>
+        <p>原始链接： <a class="post-url" href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/" title="搭建一个生产级K8S高可用集群（1）">http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/&title=《搭建一个生产级K8S高可用集群（1）》 — 成年人的世界哪有容易二字！&pic=/images/k8s.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/&title=《搭建一个生产级K8S高可用集群（1）》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《搭建一个生产级K8S高可用集群（1）》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/11/26/搭建一个生产级K8S高可用集群（1）/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、K8S特性"><span class="post-toc-text">一、K8S特性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#①自我修复"><span class="post-toc-text">①自我修复</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#②弹性伸缩"><span class="post-toc-text">②弹性伸缩</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#③自动部署和回滚"><span class="post-toc-text">③自动部署和回滚</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#④服务发现和负载均衡"><span class="post-toc-text">④服务发现和负载均衡</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#⑤机密和配置管理"><span class="post-toc-text">⑤机密和配置管理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#⑥存储编排"><span class="post-toc-text">⑥存储编排</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#⑦批处理"><span class="post-toc-text">⑦批处理</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、K8S集群架构和组件"><span class="post-toc-text">二、K8S集群架构和组件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-1、Master组件"><span class="post-toc-text">2.1、Master组件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-2、Node组件"><span class="post-toc-text">2.2、Node组件</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、下面是更高层次抽象对象："><span class="post-toc-text">三、下面是更高层次抽象对象：</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/22/容器网络 calico 基本原理和模拟/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">容器网络 calico 基本原理和模拟</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <section id="comments">
+            <div id="disqus_thread">
+                <script type="text/javascript">
+                    var disqus_shortname = 'true';
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </div>
+        </section>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 13.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 13.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 15px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 15px;">django_blog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 13.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 13.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 15px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 15px;">django_blog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
