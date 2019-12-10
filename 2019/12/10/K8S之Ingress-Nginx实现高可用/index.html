@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>K8S之Ingress-Nginx实现高可用 | 成年人的世界哪有容易二字！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用： 假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。  首先我们要先确保有两个worker节">
+<meta name="keywords" content="Kubernets,K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8S之Ingress-Nginx实现高可用">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/index.html">
+<meta property="og:site_name" content="成年人的世界哪有容易二字！">
+<meta property="og:description" content="承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用： 假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。  首先我们要先确保有两个worker节">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191210/QiuFxjwJq4x7.png?imageslim">
+<meta property="og:updated_time" content="2019-12-10T05:28:13.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="K8S之Ingress-Nginx实现高可用">
+<meta name="twitter:description" content="承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用： 假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。  首先我们要先确保有两个worker节">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191210/QiuFxjwJq4x7.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        别自己给自己作秀，结果不会给你开玩笑！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-K8S之Ingress-Nginx实现高可用" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      K8S之Ingress-Nginx实现高可用
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s/">K8s</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-10
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用：</p>
+<p>假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191210/QiuFxjwJq4x7.png?imageslim" alt="mark"></p>
+<p>首先我们要先确保有两个worker节点部署了ingress nginx</p>
+<p>在本实验中，环境如下：</p>
+<table>
+<thead>
+<tr>
+<th>IP地址</th>
+<th>主机名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.0.0.31</td>
+<td>k8s-master01    </td>
+</tr>
+<tr>
+<td>10.0.0.34</td>
+<td>k8s-node02</td>
+<td>ingress nginx、keepalived</td>
+</tr>
+<tr>
+<td>10.0.0.35</td>
+<td>k8s-node03</td>
+<td>ingress nginx、keepalived</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1、查看ingress-nginx状态"><a href="#1、查看ingress-nginx状态" class="headerlink" title="1、查看ingress nginx状态"></a>1、查看ingress nginx状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master01 Ingress]# kubectl get pod -n ingress-nginx -o wide</span><br><span class="line">NAME                                        READY   STATUS    RESTARTS   AGE     IP          NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">nginx-ingress-controller-85bd8789cd-8c4xh   1/1     Running   0          62s     10.0.0.34   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">nginx-ingress-controller-85ff8dfd88-vqkhx   1/1     Running   0          3m56s   10.0.0.35   k8s-node03   &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
+<p>创建一个用于测试环境的namespace</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl  create namespace test</span><br></pre></td></tr></table></figure>
+<h4 id="2、部署一个Deployment（用于测试）"><a href="#2、部署一个Deployment（用于测试）" class="headerlink" title="2、部署一个Deployment（用于测试）"></a>2、部署一个Deployment（用于测试）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: myweb-deploy</span><br><span class="line">  # 部署在测试环境</span><br><span class="line">  namespace: test</span><br><span class="line">spec:</span><br><span class="line">  replicas: 3</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      name: myweb</span><br><span class="line">      type: test</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        name: myweb</span><br><span class="line">        type: test</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.13</span><br><span class="line">        imagePullPolicy: IfNotPresent</span><br><span class="line">        ports:</span><br><span class="line">          - containerPort: 80</span><br><span class="line">---</span><br><span class="line"># service</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: myweb-svc</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    name: myweb</span><br><span class="line">    type: test</span><br><span class="line">  ports:</span><br><span class="line">  - port: 80</span><br><span class="line">    targetPort: 80</span><br><span class="line">    protocol: TCP</span><br><span class="line">---</span><br><span class="line"># ingress</span><br></pre></td></tr></table></figure>
+<p>执行kubectl create 创建deployment</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl  create -f myweb-demo.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">查看deployment是否部署成功</span><br><span class="line"></span><br><span class="line">[root@k8s-master01 Project]# kubectl get pods -n test -o wide | grep &quot;myweb&quot;</span><br><span class="line">myweb-deploy-6d586d7db4-2g5ll   1/1     Running   0          23s     10.244.3.240   k8s-node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">myweb-deploy-6d586d7db4-cf7w7   1/1     Running   0          4m2s    10.244.1.132   k8s-node01   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">myweb-deploy-6d586d7db4-rp5zc   1/1     Running   0          3m59s   10.244.2.5     k8s-node03   &lt;none&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="3、在两个worker节点部署keepalived"><a href="#3、在两个worker节点部署keepalived" class="headerlink" title="3、在两个worker节点部署keepalived"></a>3、在两个worker节点部署keepalived</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VIP：10.0.0.130，接口：eth0</span><br></pre></td></tr></table></figure>
+<h5 id="3-1、安装keepalived"><a href="#3-1、安装keepalived" class="headerlink" title="3.1、安装keepalived"></a>3.1、安装keepalived</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install keepalived</span><br></pre></td></tr></table></figure>
+<p>3.1.1、k8s-node03节点作为MASTER配置keepalived<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node03 ~]# cat /etc/keepalived/keepalived.conf</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   notification_email_from Alexandre.Cassen@firewall.loc</span><br><span class="line">   router_id k8s-node03</span><br><span class="line">   vrrp_skip_check_adv_addr</span><br><span class="line">   vrrp_strict</span><br><span class="line">   vrrp_garp_interval 0</span><br><span class="line">   vrrp_gna_interval 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state MASTER</span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 110</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">        10.0.0.130/24 dev eth0 label eth0:1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.1.2、k8s-node02节点作为BACKUP配置keeplived<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node02 ~]# cat /etc/keepalived/keepalived.conf</span><br><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line">global_defs &#123;</span><br><span class="line">   router_id k8s-node02</span><br><span class="line">   vrrp_skip_check_adv_addr</span><br><span class="line">   vrrp_strict</span><br><span class="line">   vrrp_garp_interval 0</span><br><span class="line">   vrrp_gna_interval 0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    state BACKUP</span><br><span class="line">    interface eth0</span><br><span class="line">    virtual_router_id 51</span><br><span class="line">    priority 100</span><br><span class="line">    advert_int 1</span><br><span class="line">    authentication &#123;</span><br><span class="line">        auth_type PASS</span><br><span class="line">        auth_pass 1111</span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;</span><br><span class="line">      10.0.0.130/24 dev eth0 label eth0:1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>两个节点启动keepalived并加入开机启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start keepalived.service</span><br><span class="line">systemctl enable keepalived.service</span><br></pre></td></tr></table></figure>
+<p>启动完成后检查k8s-node03的IP地址是否已有VIP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-node03 ~]# ip add | grep &quot;130&quot;</span><br><span class="line">    inet 10.0.0.130/24 scope global secondary eth0:1</span><br></pre></td></tr></table></figure>
+<p>然后我们在externalLB上的后端配置此VIP，即可实现预期的效果！！</p>
+<p>效果不展示了！自己实验便是最好的展示！！</p>
+<hr>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年12月10日 13:28</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/10/K8S之Ingress-Nginx实现高可用/" title="K8S之Ingress-Nginx实现高可用">http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/&title=《K8S之Ingress-Nginx实现高可用》 — 成年人的世界哪有容易二字！&pic=/images/k8s.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/&title=《K8S之Ingress-Nginx实现高可用》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S之Ingress-Nginx实现高可用》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、查看ingress-nginx状态"><span class="post-toc-text">1、查看ingress nginx状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、部署一个Deployment（用于测试）"><span class="post-toc-text">2、部署一个Deployment（用于测试）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3、在两个worker节点部署keepalived"><span class="post-toc-text">3、在两个worker节点部署keepalived</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3-1、安装keepalived"><span class="post-toc-text">3.1、安装keepalived</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/09/k8s之存储卷及pvc/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">k8s之存储卷及pvc</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <section id="comments">
+            <div id="disqus_thread">
+                <script type="text/javascript">
+                    var disqus_shortname = 'true';
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </div>
+        </section>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 15px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 15px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 16.67px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 15px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 15px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 18.33px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
