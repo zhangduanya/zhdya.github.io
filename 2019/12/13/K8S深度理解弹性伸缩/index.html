@@ -8,13 +8,13 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="第二章：《Kubernetes弹性伸缩》  二、弹性伸缩2.1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。  ​                                                                        &amp;lt;图片来自网络&amp;gt; 蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实">
+  <meta name="description" content="二、弹性伸缩2.1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。  蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。 弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。 1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kube">
 <meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8S深度理解弹性伸缩">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩/index.html">
 <meta property="og:site_name" content="成年人的世界哪有容易二字！">
-<meta property="og:description" content="第二章：《Kubernetes弹性伸缩》  二、弹性伸缩2.1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。  ​                                                                        &amp;lt;图片来自网络&amp;gt; 蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实">
+<meta property="og:description" content="二、弹性伸缩2.1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。  蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。 弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。 1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kube">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/scaling-vs.png">
 <meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/scaling-machine-config.png">
@@ -30,10 +30,10 @@
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191212/fo1z9VXaJWiH.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191212/9W3JdYyaEVcC.png?imageslim">
 <meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/hpa-5.png">
-<meta property="og:updated_time" content="2019-12-12T16:12:39.242Z">
+<meta property="og:updated_time" content="2019-12-12T16:14:25.743Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="K8S深度理解弹性伸缩">
-<meta name="twitter:description" content="第二章：《Kubernetes弹性伸缩》  二、弹性伸缩2.1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。  ​                                                                        &amp;lt;图片来自网络&amp;gt; 蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实">
+<meta name="twitter:description" content="二、弹性伸缩2.1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。  蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。 弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。 1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kube">
 <meta name="twitter:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/scaling-vs.png">
   
   
@@ -152,12 +152,8 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <blockquote>
-<p>第二章：《Kubernetes弹性伸缩》</p>
-</blockquote>
-<h1 id="二、弹性伸缩"><a href="#二、弹性伸缩" class="headerlink" title="二、弹性伸缩"></a>二、弹性伸缩</h1><h2 id="2-1-传统弹性伸缩的困境"><a href="#2-1-传统弹性伸缩的困境" class="headerlink" title="2.1 传统弹性伸缩的困境"></a>2.1 传统弹性伸缩的困境</h2><p>从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。</p>
+            <h3 id="二、弹性伸缩"><a href="#二、弹性伸缩" class="headerlink" title="二、弹性伸缩"></a>二、弹性伸缩</h3><h4 id="2-1-传统弹性伸缩的困境"><a href="#2-1-传统弹性伸缩的困境" class="headerlink" title="2.1 传统弹性伸缩的困境"></a>2.1 传统弹性伸缩的困境</h4><p>从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。</p>
 <p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/scaling-vs.png" alt=""></p>
-<p>​                                                                        &lt;图片来自网络&gt;</p>
 <p>蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。</p>
 <p>弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。</p>
 <h3 id="1、Kubernetes中弹性伸缩存在的问题"><a href="#1、Kubernetes中弹性伸缩存在的问题" class="headerlink" title="1、Kubernetes中弹性伸缩存在的问题"></a>1、Kubernetes中弹性伸缩存在的问题</h3><p>常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。</p>
@@ -167,7 +163,6 @@
 </li>
 </ol>
 <p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/scaling-machine-config.png" alt=""></p>
-<p>​                                                                                &lt;图片来自网络&gt;</p>
 <p>特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。</p>
 <ol start="2">
 <li><p><strong>机器利用率不单纯依靠宿主机计算</strong></p>
@@ -384,7 +379,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年12月13日 00:12</p>
+        <p>最后更新： 2019年12月13日 00:14</p>
         <p>原始链接： <a class="post-url" href="/2019/12/13/K8S深度理解弹性伸缩/" title="K8S深度理解弹性伸缩">http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
@@ -504,8 +499,8 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#二、弹性伸缩"><span class="post-toc-text">二、弹性伸缩</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-1-传统弹性伸缩的困境"><span class="post-toc-text">2.1 传统弹性伸缩的困境</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、Kubernetes中弹性伸缩存在的问题"><span class="post-toc-text">1、Kubernetes中弹性伸缩存在的问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、弹性伸缩概念的延伸"><span class="post-toc-text">2、弹性伸缩概念的延伸</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-2-kubernetes-弹性伸缩布局"><span class="post-toc-text">2.2 kubernetes 弹性伸缩布局</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3-Node-自动扩容-缩容"><span class="post-toc-text">2.3 Node 自动扩容/缩容</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、Cluster-AutoScaler"><span class="post-toc-text">1、Cluster AutoScaler</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、Ansible扩容Node"><span class="post-toc-text">2、Ansible扩容Node</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-4-Pod自动扩容-缩容（HPA）"><span class="post-toc-text">2.4 Pod自动扩容/缩容（HPA）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、HPA基本原理"><span class="post-toc-text">1、HPA基本原理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、HPA的演进历程"><span class="post-toc-text">2、HPA的演进历程</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-5-基于CPU指标缩放"><span class="post-toc-text">2.5 基于CPU指标缩放</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、-Kubernetes-API-Aggregation"><span class="post-toc-text">1、 Kubernetes API Aggregation</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、部署-Metrics-Server"><span class="post-toc-text">2、部署 Metrics Server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、autoscaling-v1（CPU指标实践）"><span class="post-toc-text">3、autoscaling/v1（CPU指标实践）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4、autoscaling-v2beta2（多指标）"><span class="post-toc-text">4、autoscaling/v2beta2（多指标）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-6-基于Prometheus自定义指标缩放"><span class="post-toc-text">2.6 基于Prometheus自定义指标缩放</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、部署Prometheus"><span class="post-toc-text">1、部署Prometheus</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、-部署-Custom-Metrics-Adapter"><span class="post-toc-text">2、 部署 Custom Metrics Adapter</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、基于QPS指标实践"><span class="post-toc-text">3、基于QPS指标实践</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4、配置适配器收集特定的指标"><span class="post-toc-text">4、配置适配器收集特定的指标</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-text">小结</span></a></li></ol></li></ol></li></ol>
-        </nav>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、弹性伸缩"><span class="post-toc-text">二、弹性伸缩</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-1-传统弹性伸缩的困境"><span class="post-toc-text">2.1 传统弹性伸缩的困境</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、Kubernetes中弹性伸缩存在的问题"><span class="post-toc-text">1、Kubernetes中弹性伸缩存在的问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、弹性伸缩概念的延伸"><span class="post-toc-text">2、弹性伸缩概念的延伸</span></a></li></ol><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-2-kubernetes-弹性伸缩布局"><span class="post-toc-text">2.2 kubernetes 弹性伸缩布局</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3-Node-自动扩容-缩容"><span class="post-toc-text">2.3 Node 自动扩容/缩容</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、Cluster-AutoScaler"><span class="post-toc-text">1、Cluster AutoScaler</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、Ansible扩容Node"><span class="post-toc-text">2、Ansible扩容Node</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-4-Pod自动扩容-缩容（HPA）"><span class="post-toc-text">2.4 Pod自动扩容/缩容（HPA）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、HPA基本原理"><span class="post-toc-text">1、HPA基本原理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、HPA的演进历程"><span class="post-toc-text">2、HPA的演进历程</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-5-基于CPU指标缩放"><span class="post-toc-text">2.5 基于CPU指标缩放</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、-Kubernetes-API-Aggregation"><span class="post-toc-text">1、 Kubernetes API Aggregation</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、部署-Metrics-Server"><span class="post-toc-text">2、部署 Metrics Server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、autoscaling-v1（CPU指标实践）"><span class="post-toc-text">3、autoscaling/v1（CPU指标实践）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4、autoscaling-v2beta2（多指标）"><span class="post-toc-text">4、autoscaling/v2beta2（多指标）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-6-基于Prometheus自定义指标缩放"><span class="post-toc-text">2.6 基于Prometheus自定义指标缩放</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1、部署Prometheus"><span class="post-toc-text">1、部署Prometheus</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2、-部署-Custom-Metrics-Adapter"><span class="post-toc-text">2、 部署 Custom Metrics Adapter</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、基于QPS指标实践"><span class="post-toc-text">3、基于QPS指标实践</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4、配置适配器收集特定的指标"><span class="post-toc-text">4、配置适配器收集特定的指标</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-text">小结</span></a></li></ol>
+        </li></nav>
     </aside>
     
 
