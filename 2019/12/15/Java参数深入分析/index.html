@@ -8,21 +8,26 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="原本就是一个小小的metaspaceSize的问题，找了下自己之前整理的资料，发现不是太详细，也是为了后期自己回顾，就写的详细些吧： 先来了解下： 内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2  一、JVM中的堆一般分为三部分，新生代、老年代和永久代。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1">
+  <meta name="description" content="先来了解下： 内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2  一、JVM中的堆一般分为三部分，新生代、老年代和永久代。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1/3，由于频繁创建对象，所以新生代会频繁触发MinorGC进行垃圾回收。新生代分为Eden区、ServivorFrom、Servivo">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次java_MetaspaceSize设置不当导致的问题">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/15/Java参数深入分析/index.html">
 <meta property="og:site_name" content="成年人的世界哪有容易二字！">
-<meta property="og:description" content="原本就是一个小小的metaspaceSize的问题，找了下自己之前整理的资料，发现不是太详细，也是为了后期自己回顾，就写的详细些吧： 先来了解下： 内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2  一、JVM中的堆一般分为三部分，新生代、老年代和永久代。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1">
+<meta property="og:description" content="先来了解下： 内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2  一、JVM中的堆一般分为三部分，新生代、老年代和永久代。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1/3，由于频繁创建对象，所以新生代会频繁触发MinorGC进行垃圾回收。新生代分为Eden区、ServivorFrom、Servivo">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191217/5zSS59967ry9.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191217/Lz8edUps4s6B.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191218/pWuA7RQLJGVA.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191217/aSadpXMNvKXL.png?imageslim">
-<meta property="og:updated_time" content="2019-12-17T11:22:15.757Z">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191218/PsY75q3oyKLg.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191218/zEU4HwRh09jm.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191218/iDq0cFbYf9aO.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191218/AHxpwnr3vKBy.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191218/SLo0txoUUzBJ.png?imageslim">
+<meta property="og:updated_time" content="2019-12-18T01:51:08.817Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次java_MetaspaceSize设置不当导致的问题">
-<meta name="twitter:description" content="原本就是一个小小的metaspaceSize的问题，找了下自己之前整理的资料，发现不是太详细，也是为了后期自己回顾，就写的详细些吧： 先来了解下： 内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2  一、JVM中的堆一般分为三部分，新生代、老年代和永久代。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1">
+<meta name="twitter:description" content="先来了解下： 内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2  一、JVM中的堆一般分为三部分，新生代、老年代和永久代。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1/3，由于频繁创建对象，所以新生代会频繁触发MinorGC进行垃圾回收。新生代分为Eden区、ServivorFrom、Servivo">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191217/5zSS59967ry9.png?imageslim">
   
   
@@ -141,10 +146,9 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>原本就是一个小小的metaspaceSize的问题，找了下自己之前整理的资料，发现不是太详细，也是为了后期自己回顾，就写的详细些吧：</p>
-<h3 id="先来了解下："><a href="#先来了解下：" class="headerlink" title="先来了解下："></a>先来了解下：</h3><p><img src="http://myimage.okay686.cn/okay686cn/20191217/5zSS59967ry9.png?imageslim" alt="mark"></p>
+            <h3 id="先来了解下："><a href="#先来了解下：" class="headerlink" title="先来了解下："></a>先来了解下：</h3><p><img src="http://myimage.okay686.cn/okay686cn/20191217/5zSS59967ry9.png?imageslim" alt="mark"></p>
 <h4 id="内存的分配及回收–堆中的新生代和老年代："><a href="#内存的分配及回收–堆中的新生代和老年代：" class="headerlink" title="内存的分配及回收–堆中的新生代和老年代："></a>内存的分配及回收–堆中的新生代和老年代：</h4><p>java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的<strong>比例通常为 1：2</strong></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191217/Lz8edUps4s6B.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/pWuA7RQLJGVA.png?imageslim" alt="mark"></p>
 <h3 id="一、JVM中的堆一般分为三部分，新生代、老年代和永久代。"><a href="#一、JVM中的堆一般分为三部分，新生代、老年代和永久代。" class="headerlink" title="一、JVM中的堆一般分为三部分，新生代、老年代和永久代。"></a>一、JVM中的堆一般分为三部分，新生代、老年代和永久代。</h3><h4 id="1-1、新生代："><a href="#1-1、新生代：" class="headerlink" title="1.1、新生代："></a>1.1、新生代：</h4><p>主要是用来存放新生的对象。一般占据堆空间的1/3，由于频繁创建对象，所以新生代会频繁触发MinorGC进行垃圾回收。<br>新生代分为<strong>Eden</strong>区、<strong>ServivorFrom</strong>、<strong>ServivorTo</strong>三个区，==比例为 8：1：1==。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20191217/aSadpXMNvKXL.png?imageslim" alt="mark"></p>
 <p><strong>Eden区</strong>：Java新对象的出生地(如果新创建的对象占用内存很大则直接分配给老年代)。</p>
@@ -165,8 +169,8 @@
 <p><strong><em>当老年代也满了装不下的时候，就会抛出OOM。</em></strong></p>
 <h4 id="1-3、永久代："><a href="#1-3、永久代：" class="headerlink" title="1.3、永久代："></a>1.3、永久代：</h4><p><em>指内存的永久保存区域，主要存放Class和Meta（元数据）的信息。</em><br>Class在被加载的时候元数据信息会放入永久区域，但是GC不会在主程序运行的时候清除永久代的信息。<strong>所以这也导致永久代的信息会随着类加载的增多而膨胀，最终导致OOM。</strong></p>
 <p>从JDK1.8开始，就没有永久代了， 永久代被元空间的概念所替代。</p>
-<h3 id="三、GC-堆"><a href="#三、GC-堆" class="headerlink" title="三、GC 堆"></a>三、GC 堆</h3><p>Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：Minor GC、FullGC ( 或称为 Major GC )。</p>
-<h4 id="3-1、Minor-GC"><a href="#3-1、Minor-GC" class="headerlink" title="3.1、Minor GC"></a>3.1、Minor GC</h4><p><strong>Minor GC</strong> 是发生在新生代中的垃圾收集动作，所采用的是复制算法。</p>
+<h3 id="二、GC-堆"><a href="#二、GC-堆" class="headerlink" title="二、GC 堆"></a>二、GC 堆</h3><p>Java 中的堆也是 GC 收集垃圾的主要区域。GC 分为两种：Minor GC、FullGC ( 或称为 Major GC )。</p>
+<h4 id="2-1、Minor-GC"><a href="#2-1、Minor-GC" class="headerlink" title="2.1、Minor GC"></a>2.1、Minor GC</h4><p><strong>Minor GC</strong> 是发生在新生代中的垃圾收集动作，所采用的是复制算法。</p>
 <p>当对象在 Eden ( 包括一个 Survivor 区域，这里假设是 from 区域 ) 出生后，<strong>在经过一次 Minor GC 后，如</strong></p>
 <p><strong>果对象还存活，并且能够被另外一块 Survivor 区域所容纳</strong>( 上面已经假设为 from 区域，这里应为 to 区域，</p>
 <p>即 to 区域有足够的内存空间来存储 Eden 和 from 区域中存活的对象 )，<strong>则使用复制算法将这些仍然还存活的对</strong></p>
@@ -174,13 +178,22 @@
 <p>from 区域 )，<strong>并且将这些对象的年龄设置为1，以后对象在 Survivor 区每熬过一次 Minor GC，就将对象的年</strong></p>
 <p><strong>龄 + 1，当对象的年龄达到某个值时 ( 默认是 15 岁，可以通过参数 -XX:MaxTenuringThreshold 来设定</strong></p>
 <p> <strong>)，这些对象就会成为老年代。</strong></p>
-<h4 id="3-2、Full-GC"><a href="#3-2、Full-GC" class="headerlink" title="3.2、Full GC"></a>3.2、Full GC</h4><p><strong>Full GC</strong> 是<strong>发生在老年代</strong>的垃圾收集动作，所采用的是<strong>标记-清除算法</strong>。</p>
+<h4 id="2-2、Full-GC"><a href="#2-2、Full-GC" class="headerlink" title="2.2、Full GC"></a>2.2、Full GC</h4><p><strong>Full GC</strong> 是<strong>发生在老年代</strong>的垃圾收集动作，所采用的是<strong>标记-清除算法</strong>。</p>
 <p>现实的生活中，老年代的人通常会比新生代的人”早死”。堆内存中的老年代(Old)不同于这个，老年代里面的对象</p>
 <p>几乎个个都是在 Survivor 区域中熬过来的，它们是不会那么容易就 “死掉” 了的。因此，<strong>Full GC 发生的次数不</strong></p>
 <p><strong>会有 Minor GC 那么频繁，并且做一次 Full GC 要比进行一次 Minor GC 的时间更长。</strong></p>
 <p>另外，标记-清除算法收集垃圾的时候会产生许多的内存碎片 ( 即不连续的内存空间 )，此后需要为较大的对象</p>
 <p>分配内存空间时，若无法找到足够的连续的内存空间，就会提前触发一次 GC 的收集动作。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@xhy-18-175-61 dsf]# ps aux | grep java</span><br><span class="line">root         136 13.7  0.7 18846112 1968564 ?    Sl+  18:28   4:08 java -Duser.timezone=GMT+08 -server -Xms3840m -Xmx3840m -XX:NewSize=1024m -XX:MaxNewSize=1024m -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:MinMetaspaceFreeRatio=40 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_heapDump.hprof -XX:+UseParNewGC -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=1024M -XX:+ExplicitGCInvokesConcurrent -XX:-UseGCOverheadLimit -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=65 -XX:CMSFullGCsBeforeCompaction=2 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_gc.log -javaagent:/usr/local/apm_agent/apm.agent.bootstrap.jar -Dapm.applicationName=cxgc.java.dsf.zkt.service -Dapm.agentId=172.18.175.61-17851 -Dapm.env=product -classpath -DDSF_HOME=/usr/local/dsf -DDio.netty.leakDetectionLevel=PARANOID -jar /usr/local/dsf/dsfapps/dsf.zkt.service.jar</span><br><span class="line"></span><br><span class="line">通过jstat -gcutil pid查看M的值为97.37，即Meta区使用率也达到了97.37%：</span><br><span class="line">[root@xhy-18-175-61 dsf]# jstat -gcutil 136</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">  0.00  89.03  35.00   3.79  97.37  97.18     19    4.312     0    0.000    4.312</span><br><span class="line"></span><br><span class="line">那么-XX:MetaspaceSize=256m的含义到底是什么呢？其实，这个JVM参数是指Metaspace扩容时触发FullGC的初始化阈值，也是最小的阈值。</span><br></pre></td></tr></table></figure>
+<h3 id="三、故障重现"><a href="#三、故障重现" class="headerlink" title="三、故障重现"></a>三、故障重现</h3><p>某开发负责的其中一个业务其中1台容器无故gg了，已知不是核心应用，且目前线上1台虚机也可以扛住目前的量，赶紧一起同开发分析问题：<br>- 先看虚机和宿主机的负载，正常；<br>- 进入容器看下进程还在；<br>- 业务日志已经停止写入；<br>- 查看是否有gclog；</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/PsY75q3oyKLg.png?imageslim" alt="mark"></p>
+<p>再次看下大盘：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/zEU4HwRh09jm.png?imageslim" alt="mark"></p>
+<p>gc问题，有异常了，节点被下掉了；</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/iDq0cFbYf9aO.png?imageslim" alt="mark"></p>
+<p>先问下开发此业务当然有没有什么其它动作？经查看业务日志发现，刚刚那一阵在跑job，为什么metadata区会爆掉呢？</p>
+<p>开发给的答案：</p>
+<p>类加载器创建过多，带来的一个问题是，在类加载器第一次加载类的时候，会在Metaspace里会给它分配内存块，为了分配高效，每个类加载器用来存放类信息的内存块都是独立的，所以哪怕你这个类加载器只加载一个类，也会为之分配一块空的内存给这个类加载器，其实是至少两个内存块，于是你有可能会发现Metaspace的内存使用率非常低，但是committed的内存已经达到了阈值，从而触发了Full GC，如果这种只加载很少类的类加载器非常多，那造成的后果就是很多碎片化的内存！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">##先来看下目前的JVM参数：</span><br><span class="line">[root@xhy-18-175-61 dsf]# ps aux | grep java</span><br><span class="line">root         136 13.7  0.7 18846112 1968564 ?    Sl+  18:28   4:08 java -Duser.timezone=GMT+08 -server -Xms3840m -Xmx3840m -XX:NewSize=1024m -XX:MaxNewSize=1024m -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=128-XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_heapDump.hprof -XX:+UseParNewGC -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=1024M -XX:+ExplicitGCInvokesConcurrent -XX:-UseGCOverheadLimit -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=65 -XX:CMSFullGCsBeforeCompaction=2 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_gc.log -javaagent:/usr/local/apm_agent/apm.agent.bootstrap.jar -Dapm.applicationName=cxgc.java.dsf.zkt.service -Dapm.agentId=172.18.175.61-17851 -Dapm.env=product -classpath -DDSF_HOME=/usr/local/dsf -DDio.netty.leakDetectionLevel=PARANOID -jar /usr/local/dsf/dsfapps/dsf.zkt.service.jar</span><br><span class="line"></span><br><span class="line">##分析下：</span><br><span class="line">通过jstat -gcutil pid查看M的值为97.37，即Meta区使用率也达到了97.37%：</span><br><span class="line">[root@xhy-18-175-61 dsf]# jstat -gcutil 136</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">  0.00  89.03  35.00   3.79  97.37  97.18     19    4.312     0    0.000    4.312</span><br><span class="line"></span><br><span class="line">那么-XX:MetaspaceSize=256m的含义到底是什么呢？其实，这个JVM参数是指Metaspace扩容时触发FullGC的初始化阈值，也是最小的阈值。</span><br><span class="line"></span><br><span class="line">先来解决下：</span><br><span class="line">- MetaspaceSize改成256m；</span><br><span class="line">增加 -XX:MinMetaspaceFreeRatio=40；</span><br></pre></td></tr></table></figure>
 <p>这里有几个要点需要明确：</p>
 <ol>
 <li>无论<code>-XX:MetaspaceSize</code>配置什么值，Metaspace的初始容量一定是<code>21807104</code>（约20.8m）；</li>
@@ -190,15 +203,16 @@
 <li>如果MaxMetaspaceSize设置太小，可能会导致频繁FGC，甚至OOM；</li>
 </ol>
 <h4 id="最后建议："><a href="#最后建议：" class="headerlink" title="最后建议："></a>最后建议：</h4><ul>
-<li><p>MetaspaceSize和MaxMetaspaceSize设置一样大；</p>
-</li>
-<li><p>具体设置多大，建议稳定运行一段时间后通过jstat -gc pid确认且这个值大一些，对于大部分项目256m即可。</p>
-</li>
+<li>MetaspaceSize和MaxMetaspaceSize设置一样大；</li>
+<li>具体设置多大，建议稳定运行一段时间后通过jstat -gc pid确认且这个值大一些，对于大部分项目256m即可。</li>
 </ul>
+<p>写这篇日志已经是第二天了 暂时没有发现异常：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/AHxpwnr3vKBy.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/SLo0txoUUzBJ.png?imageslim" alt="mark"></p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年12月17日 19:22</p>
+        <p>最后更新： 2019年12月18日 09:51</p>
         <p>原始链接： <a class="post-url" href="/2019/12/15/Java参数深入分析/" title="记一次java_MetaspaceSize设置不当导致的问题">http://zhdya.okay686.cn/2019/12/15/Java参数深入分析/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
@@ -316,7 +330,7 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#先来了解下："><span class="post-toc-text">先来了解下：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内存的分配及回收–堆中的新生代和老年代："><span class="post-toc-text">内存的分配及回收–堆中的新生代和老年代：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、JVM中的堆一般分为三部分，新生代、老年代和永久代。"><span class="post-toc-text">一、JVM中的堆一般分为三部分，新生代、老年代和永久代。</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-1、新生代："><span class="post-toc-text">1.1、新生代：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-1-1、MinorGC-触发机制："><span class="post-toc-text">1.1.1、MinorGC 触发机制：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-2、老年代："><span class="post-toc-text">1.2、老年代：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-2-1、触发MinorGC的条件："><span class="post-toc-text">1.2.1、触发MinorGC的条件：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-3、永久代："><span class="post-toc-text">1.3、永久代：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、GC-堆"><span class="post-toc-text">三、GC 堆</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-1、Minor-GC"><span class="post-toc-text">3.1、Minor GC</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-2、Full-GC"><span class="post-toc-text">3.2、Full GC</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#最后建议："><span class="post-toc-text">最后建议：</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#先来了解下："><span class="post-toc-text">先来了解下：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内存的分配及回收–堆中的新生代和老年代："><span class="post-toc-text">内存的分配及回收–堆中的新生代和老年代：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、JVM中的堆一般分为三部分，新生代、老年代和永久代。"><span class="post-toc-text">一、JVM中的堆一般分为三部分，新生代、老年代和永久代。</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-1、新生代："><span class="post-toc-text">1.1、新生代：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-1-1、MinorGC-触发机制："><span class="post-toc-text">1.1.1、MinorGC 触发机制：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-2、老年代："><span class="post-toc-text">1.2、老年代：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-2-1、触发MinorGC的条件："><span class="post-toc-text">1.2.1、触发MinorGC的条件：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-3、永久代："><span class="post-toc-text">1.3、永久代：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、GC-堆"><span class="post-toc-text">二、GC 堆</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-1、Minor-GC"><span class="post-toc-text">2.1、Minor GC</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-2、Full-GC"><span class="post-toc-text">2.2、Full GC</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、故障重现"><span class="post-toc-text">三、故障重现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#最后建议："><span class="post-toc-text">最后建议：</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
