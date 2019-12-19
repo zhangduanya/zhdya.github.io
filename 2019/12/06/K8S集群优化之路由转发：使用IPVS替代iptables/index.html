@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>K8S集群优化之路由转发：使用IPVS替代iptables | 成年人的世界哪有容易二字！</title>
+  <title>K8S集群优化之路由转发：使用IPVS替代iptables | 拼！就对了！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8S集群优化之路由转发：使用IPVS替代iptables">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/index.html">
-<meta property="og:site_name" content="成年人的世界哪有容易二字！">
+<meta property="og:site_name" content="拼！就对了！">
 <meta property="og:description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数1234567cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;l">
 <meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2019-12-06T05:06:47.386Z">
@@ -84,7 +84,7 @@
                 <div id="header-description">
                     
                     <h3>
-                        别自己给自己作秀，结果不会给你开玩笑！
+                        K8S生态，Django，python专列！
                     </h3>
                     
                 </div>
@@ -205,7 +205,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/&title=《K8S集群优化之路由转发：使用IPVS替代iptables》 — 成年人的世界哪有容易二字！&pic=/images/k8s.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/&title=《K8S集群优化之路由转发：使用IPVS替代iptables》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -215,7 +215,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/&title=《K8S集群优化之路由转发：使用IPVS替代iptables》 — 成年人的世界哪有容易二字！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/&title=《K8S集群优化之路由转发：使用IPVS替代iptables》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -225,7 +225,7 @@
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S集群优化之路由转发：使用IPVS替代iptables》 — 成年人的世界哪有容易二字！&url=http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S集群优化之路由转发：使用IPVS替代iptables》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
