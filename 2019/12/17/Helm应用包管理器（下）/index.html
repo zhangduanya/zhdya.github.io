@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Helm应用包管理器（下） | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="3.6 Chart模板Helm最核心的就是模板，即模板化的K8S manifests文件。 它本质上就是一个Go的template模板。Helm在Go template模板的基础上，还会增加很多东西。如一些自定义的元数据信息、扩展的库以及一些类似于编程形式的工作流，例如条件语句、管道等等。这些东西都会使得我们的模板变得更加丰富。 1、模板有了模板，我们怎么把我们的配置融入进去呢？用的就是这个val">
+<meta name="keywords" content="Kubernets,K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Helm应用包管理器（下）">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="3.6 Chart模板Helm最核心的就是模板，即模板化的K8S manifests文件。 它本质上就是一个Go的template模板。Helm在Go template模板的基础上，还会增加很多东西。如一些自定义的元数据信息、扩展的库以及一些类似于编程形式的工作流，例如条件语句、管道等等。这些东西都会使得我们的模板变得更加丰富。 1、模板有了模板，我们怎么把我们的配置融入进去呢？用的就是这个val">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191222/UnbhkzOdohei.png?imageslim">
+<meta property="og:updated_time" content="2019-12-23T06:37:41.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Helm应用包管理器（下）">
+<meta name="twitter:description" content="3.6 Chart模板Helm最核心的就是模板，即模板化的K8S manifests文件。 它本质上就是一个Go的template模板。Helm在Go template模板的基础上，还会增加很多东西。如一些自定义的元数据信息、扩展的库以及一些类似于编程形式的工作流，例如条件语句、管道等等。这些东西都会使得我们的模板变得更加丰富。 1、模板有了模板，我们怎么把我们的配置融入进去呢？用的就是这个val">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191222/UnbhkzOdohei.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Helm应用包管理器（下）" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Helm应用包管理器（下）
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s/">K8s</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-17
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h4 id="3-6-Chart模板"><a href="#3-6-Chart模板" class="headerlink" title="3.6 Chart模板"></a>3.6 Chart模板</h4><p>Helm最核心的就是模板，即模板化的K8S manifests文件。</p>
+<p>它本质上就是一个Go的template模板。Helm在Go template模板的基础上，还会增加很多东西。如一些自定义的<strong>元数据信息</strong>、<strong>扩展的库</strong>以及一些类似于编程形式的<strong>工作流</strong>，例如条件语句、管道等等。这些东西都会使得我们的模板变得更加丰富。</p>
+<h5 id="1、模板"><a href="#1、模板" class="headerlink" title="1、模板"></a>1、模板</h5><p>有了模板，我们怎么把我们的配置融入进去呢？用的就是这个values文件。这两部分内容其实就是chart的核心功能。</p>
+<p>接下来，部署nginx应用，熟悉模板使用，先把templates 目录下面所有文件全部删除掉，这里我们自己来创建模板文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"># rm -rf mychart/templates/*</span><br><span class="line"></span><br><span class="line"># kubectl create deployment zhdyaweb --image=nginx:1.16 --dry-run -o yaml &gt; deployment.yaml</span><br><span class="line"></span><br><span class="line"># vi templates/deployment.yaml</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: zhdyaweb</span><br><span class="line">  name: zhdyaweb</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: zhdyaweb</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: zhdyaweb</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - image: nginx:1.16</span><br><span class="line">        name: nginx</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line"># kubectl expose deployment zhdyaweb --port=80 --target-port=80 -o yaml &gt; service.yaml</span><br><span class="line"></span><br><span class="line"># cat service.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: zhdyaweb</span><br><span class="line">  name: zhdyaweb</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  clusterIP: 10.0.0.52</span><br><span class="line">  ports:</span><br><span class="line">  - port: 80</span><br><span class="line">    protocol: TCP</span><br><span class="line">    targetPort: 80</span><br><span class="line">  selector:</span><br><span class="line">    app: zhdyaweb</span><br></pre></td></tr></table></figure>
+<p>实际上，这已经是一个可安装的Chart包了，通过 <code>helm install</code>命令来进行安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install zhdyaweb zhdya</span><br></pre></td></tr></table></figure>
+<p>这样部署，其实与直接apply没什么两样。</p>
+<p>然后使用如下命令可以看到实际的模板被渲染过后的资源文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm get manifest zhdyaweb</span><br></pre></td></tr></table></figure>
+<p>可以看到，这与刚开始写的内容是一样的，包括名字、镜像等，我们希望能在一个地方统一定义这些会经常变换的字段，这就需要用到Chart的模板了。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vi templates/deployment.yaml </span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    chart:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Chart.Name</span> <span class="string">&#125;&#125;```</span>    <span class="comment">##Chart.yaml 文件中定义的name</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Release.Name</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>  name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spec:</span><br><span class="line">  replicas: ```&#123;&#123; .Values.replicas &#125;&#125;```     ##Values.yaml文件中定义的</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: ```&#123;&#123; .Values.name &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  template:<br>    metadata:<br>      labels:<br>        app: <figure class="highlight plain"><figcaption><span>.Values.name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: ```&#123;&#123; .Values.image &#125;&#125;```:```&#123;&#123; .Values.imageTag &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code>name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># vim values.yaml</span><br><span class="line"></span><br><span class="line">replicas: 2</span><br><span class="line">image: nginx</span><br><span class="line">imageTag: 1.16</span><br><span class="line"></span><br><span class="line"># cat service.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: ```&#123;&#123; .Release.Name &#125;&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p>  name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  clusterIP: 10.0.0.52</span><br><span class="line">  ports:</span><br><span class="line">  - port: 80</span><br><span class="line">    protocol: TCP</span><br><span class="line">    targetPort: 80</span><br><span class="line">  selector:</span><br><span class="line">    app: ```&#123;&#123; .Values.name &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这个deployment就是一个Go template的模板，这里定义的Release模板对象属于Helm内置的一种对象，是从values文件中读取出来的。这样一来，我们可以将需要变化的地方都定义变量。</span><br><span class="line"></span><br><span class="line">也可以使用命令helm get manifest查看最终生成的文件内容。</span><br><span class="line"></span><br><span class="line">### 2、调试</span><br><span class="line"></span><br><span class="line">Helm也提供了`--dry-run --debug`调试参数，帮助你验证模板正确性。在执行`helm install`时候带上这两个参数就可以把对应的values值和渲染的资源清单打印出来，而不会真正的去部署一个release。</span><br><span class="line"></span><br><span class="line">比如我们来调试上面创建的 chart 包：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line">[root@k8s-master1 ~]# helm install zhdya --dry-run zhdya</span><br><span class="line">NAME: zhdya</span><br><span class="line">LAST DEPLOYED: Mon Dec 16 22:54:59 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: pending-install</span><br><span class="line">REVISION: 1</span><br><span class="line">TEST SUITE: None</span><br><span class="line">HOOKS:</span><br><span class="line">MANIFEST:</span><br><span class="line">---</span><br><span class="line"># Source: zhdya/templates/service.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: zhdyaweb</span><br><span class="line">  name: zhdyaweb</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  clusterIP: 10.0.0.52</span><br><span class="line">  ports:</span><br><span class="line">  - port: 80</span><br><span class="line">    protocol: TCP</span><br><span class="line">    targetPort: 80</span><br><span class="line">  selector:</span><br><span class="line">    app: zhdyaweb</span><br><span class="line">---</span><br><span class="line"># Source: zhdya/templates/deployment.yaml</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    chart: zhdya    ##Chart.yaml 文件中定义的name</span><br><span class="line">    app: zhdya</span><br><span class="line">  name: zhdya</span><br><span class="line">spec:</span><br><span class="line">  replicas: 2     ##Values.yaml文件中定义的</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: zhdyaweb</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: zhdyaweb</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - image: nginx:1.16</span><br><span class="line">        name: zhdya</span><br></pre></td></tr></table></figure>
+<h3 id="3、内置对象"><a href="#3、内置对象" class="headerlink" title="3、内置对象"></a>3、内置对象</h3><p>刚刚我们使用 <figure class="highlight plain"><figcaption><span>release 的名称插入到模板中。这里的 Release 就是 Helm 的内置对象，下面是一些常用的内置对象：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">| Release.Name      | release 名称                    |</span><br><span class="line">| ----------------- | ------------------------------- |</span><br><span class="line">| Release.Name      | release 名字                    |</span><br><span class="line">| Release.Namespace | release 命名空间                |</span><br><span class="line">| Release.Service   | release 服务的名称              |</span><br><span class="line">| Release.Revision  | release 修订版本号，从1开始累加 |</span><br><span class="line"></span><br><span class="line">### 4、Values</span><br><span class="line"></span><br><span class="line">Values对象是为Chart模板提供值，这个对象的值有4个来源：</span><br><span class="line"></span><br><span class="line">- chart 包中的 values.yaml 文件</span><br><span class="line">- 父 chart 包的 values.yaml 文件</span><br><span class="line">- 通过 helm install 或者 helm upgrade 的 `-f`或者 `--values`参数传入的自定义的 yaml 文件</span><br><span class="line">- 通过 `--set` 参数传入的值</span><br></pre></td></tr></table></figure></p>
+<p>[root@k8s-master1 ~]# helm install zhdyaweb2 –set replicas=1 zhdya<br>NAME: zhdyaweb2<br>LAST DEPLOYED: Tue Dec 17 21:47:38 2019<br>NAMESPACE: default<br>STATUS: deployed<br>REVISION: 1<br>TEST SUITE: None<br>[root@k8s-master1 ~]# kubectl get pod<br>NAME                                     READY   STATUS    RESTARTS   AGE<br>metrics-app-7674cfb699-5l72f             1/1     Running   3          4d22h<br>metrics-app-7674cfb699-btch5             1/1     Running   4          4d22h<br>mysql2-7899bb48c9-w85gf                  1/1     Running   2          3d4h<br>nfs-client-provisioner-f9fdd5cc9-ffzbd   1/1     Running   5          4d22h<br>zhdyaweb-6958864855-6vfmw                1/1     Running   0          10m<br>zhdyaweb-6958864855-r8lcj                1/1     Running   0          10m<br>zhdyaweb2-d5477f589-966z5                1/1     Running   0          3s<br>[root@k8s-master1 ~]# kubectl get svc<br>NAME          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE<br>kubernetes    ClusterIP   10.0.0.1     <none>        443/TCP    7d<br>metrics-app   ClusterIP   10.0.0.163   <none>        80/TCP     4d22h<br>mysql2        ClusterIP   10.0.0.122   <none>        3306/TCP   3d4h<br>zhdyaweb      ClusterIP   10.0.0.52    <none>        80/TCP     10m<br>zhdyaweb2     ClusterIP   10.0.0.80    <none>        80/TCP     10s<br>[root@k8s-master1 ~]# kubectl get ep<br>NAME             ENDPOINTS                                      AGE<br>fuseim.pri-ifs   <none>                                         4d22h<br>kubernetes       192.168.171.11:6443                            7d<br>metrics-app      10.244.1.38:80,10.244.2.39:80                  4d22h<br>mysql2           10.244.0.30:3306                               3d4h<br>zhdyaweb         10.244.0.31:80,10.244.0.34:80,10.244.2.43:80   10m<br>zhdyaweb2        10.244.0.31:80,10.244.0.34:80,10.244.2.43:80   20s</none></none></none></none></none></none></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">chart 的 values.yaml 提供的值可以被用户提供的 values 文件覆盖，而该文件同样可以被 `--set`提供的参数所覆盖。</span><br><span class="line"></span><br><span class="line">这里我们来重新编辑 mychart/values.yaml 文件，将默认的值全部清空，然后添加一个副本数：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat values.yaml </span><br><span class="line">replicas: 3</span><br><span class="line">image: &quot;nginx&quot;</span><br><span class="line">imageTag: &quot;1.17&quot;</span><br><span class="line"></span><br><span class="line"># cat templates/deployment.yaml </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: ```&#123;&#123; .Release.Name &#125;&#125;```-deployment</span><br><span class="line">spec:</span><br><span class="line">  replicas: ```&#123;&#123; .Values.replicas &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>  selector:<br>    matchLabels:<br>      app: nginx<br>  template:<br>    metadata:<br>      labels:<br>        app: nginx<br>    spec:<br>      containers:</p>
+<pre><code>- image: <figure class="highlight plain"><figcaption><span>.Values.image &#125;&#125;```:```&#123;&#123; .Values.imageTag &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name: nginx</span><br></pre></td></tr></table></figure>
+</code></pre><p>查看渲染结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install --dry-run zhdyaweb zhdya</span><br></pre></td></tr></table></figure>
+<p>values 文件也可以包含结构化内容，例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat values.yaml </span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="attr">label:</span></span><br><span class="line"><span class="attr">  project:</span> <span class="string">ms</span></span><br><span class="line"><span class="attr">  app:</span> <span class="string">nginx</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat templates/deployment.yaml </span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Release.Name</span> <span class="string">&#125;&#125;```-deployment</span> </span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Values.replicas</span> <span class="string">&#125;&#125;```</span> </span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      project:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Values.label.project</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code>app: <figure class="highlight plain"><figcaption><span>.Values.label.app &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">template:</span><br><span class="line">  metadata:</span><br><span class="line">    labels:</span><br><span class="line">      project: ```&#123;&#123; .Values.label.project &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+  app: <figure class="highlight plain"><figcaption><span>.Values.label.app &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - image: ```&#123;&#123; .Values.image &#125;&#125;```:```&#123;&#123; .Values.imageTag &#125;&#125;``` </span><br><span class="line">    name: nginx</span><br></pre></td></tr></table></figure>
+</code></pre><p>查看渲染结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install --dry-run zhdyaweb zhdya</span><br></pre></td></tr></table></figure>
+<h3 id="5、管道与函数"><a href="#5、管道与函数" class="headerlink" title="5、管道与函数"></a>5、管道与函数</h3><p>前面讲的模块，其实就是将值传给模板引擎进行渲染，模板引擎还支持对拿到数据进行二次处理。</p>
+<p>例如从.Values中读取的值变成字符串，可以使用<code>quote</code>函数实现：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vi templates/deployment.yaml</span></span><br><span class="line"><span class="attr">app:</span> <span class="string">```&#123;&#123;</span> <span class="string">quote</span> <span class="string">.Values.label.app</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="helm-install-–dry-run-zhdyaweb-zhdya"><a href="#helm-install-–dry-run-zhdyaweb-zhdya" class="headerlink" title="helm install –dry-run zhdyaweb zhdya"></a>helm install –dry-run zhdyaweb zhdya</h1><pre><code>project: ms
+app: &quot;nginx&quot;    ##自动特殊处理添加了 “双引号”
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">quote .Values.label.app 将后面的值作为参数传递给quote函数。</span><br><span class="line"></span><br><span class="line">模板函数调用语法为：functionName arg1 arg2...</span><br><span class="line"></span><br><span class="line">另外还会经常使用一个**default函数**，该函数允许在模板中指定默认值，以防止该值被忽略掉。</span><br><span class="line"></span><br><span class="line">例如忘记定义，执行helm install 会因为缺少字段无法创建资源，这时就可以定义一个默认值。</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat values.yaml </span><br><span class="line">replicas: 2</span><br><span class="line"></span><br><span class="line"># cat templates/deployment.yaml </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: ```&#123;&#123; .Release.Name &#125;&#125;```-deployment</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">- name:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Values.name</span> <span class="string">| default "nginx" &#125;&#125;```	##这样我们就可以不用传入值，默认就为nginx，当然自定义值优先于default；</span></span><br></pre></td></tr></table></figure>
+<p><strong>其他函数：</strong></p>
+<p>缩进：<figure class="highlight plain"><figcaption><span>.Values.resources | indent 8 &#125;&#125;```		##后面会用到</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">大写：```&#123;&#123; upper .Values.resources &#125;&#125;```		##不怎么常用</span><br><span class="line"></span><br><span class="line">首字母大写：```&#123;&#123; title .Values.resources &#125;&#125;```		##不怎么常用</span><br><span class="line"></span><br><span class="line">### 6、流程控制</span><br><span class="line"></span><br><span class="line">流程控制是为模板提供了一种能力，满足更复杂的数据逻辑处理。</span><br><span class="line"></span><br><span class="line">Helm模板语言提供以下流程控制语句：</span><br><span class="line"></span><br><span class="line">- `if/else` 条件块</span><br><span class="line">- `with` 指定范围</span><br><span class="line">- `range` 循环块</span><br><span class="line"></span><br><span class="line">#### if</span><br><span class="line"></span><br><span class="line">`if/else`块是用于在模板中有条件地包含文本块的方法，条件块的基本结构如下：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line">```&#123;&#123; if PIPELINE &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Do-something"><a href="#Do-something" class="headerlink" title="Do something"></a>Do something</h1><figure class="highlight plain"><figcaption><span>else if OTHER PIPELINE &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  # Do something else</span><br><span class="line">```&#123;&#123; else &#125;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Default-case"><a href="#Default-case" class="headerlink" title="Default case"></a>Default case</h1><figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">示例：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat values.yaml </span><br><span class="line">devops: k9s</span><br><span class="line"></span><br><span class="line"># cat templates/deployment.yaml </span><br><span class="line">...</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">        ```&#123;&#123; if eq .Values.devops &quot;k8s&quot; &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>devops: 123
+<figure class="highlight plain"><figcaption><span>else &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">devops: 456</span><br><span class="line">```&#123;&#123; end &#125;&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在上面条件语句使用了`eq`运算符判断是否相等，除此之外，还支持`ne`、 `lt`、 `gt`、 `and`、 `or`等运算符。</span><br><span class="line"></span><br><span class="line">通过模板引擎来渲染一下，会得到如下结果：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># helm install --dry-run zhdyaweb zhdya </span><br><span class="line">...</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">        </span><br><span class="line">        devops: 456</span><br></pre></td></tr></table></figure>
+<p>可以看到渲染出来会有<strong>多余的空行</strong>，这是因为当模板引擎运行时，会将控制指令删除，所有之前占的位置也就空白了，需要使用<figure class="highlight plain"><figcaption><span>if ...&#125;&#125;``` 的方式消除此空行：</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat templates/deploymemt.yaml</span><br><span class="line">...</span><br><span class="line">        env:</span><br><span class="line">        ```&#123;&#123;- if eq .Values.env.hello &quot;world&quot; &#125;&#125;```		##最前面增加 -</span><br><span class="line">          - name: hello</span><br><span class="line">            value: 123</span><br><span class="line">        ```&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">现在是不是没有多余的空格了，==如果使用`-&#125;&#125;````需谨慎==，比如上面模板文件中：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat templates/deploymemt.yaml</span><br><span class="line">...</span><br><span class="line">       env:</span><br><span class="line">        ```&#123;&#123;- if eq .Values.env.hello &quot;world&quot; -&#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>   - hello: true
+<figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">这会渲染成：</span><br></pre></td></tr></table></figure>
+
+env:- hello: true
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">因为`-&#125;&#125;````它删除了双方的换行符。</span><br><span class="line"></span><br><span class="line">条件判断就是判断条件是否为真，如果值为以下几种情况则为false：</span><br><span class="line"></span><br><span class="line">- 一个布尔类型的 `false`</span><br><span class="line"></span><br><span class="line">- 一个数字 `零`</span><br><span class="line"></span><br><span class="line">- 一个 `空`的字符串</span><br><span class="line"></span><br><span class="line">- 一个 `nil`（空或 `null`）</span><br><span class="line"></span><br><span class="line">- 一个空的集合（ `map`、 `slice`、 `tuple`、 `dict`、 `array`）</span><br><span class="line"></span><br><span class="line">除了上面的这些情况外，其他所有条件都为 `真`。</span><br><span class="line"></span><br><span class="line">例如，根据values所传入的值判断是否需要：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat values.yaml </span><br><span class="line">resources:</span><br><span class="line">  limits:</span><br><span class="line">    cpu: 100m</span><br><span class="line">    memory: 128Mi</span><br><span class="line">  # requests:</span><br><span class="line">  #   cpu: 100m</span><br><span class="line">  #   memory: 128Mi</span><br><span class="line">  </span><br><span class="line"># cat templates/deployment.yaml</span><br><span class="line">···</span><br><span class="line">   spec:</span><br><span class="line">     containers:</span><br><span class="line">     - image: ```&#123;&#123; .Values.image.repository &#125;&#125;```:```&#123;&#123; .Values.image.imageTag &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- if .Values.resources &#125;&#125;```		##判断values中是否开启</span><br><span class="line">resources:</span><br><span class="line">  limits:</span><br><span class="line">    cpu: ```&#123;&#123; .Values.resources.limits.cpu &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+    memory: <figure class="highlight plain"><figcaption><span>.Values.resources.limits.memory &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- else &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+resources: {}
+<figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># helm install zhdyaweb6 --dry-run zhdya</span><br><span class="line">...</span><br><span class="line">   spec:</span><br><span class="line">     containers:</span><br><span class="line">     - image: nginx:1.16</span><br><span class="line">       name: zhdyaweb6</span><br><span class="line">       resources:</span><br><span class="line">         limits:</span><br><span class="line">           cpu: 100m</span><br><span class="line">           memory: 128Mi</span><br></pre></td></tr></table></figure>
+</code></pre><p>如上太复杂，配置不是太便携，我们可以直接设置成<strong>开关形式</strong>，是否需要开启限制：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat values.yaml </span></span><br><span class="line"><span class="attr">resources:</span></span><br><span class="line">  <span class="string">enabled：true</span></span><br><span class="line"><span class="attr">  limits:</span></span><br><span class="line"><span class="attr">    cpu:</span> <span class="number">100</span><span class="string">m</span></span><br><span class="line"><span class="attr">    memory:</span> <span class="number">128</span><span class="string">Mi</span></span><br><span class="line">  <span class="comment"># requests:</span></span><br><span class="line">  <span class="comment">#   cpu: 100m</span></span><br><span class="line">  <span class="comment">#   memory: 128Mi</span></span><br><span class="line">  </span><br><span class="line"><span class="comment"># cat templates/deployment.yaml</span></span><br><span class="line"><span class="string">···</span></span><br><span class="line"><span class="attr">   spec:</span></span><br><span class="line"><span class="attr">     containers:</span></span><br><span class="line"><span class="attr">     - image:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Values.image.repository</span> <span class="string">&#125;&#125;```:```&#123;&#123;</span> <span class="string">.Values.image.imageTag</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code>name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- if .Values.resources.enabled &#125;&#125;```		##判断values中是否开启</span><br><span class="line">resources:</span><br><span class="line">  limits:</span><br><span class="line">    cpu: ```&#123;&#123; .Values.resources.limits.cpu &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+    memory: <figure class="highlight plain"><figcaption><span>.Values.resources.limits.memory &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- else &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+resources: {}
+<figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># helm install zhdyaweb6 --dry-run zhdya</span><br><span class="line">...</span><br><span class="line">   spec:</span><br><span class="line">     containers:</span><br><span class="line">     - image: nginx:1.16</span><br><span class="line">       name: zhdyaweb6</span><br><span class="line">       resources:</span><br><span class="line">         limits:</span><br><span class="line">           cpu: 100m</span><br><span class="line">           memory: 128Mi</span><br></pre></td></tr></table></figure>
+</code></pre><p>示例：当然如上也可以应用在（是否开启ingress）：</p>
+<ul>
+<li>这样的话 我们后期就只需要维护values.yaml即可，是否需要开启ingress</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat values.yaml</span></span><br><span class="line"><span class="string">···</span></span><br><span class="line"><span class="attr">ingress:</span></span><br><span class="line"><span class="attr">  enabled:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat ingress.yaml</span></span><br><span class="line"><span class="string">```&#123;&#123;</span> <span class="string">if</span> <span class="string">.Values.ingress.enabled</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>apiVersion: networking.k8s.io/v1beta1<br>kind: Ingress<br>metadata:<br>  name: test-ingress<br>  annotations:<br>    nginx.ingress.kubernetes.io/rewrite-target: /<br>spec:<br>  rules:</p>
+<ul>
+<li>http:<br>  paths:<ul>
+<li>path: /<br>backend:<br>  serviceName: test<br>  servicePort: 80<figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># helm install zhdyaweb6 --dry-run ../../zhdya</span><br><span class="line">NAME: zhdyaweb6</span><br><span class="line">LAST DEPLOYED: Tue Dec 17 23:13:35 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: pending-install</span><br><span class="line">REVISION: 1</span><br><span class="line">TEST SUITE: None</span><br><span class="line">HOOKS:</span><br><span class="line">MANIFEST:</span><br><span class="line">···省略···</span><br><span class="line">---</span><br><span class="line"># Source: zhdya/templates/ingress.yaml</span><br><span class="line">apiVersion: networking.k8s.io/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: test-ingress</span><br><span class="line">  annotations:</span><br><span class="line">    nginx.ingress.kubernetes.io/rewrite-target: /</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">  - http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: /</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: test</span><br><span class="line">          servicePort: 80</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>例如，判断一个布尔值</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat values.yaml </span></span><br><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="attr">ingress:</span></span><br><span class="line"><span class="attr">  enabled:</span> <span class="literal">true</span> </span><br><span class="line"><span class="attr">  host:</span> <span class="string">zhdya.okay686.cn</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat templates/ingress.yaml </span></span><br><span class="line"><span class="string">```&#123;&#123;-</span> <span class="string">if</span> <span class="string">.Values.ingress.enabled</span> <span class="bullet">-&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>apiVersion: networking.k8s.io/v1beta1<br>kind: Ingress<br>metadata:<br>  name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```-ingress</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">  - host: ```&#123;&#123; .Values.ingress.host &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code>http:
+  paths:
+  - path: /
+    backend:
+      serviceName: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">servicePort: ```&#123;&#123; .Values.service.port &#125;&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">#### with</span><br><span class="line"></span><br><span class="line">with ：控制变量作用域。</span><br><span class="line"></span><br><span class="line">还记得之前我们的 ````&#123;&#123;.Release.xxx&#125;&#125;````或者 ````&#123;&#123;.Values.xxx&#125;&#125;````吗？其中的 `.`就是表示对**当前范围的引用**， `.Values`就是告诉模板在**当前范围中**查找 `Values`对象的值。而 `with`语句就可以来控制变量的作用域范围，其语法和一个简单的 `if`语句比较类似：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>with PIPELINE &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  #  restricted scope</span><br><span class="line">```&#123;&#123; end &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">`with`语句可以允许将当前范围 `.`设置为特定的对象，比如我们前面一直使用的 `.Values.label`，我们可以使用 `with`来将 `.`范围指向 `.Values.label`：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat values.yaml </span><br><span class="line">...</span><br><span class="line">replicas: 3</span><br><span class="line">label:</span><br><span class="line">  project: ms</span><br><span class="line">  app: nginx</span><br><span class="line">nodeSelector:</span><br><span class="line">  team: numberA</span><br><span class="line">  gpu: numberB</span><br><span class="line"></span><br><span class="line"># cat templates/deployment.yaml </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: ```&#123;&#123; .Release.Name &#125;&#125;```-deployment</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: nginx</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">    spec:</span><br><span class="line">      ```&#123;&#123;- with .Values.nodeSelector &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>nodeSelector:
+  team: <figure class="highlight plain"><figcaption><span>.team &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpu: ```&#123;&#123; .gpu &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">containers:</span><br><span class="line">- image: nginx:1.16</span><br><span class="line">  name: nginx</span><br></pre></td></tr></table></figure>
+</code></pre><p>可以看到上面我们增加了一个<figure class="highlight plain"><figcaption><span>with .Values.nodeSelector &#125;&#125;```xxx```&#123;&#123;- end &#125;&#125;````的一个块，这样的话我们就可以在当前的块里面直接引用`.team`和`.gpu`了，而不需要进行限定了，这是因为该`with`声明将`.`指向了`.Values.nodeSelector`，在````&#123;&#123;- end &#125;&#125;````后`.`就会复原其之前的作用范围了，我们可以使用模板引擎来渲染上面的模板查看是否符合预期结果。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">如上只要我们启用了`nodeSelector` 在deployment文件中就会加载其中的值，虽然我们以往的这种方式可以获取，但是仍然不是太友好，且不灵活，如果其中有很多个参数就不适用了！！</span><br><span class="line"></span><br><span class="line">**优化后：**</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line">      ```&#123;&#123;- with .Values.nodeSelector &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code>nodeSelector:
+  <figure class="highlight plain"><figcaption><span>toYaml . | nindent 8 &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">上面增加了一个```&#123;&#123;- with .Values.label &#125;&#125;``` xxx ```&#123;&#123;- end &#125;&#125;```的一个块，这样的话就可以在当前的块里面直接引用 `.team`和 `.gpu`了。</span><br><span class="line"></span><br><span class="line"> **with**是一个循环构造。使用**.Values.nodeSelector中**的值：将其转换为Yaml。 </span><br><span class="line"></span><br><span class="line"> toYaml之后的点是循环中**.Values.nodeSelector**的当前值。</span><br><span class="line"></span><br><span class="line">nindent是缩进，空8格。（indent：不换行输出；nindent：换行输出）</span><br><span class="line"></span><br><span class="line">#### range</span><br><span class="line"></span><br><span class="line">如果大家对编程语言熟悉的话，几乎所有的编程语言都支持类似于`for`、`foreach`或者类似功能的循环机制，在 Helm 模板语言中，使用 `range`关键字来进行循环操作。</span><br><span class="line"></span><br><span class="line">我们在 `values.yaml`文件中添加上一个变量列表：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line"># cat values.yaml </span><br><span class="line">like:</span><br><span class="line">  - go</span><br><span class="line">  - python</span><br><span class="line">  - java</span><br></pre></td></tr></table></figure>
+<p>循环打印该列表：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Release.Name</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>data:<br>  test: |<br>  <figure class="highlight plain"><figcaption><span>range .Values.like &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123; . | title | quote &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+  <figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">可以看到最下面我们使用了一个`range`函数，该函数将会遍历````&#123;&#123; .Values.like &#125;&#125;````列表，循环内部我们使用的是一个`.`，这是因为当前的作用域就在当前循环内，这个`.`从列表的第一个元素一直遍历到最后一个元素，然后在遍历过程中使用了`title`和`quote`这两个函数，前面这个函数是**将字符串首字母变成大写**，后面就是**加上双引号变成字符串**，所以按照上面这个模板被渲染过后的结果为：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: zhdyaweb66</span><br><span class="line">data:</span><br><span class="line">  test: |</span><br><span class="line">    - &quot;Go&quot;</span><br><span class="line">    - &quot;Python&quot;</span><br><span class="line">    - &quot;Java&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="7、变量"><a href="#7、变量" class="headerlink" title="7、变量"></a>7、变量</h3><p>接下来学习一个语言中基本的概念：<strong>变量</strong>，在模板中，使用变量的场合不多，但我们将看到如何使用它来简化代码，并更好地利用with和range。</p>
+<p><strong>问题1：获取列表键值</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat values.yaml</span></span><br><span class="line"><span class="attr">env:</span></span><br><span class="line"><span class="attr">  NAME:</span> <span class="string">"GATEWAY"</span></span><br><span class="line"><span class="attr">  JAVA_OPTS:</span> <span class="string">"--Xmx2G"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cat deployment.yaml </span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="attr">   spec:</span></span><br><span class="line"><span class="attr">     containers:</span></span><br><span class="line"><span class="attr">     - image:</span> <span class="string">```&#123;&#123;</span> <span class="string">.Values.image.repository</span> <span class="string">&#125;&#125;```:```&#123;&#123;</span> <span class="string">.Values.image.imageTag</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code>name: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- if .Values.resources.enabled &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+resources:
+  limits:
+    cpu: <figure class="highlight plain"><figcaption><span>.Values.resources.limits.cpu &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">memory: ```&#123;&#123; .Values.resources.limits.memory &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>else &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">resources: &#123;&#125;</span><br><span class="line">```&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+env:
+  <figure class="highlight plain"><figcaption><span>range $k, $v :</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- name: ```&#123;&#123; $k &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+    value: <figure class="highlight plain"><figcaption><span>$v | quote &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">结果如下：</span><br><span class="line"></span><br><span class="line">    # helm install zhdyaweb66 --dry-run ../zhdya</span><br><span class="line">         env:</span><br><span class="line">           - name: JAVA_OPTS</span><br><span class="line">             value: &quot;--Xmx2G&quot;</span><br><span class="line">           - name: NAME</span><br><span class="line">             value: &quot;GATEWAY&quot;</span><br><span class="line">上面在 `range`循环中使用 `$key`和 `$value`两个变量来接收后面列表循环的键和值`。`</span><br><span class="line"></span><br><span class="line">**问题2：with中不能使用内置对象**</span><br><span class="line"></span><br><span class="line">`with`语句块内不能再 `.Release.Name`对象，否则报错。</span><br><span class="line"></span><br><span class="line">我们可以将该对象赋值给一个变量可以来解决这个问题：</span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: ```&#123;&#123; .Release.Name &#125;&#125;```-deployment</span><br><span class="line">spec:</span><br><span class="line">  replicas: ```&#123;&#123; .Values.replicas &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>  template:<br>    metadata:<br>      labels:<br>        project: <figure class="highlight plain"><figcaption><span>.Values.label.project &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app: ```&#123;&#123; quote .Values.label.app &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<pre><code><figure class="highlight plain"><figcaption><span>with .Values.label &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">project: ```&#123;&#123; .project &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+  app: <figure class="highlight plain"><figcaption><span>.app &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">release: ```&#123;&#123; .Release.Name &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>end &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">我们在`with`语句块内添加了一个`.Release.Name`对象，但这个模板是错误的，编译的时候会失败，这是因为`.Release.Name`不在该`with`语句块限制的作用范围之内，我们可以将该对象赋值给一个**变量**可以来解决这个问题：</span><br><span class="line"></span><br><span class="line">**全局变量：**</span><br><span class="line"></span><br><span class="line">```go</span><br><span class="line">      ```&#123;&#123;- $releaseName := .Release.Name -&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>with .Values.label &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">project: ```&#123;&#123; .project &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+  app: <figure class="highlight plain"><figcaption><span>.app &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">release: ```&#123;&#123; $releaseName &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+  # 或者可以使用$符号,引入全局命名空间
+  release: <figure class="highlight plain"><figcaption><span>$.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">可以看到在 `with`语句上面增加了一句 ````&#123;&#123;- $releaseName := .Release.Name -&#125;&#125;````，其中 `$releaseName`就是后面的对象的一个引用变量，它的形式就是 `$name`，赋值操作使用 `:=`，这样 `with`语句块内部的 `$releaseName`变量仍然指向的是 `.Release.Name`</span><br><span class="line"></span><br><span class="line">### 8、命名模板</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">[root@k8s-master1 zhdya]# ls templates/</span><br><span class="line">deployment.yaml  ingress.yaml  service.yaml</span><br></pre></td></tr></table></figure>
+<p>如上我们可以看到一个很小的应用几乎都包含如上3个yaml，且其中我们大量引入了各种变量，这样后期维护起来会非常的不方便，有没有一个模板，一旦变更只需要修改模板中的文件即可：</p>
+<p>命名模板：使用define定义，template引入，在<strong>templates目录中</strong>默认下划线_开头的文件为公共模板(_helpers.tpl)</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat _helpers.tpl</span></span><br><span class="line"><span class="string">```&#123;&#123;-</span> <span class="string">define</span> <span class="string">"fullname"</span> <span class="bullet">-&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>.Chart.Name &#125;&#125;```-```&#123;&#123; .Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- end -&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="cat-deployment-yaml"><a href="#cat-deployment-yaml" class="headerlink" title="cat deployment.yaml"></a>cat deployment.yaml</h1><p>apiVersion: apps/v1<br>kind: Deployment<br>metadata:<br>  name: <figure class="highlight plain"><figcaption><span>template "fullname" . &#125;&#125;```		##引入_helpers.tpl中定义的fullname</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p><u>如上可能大家也看到了，单个的定义反而不如直接写死在yaml文件中，但是咱们毕竟为了真实的线上环境，所以后期的维护量还是蛮大的，所以维护一个文件和维护多个文件的差异和人工就立竿见影了，且单文件不容易出错！！</u></p>
+<p>template指令是将一个模板包含在另一个模板中的方法。但是，template函数不能用于Go模板管道。为了解决该问题，增加include功能。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cat _helpers.tpl</span></span><br><span class="line"><span class="string">```&#123;&#123;-</span> <span class="string">define</span> <span class="string">"fullname"</span> <span class="bullet">-&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>.Chart.Name &#125;&#125;```-```&#123;&#123; .Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- end -&#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>define "demo.labels" -&#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app: ```&#123;&#123; template &quot;fullname&quot; . &#125;&#125;```	##引用如上的fullname</span><br><span class="line">chart: ```&#123;&#123; .Chart.Name &#125;&#125;```-```&#123;&#123; .Chart.Version &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>release: <figure class="highlight plain"><figcaption><span>.Release.Name &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```&#123;&#123;- end -&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="cat-deployment-yaml-1"><a href="#cat-deployment-yaml-1" class="headerlink" title="cat deployment.yaml"></a>cat deployment.yaml</h1><p>apiVersion: apps/v1<br>kind: Deployment<br>metadata:<br>  name: <figure class="highlight plain"><figcaption><span>include "demo.fullname" . &#125;&#125;```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">labels:</span><br><span class="line">  ```&#123;&#123;- include &quot;demo.labels&quot; . | nindent 4 &#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>…<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">上面包含一个名为 `demo.labels` 的模板，然后将值 `.` 传递给模板，最后将该模板的输出传递给 `nindent` 函数。</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 3.7 开发自己的Chart：Java应用为例</span><br><span class="line"></span><br><span class="line">1. 先创建模板</span><br></pre></td></tr></table></figure></p>
+<p>   helm create javademo<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. 修改Chart.yaml，Values.yaml，_helpers.tpl添加常用的变量;</span><br><span class="line"></span><br><span class="line">3. 在templates目录下创建部署镜像所需要的yaml文件，并变量引用yaml里经常变动的字段;</span><br><span class="line"></span><br><span class="line">## 3.8 使用Harbor作为Chart仓库</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;u&gt;部署harbor之前一定要有docker和Docker Compose环境&lt;/u&gt;</span><br></pre></td></tr></table></figure>
+<p>1、安装docker<br>安装依赖包<br>yum install -y yum-utils device-mapper-persistent-data lvm2<br>设置阿里云镜像源<br>yum-config-manager –add-repo <a href="https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo" target="_blank" rel="noopener">https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</a><br>安装 Docker-CE<br>yum install docker-ce -y</p>
+<p>2、安装docker Compose<br>1）：</p>
+<h1 id="wget-https-github-com-docker-compose-releases-download-1-25-0-docker-compose-Linux-x86-64"><a href="#wget-https-github-com-docker-compose-releases-download-1-25-0-docker-compose-Linux-x86-64" class="headerlink" title="wget https://github.com/docker/compose/releases/download/1.25.0/docker-compose-Linux-x86_64"></a>wget <a href="https://github.com/docker/compose/releases/download/1.25.0/docker-compose-Linux-x86_64" target="_blank" rel="noopener">https://github.com/docker/compose/releases/download/1.25.0/docker-compose-Linux-x86_64</a></h1><h1 id="mv-docker-compose-Linux-x86-64-usr-local-bin-docker-compose"><a href="#mv-docker-compose-Linux-x86-64-usr-local-bin-docker-compose" class="headerlink" title="mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose"></a>mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose</h1><h1 id="chmod-x-usr-local-bin-docker-compose"><a href="#chmod-x-usr-local-bin-docker-compose" class="headerlink" title="chmod +x /usr/local/bin/docker-compose"></a>chmod +x /usr/local/bin/docker-compose</h1><p>2）：<br>pip 安装（推荐），官网太慢<br>yum -y install epel-release<br>pip –version<br>pip install –upgrade pip<br>pip install docker-compose</p>
+<p>3、下载harbor离线安装包百度云下载（harbor-offline-installer-v1.9.3）<br>链接：<a href="https://pan.baidu.com/s/1muZJryPrP1dSQDuHn_9GmA" target="_blank" rel="noopener">https://pan.baidu.com/s/1muZJryPrP1dSQDuHn_9GmA</a><br>提取码：turx </p>
+<p>4、编辑harbor配置文件</p>
+<h1 id="vim-harbor-yml"><a href="#vim-harbor-yml" class="headerlink" title="vim harbor.yml"></a>vim harbor.yml</h1><p>hostname:cr-qa.xxx.com      #harbor 的域名<br>https:                  #开启https<br>  port: 443<br>  certificate: /data/cert/cr-qa.xxx.com.crt   #https 的文件<br>  private_key: /data/cert/cr-qa.xxx.com.key<br>harbor_admin_password: xxxxx          # harbor ui后台的密码<br>password: xxxx                    #(一开始就要设置，否则安装后通过重装不能修改，但删除数据库可以) location: /data/logs/harbor       # harbor的日志</p>
+<p>5、生成配置&amp;安装<br>./prepare<br>./install<br>成功后会有提示。然后通过浏览器访问你的域名就可以了。</p>
+<p>###################分割线，到这就安装完成可以使用了##################################<br>6、停止&amp;开启<br>docker-compose stop<br>docker-compose start</p>
+<p>7、后修改配置<br>docker-compose down -v<br>vim harbor.yml<br>./prepare<br>docker-compose up -d</p>
+<p>8、删除harbors的镜像保留数据库和镜像数据<br>docker-compose down -v</p>
+<p>9、删除harbor的数据库和数据，相当于重装<br>rm -r /data/database<br>rm -r /data/registry</p>
+<p>UI后台创建用户和仓库，客户机可以通过docker login xxx.com 然后push pull 了，具体权限界面端后台都有。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**1、启用Harbor的Chart仓库服务**</span><br></pre></td></tr></table></figure></p>
+<h1 id="install-sh-–with-chartmuseum"><a href="#install-sh-–with-chartmuseum" class="headerlink" title="./install.sh –with-chartmuseum"></a>./install.sh –with-chartmuseum</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">启用后，默认创建的项目就带有helm charts功能了。</span><br><span class="line"></span><br><span class="line">![mark](http://myimage.okay686.cn/okay686cn/20191222/3QYNs8e4wfS6.png?imageslim)</span><br><span class="line"></span><br><span class="line">**2、安装push插件**</span><br><span class="line"></span><br><span class="line"> https://github.com/chartmuseum/helm-push </span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">helm plugin install https://github.com/chartmuseum/helm-push</span><br></pre></td></tr></table></figure>
+<p><strong>3、添加repo</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm repo add  --username admin --password Harbor12345 myrepo http://192.168.171.10/chartrepo/library</span><br></pre></td></tr></table></figure>
+<p><strong>4、推送与安装Chart</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@k8s-master1 ~]# helm push demo-0.1.0.tgz --username=admin --password=Zhang http://192.168.171.10/chartrepo/library</span><br><span class="line">Pushing demo-0.1.0.tgz to http://192.168.171.10/chartrepo/library...</span><br><span class="line">Done.</span><br><span class="line"></span><br><span class="line"># helm install web --version 1.4.0 myrepo/demo</span><br></pre></td></tr></table></figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191222/UnbhkzOdohei.png?imageslim" alt="mark"></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年12月23日 14:37</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/17/Helm应用包管理器（下）/" title="Helm应用包管理器（下）">http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/&title=《Helm应用包管理器（下）》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/&title=《Helm应用包管理器（下）》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Helm应用包管理器（下）》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/17/Helm应用包管理器（下）/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-6-Chart模板"><span class="post-toc-text">3.6 Chart模板</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、模板"><span class="post-toc-text">1、模板</span></a></li></ol></li></ol><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、内置对象"><span class="post-toc-text">3、内置对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5、管道与函数"><span class="post-toc-text">5、管道与函数</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#helm-install-–dry-run-zhdyaweb-zhdya"><span class="post-toc-text">helm install –dry-run zhdyaweb zhdya</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Do-something"><span class="post-toc-text">Do something</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Default-case"><span class="post-toc-text">Default case</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#7、变量"><span class="post-toc-text">7、变量</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#cat-deployment-yaml"><span class="post-toc-text">cat deployment.yaml</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#cat-deployment-yaml-1"><span class="post-toc-text">cat deployment.yaml</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#wget-https-github-com-docker-compose-releases-download-1-25-0-docker-compose-Linux-x86-64"><span class="post-toc-text">wget https://github.com/docker/compose/releases/download/1.25.0/docker-compose-Linux-x86_64</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#mv-docker-compose-Linux-x86-64-usr-local-bin-docker-compose"><span class="post-toc-text">mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#chmod-x-usr-local-bin-docker-compose"><span class="post-toc-text">chmod +x /usr/local/bin/docker-compose</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#vim-harbor-yml"><span class="post-toc-text">vim harbor.yml</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#install-sh-–with-chartmuseum"><span class="post-toc-text">./install.sh –with-chartmuseum</span></a>
+        </li></nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/16/Helm应用包管理器（上）/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Helm应用包管理器（上）</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <section id="comments">
+            <div id="disqus_thread">
+                <script type="text/javascript">
+                    var disqus_shortname = 'true';
+                    (function() {
+                        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </div>
+        </section>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
