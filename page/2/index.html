@@ -133,7 +133,7 @@
         </div>
         <div class="article-feed">
             <p>
-                一、环境准备1.1、角色划分12345610.8.13.80   vip  10.8.13.81   master01  haproxy、keepalived、etcd、kube-apiserv...
+                一、环境准备1.1、角色划分12345610.8.13.80   vip  10.8.13.81   master01  haproxy、keepalived、etcd、kube-apiserver、kube-controller-m...
             </p>
         </div>
       
@@ -197,7 +197,7 @@
         </div>
         <div class="article-feed">
             <p>
-                摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT...
+                摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量...
             </p>
         </div>
       
@@ -261,7 +261,7 @@
         </div>
         <div class="article-feed">
             <p>
-                在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到...
+                在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过...
             </p>
         </div>
       
@@ -329,7 +329,7 @@
             <p>
                 在Django admin后台添加数据的时候，文章内容文本框想发布一篇图文并茂的文章需就得手写Html代码，这十分吃力，也没法上传图片和文件。这显然不是我等高大上程序猿想要的。
 
-为提升效率，我...
+为提升效率，我们可以使用富文本编辑器添加数据。支持Dj...
             </p>
         </div>
       
@@ -395,7 +395,7 @@
         </div>
         <div class="article-feed">
             <p>
-                django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其...
+                django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_AP...
             </p>
         </div>
       
@@ -461,7 +461,7 @@
         </div>
         <div class="article-feed">
             <p>
-                Django是通过Model操作数据库，不管你数据库的类型是MySql或者Sqlite，Django它自动帮你生成相应数据库类型的SQL语句，所以不需要关注SQL语句和类型，对数据的操作Djan...
+                Django是通过Model操作数据库，不管你数据库的类型是MySql或者Sqlite，Django它自动帮你生成相应数据库类型的SQL语句，所以不需要关注SQL语句和类型，对数据的操作Django帮我们自动完成。只要回写Model就...
             </p>
         </div>
       
@@ -528,7 +528,8 @@
         <div class="article-feed">
             <p>
                 基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。
-12python manage.py makemigrationspython manage.py...
+12python manage.py makemigrationspython manage.py migrate
+迁移数据之后，网站目录...
             </p>
         </div>
       
@@ -595,7 +596,7 @@
         <div class="article-feed">
             <p>
                 打开myblog目录下的settings.py文件：
-一、设置域名访问权限123456myblog/settings.pyALLOWED_HOSTS = []      #修改前ALLOWED_...
+一、设置域名访问权限123456myblog/settings.pyALLOWED_HOSTS = []      #修改前ALLOWED_HOSTS = [&apos;*&apo...
             </p>
         </div>
       
@@ -668,7 +669,8 @@ django2.1.1
 
 
 说明：1、为项目保存路径，myblog为项目名。
-2、为选择使用的虚拟环境软件，这里选virtualenv。...
+2、为选择使用的虚拟环境软件，这里选virtualenv。
+3、为虚拟环境保存目录，我把它保存在项...
             </p>
         </div>
       
@@ -735,7 +737,7 @@ django2.1.1
         <div class="article-feed">
             <p>
                 ++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++
-从如下图片中可...
+从如下图片中可以看到，文章有标题、分类、作者、浏览次数...
             </p>
         </div>
       

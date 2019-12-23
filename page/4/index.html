@@ -134,7 +134,8 @@
         <div class="article-feed">
             <p>
                 一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。
-批准上线这一操作是通过admin的自定义ac...
+批准上线这一操作是通过admin的自定义actions来实现的。
+Django的ad...
             </p>
         </div>
       
@@ -201,7 +202,9 @@
         <div class="article-feed">
             <p>
                 一、启用admin前面，我们已经完成了数据收集客户端的编写和测试，下面我们就可以在admin中展示和管理资产数据了。
-首先，通过1python manage.py createsuperuser...
+首先，通过1python manage.py createsuperuser
+创建一个管理员账户。
+然后，进入/as...
             </p>
         </div>
       
@@ -268,7 +271,8 @@
         <div class="article-feed">
             <p>
                 Linux下收集数据就有很多命令和工具了，比Windows方便多了。
-但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Py...
+但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。
+下面，我...
             </p>
         </div>
       
@@ -335,7 +339,7 @@
         <div class="article-feed">
             <p>
                 一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。
-在Pycharm的Client目录下的plugins包中，新建一个window...
+在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py...
             </p>
         </div>
       
@@ -405,7 +409,7 @@
 CMDB最主要的管理对象：服务器，其数据信息自然不可能通过手工收集，必须以客户端的方式，定时自动收集并报告给远程的服务器。
 
 下面，让我们暂时忘掉Django，进入Python运维的世界……
-...
+一、客户端程序组织编写客户端，不能一个p...
             </p>
         </div>
       
@@ -472,7 +476,8 @@ CMDB最主要的管理对象：服务器，其数据信息自然不可能通过�
         <div class="article-feed">
             <p>
                 一、创建项目创建Django项目cmdb，配置好settings中的语言和时区，最后新建一个app，名字就叫做assets。这些基本过程以后就不再赘述了，不熟悉的请参考教程的前面部分。
-1dja...
+1django版本：1.11.11
+创建成功后，...
             </p>
         </div>
       
@@ -539,7 +544,7 @@ CMDB最主要的管理对象：服务器，其数据信息自然不可能通过�
         <div class="article-feed">
             <p>
                 一、CMDB简介CMDB (Configuration Management Database)配置管理数据库:
-CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交...
+CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发...
             </p>
         </div>
       
@@ -606,7 +611,7 @@ CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与�
         <div class="article-feed">
             <p>
                 一、Django简介
-Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻...
+Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系...
             </p>
         </div>
       
@@ -670,7 +675,7 @@ Django是一个开放源代码的Web应用框架，由Python写成。采用了MV
         </div>
         <div class="article-feed">
             <p>
-                测试集群123456789101112131415161718192021222324252627282930313233# 创建一个 nginx deplymentapiVersion: ex...
+                测试集群123456789101112131415161718192021222324252627282930313233# 创建一个 nginx deplymentapiVersion: extensions/v1beta1 kin...
             </p>
         </div>
       
@@ -735,7 +740,7 @@ Django是一个开放源代码的Web应用框架，由Python写成。采用了MV
         <div class="article-feed">
             <p>
                 配置 kubelet 认证kubelet 授权 kube-apiserver 的一些操作 exec run logs 等
-123# RBAC 只需创建一次就可以kubectl create cl...
+123# RBAC 只需创建一次就可以kubectl create clusterrolebinding kub...
             </p>
         </div>
       
