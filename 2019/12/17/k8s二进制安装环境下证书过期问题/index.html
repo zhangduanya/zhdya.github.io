@@ -3,23 +3,23 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>CMDB项目需求分析（一） | 拼！就对了！</title>
+  <title>k8s二进制安装环境下证书过期问题 | 拼！就对了！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="一、CMDB简介CMDB (Configuration Management Database)配置管理数据库: CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发挥配置信息的价值，同时依赖于相关流程保证数据的准确性。 CMDB是ITIL(Information Technology Infrastructure Library">
-<meta name="keywords" content="django,python,CMDB">
+  <meta name="description" content="k8s配置信息的工作目录一般为/etc/kubernetes，证书目录一般为/etc/kubernetes/ssl 一、重新生成证书当你的kubernetes报错：certificate has expired or is not yet valid，可以通过命令：openssl x509 -in [证书全路径] -noout -text查看证书详情。 1、备份123[root@zhdya]# c">
+<meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CMDB项目需求分析（一）">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/index.html">
+<meta property="og:title" content="k8s二进制安装环境下证书过期问题">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="一、CMDB简介CMDB (Configuration Management Database)配置管理数据库: CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发挥配置信息的价值，同时依赖于相关流程保证数据的准确性。 CMDB是ITIL(Information Technology Infrastructure Library">
+<meta property="og:description" content="k8s配置信息的工作目录一般为/etc/kubernetes，证书目录一般为/etc/kubernetes/ssl 一、重新生成证书当你的kubernetes报错：certificate has expired or is not yet valid，可以通过命令：openssl x509 -in [证书全路径] -noout -text查看证书详情。 1、备份123[root@zhdya]# c">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-03T23:50:34.870Z">
+<meta property="og:updated_time" content="2019-12-26T14:56:58.332Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CMDB项目需求分析（一）">
-<meta name="twitter:description" content="一、CMDB简介CMDB (Configuration Management Database)配置管理数据库: CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发挥配置信息的价值，同时依赖于相关流程保证数据的准确性。 CMDB是ITIL(Information Technology Infrastructure Library">
+<meta name="twitter:title" content="k8s二进制安装环境下证书过期问题">
+<meta name="twitter:description" content="k8s配置信息的工作目录一般为/etc/kubernetes，证书目录一般为/etc/kubernetes/ssl 一、重新生成证书当你的kubernetes报错：certificate has expired or is not yet valid，可以通过命令：openssl x509 -in [证书全路径] -noout -text查看证书详情。 1、备份123[root@zhdya]# c">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -101,14 +101,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-1、项目需求分析" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-k8s二进制安装环境下证书过期问题" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      CMDB项目需求分析（一）
+      k8s二进制安装环境下证书过期问题
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -116,12 +116,12 @@
               <li>
                   <i class="fa fa-book"></i>
                   
-                      <a href="/categories/Python3/">Python3</a>
+                      <a href="/categories/K8s/">K8s</a>
                   
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2019-02-28
+          <i class="fa fa-calendar"></i>  2019-12-17
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -137,126 +137,19 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="一、CMDB简介"><a href="#一、CMDB简介" class="headerlink" title="一、CMDB简介"></a>一、CMDB简介</h3><p>CMDB (Configuration Management Database)配置管理数据库:</p>
-<p>CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发挥配置信息的价值，同时依赖于相关流程保证数据的准确性。</p>
-<p>CMDB是ITIL(Information Technology Infrastructure Library，信息技术基础架构库)的基础，常常被认为是构建其它ITIL流程的先决条件而优先考虑，ITIL项目的成败与是否成功建立CMDB有非常大的关系。</p>
-<p>CMDB的核心是对整个公司的IT硬件/软件资源进行自动/手动收集、变更操作，说白了也就是对IT资产进行自动化管理，这也是本项目的重点。</p>
-<h3 id="二、项目需求分析"><a href="#二、项目需求分析" class="headerlink" title="二、项目需求分析"></a>二、项目需求分析</h3><p>本项目不是一个完整的的CMDB系统，重点针对服务器资产的自动数据收集、报告、接收、审批、更新和展示，搭建一个基础的面向运维的主机管理平台。</p>
-<p>下面是项目需求的总结：</p>
-<ul>
-<li>尽可能存储所有的IT资产数据，但不包括外设、优盘、显示器这种属于行政部门管理的设备；</li>
-<li>硬件信息可自动收集、报告、分析、存储和展示；</li>
-<li>具有后台管理人员的工作界面；</li>
-<li>具有前端可视化展示的界面；</li>
-<li>具有日志记录功能；</li>
-<li>数据可手动添加、修改和删除。</li>
-</ul>
-<p>当然，实际的CMDB项目需求绝对不止这些，还有诸如用户管理、权限管理、API安全认证、REST设计等等。</p>
-<h3 id="三、资产分类"><a href="#三、资产分类" class="headerlink" title="三、资产分类"></a>三、资产分类</h3><p>资产种类众多，不是所有的都需要CMDB管理，也不是什么都是CMDB能管理的。</p>
-<p>下面是一个大致的分类，不一定准确、全面：</p>
-<h4 id="资产类型包括："><a href="#资产类型包括：" class="headerlink" title="资产类型包括："></a>资产类型包括：</h4><ul>
-<li>服务器</li>
-<li>存储设备</li>
-<li>安全设备</li>
-<li>网络设备</li>
-<li>软件资产</li>
-</ul>
-<h4 id="服务器又可分为："><a href="#服务器又可分为：" class="headerlink" title="服务器又可分为："></a>服务器又可分为：</h4><ul>
-<li>刀片服务器</li>
-<li>PC服务器</li>
-<li>小型机</li>
-<li>大型机</li>
-<li>其它</li>
-</ul>
-<h4 id="存储设备包括："><a href="#存储设备包括：" class="headerlink" title="存储设备包括："></a>存储设备包括：</h4><ul>
-<li>磁盘阵列</li>
-<li>网络存储器</li>
-<li>磁带库</li>
-<li>磁带机</li>
-<li>其它</li>
-</ul>
-<h4 id="安全设备包括："><a href="#安全设备包括：" class="headerlink" title="安全设备包括："></a>安全设备包括：</h4><ul>
-<li>防火墙</li>
-<li>入侵检测设备</li>
-<li>互联网网关</li>
-<li>漏洞扫描设备</li>
-<li>数字签名设备</li>
-<li>上网行为管理设备</li>
-<li>运维审计设备</li>
-<li>加密机</li>
-<li>其它</li>
-</ul>
-<h4 id="网络设备包括："><a href="#网络设备包括：" class="headerlink" title="网络设备包括："></a>网络设备包括：</h4><ul>
-<li>路由器</li>
-<li>交换器</li>
-<li>负载均衡</li>
-<li>VPN</li>
-<li>流量分析</li>
-<li>其它</li>
-</ul>
-<h4 id="软件资产包括："><a href="#软件资产包括：" class="headerlink" title="软件资产包括："></a>软件资产包括：</h4><ul>
-<li>操作系统授权</li>
-<li>大型软件授权</li>
-<li>数据库授权</li>
-<li>其它</li>
-</ul>
-<p>其中，服务器是运维部门最关心的，也是CMDB中最主要、最方便进行自动化管理的资产。</p>
-<p><strong>服务器</strong>又可以包含下面的部件：</p>
-<ul>
-<li>CPU</li>
-<li>硬盘</li>
-<li>内存</li>
-<li>网卡</li>
-</ul>
-<p>除此之外，我们还要考虑下面的一些内容：</p>
-<ul>
-<li>机房</li>
-<li>业务线</li>
-<li>合同</li>
-<li>管理员</li>
-<li>审批员</li>
-<li>资产标签</li>
-<li>其它未尽事宜</li>
-</ul>
-<p>大概对资产进行了分类之后，就要详细考虑各细分数据条目了。</p>
-<p><strong>共有数据条目：</strong></p>
-<p>有一些数据条目是所有资产都应该有的，比如：</p>
-<ul>
-<li>资产名称</li>
-<li>资产sn</li>
-<li>所属业务线</li>
-<li>设备状态</li>
-<li>制造商</li>
-<li>管理IP</li>
-<li>所在机房</li>
-<li>资产管理员</li>
-<li>资产标签</li>
-<li>合同</li>
-<li>价格</li>
-<li>购买日期</li>
-<li>过保日期</li>
-<li>批准人</li>
-<li>批准日期</li>
-<li>数据更新日期</li>
-<li>备注</li>
-</ul>
-<p>另外，不同类型的资产还有各自不同的数据条目，例如服务器：</p>
-<h4 id="服务器："><a href="#服务器：" class="headerlink" title="服务器："></a>服务器：</h4><ul>
-<li>服务器类型</li>
-<li>添加方式</li>
-<li>宿主机</li>
-<li>服务器型号</li>
-<li>Raid类型</li>
-<li>操作系统类型</li>
-<li>发行版本</li>
-<li>操作系统版本</li>
-</ul>
-<p>其实，在开始正式编写CMDB项目代码之前，对项目的需求分析准确与否，数据条目的安排是否合理，是决定整个CMDB项目成败的关键。这一部分工作看似简单其实复杂，看似无用其实关键，做好了，项目基础就牢固，没做好，推到重来好几遍很正常！</p>
+            <p>k8s配置信息的工作目录一般为/etc/kubernetes，证书目录一般为/etc/kubernetes/ssl</p>
+<h3 id="一、重新生成证书"><a href="#一、重新生成证书" class="headerlink" title="一、重新生成证书"></a>一、重新生成证书</h3><p>当你的kubernetes报错：certificate has expired or is not yet valid，可以通过命令：openssl x509 -in [证书全路径] -noout -text查看证书详情。</p>
+<h4 id="1、备份"><a href="#1、备份" class="headerlink" title="1、备份"></a>1、备份</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@zhdya]# cd /etc/kubernetes;</span><br><span class="line">[root@zhdya]# cp kubelet.kubeconfig kubelet.kubeconfig.bak;</span><br><span class="line">[root@zhdya]# mkdir sslbak &amp;&amp; cp ssl/ sslbak;</span><br></pre></td></tr></table></figure>
+<h4 id="2、清理"><a href="#2、清理" class="headerlink" title="2、清理"></a>2、清理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@zhdya]# rm -f kubelet.kubeconfig;</span><br><span class="line">[root@zhdya]# rm ssl/kubelet.*;</span><br></pre></td></tr></table></figure>
+<h4 id="3-重启kubelete"><a href="#3-重启kubelete" class="headerlink" title="3. 重启kubelete"></a>3. 重启kubelete</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@zhdya]# systemctl  restart kubelet &amp;&amp; systemctl  status  kubelet</span><br></pre></td></tr></table></figure>
+<h4 id="4-使用CSR重新生产证书"><a href="#4-使用CSR重新生产证书" class="headerlink" title="4. 使用CSR重新生产证书"></a>4. 使用CSR重新生产证书</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@zhdya]# kubectl get csr</span><br><span class="line">NAME                        AGE       REQUESTOR           CONDITION</span><br><span class="line">node-csr-NsKZSz-myrv   11s       kubelet-bootstrap   Pending</span><br><span class="line"></span><br><span class="line">[root@zhdya]# kubectl certificate approve node-csr-NsKZSz-myrv</span><br><span class="line">certificatesigningrequest.certificates.k8s.io/node-csr-NsKZSz-myrv approved</span><br></pre></td></tr></table></figure>
+<p>备注：CSR授权完成后，kubelete会自动发起CSR请求更新证书。</p>
+<h4 id="5、查看集群状态"><a href="#5、查看集群状态" class="headerlink" title="5、查看集群状态"></a>5、查看集群状态</h4><p>大概等待10秒，运行如下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@zhdya]# kubectl get node</span><br></pre></td></tr></table></figure></p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年03月04日 07:50</p>
-        <p>原始链接： <a class="post-url" href="/2019/02/28/1、项目需求分析/" title="CMDB项目需求分析（一）">http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/</a></p>
+        <p>最后更新： 2019年12月26日 22:56</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/17/k8s二进制安装环境下证书过期问题/" title="k8s二进制安装环境下证书过期问题">http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -313,7 +206,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/&title=《CMDB项目需求分析（一）》 — 拼！就对了！&pic=/images/django.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/&title=《k8s二进制安装环境下证书过期问题》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -323,22 +216,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/&title=《CMDB项目需求分析（一）》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/&title=《k8s二进制安装环境下证书过期问题》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CMDB项目需求分析（一）》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《k8s二进制安装环境下证书过期问题》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -348,7 +241,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/02/28/1、项目需求分析/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/17/k8s二进制安装环境下证书过期问题/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -360,11 +253,9 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/django/" class="color2">django</a>
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
       
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
+    <a href="/tags/K8S/" class="color4">K8S</a>
       
   </li>
 
@@ -377,26 +268,26 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、CMDB简介"><span class="post-toc-text">一、CMDB简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、项目需求分析"><span class="post-toc-text">二、项目需求分析</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、资产分类"><span class="post-toc-text">三、资产分类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#资产类型包括："><span class="post-toc-text">资产类型包括：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务器又可分为："><span class="post-toc-text">服务器又可分为：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#存储设备包括："><span class="post-toc-text">存储设备包括：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安全设备包括："><span class="post-toc-text">安全设备包括：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网络设备包括："><span class="post-toc-text">网络设备包括：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#软件资产包括："><span class="post-toc-text">软件资产包括：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务器："><span class="post-toc-text">服务器：</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、重新生成证书"><span class="post-toc-text">一、重新生成证书</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、备份"><span class="post-toc-text">1、备份</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、清理"><span class="post-toc-text">2、清理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-重启kubelete"><span class="post-toc-text">3. 重启kubelete</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-使用CSR重新生产证书"><span class="post-toc-text">4. 使用CSR重新生产证书</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5、查看集群状态"><span class="post-toc-text">5、查看集群状态</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2019/03/01/2、模型设计/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/12/18/K8s Ingress Nginx使用/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          CMDB模型设计（二）
+          K8s Ingress Nginx使用
         
       </span>
     </a>
   
   
-    <a href="/2019/02/11/Django 基础学习Ⅰ/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Django基础学习Ⅰ</span>
+    <a href="/2019/12/16/Helm应用包管理器（上）/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Helm应用包管理器（上）</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -405,7 +296,7 @@
 
 
     
-        <div id="SOHUCS" sid="1、项目需求分析"></div>
+        <div id="SOHUCS" sid="k8s二进制安装环境下证书过期问题"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';
