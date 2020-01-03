@@ -3,23 +3,23 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>部署Ceph集群 | 拼！就对了！</title>
+  <title>二、部署Ceph集群 | 拼！就对了！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="[toc] 一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z -">
+  <meta name="description" content="一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z - 开发版（给">
 <meta name="keywords" content="K8S">
 <meta property="og:type" content="article">
-<meta property="og:title" content="部署Ceph集群">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/index.html">
+<meta property="og:title" content="二、部署Ceph集群">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="[toc] 一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z -">
+<meta property="og:description" content="一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z - 开发版（给">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-03T04:15:50.188Z">
+<meta property="og:updated_time" content="2020-01-03T06:44:24.683Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="部署Ceph集群">
-<meta name="twitter:description" content="[toc] 一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z -">
+<meta name="twitter:title" content="二、部署Ceph集群">
+<meta name="twitter:description" content="一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z - 开发版（给">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -101,14 +101,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-部署Ceph集群" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-二、部署Ceph集群" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      部署Ceph集群
+      二、部署Ceph集群
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -137,8 +137,7 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>[toc]</p>
-<h3 id="一、Ceph版本选择"><a href="#一、Ceph版本选择" class="headerlink" title="一、Ceph版本选择"></a>一、Ceph版本选择</h3><h4 id="Ceph版本来源介绍"><a href="#Ceph版本来源介绍" class="headerlink" title="Ceph版本来源介绍"></a>Ceph版本来源介绍</h4><p>Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。<br>第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。</p>
+            <h3 id="一、Ceph版本选择"><a href="#一、Ceph版本选择" class="headerlink" title="一、Ceph版本选择"></a>一、Ceph版本选择</h3><h4 id="Ceph版本来源介绍"><a href="#Ceph版本来源介绍" class="headerlink" title="Ceph版本来源介绍"></a>Ceph版本来源介绍</h4><p>Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。<br>第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。</p>
 <p>x.0.z - 开发版（给早期测试者和勇士们）</p>
 <p>x.1.z - 候选版（用于测试集群、高手们）</p>
 <p>x.2.z - 稳定、修正版（给用户们）</p>
@@ -236,8 +235,8 @@ $name：值为$type.$id。
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年01月03日 12:15</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/24/部署Ceph集群/" title="部署Ceph集群">http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/</a></p>
+        <p>最后更新： 2020年01月03日 14:44</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/24/二、部署Ceph集群/" title="二、部署Ceph集群">http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -294,7 +293,7 @@ $name：值为$type.$id。
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/&title=《部署Ceph集群》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/&title=《二、部署Ceph集群》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -304,22 +303,22 @@ $name：值为$type.$id。
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/&title=《部署Ceph集群》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/&title=《二、部署Ceph集群》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《部署Ceph集群》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《二、部署Ceph集群》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -329,7 +328,7 @@ $name：值为$type.$id。
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/24/二、部署Ceph集群/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -361,19 +360,19 @@ $name：值为$type.$id。
 
 <nav id="article-nav">
   
-    <a href="/2019/12/25/Ceph RBD介绍与使用/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/12/25/三、Ceph RBD介绍与使用/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          Ceph RBD介绍与使用
+          三、Ceph RBD介绍与使用
         
       </span>
     </a>
   
   
-    <a href="/2019/12/23/Ceph介绍/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Ceph介绍</span>
+    <a href="/2019/12/23/一、Ceph介绍/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">一、Ceph介绍</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -382,7 +381,7 @@ $name：值为$type.$id。
 
 
     
-        <div id="SOHUCS" sid="部署Ceph集群"></div>
+        <div id="SOHUCS" sid="二、部署Ceph集群"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';

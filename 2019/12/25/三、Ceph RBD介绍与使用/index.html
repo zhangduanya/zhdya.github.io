@@ -3,23 +3,23 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Ceph RBD介绍与使用 | 拼！就对了！</title>
+  <title>三、Ceph RBD介绍与使用 | 拼！就对了！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="[toc] 一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD">
+  <meta name="description" content="一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁">
 <meta name="keywords" content="K8S">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ceph RBD介绍与使用">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/index.html">
+<meta property="og:title" content="三、Ceph RBD介绍与使用">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="[toc] 一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD">
+<meta property="og:description" content="一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-03T04:15:39.780Z">
+<meta property="og:updated_time" content="2020-01-03T06:44:38.711Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ceph RBD介绍与使用">
-<meta name="twitter:description" content="[toc] 一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD">
+<meta name="twitter:title" content="三、Ceph RBD介绍与使用">
+<meta name="twitter:description" content="一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -101,14 +101,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-Ceph RBD介绍与使用" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-三、Ceph RBD介绍与使用" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Ceph RBD介绍与使用
+      三、Ceph RBD介绍与使用
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -137,8 +137,7 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <p>[toc]</p>
-<h3 id="一、RBD介绍"><a href="#一、RBD介绍" class="headerlink" title="一、RBD介绍"></a>一、RBD介绍</h3><blockquote>
+            <h3 id="一、RBD介绍"><a href="#一、RBD介绍" class="headerlink" title="一、RBD介绍"></a>一、RBD介绍</h3><blockquote>
 <p>RBD即RADOS Block Device的简称，<strong>RBD块存储是最稳定且最常用的存储类型</strong>。RBD块设备类似磁盘可以被挂载。<br>RBD块设备具有<strong>快照</strong>、<strong>多副本</strong>、<strong>克隆</strong>和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。</p>
 <ul>
 <li>RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁盘用；</li>
@@ -228,8 +227,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年01月03日 12:15</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/25/Ceph RBD介绍与使用/" title="Ceph RBD介绍与使用">http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/</a></p>
+        <p>最后更新： 2020年01月03日 14:44</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/25/三、Ceph RBD介绍与使用/" title="三、Ceph RBD介绍与使用">http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -286,7 +285,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/&title=《Ceph RBD介绍与使用》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/&title=《三、Ceph RBD介绍与使用》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -296,22 +295,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/&title=《Ceph RBD介绍与使用》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/&title=《三、Ceph RBD介绍与使用》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ceph RBD介绍与使用》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《三、Ceph RBD介绍与使用》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -321,7 +320,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/25/三、Ceph RBD介绍与使用/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -354,8 +353,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2019/12/24/部署Ceph集群/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">部署Ceph集群</span>
+    <a href="/2019/12/24/二、部署Ceph集群/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">二、部署Ceph集群</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -364,7 +363,7 @@
 
 
     
-        <div id="SOHUCS" sid="Ceph RBD介绍与使用"></div>
+        <div id="SOHUCS" sid="三、Ceph RBD介绍与使用"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';

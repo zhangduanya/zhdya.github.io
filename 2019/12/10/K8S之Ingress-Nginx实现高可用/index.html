@@ -9,7 +9,7 @@
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
   <meta name="description" content="承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用： 假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。  首先我们要先确保有两个worker节">
-<meta name="keywords" content="K8S,Kubernets">
+<meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8S之Ingress-Nginx实现高可用">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/10/K8S之Ingress-Nginx实现高可用/index.html">
@@ -295,9 +295,9 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
     <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
       
   </li>
 
