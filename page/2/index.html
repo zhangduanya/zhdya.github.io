@@ -101,6 +101,199 @@
       <div class="outer">
         <section id="main" class="body-wrap">
   
+    <article id="post-k8s之存储卷及pvc" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/09/k8s之存储卷及pvc/">k8s之存储卷及pvc</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/K8s/">K8s</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2019/12/09/k8s之存储卷及pvc/">
+                
+                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="k8s之存储卷及pvc" title="k8s之存储卷及pvc">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                一、概述因为pod是有生命周期的,pod一重启,里面的数据就没了,所以我们需要数据持久化存储,在k8s中,存储卷不属于容器,而是属于pod,也就是说同一个pod中的容器可以共享一个存储卷,存储卷可以是宿主机上的目录,也可以是挂载在宿主...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2019-12-09</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2019/12/09/k8s之存储卷及pvc/#more" class="article-more-link">more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-K8S负载均衡之nginx-ingress" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/07/K8S负载均衡之nginx-ingress/">K8S负载均衡之nginx-ingress</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/K8s/">K8s</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2019/12/07/K8S负载均衡之nginx-ingress/">
+                
+                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S负载均衡之nginx-ingress" title="K8S负载均衡之nginx-ingress">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                ++本篇引自多篇大佬文档整合而来，加上自己所理解整理如下：++
+一、目前状况：k8s有了coreDNS解决了k8s集群内部通过dns域名的方式相互访问容器服务，但是集群内部的域名无法在外部被访问，也没有解决域名7层负载均衡的问题，而n...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2019-12-07</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2019/12/07/K8S负载均衡之nginx-ingress/#more" class="article-more-link">more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-K8S集群优化之路由转发：使用IPVS替代iptables" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/">K8S集群优化之路由转发：使用IPVS替代iptables</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/K8s/">K8s</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/">
+                
+                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S集群优化之路由转发：使用IPVS替代iptables" title="K8S集群优化之路由转发：使用IPVS替代iptables">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2019-12-06</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/#more" class="article-more-link">more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
     <article id="post-ansible自动化部署kubernetes-1.16" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -151,9 +344,9 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
     <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
       
   </li>
 
@@ -218,9 +411,9 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
     <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
       
   </li>
 
@@ -284,9 +477,9 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
     <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
       
   </li>
 
@@ -348,9 +541,9 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
     <a href="/tags/K8S/" class="color4">K8S</a>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
       
   </li>
 
@@ -562,206 +755,6 @@
 
 
   
-    <article id="post-七、用Admin管理后台管理数据" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/11/七、用Admin管理后台管理数据/">Django博客开发：用Admin管理后台数据（七）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/11/七、用Admin管理后台管理数据/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：用Admin管理后台数据（七）" title="Django博客开发：用Admin管理后台数据（七）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_AP...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-11</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/11/七、用Admin管理后台管理数据/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-六、创建数据库模型" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/10/六、创建数据库模型/">Django博客开发：创建数据库模型（六）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/10/六、创建数据库模型/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：创建数据库模型（六）" title="Django博客开发：创建数据库模型（六）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                Django是通过Model操作数据库，不管你数据库的类型是MySql或者Sqlite，Django它自动帮你生成相应数据库类型的SQL语句，所以不需要关注SQL语句和类型，对数据的操作Django帮我们自动完成。只要回写Model就...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-10</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/10/六、创建数据库模型/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-五、欢迎页面" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/09/五、欢迎页面/">Django博客开发：欢迎页面（五）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/09/五、欢迎页面/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：欢迎页面（五）" title="Django博客开发：欢迎页面（五）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。
-12python manage.py makemigrationspython manage.py migrate
-迁移数据之后，网站目录...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-09</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/09/五、欢迎页面/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -820,10 +813,10 @@
 <div class="sidebar-menu-box" id="sidebar-menu-box">
     <div class="sidebar-menu-box-container">
         <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/Python3/">Python3</a>
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -856,7 +849,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.33px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
         </div>
     </div>
 </div>

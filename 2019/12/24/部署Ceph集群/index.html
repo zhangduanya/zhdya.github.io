@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>部署Ceph集群 | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="[toc] 一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z -">
+<meta name="keywords" content="K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部署Ceph集群">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="[toc] 一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z -">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-01-03T04:15:50.188Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="部署Ceph集群">
+<meta name="twitter:description" content="[toc] 一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。 x.0.z -">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-部署Ceph集群" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      部署Ceph集群
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s,ceph/">K8s, ceph</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-24
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>[toc]</p>
+<h3 id="一、Ceph版本选择"><a href="#一、Ceph版本选择" class="headerlink" title="一、Ceph版本选择"></a>一、Ceph版本选择</h3><h4 id="Ceph版本来源介绍"><a href="#Ceph版本来源介绍" class="headerlink" title="Ceph版本来源介绍"></a>Ceph版本来源介绍</h4><p>Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。<br>第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。</p>
+<p>x.0.z - 开发版（给早期测试者和勇士们）</p>
+<p>x.1.z - 候选版（用于测试集群、高手们）</p>
+<p>x.2.z - 稳定、修正版（给用户们）</p>
+<p>x 将从 9 算起，它代表 Infernalis （ I 是第九个字母），这样第九个发布周期的第一个开发版就是 9.0.0 ；后续的开发版依次是 9.0.1 、 9.0.2 等等。<br>| 版本名称 | 版本号 | 发布时间 |<br>| —— | —— | —— |<br>| Argonaut | 0.48版本(LTS) | 　　2012年6月3日 |<br>| Bobtail | 0.56版本(LTS) | 　2013年5月7日 |<br>| Cuttlefish | 0.61版本 | 　2013年1月1日 |<br>| Dumpling | 0.67版本(LTS) | 　2013年8月14日 |<br>| Emperor | 0.72版本 | 　　　 2013年11月9 |<br>| Firefly | 0.80版本(LTS) | 　2014年5月 |<br>| Giant | Giant | 　October 2014 - April 2015 |<br>| Hammer | Hammer | 　April 2015 - November 2016|<br>| Infernalis | Infernalis | 　November 2015 - June 2016 |<br>| Jewel | 10.2.9 | 　2016年4月 |<br>| Kraken | 11.2.1 | 　2017年10月 |<br>| Luminous |12.2.12  | 　2017年10月 |<br>| mimic | 13.2.7 | 　2018年5月 |<br>| nautilus | 14.2.5 | 　2019年2月 |</p>
+<h6 id="Luminous新版本特性"><a href="#Luminous新版本特性" class="headerlink" title="Luminous新版本特性"></a>Luminous新版本特性</h6><ul>
+<li>Bluestore<ul>
+<li>ceph-osd的新后端存储BlueStore已经稳定，是新创建的OSD的默认设置。<br>BlueStore通过直接管理物理HDD或SSD而不使用诸如XFS的中间文件系统，来管理每个OSD存储的数据，这提供了更大的性能和功能。</li>
+<li>BlueStore支持Ceph存储的所有的完整的数据和元数据校验。</li>
+<li>BlueStore内嵌支持使用zlib，snappy或LZ4进行压缩。（Ceph还支持zstd进行RGW压缩，但由于性能原因，不为BlueStore推荐使用zstd）</li>
+</ul>
+</li>
+<li>集群的总体可扩展性有所提高。我们已经成功测试了多达10,000个OSD的集群。</li>
+<li>ceph-mgr<ul>
+<li>ceph-mgr是一个新的后台进程，这是任何Ceph部署的必须部分。虽然当ceph-mgr停止时，IO可以继续，但是度量不会刷新，并且某些与度量相关的请求（例如，ceph df）可能会被阻止。我们建议您多部署ceph-mgr的几个实例来实现可靠性。</li>
+<li>ceph-mgr守护进程daemon包括基于REST的API管理。注：API仍然是实验性质的，目前有一些限制，但未来会成为API管理的基础。</li>
+<li>ceph-mgr还包括一个Prometheus插件。</li>
+<li>ceph-mgr现在有一个Zabbix插件。使用zabbix_sender，它可以将集群故障事件发送到Zabbix Server主机。这样可以方便地监视Ceph群集的状态，并在发生故障时发送通知。</li>
+</ul>
+</li>
+</ul>
+<h3 id="二、安装前准备"><a href="#二、安装前准备" class="headerlink" title="二、安装前准备"></a>二、安装前准备</h3><ol>
+<li>安装要求：</li>
+</ol>
+<ul>
+<li>最少三台Centos7系统虚拟机用于部署Ceph集群。硬件配置：2C4G，另外每台机器最少挂载三块硬盘(每块盘5G)  </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>主机名</th>
+<th>IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cephnode01</td>
+<td>192.168.171.135 </td>
+</tr>
+<tr>
+<td>cephnode02</td>
+<td>192.168.171.136 </td>
+</tr>
+<tr>
+<td>cephnode03</td>
+<td>192.168.171.137 </td>
+</tr>
+<tr>
+<td>cephyumresource01</td>
+<td>192.168.171.10（内网yum源服务器）</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li>环境准备（在Ceph三台机器上操作）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">（1）关闭防火墙：</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br><span class="line">（2）关闭selinux：</span><br><span class="line">sed -i &apos;s/enforcing/disabled/&apos; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line">（3）关闭NetworkManager</span><br><span class="line">systemctl disable NetworkManager &amp;&amp; systemctl stop NetworkManager</span><br><span class="line">（4）添加主机名与IP对应关系：</span><br><span class="line">vim /etc/hosts</span><br><span class="line">192.168.171.135 cephnode01</span><br><span class="line">192.168.171.136 cephnode02</span><br><span class="line">192.168.171.137 cephnode03</span><br><span class="line">（5）设置主机名：</span><br><span class="line">hostnamectl set-hostname cephnode01</span><br><span class="line">hostnamectl set-hostname cephnode02</span><br><span class="line">hostnamectl set-hostname cephnode03</span><br><span class="line">（6）同步网络时间和修改时区</span><br><span class="line">systemctl restart chronyd.service &amp;&amp; systemctl enable chronyd.service</span><br><span class="line">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">（7）设置文件描述符</span><br><span class="line">echo &quot;ulimit -SHn 102400&quot; &gt;&gt; /etc/rc.local</span><br><span class="line">cat &gt;&gt; /etc/security/limits.conf &lt;&lt; EOF</span><br><span class="line">* soft nofile 65535</span><br><span class="line">* hard nofile 65535</span><br><span class="line">EOF</span><br><span class="line">（8）内核参数优化</span><br><span class="line">cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOF</span><br><span class="line">kernel.pid_max = 4194303</span><br><span class="line">echo &quot;vm.swappiness = 0&quot; /etc/sysctl.conf </span><br><span class="line">EOF</span><br><span class="line">sysctl -p</span><br><span class="line">（9）在cephnode01上配置免密登录到cephnode02、cephnode03</span><br><span class="line">ssh-copy-id root@cephnode02</span><br><span class="line">ssh-copy-id root@cephnode03</span><br><span class="line">(10)read_ahead,通过数据预读并且记载到随机访问内存方式提高磁盘读操作</span><br><span class="line">echo &quot;8192&quot; &gt; /sys/block/sda/queue/read_ahead_kb</span><br><span class="line">(11) I/O Scheduler，SSD要用noop，SATA/SAS使用deadline</span><br><span class="line">echo &quot;deadline&quot; &gt;/sys/block/sd[x]/queue/scheduler</span><br><span class="line">echo &quot;noop&quot; &gt;/sys/block/sd[x]/queue/scheduler</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="三、安装内网yum源"><a href="#三、安装内网yum源" class="headerlink" title="三、安装内网yum源"></a>三、安装内网yum源</h3><p><u>仅在192.168.171.10操作</u></p>
+<p>1、安装httpd、createrepo和epel源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd createrepo epel-release -y</span><br></pre></td></tr></table></figure></p>
+<p>2、编辑yum源文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">[root@cephyumresource01 ~]# more /etc/yum.repos.d/ceph.repo</span><br><span class="line">[Ceph]</span><br><span class="line">name=Ceph packages for $basearch</span><br><span class="line">baseurl=http://mirrors.163.com/ceph/rpm-nautilus/el7/$basearch</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://download.ceph.com/keys/release.asc</span><br><span class="line">priority=1</span><br><span class="line"></span><br><span class="line">[Ceph-noarch]</span><br><span class="line">name=Ceph noarch packages</span><br><span class="line">baseurl=http://mirrors.163.com/ceph/rpm-nautilus/el7/noarch</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://download.ceph.com/keys/release.asc</span><br><span class="line">priority=1</span><br><span class="line"></span><br><span class="line">[ceph-source]</span><br><span class="line">name=Ceph source packages</span><br><span class="line">baseurl=http://mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://download.ceph.com/keys/release.asc</span><br><span class="line"></span><br><span class="line">或者阿里云yum源：（推荐！！）</span><br><span class="line">[Ceph-SRPMS]</span><br><span class="line">name=Ceph SRPMS packagesno</span><br><span class="line">baseurl=https://mirrors.aliyun.com/ceph/rpm-luminous/el7/SRPMS/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/ceph/keys/release.asc</span><br><span class="line"></span><br><span class="line">[Ceph-noarch]</span><br><span class="line">name=Ceph noarch packages</span><br><span class="line">baseurl=https://mirrors.aliyun.com/ceph/rpm-luminous/el7/noarch/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">type=rpm-md</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/ceph/keys/release.asc</span><br><span class="line"> </span><br><span class="line">[Ceph-x86_64]</span><br><span class="line">name=Ceph x86_64 packages</span><br><span class="line">baseurl=https://mirrors.aliyun.com/ceph/rpm-luminous/el7/x86_64/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/ceph/keys/release.asc</span><br></pre></td></tr></table></figure></p>
+<p>3、下载Ceph安装包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum --downloadonly --downloaddir=/var/www/html/ceph/rpm-nautilus/el7/x86_64/ install ceph ceph-radosgw</span><br></pre></td></tr></table></figure></p>
+<p>4、下载Ceph依赖文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/ceph-14.2.4-0.el7.src.rpm </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/ceph-deploy-2.0.1-0.src.rpm</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-deploy-2.0.1-0.noarch.rpm</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-grafana-dashboards-14.2.4-0.el7.noarch.rpm </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-mgr-dashboard-14.2.4-0.el7.noarch.rpm</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-mgr-diskprediction-cloud-14.2.4-0.el7.noarch.rpm</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-mgr-diskprediction-local-14.2.4-0.el7.noarch.rpm</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-mgr-rook-14.2.4-0.el7.noarch.rpm </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-mgr-ssh-14.2.4-0.el7.noarch.rpm </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/ceph-release-1-1.el7.noarch.rpm </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/ceph-release-1-1.el7.src.rpm </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/ceph-medic-1.0.4-16.g60cf7e9.el7.src.rpm</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/repodata/repomd.xml </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/repodata/repomd.xml</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/repodata/a4bf0ee38cd4e64fae2d2c493e5b5eeeab6cf758beb7af4eec0bc4046b595faf-filelists.sqlite</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/repodata/a4bf0ee38cd4e64fae2d2c493e5b5eeeab6cf758beb7af4eec0bc4046b595faf-filelists.sqlite.bz2</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/repodata/183278bb826f5b8853656a306258643384a1547c497dd8b601ed6af73907bb22-other.sqlite.bz2 </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/repodata/52bf459e39c76b2ea2cff2c5340ac1d7b5e17a105270f5f01b454d5a058adbd2-filelists.sqlite.bz2</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/repodata/4f3141aec1132a9187ff5d1b4a017685e2f83a761880884d451a288fcedb154e-primary.sqlite.bz2</span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/SRPMS/repodata/0c554884aa5600b1311cd8f616aa40d036c1dfc0922e36bcce7fd84e297c5357-other.sqlite.bz2 </span><br><span class="line"> wget mirrors.163.com/ceph/rpm-nautilus/el7/noarch/repodata/597468b64cddfc386937869f88c2930c8e5fda3dd54977c052bab068d7438fcb-primary.sqlite.bz2</span><br></pre></td></tr></table></figure></p>
+<p>5、更新yum源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">createrepo --update  /var/www/html/ceph/rpm-nautilus</span><br></pre></td></tr></table></figure></p>
+<h3 id="四、安装Ceph集群"><a href="#四、安装Ceph集群" class="headerlink" title="四、安装Ceph集群"></a>四、安装Ceph集群</h3><p>1、编辑内网yum源,将yum源同步到其它节点并提前做好yum makecache</p>
+<p>当然如果外网没有任何限制，也建议直接配置如上阿里云镜像源即可！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># vim /etc/yum.repos.d/ceph.repo </span><br><span class="line">[Ceph]</span><br><span class="line">name=Ceph packages for $basearch</span><br><span class="line">baseurl=http://192.168.171.10/ceph/rpm-nautilus/el7/$basearch</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=1</span><br><span class="line"></span><br><span class="line">[Ceph-noarch]</span><br><span class="line">name=Ceph noarch packages</span><br><span class="line">baseurl=http://192.168.171.10/ceph/rpm-nautilus/el7/noarch</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=1</span><br><span class="line"></span><br><span class="line">[ceph-source]</span><br><span class="line">name=Ceph source packages</span><br><span class="line">baseurl=http://192.168.171.10/ceph/rpm-nautilus/el7/srpms</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=1</span><br></pre></td></tr></table></figure></p>
+<p>只在cephnode01上执行即可（如下标注：每个节点执行，需要在所有节点执行）<br>2、安装ceph-deploy(确认ceph-deploy版本是否为2.0.1)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># yum list | grep ceph</span><br><span class="line"># yum install -y ceph-deploy</span><br><span class="line"></span><br><span class="line"># ceph-deploy --version</span><br><span class="line">然后测试一下，发现报错：</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;/usr/bin/ceph-deploy&quot;, line 18, in &lt;module&gt;</span><br><span class="line">    from ceph_deploy.cli import main</span><br><span class="line">  File &quot;/usr/lib/python2.7/site-packages/ceph_deploy/cli.py&quot;, line 1, in &lt;module&gt;</span><br><span class="line">    import pkg_resources</span><br><span class="line">ImportError: No module named pkg_resources</span><br><span class="line"></span><br><span class="line">原因是缺python-setuptools，安装它即可：</span><br><span class="line"># yum install -y python-setuptools</span><br><span class="line"></span><br><span class="line"># ceph-deploy --version</span><br><span class="line">2.0.1</span><br></pre></td></tr></table></figure></p>
+<p>3、创建一个my-cluster目录，<strong>所有命令都需要在此目录下进行</strong>（文件位置和名字可以随意）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># mkdir /my-cluster</span><br><span class="line"># cd /my-cluster</span><br></pre></td></tr></table></figure></p>
+<p>4、创建一个Ceph集群<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># ceph-deploy new cephnode01 cephnode02 cephnode03</span><br><span class="line">...省略</span><br><span class="line">[ceph_deploy.new][DEBUG ] Resolving host cephnode03</span><br><span class="line">[ceph_deploy.new][DEBUG ] Monitor cephnode03 at 192.168.171.137</span><br><span class="line">[ceph_deploy.new][DEBUG ] Monitor initial members are [&apos;cephnode01&apos;, &apos;cephnode02&apos;, &apos;cephnode03&apos;]</span><br><span class="line">[ceph_deploy.new][DEBUG ] Monitor addrs are [&apos;192.168.171.135&apos;, &apos;192.168.171.136&apos;, &apos;192.168.171.137&apos;]</span><br><span class="line">[ceph_deploy.new][DEBUG ] Creating a random mon key...</span><br><span class="line">[ceph_deploy.new][DEBUG ] Writing monitor keyring to ceph.mon.keyring...</span><br><span class="line">[ceph_deploy.new][DEBUG ] Writing initial config to ceph.conf...</span><br></pre></td></tr></table></figure></p>
+<p>如果安装异常可以查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ls ceph-deploy-ceph.log</span><br></pre></td></tr></table></figure></p>
+<p>5、安装Ceph软件（<strong>每个节点执行</strong>）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># yum -y install epel-release</span><br><span class="line"># yum install -y ceph</span><br><span class="line"># ceph -v</span><br><span class="line">ceph version 12.2.12 (1436006594665279fe734b4c15d7e08c13ebd777) luminous (stable)</span><br></pre></td></tr></table></figure></p>
+<p>6、生成monitor检测集群所使用的的秘钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># ceph-deploy mon create-initial</span><br><span class="line"># ls</span><br><span class="line">ceph.bootstrap-mds.keyring  ceph.bootstrap-osd.keyring  ceph.client.admin.keyring  ceph-deploy-ceph.log</span><br><span class="line">ceph.bootstrap-mgr.keyring  ceph.bootstrap-rgw.keyring  ceph.conf                  ceph.mon.keyring</span><br></pre></td></tr></table></figure></p>
+<p>7、<strong>安装Ceph CLI，方便执行一些管理命令</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ceph-deploy admin cephnode01 cephnode02 cephnode03</span><br></pre></td></tr></table></figure></p>
+<p>8、<strong>配置mgr，用于管理集群</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># ceph-deploy mgr create cephnode01 cephnode02 cephnode03</span><br><span class="line"># more ceph.conf</span><br><span class="line">[global]</span><br><span class="line">fsid = b1f800c7-a4bc-4fc7-87e2-239291f2e4c7</span><br><span class="line">mon_initial_members = cephnode01, cephnode02, cephnode03</span><br><span class="line">mon_host = 192.168.171.135,192.168.171.136,192.168.171.137</span><br><span class="line">auth_cluster_required = cephx</span><br><span class="line">auth_service_required = cephx</span><br><span class="line">auth_client_required = cephx</span><br></pre></td></tr></table></figure></p>
+<p>9、部署rgw（生产一般都是多台，然后nginx做负载均衡）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># yum install -y ceph-radosgw</span><br><span class="line"># ceph-deploy rgw create cephnode01</span><br></pre></td></tr></table></figure></p>
+<p>10、部署MDS（CephFS）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ceph-deploy mds create cephnode01 cephnode02 cephnode03</span><br></pre></td></tr></table></figure></p>
+<p>11、添加osd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"># lsblk</span><br><span class="line">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT</span><br><span class="line">sda      8:0    0   30G  0 disk</span><br><span class="line">├─sda1   8:1    0    4G  0 part</span><br><span class="line">└─sda2   8:2    0   26G  0 part /</span><br><span class="line">sdb      8:16   0    8G  0 disk     ##磁盘仅仅为一块裸盘，没有做任何的初始化和处理；</span><br><span class="line">sr0     11:0    1  4.3G  0 rom</span><br><span class="line"></span><br><span class="line">ceph-deploy osd create --data /dev/sdb cephnode01   ##会自动的格式化成ceph可以读取的格式；</span><br><span class="line">...省略</span><br><span class="line">[ceph_deploy.osd][DEBUG ] Host cephnode01 is now ready for osd use.</span><br><span class="line"></span><br><span class="line"># ceph osd tree</span><br><span class="line">ID CLASS WEIGHT  TYPE NAME           STATUS REWEIGHT PRI-AFF</span><br><span class="line">-1       0.00780 root default</span><br><span class="line">-3       0.00780     host cephnode01</span><br><span class="line"> 0   hdd 0.00780         osd.0           up  1.00000 1.00000</span><br><span class="line"></span><br><span class="line">##继续添加其它盘及其它node的盘</span><br><span class="line">ceph-deploy osd create --data /dev/sdX cephnode01   如有，修改sdX即可；</span><br><span class="line">ceph-deploy osd create --data /dev/sdX cephnode01</span><br><span class="line">ceph-deploy osd create --data /dev/sdb cephnode02</span><br><span class="line">ceph-deploy osd create --data /dev/sdX cephnode02</span><br><span class="line">ceph-deploy osd create --data /dev/sdX cephnode02</span><br><span class="line">ceph-deploy osd create --data /dev/sdb cephnode03</span><br><span class="line">ceph-deploy osd create --data /dev/sdX cephnode03</span><br><span class="line">ceph-deploy osd create --data /dev/sdX cephnode03</span><br><span class="line"></span><br><span class="line">[root@cephnode01 my-cluster]# ceph osd tree</span><br><span class="line">ID CLASS WEIGHT  TYPE NAME           STATUS REWEIGHT PRI-AFF</span><br><span class="line">-1       0.02339 root default</span><br><span class="line">-3       0.00780     host cephnode01</span><br><span class="line"> 0   hdd 0.00780         osd.0           up  1.00000 1.00000</span><br><span class="line">-5       0.00780     host cephnode02</span><br><span class="line"> 1   hdd 0.00780         osd.1           up  1.00000 1.00000</span><br><span class="line">-7       0.00780     host cephnode03</span><br><span class="line"> 2   hdd 0.00780         osd.2           up  1.00000 1.00000</span><br></pre></td></tr></table></figure></p>
+<p>查看集群状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@cephnode01 my-cluster]# ceph -s</span><br><span class="line">  cluster:</span><br><span class="line">    id:     b1f800c7-a4bc-4fc7-87e2-239291f2e4c7</span><br><span class="line">    health: HEALTH_OK</span><br><span class="line"></span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum cephnode01,cephnode02,cephnode03</span><br><span class="line">    mgr: cephnode01(active), standbys: cephnode02, cephnode03</span><br><span class="line">    osd: 3 osds: 3 up, 3 in</span><br><span class="line">    rgw: 1 daemon active</span><br><span class="line"></span><br><span class="line">  data:</span><br><span class="line">    pools:   4 pools, 32 pgs</span><br><span class="line">    objects: 187 objects, 1.09KiB</span><br><span class="line">    usage:   3.01GiB used, 21.0GiB / 24.0GiB avail</span><br><span class="line">    pgs:     32 active+clean</span><br><span class="line"></span><br><span class="line">[root@cephnode01 my-cluster]# ceph health detail</span><br><span class="line">HEALTH_OK</span><br><span class="line"></span><br><span class="line">[root@cephnode01 my-cluster]# ceph osd df   ##每块盘的使用量</span><br><span class="line">ID CLASS WEIGHT  REWEIGHT SIZE    USE     AVAIL   %USE  VAR  PGS</span><br><span class="line"> 0   hdd 0.00780  1.00000 8.00GiB 1.00GiB 6.99GiB 12.55 1.00  32</span><br><span class="line"> 1   hdd 0.00780  1.00000 8.00GiB 1.00GiB 6.99GiB 12.55 1.00  32</span><br><span class="line"> 2   hdd 0.00780  1.00000 8.00GiB 1.00GiB 6.99GiB 12.55 1.00  32</span><br><span class="line">                    TOTAL 24.0GiB 3.01GiB 21.0GiB 12.55</span><br><span class="line">MIN/MAX VAR: 1.00/1.00  STDDEV: 0</span><br></pre></td></tr></table></figure></p>
+<h3 id="五、ceph-conf"><a href="#五、ceph-conf" class="headerlink" title="五、ceph.conf"></a>五、ceph.conf</h3><p>1、该配置文件采用init文件语法，###和;为注释，ceph集群在启动的时候会按照顺序加载所有的conf配置文件。 配置文件分为以下几大块配置。</p>
+<pre><code>global：全局配置。
+osd：osd专用配置，可以使用osd.N，来表示某一个OSD专用配置，N为osd的编号，如0、2、1等。
+mon：mon专用配置，也可以使用mon.A来为某一个monitor节点做专用配置，其中A为该节点的名称，ceph-monitor-2、ceph-monitor-1等。使用命令 ceph mon dump可以获取节点的名称。
+client：客户端专用配置。
+</code></pre><p>2、配置文件可以从多个地方进行顺序加载，如果冲突将使用最新加载的配置，其加载顺序为。</p>
+<pre><code>$CEPH_CONF环境变量
+-c 指定的位置
+/etc/ceph/ceph.conf
+~/.ceph/ceph.conf
+./ceph.conf
+</code></pre><p>3、配置文件还可以使用一些元变量应用到配置文件，如。</p>
+<pre><code>$cluster：当前集群名。
+$type：当前服务类型。
+$id：进程的标识符。
+$host：守护进程所在的主机名。
+$name：值为$type.$id。
+</code></pre><p>4、ceph.conf详细参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">[global]#全局设置</span><br><span class="line">fsid = xxxxxxxxxxxxxxx                           #集群标识ID </span><br><span class="line">mon host = 10.0.1.1,10.0.1.2,10.0.1.3            #monitor IP 地址</span><br><span class="line">auth cluster required = cephx                    #集群认证</span><br><span class="line">auth service required = cephx                           #服务认证</span><br><span class="line">auth client required = cephx                            #客户端认证</span><br><span class="line">osd pool default size = 3                             #最小副本数 默认是3</span><br><span class="line">osd pool default min size = 1                           #PG 处于 degraded 状态不影响其 IO 能力,min_size是一个PG能接受IO的最小副本数</span><br><span class="line">public network = 10.0.1.0/24                            #公共网络(monitorIP段) </span><br><span class="line">cluster network = 10.0.2.0/24                           #集群网络</span><br><span class="line">max open files = 131072                                 #默认0###如果设置了该选项，Ceph会设置系统的max open fds</span><br><span class="line">mon initial members = node1, node2, node3               #初始monitor (由创建monitor命令而定)</span><br><span class="line">###########################################################################################################################</span><br><span class="line">[mon]</span><br><span class="line">mon data = /var/lib/ceph/mon/ceph-$id</span><br><span class="line">mon clock drift allowed = 1                             #默认值0.05###monitor间的clock drift</span><br><span class="line">mon osd min down reporters = 13                         #默认值1###向monitor报告down的最小OSD数</span><br><span class="line">mon osd down out interval = 600      #默认值300      #标记一个OSD状态为down和out之前ceph等待的秒数</span><br><span class="line">###########################################################################################################################</span><br><span class="line">[osd]</span><br><span class="line">osd data = /var/lib/ceph/osd/ceph-$id</span><br><span class="line">osd mkfs type = xfs                                     #格式化系统类型</span><br><span class="line">osd max write size = 512 #默认值90                   #OSD一次可写入的最大值(MB)</span><br><span class="line">osd client message size cap = 2147483648 #默认值100    #客户端允许在内存中的最大数据(bytes)</span><br><span class="line">osd deep scrub stride = 131072 #默认值524288         #在Deep Scrub时候允许读取的字节数(bytes)</span><br><span class="line">osd op threads = 16 #默认值2                         #并发文件系统操作数</span><br><span class="line">osd disk threads = 4 #默认值1                        #OSD密集型操作例如恢复和Scrubbing时的线程</span><br><span class="line">osd map cache size = 1024 #默认值500                 #保留OSD Map的缓存(MB)</span><br><span class="line">osd map cache bl size = 128 #默认值50                #OSD进程在内存中的OSD Map缓存(MB)</span><br><span class="line">osd mount options xfs = &quot;rw,noexec,nodev,noatime,nodiratime,nobarrier&quot; ###默认值rw,noatime,inode64  ###Ceph OSD xfs Mount选项</span><br><span class="line">osd recovery op priority = 2 #默认值10              #恢复操作优先级，取值1-63，值越高占用资源越高</span><br><span class="line">osd recovery max active = 10 #默认值15              #同一时间内活跃的恢复请求数 </span><br><span class="line">osd max backfills = 4  #默认值10                  #一个OSD允许的最大backfills数</span><br><span class="line">osd min pg log entries = 30000 #默认值3000           #修建PGLog是保留的最大PGLog数</span><br><span class="line">osd max pg log entries = 100000 #默认值10000         #修建PGLog是保留的最大PGLog数</span><br><span class="line">osd mon heartbeat interval = 40 #默认值30            #OSD ping一个monitor的时间间隔（默认30s）</span><br><span class="line">ms dispatch throttle bytes = 1048576000 #默认值 104857600 #等待派遣的最大消息数</span><br><span class="line">objecter inflight ops = 819200 #默认值1024           #客户端流控，允许的最大未发送io请求数，超过阀值会堵塞应用io，为0表示不受限</span><br><span class="line">osd op log threshold = 50 #默认值5                  #一次显示多少操作的log</span><br><span class="line">osd crush chooseleaf type = 0 #默认值为1              #CRUSH规则用到chooseleaf时的bucket的类型</span><br><span class="line">###########################################################################################################################</span><br><span class="line">[client]</span><br><span class="line">rbd cache = true #默认值 true      #RBD缓存</span><br><span class="line">rbd cache size = 335544320 #默认值33554432           #RBD缓存大小(bytes)</span><br><span class="line">rbd cache max dirty = 134217728 #默认值25165824      #缓存为write-back时允许的最大dirty字节数(bytes)，如果为0，使用write-through</span><br><span class="line">rbd cache max dirty age = 30 #默认值1                #在被刷新到存储盘前dirty数据存在缓存的时间(seconds)</span><br><span class="line">rbd cache writethrough until flush = false #默认值true  #该选项是为了兼容linux-2.6.32之前的virtio驱动，避免因为不发送flush请求，数据不回写</span><br><span class="line">              #设置该参数后，librbd会以writethrough的方式执行io，直到收到第一个flush请求，才切换为writeback方式。</span><br><span class="line">rbd cache max dirty object = 2 #默认值0              #最大的Object对象数，默认为0，表示通过rbd cache size计算得到，librbd默认以4MB为单位对磁盘Image进行逻辑切分</span><br><span class="line">      #每个chunk对象抽象为一个Object；librbd中以Object为单位来管理缓存，增大该值可以提升性能</span><br><span class="line">rbd cache target dirty = 235544320 #默认值16777216    #开始执行回写过程的脏数据大小，不能超过 rbd_cache_max_dirty</span><br></pre></td></tr></table></figure></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年01月03日 12:15</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/24/部署Ceph集群/" title="部署Ceph集群">http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/&title=《部署Ceph集群》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/&title=《部署Ceph集群》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《部署Ceph集群》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/24/部署Ceph集群/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、Ceph版本选择"><span class="post-toc-text">一、Ceph版本选择</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ceph版本来源介绍"><span class="post-toc-text">Ceph版本来源介绍</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#Luminous新版本特性"><span class="post-toc-text">Luminous新版本特性</span></a></li></ol></li></ol></li></ol><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、安装前准备"><span class="post-toc-text">二、安装前准备</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、安装内网yum源"><span class="post-toc-text">三、安装内网yum源</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、安装Ceph集群"><span class="post-toc-text">四、安装Ceph集群</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#五、ceph-conf"><span class="post-toc-text">五、ceph.conf</span></a></li>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/12/25/Ceph RBD介绍与使用/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Ceph RBD介绍与使用
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/12/23/Ceph介绍/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Ceph介绍</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="部署Ceph集群"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

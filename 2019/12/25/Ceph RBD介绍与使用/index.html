@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Ceph RBD介绍与使用 | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="[toc] 一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD">
+<meta name="keywords" content="K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ceph RBD介绍与使用">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="[toc] 一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-01-03T04:15:39.780Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ceph RBD介绍与使用">
+<meta name="twitter:description" content="[toc] 一、RBD介绍 RBD即RADOS Block Device的简称，RBD块存储是最稳定且最常用的存储类型。RBD块设备类似磁盘可以被挂载。RBD块设备具有快照、多副本、克隆和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。  RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Ceph RBD介绍与使用" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Ceph RBD介绍与使用
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s,ceph/">K8s, ceph</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-25
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>[toc]</p>
+<h3 id="一、RBD介绍"><a href="#一、RBD介绍" class="headerlink" title="一、RBD介绍"></a>一、RBD介绍</h3><blockquote>
+<p>RBD即RADOS Block Device的简称，<strong>RBD块存储是最稳定且最常用的存储类型</strong>。RBD块设备类似磁盘可以被挂载。<br>RBD块设备具有<strong>快照</strong>、<strong>多副本</strong>、<strong>克隆</strong>和一致性等特性，数据以条带化的方式存储在Ceph集群的多个OSD中。如下是对Ceph RBD的理解。</p>
+<ul>
+<li>RBD 就是 Ceph 里的块设备，一个 4T 的块设备的功能和一个 4T 的 SATA 类似，挂载的 RBD 就可以当磁盘用；</li>
+<li>resizable：这个块可大可小；</li>
+<li>data striped：这个块在Ceph里面是被切割成若干小块来保存，不然 1PB 的块怎么存的下；</li>
+<li>thin-provisioned：精简置备，1TB 的集群是能创建无数 1PB 的块的。其实就是块的大小和在 Ceph 中实际占用大小是没有关系的，刚创建出来的块是不占空间，今后用多大空间，才会在 Ceph 中占用多大空间。举例：你有一个 32G 的 U盘，存了一个2G的电影，那么 RBD 大小就类似于 32G，而 2G 就相当于在 Ceph 中占用的空间  ；</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>块存储本质就是将裸磁盘或类似裸磁盘(lvm)设备映射给主机使用，主机可以对其进行格式化并存储和读取数据，块设备读取速度快但是不支持共享。</p>
+<blockquote>
+<p>ceph可以通过内核模块和librbd库提供块设备支持。客户端可以通过内核模块挂在rbd使用，客户端使用rbd块设备就像使用普通硬盘一样，可以对其就行格式化然后使用；客户应用也可以通过librbd使用ceph块，典型的是云平台的块存储服务（如下图），云平台可以使用rbd作为云的存储后端提供镜像存储、volume块或者客户的系统引导盘等。</p>
+</blockquote>
+</blockquote>
+<p>使用场景：</p>
+<ul>
+<li>云平台（OpenStack做为云的存储后端提供镜像存储）</li>
+<li>K8s容器</li>
+<li>map成块设备直接使用</li>
+<li>ISCIS，安装Ceph客户端</li>
+</ul>
+<h3 id="二、RBD常用命令"><a href="#二、RBD常用命令" class="headerlink" title="二、RBD常用命令"></a>二、RBD常用命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rbd create</td>
+<td>创建块设备映像</td>
+</tr>
+<tr>
+<td>rbd ls</td>
+<td>列出 rbd 存储池中的块设备</td>
+</tr>
+<tr>
+<td>rbd info</td>
+<td>查看块设备信息</td>
+</tr>
+<tr>
+<td>rbd diff</td>
+<td>可以统计 rbd 使用量</td>
+</tr>
+<tr>
+<td>rbd map</td>
+<td>映射块设备</td>
+</tr>
+<tr>
+<td>rbd showmapped</td>
+<td>查看已映射块设备</td>
+</tr>
+<tr>
+<td>rbd remove</td>
+<td>删除块设备</td>
+</tr>
+<tr>
+<td>rbd resize</td>
+<td>更改块设备的大小</td>
+</tr>
+</tbody>
+</table>
+<h3 id="三、RBD配置操作"><a href="#三、RBD配置操作" class="headerlink" title="三、RBD配置操作"></a>三、RBD配置操作</h3><h4 id="3-1、RBD挂载到本地操作系统"><a href="#3-1、RBD挂载到本地操作系统" class="headerlink" title="3.1、RBD挂载到本地操作系统"></a>3.1、RBD挂载到本地操作系统</h4><p>1、创建rbd使用的pool<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># ceph osd pool create rbd  32 32</span><br><span class="line">pool &apos;rbd&apos; created</span><br><span class="line"></span><br><span class="line"># ceph osd pool ls detail   ##查看创建的详细信息</span><br><span class="line"></span><br><span class="line"># ceph osd pool application enable rbd rbd</span><br><span class="line">enabled application &apos;rbd&apos; on pool &apos;rbd&apos;</span><br></pre></td></tr></table></figure></p>
+<p>2、创建一个块设备<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd create --size 10240 image01</span><br></pre></td></tr></table></figure></p>
+<p>3、查看块设备<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># rbd ls</span><br><span class="line">image01</span><br><span class="line"></span><br><span class="line"># rbd info image01</span><br><span class="line">rbd image &apos;image01&apos;:</span><br><span class="line">	size 10GiB in 2560 objects</span><br><span class="line">	order 22 (4MiB objects)</span><br><span class="line">	block_name_prefix: rbd_data.10836b8b4567</span><br><span class="line">	format: 2</span><br><span class="line">	features: layering, exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line">	flags:</span><br><span class="line">	create_timestamp: Tue Dec 31 13:40:22 2019</span><br><span class="line"></span><br><span class="line"># rados -p rbd ls --all     ##查看底层存储格式</span><br><span class="line">	rbd_object_map.10836b8b4567</span><br><span class="line">	rbd_id.image01</span><br><span class="line">	rbd_directory</span><br><span class="line">	rbd_info</span><br><span class="line">	rbd_header.10836b8b4567</span><br></pre></td></tr></table></figure></p>
+<p>4、将块设备映射到系统内核<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd map image01</span><br></pre></td></tr></table></figure></p>
+<p>5、禁用当前系统内核不支持的feature<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd feature disable image01 exclusive-lock, object-map, fast-diff, deep-flatten</span><br></pre></td></tr></table></figure></p>
+<p>6、再次映射<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># rbd map image01</span><br><span class="line">/dev/rbd0</span><br><span class="line"></span><br><span class="line"># rbd info image01</span><br><span class="line">rbd image &apos;image01&apos;:</span><br><span class="line">	size 10GiB in 2560 objects</span><br><span class="line">	order 22 (4MiB objects)</span><br><span class="line">	block_name_prefix: rbd_data.10836b8b4567</span><br><span class="line">	format: 2</span><br><span class="line">	features: layering</span><br><span class="line">	flags:</span><br><span class="line">	create_timestamp: Tue Dec 31 13:40:22 2019</span><br><span class="line"></span><br><span class="line"># fdisk -l</span><br><span class="line">...省略</span><br><span class="line">磁盘 /dev/rbd0：10.7 GB, 10737418240 字节，20971520 个扇区</span><br><span class="line">Units = 扇区 of 1 * 512 = 512 bytes</span><br><span class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</span><br><span class="line">I/O 大小(最小/最佳)：4194304 字节 / 4194304 字节</span><br></pre></td></tr></table></figure></p>
+<p>7、格式化块设备镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># mkfs.xfs /dev/rbd0</span><br></pre></td></tr></table></figure></p>
+<p>8、mount到本地<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># mount /dev/rbd0 /mnt</span><br><span class="line"></span><br><span class="line"># df -h</span><br><span class="line">文件系统        容量  已用  可用 已用% 挂载点</span><br><span class="line">...省略...</span><br><span class="line">/dev/rbd0        10G   33M   10G    1% /mnt</span><br><span class="line"></span><br><span class="line"># umount /mnt</span><br></pre></td></tr></table></figure></p>
+<p>9、取消块设备和内核映射<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd unmap image01</span><br></pre></td></tr></table></figure></p>
+<p>10、删除RBD块设备<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># rbd rm image01</span><br><span class="line">Removing image: 100% complete...done.</span><br></pre></td></tr></table></figure></p>
+<p>11、扩容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># rbd --image image02 resize --size=15240</span><br><span class="line">Resizing image: 100% complete...done.</span><br><span class="line"></span><br><span class="line"># rbd info image02</span><br><span class="line">rbd image &apos;image02&apos;:</span><br><span class="line">	size 14.9GiB in 3810 objects</span><br><span class="line">	order 22 (4MiB objects)</span><br><span class="line">	block_name_prefix: rbd_data.10c26b8b4567</span><br><span class="line">	format: 2</span><br><span class="line">	features: layering, exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line">	flags:</span><br><span class="line">	create_timestamp: Tue Dec 31 14:43:23 2019</span><br></pre></td></tr></table></figure></p>
+<p>如上就是本地如何挂载rbd块设备的步骤；</p>
+<hr>
+<h3 id="四、快照配置"><a href="#四、快照配置" class="headerlink" title="四、快照配置"></a>四、快照配置</h3><p>1、创建快照（占用存储比较大）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># rbd create --size 10240 image02</span><br><span class="line"></span><br><span class="line"># rbd info image02</span><br><span class="line"></span><br><span class="line"># rbd snap create image02@image02_snap01          ## 本地快照名@快照名字</span><br></pre></td></tr></table></figure></p>
+<p>2、列出创建的快照<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># rbd snap list image02</span><br><span class="line">或</span><br><span class="line"># rbd ls -l</span><br><span class="line">NAME                    SIZE PARENT FMT PROT LOCK</span><br><span class="line">image02                10GiB          2</span><br><span class="line">image02@image02_snap01 10GiB          2</span><br></pre></td></tr></table></figure></p>
+<p>3、查看快照详细信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd info image02@image02_snap01</span><br></pre></td></tr></table></figure></p>
+<p>4、克隆快照（快照必须处于被保护状态&lt;没有写入&gt;才能被克隆）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># rbd snap protect image02@image02_snap01</span><br><span class="line"></span><br><span class="line"># ceph osd pool create kube 16 16</span><br><span class="line"></span><br><span class="line"># rbd clone rbd/image02@image02_snap01 kube/image02_clone01     ##将刚刚克隆的image02镜像克隆到 kube 资源池；</span><br><span class="line"></span><br><span class="line">## rbd ls -p kube</span><br></pre></td></tr></table></figure></p>
+<p>5、查看快照的children<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd children image02</span><br></pre></td></tr></table></figure></p>
+<p>6、去掉快照的parent<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd flatten kube/image02_clone01</span><br></pre></td></tr></table></figure></p>
+<p>7、恢复快照<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rbd snap rollback image02@image02_snap01</span><br></pre></td></tr></table></figure></p>
+<p>8、删除快照<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># rbd snap unprotect image02@image02_snap01</span><br><span class="line"></span><br><span class="line"># rbd snap remove image02@image02_snap01</span><br><span class="line"></span><br><span class="line"># rbd snap ls image02</span><br></pre></td></tr></table></figure></p>
+<h3 id="五、导出导入RBD镜像"><a href="#五、导出导入RBD镜像" class="headerlink" title="五、导出导入RBD镜像"></a>五、导出导入RBD镜像</h3><p>1、导出RBD镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># rbd export image02 /tmp/image02</span><br><span class="line"></span><br><span class="line"># ll /tmp/image02</span><br><span class="line">-rw-r--r-- 1 root root 10737418240 12月 31 14:41 /tmp/image02</span><br></pre></td></tr></table></figure></p>
+<p>2、导入RBD镜像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># rbd remove image02    ##删除本地rbd设备</span><br><span class="line">Removing image: 100% complete...done.</span><br><span class="line"></span><br><span class="line"># rbd ls</span><br><span class="line"></span><br><span class="line"># rbd import /tmp/image02 rbd/image02 --image-format 2  ##导入</span><br><span class="line">Importing image: 100% complete...done.</span><br><span class="line"></span><br><span class="line"># rbd info image02</span><br><span class="line">rbd image &apos;image02&apos;:</span><br><span class="line">	size 10GiB in 2560 objects</span><br><span class="line">	order 22 (4MiB objects)</span><br><span class="line">	block_name_prefix: rbd_data.10c26b8b4567</span><br><span class="line">	format: 2</span><br><span class="line">	features: layering, exclusive-lock, object-map, fast-diff, deep-flatten</span><br><span class="line">	flags:</span><br><span class="line">	create_timestamp: Tue Dec 31 14:43:23 2019</span><br></pre></td></tr></table></figure></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年01月03日 12:15</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/25/Ceph RBD介绍与使用/" title="Ceph RBD介绍与使用">http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/&title=《Ceph RBD介绍与使用》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/&title=《Ceph RBD介绍与使用》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ceph RBD介绍与使用》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/25/Ceph RBD介绍与使用/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、RBD介绍"><span class="post-toc-text">一、RBD介绍</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、RBD常用命令"><span class="post-toc-text">二、RBD常用命令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、RBD配置操作"><span class="post-toc-text">三、RBD配置操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-1、RBD挂载到本地操作系统"><span class="post-toc-text">3.1、RBD挂载到本地操作系统</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、快照配置"><span class="post-toc-text">四、快照配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#五、导出导入RBD镜像"><span class="post-toc-text">五、导出导入RBD镜像</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/24/部署Ceph集群/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">部署Ceph集群</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="Ceph RBD介绍与使用"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
