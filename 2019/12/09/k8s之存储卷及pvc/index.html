@@ -153,208 +153,23 @@
 <li><p>云存储：亚马逊的EBS,Azure Disk,阿里云,关键数据一定要有异地备份；</p>
 </li>
 </ul>
-<h5 id="emptyDIR存储卷："><a href="#emptyDIR存储卷：" class="headerlink" title="emptyDIR存储卷："></a>emptyDIR存储卷：</h5><pre><code>vim podtest/pod-vol-demo.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pod-demo
-  namespace: default
-  labels:
-    app: myapp
-    tier: frontend
-spec:
-  containers:
-  - name: myapp
-    image: ikubernetes/myapp:v2
-    imagePullPolicy: IfNotPresent
-    ports:
-    - name: http
-      containerPort: 80
-    volumeMounts:
-    - name: html
-      mountPath: /usr/share/nginx/html
-  - name: busybox
-    image: busybox:latest
-    imagePullPolicy: IfNotPresent
-    volumeMounts:
-    - name: html
-      mountPath: /data/
-    command: [&quot;/bin/sh&quot;]
-    args: [&quot;-c&quot;,&quot;while true;do echo $(date) &gt;&gt; /data/index.html; sleep 10;done&quot;]
-  volumes:
-  - name: html
-    emptyDir: {}
-
-
-volumeMounts:把哪个存储卷挂到pod中的哪个目录下；
-emptyDir:不设置意味着对这个参数下的两个选项不做限制；
-</code></pre><h5 id="hostPath-使用宿主机上目录作为存储卷"><a href="#hostPath-使用宿主机上目录作为存储卷" class="headerlink" title="hostPath:使用宿主机上目录作为存储卷"></a>hostPath:使用宿主机上目录作为存储卷</h5><pre><code>kubectl explain pods.spec.volumes.hostPath.type
-DirectoryOrCreate:要挂载的路径是一个目录,不存在就创建目录;
-Directory:宿主机上必须实现存在目录,如果不存在就报错;
-FileOrCreate:表示挂载的是文件,如果不存在就创建;
-File:表示要挂载的文件必须事先存在,否则就报错.
-
-cat pod-hostpath-vol.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pod-vol-hostpath
-  namespace: default
-spec:
-  containers:
-  - name: myapp
-    image: ikubernetes/myapp:v2
-    volumeMounts:
-    - name: html
-      mountPath: /usr/share/nginx/html/
-  volumes:
-  - name: html
-    hostPath:
-      path: /data/pod/volume1
-      type: DirectoryOrCreate
-
-hostPath:宿主机上的目录；
-volumes的名字可以随便取,这是存储卷的名字,但是上面的volumeMounts指定时,
-name必须和存储卷的名字一致,这样两者才建立了联系；
-</code></pre><h5 id="nfs做共享存储"><a href="#nfs做共享存储" class="headerlink" title="nfs做共享存储"></a>nfs做共享存储</h5><pre><code>这里为了方便,把master节点当做nfs存储,三个节点均执行：
-
-yum -y install nfs-utils  # 然后在master上启动nfs
-mkdir /data/volumes
-cat /etc/exports
-/data/volumes 10.0.0.0/16(rw,no_root_squash)
-systemctl start nfs
-
-在node1和node2上试挂载
-mount -t nfs k8s-master:/data/volumes /mnt
-cat pod-vol-nfs.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pod-vol-nfs
-  namespace: default
-spec:
-  containers:
-  - name: myapp
-    image: ikubernetes/myapp:v2
-    volumeMounts:
-    - name: html
-      mountPath: /usr/share/nginx/html/
-  volumes:
-  - name: html
-    nfs:
-      path: /data/volumes
-      server: k8s-master
-
-kubectl apply -f pod-vol-nfs.yaml
-此时不管pod被建立在哪个节点上,对应节点上是不存放数据的,数据都在nfs主机上
-</code></pre><h5 id="pvc和pv"><a href="#pvc和pv" class="headerlink" title="pvc和pv"></a>pvc和pv</h5><p>用户只需要挂载pvc到容器中而不需要关注存储卷采用何种技术实现。<strong>pvc和pv的关系与pod和node关系类似，前者消耗后者的资源，pvc可以向pv申请指定大小的存储资源并设置访问模式。</strong></p>
+<h5 id="emptyDIR存储卷："><a href="#emptyDIR存储卷：" class="headerlink" title="emptyDIR存储卷："></a>emptyDIR存储卷：</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim podtest/pod-vol-demo.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: pod-demo</span><br><span class="line">  namespace: default</span><br><span class="line">  labels:</span><br><span class="line">    app: myapp</span><br><span class="line">    tier: frontend</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: ikubernetes/myapp:v2</span><br><span class="line">    imagePullPolicy: IfNotPresent</span><br><span class="line">    ports:</span><br><span class="line">    - name: http</span><br><span class="line">      containerPort: 80</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html</span><br><span class="line">      mountPath: /usr/share/nginx/html</span><br><span class="line">  - name: busybox</span><br><span class="line">    image: busybox:latest</span><br><span class="line">    imagePullPolicy: IfNotPresent</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html</span><br><span class="line">      mountPath: /data/</span><br><span class="line">    command: [&quot;/bin/sh&quot;]</span><br><span class="line">    args: [&quot;-c&quot;,&quot;while true;do echo $(date) &gt;&gt; /data/index.html; sleep 10;done&quot;]</span><br><span class="line">  volumes:</span><br><span class="line">  - name: html</span><br><span class="line">    emptyDir: &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">volumeMounts:把哪个存储卷挂到pod中的哪个目录下；</span><br><span class="line">emptyDir:不设置意味着对这个参数下的两个选项不做限制；</span><br></pre></td></tr></table></figure>
+<h5 id="hostPath-使用宿主机上目录作为存储卷"><a href="#hostPath-使用宿主机上目录作为存储卷" class="headerlink" title="hostPath:使用宿主机上目录作为存储卷"></a>hostPath:使用宿主机上目录作为存储卷</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl explain pods.spec.volumes.hostPath.type</span><br><span class="line">DirectoryOrCreate:要挂载的路径是一个目录,不存在就创建目录;</span><br><span class="line">Directory:宿主机上必须实现存在目录,如果不存在就报错;</span><br><span class="line">FileOrCreate:表示挂载的是文件,如果不存在就创建;</span><br><span class="line">File:表示要挂载的文件必须事先存在,否则就报错.</span><br><span class="line"> </span><br><span class="line">cat pod-hostpath-vol.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: pod-vol-hostpath</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: ikubernetes/myapp:v2</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html</span><br><span class="line">      mountPath: /usr/share/nginx/html/</span><br><span class="line">  volumes:</span><br><span class="line">  - name: html</span><br><span class="line">    hostPath:</span><br><span class="line">      path: /data/pod/volume1</span><br><span class="line">      type: DirectoryOrCreate</span><br><span class="line"> </span><br><span class="line">hostPath:宿主机上的目录；</span><br><span class="line">volumes的名字可以随便取,这是存储卷的名字,但是上面的volumeMounts指定时,</span><br><span class="line">name必须和存储卷的名字一致,这样两者才建立了联系；</span><br></pre></td></tr></table></figure>
+<h5 id="nfs做共享存储"><a href="#nfs做共享存储" class="headerlink" title="nfs做共享存储"></a>nfs做共享存储</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">这里为了方便,把master节点当做nfs存储,三个节点均执行：</span><br><span class="line"></span><br><span class="line">yum -y install nfs-utils  # 然后在master上启动nfs</span><br><span class="line">mkdir /data/volumes</span><br><span class="line">cat /etc/exports</span><br><span class="line">/data/volumes 10.0.0.0/16(rw,no_root_squash)</span><br><span class="line">systemctl start nfs</span><br><span class="line"></span><br><span class="line">在node1和node2上试挂载</span><br><span class="line">mount -t nfs k8s-master:/data/volumes /mnt</span><br><span class="line">cat pod-vol-nfs.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: pod-vol-nfs</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: ikubernetes/myapp:v2</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html</span><br><span class="line">      mountPath: /usr/share/nginx/html/</span><br><span class="line">  volumes:</span><br><span class="line">  - name: html</span><br><span class="line">    nfs:</span><br><span class="line">      path: /data/volumes</span><br><span class="line">      server: k8s-master</span><br><span class="line"> </span><br><span class="line">kubectl apply -f pod-vol-nfs.yaml</span><br><span class="line">此时不管pod被建立在哪个节点上,对应节点上是不存放数据的,数据都在nfs主机上</span><br></pre></td></tr></table></figure>
+<h5 id="pvc和pv"><a href="#pvc和pv" class="headerlink" title="pvc和pv"></a>pvc和pv</h5><p>用户只需要挂载pvc到容器中而不需要关注存储卷采用何种技术实现。<strong>pvc和pv的关系与pod和node关系类似，前者消耗后者的资源，pvc可以向pv申请指定大小的存储资源并设置访问模式。</strong></p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20191209/gtefBKlEgvB6.png?imageslim" alt="mark"></p>
 <p>在定义pod时,我们只需要说明我们要一个多大的存储卷就行了,pvc存储卷必须与当前namespace的pvc建立直接绑定关系,pvc必须与pv建立绑定关系,而pv是真正的某个存储设备上的空间.</p>
 <p><strong>一个pvc和pv是一一对应关系,一旦一个pv被一个pvc绑定了,那么这个pv就不能被其他pvc绑定了,一个pvc是可以被多个pod所访问的,pvc在名称空间中,pv是集群级别的</strong>。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20191209/h4b5mB22jgnC.png?imageslim" alt="mark"></p>
-<p>将master作为存储节点,创建挂载目录</p>
-<pre><code>cd /data/volumes &amp;&amp; mkdir v{1,2,3,4,5}
-cat  /etc/exports
-/data/volumes/v1 10.0.0.0/16(rw,no_root_squash)
-/data/volumes/v2 10.0.0.0/16(rw,no_root_squash)
-/data/volumes/v3 10.0.0.0/16(rw,no_root_squash)
-exportfs -arv
-showmount -e
-
-kubectl explain pv.spec.nfs
-accessModes模式有:
-ReadWriteOnce:单路读写,可以简写为RWO;
-ReadOnlyMany:多路只读,可以简写为ROX;
-ReadWriteMany:多路读写,可以简写为RWX
-
-# 先将存储设备定义为pv
-cat pv-demo.yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv001 # 定义pv时不用加名称空间,因为pv是集群级别
-  labels:
-    name: pv001
-spec:
-  nfs:
-    path: /data/volumes/v1
-    server: k8s-master
-  accessModes: [&quot;ReadWriteMany&quot;,&quot;ReadWriteOnce&quot;]
-  capacity: # 分配磁盘空间大小
-    storage: 3Gi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv002
-  labels:
-    name: pv002
-spec:
-  nfs:
-    path: /data/volumes/v2
-    server: k8s-master
-  accessModes: [&quot;ReadWriteOnce&quot;]
-  capacity:
-    storage: 5Gi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pv003
-  labels:
-    name: pv003
-spec:
-  nfs:
-    path: /data/volumes/v3
-    server: k8s-master
-  accessModes: [&quot;ReadWriteMany&quot;,&quot;ReadWriteOnce&quot;]
-  capacity:
-    storage: 8Gi
-
-kubectl apply -f pv-demo.yaml
-
-kubectl get pv
-NAME      CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS  
-pv001     3Gi        RWO,RWX        Retain           Available
-pv002     5Gi        RWO            Retain           Available
-pv003     8Gi        RWO,RWX        Retain           Available
-</code></pre><h6 id="回收策略："><a href="#回收策略：" class="headerlink" title="回收策略："></a>回收策略：</h6><p>如果某个pvc在pv里面存数据了,后来pvc删了,那么pv里面的数据怎么处理？</p>
+<p>将master作为存储节点,创建挂载目录<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd /data/volumes &amp;&amp; mkdir v&#123;1,2,3,4,5&#125;</span><br><span class="line">cat  /etc/exports</span><br><span class="line">/data/volumes/v1 10.0.0.0/16(rw,no_root_squash)</span><br><span class="line">/data/volumes/v2 10.0.0.0/16(rw,no_root_squash)</span><br><span class="line">/data/volumes/v3 10.0.0.0/16(rw,no_root_squash)</span><br><span class="line">exportfs -arv</span><br><span class="line">showmount -e</span><br><span class="line"></span><br><span class="line">kubectl explain pv.spec.nfs</span><br><span class="line">accessModes模式有:</span><br><span class="line">ReadWriteOnce:单路读写,可以简写为RWO;</span><br><span class="line">ReadOnlyMany:多路只读,可以简写为ROX;</span><br><span class="line">ReadWriteMany:多路读写,可以简写为RWX</span><br><span class="line"> </span><br><span class="line"># 先将存储设备定义为pv</span><br><span class="line">cat pv-demo.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv001 # 定义pv时不用加名称空间,因为pv是集群级别</span><br><span class="line">  labels:</span><br><span class="line">    name: pv001</span><br><span class="line">spec:</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v1</span><br><span class="line">    server: k8s-master</span><br><span class="line">  accessModes: [&quot;ReadWriteMany&quot;,&quot;ReadWriteOnce&quot;]</span><br><span class="line">  capacity: # 分配磁盘空间大小</span><br><span class="line">    storage: 3Gi</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv002</span><br><span class="line">  labels:</span><br><span class="line">    name: pv002</span><br><span class="line">spec:</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v2</span><br><span class="line">    server: k8s-master</span><br><span class="line">  accessModes: [&quot;ReadWriteOnce&quot;]</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 5Gi</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv003</span><br><span class="line">  labels:</span><br><span class="line">    name: pv003</span><br><span class="line">spec:</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v3</span><br><span class="line">    server: k8s-master</span><br><span class="line">  accessModes: [&quot;ReadWriteMany&quot;,&quot;ReadWriteOnce&quot;]</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 8Gi</span><br><span class="line"> </span><br><span class="line">kubectl apply -f pv-demo.yaml</span><br><span class="line"></span><br><span class="line">kubectl get pv</span><br><span class="line">NAME      CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS  </span><br><span class="line">pv001     3Gi        RWO,RWX        Retain           Available</span><br><span class="line">pv002     5Gi        RWO            Retain           Available</span><br><span class="line">pv003     8Gi        RWO,RWX        Retain           Available</span><br></pre></td></tr></table></figure></p>
+<h6 id="回收策略："><a href="#回收策略：" class="headerlink" title="回收策略："></a>回收策略：</h6><p>如果某个pvc在pv里面存数据了,后来pvc删了,那么pv里面的数据怎么处理？</p>
 <ul>
 <li>reclaim_policy：即pvc删了,但pv里面的数据不删除,还保留着；</li>
 <li>recycle：即pvc删了,那么就把pv里面的数据也删了；</li>
 <li>delete：即pvc删了,那么就把pv也删了；</li>
 </ul>
-<pre><code># 创建pvc的清单文件
-kubectl explain pods.spec.volumes.persistentVolumeClaim
-cat pod-vol-pvc.yaml
-apiVersion: v1
-kind: PersistentVolumeClaim # 简称pvc
-metadata:
-  name: mypvc
-  namespace: default # pvc和pod在同一个名称空间
-spec:
-  accessModes: [&quot;ReadWriteMany&quot;] # 一定是pv策略的子集
-  resources:
-    requests:
-      storage: 7Gi # 申请一个大小至少为7G的pv
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: pod-vol-pvc
-  namespace: default
-spec:
-  containers:
-  - name: myapp
-    image: ikubernetes/myapp:v1
-    volumeMounts:
-    - name: html # 使用的存储卷的名字
-      mountPath: /usr/share/nginx/html/ #挂载路径
-  volumes:
-  - name: html
-    persistentVolumeClaim:
-      claimName: mypvc # 表示要使用哪个pvc
-</code></pre><p>所以pod的存储卷类型如果是pvc,则:pod指定的pvc需要先匹配一个pv,才能被pod所挂载,在k8s 1.10之后,不能手工从底层删除pv。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建pvc的清单文件</span><br><span class="line">kubectl explain pods.spec.volumes.persistentVolumeClaim</span><br><span class="line">cat pod-vol-pvc.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolumeClaim # 简称pvc</span><br><span class="line">metadata:</span><br><span class="line">  name: mypvc</span><br><span class="line">  namespace: default # pvc和pod在同一个名称空间</span><br><span class="line">spec:</span><br><span class="line">  accessModes: [&quot;ReadWriteMany&quot;] # 一定是pv策略的子集</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 7Gi # 申请一个大小至少为7G的pv</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: pod-vol-pvc</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: ikubernetes/myapp:v1</span><br><span class="line">    volumeMounts:</span><br><span class="line">    - name: html # 使用的存储卷的名字</span><br><span class="line">      mountPath: /usr/share/nginx/html/ #挂载路径</span><br><span class="line">  volumes:</span><br><span class="line">  - name: html</span><br><span class="line">    persistentVolumeClaim:</span><br><span class="line">      claimName: mypvc # 表示要使用哪个pvc</span><br></pre></td></tr></table></figure>
+<p>所以pod的存储卷类型如果是pvc,则:pod指定的pvc需要先匹配一个pv,才能被pod所挂载,在k8s 1.10之后,不能手工从底层删除pv。</p>
 
             <div class="post-copyright">
     <div class="content">

@@ -8,20 +8,20 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句： assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、">
+  <meta name="description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句：assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、配">
 <meta name="keywords" content="django,python,CMDB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMDB-资产总表（十）">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/03/13/10、资产总表/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句： assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、">
+<meta property="og:description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句：assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、配">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/m7x7woCSatFa.png?imageslim">
 <meta property="og:updated_time" content="2019-04-20T07:00:54.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMDB-资产总表（十）">
-<meta name="twitter:description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句： assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、">
+<meta name="twitter:description" content="当前，我们的资产总表如下图所示，还没有任何数据：  这需要我们从数据库中查询数据，然后渲染到前端页面中。 数据的获取很简单，一句：assets = models.Asset.objects.all() 就搞定。当然，你也可以设置过滤条件，添加分页等等。 而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、配">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim">
   
   
@@ -143,18 +143,15 @@
             <p>当前，我们的资产总表如下图所示，还没有任何数据：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim" alt="mark"></p>
 <p>这需要我们从数据库中查询数据，然后渲染到前端页面中。</p>
-<p>数据的获取很简单，一句：</p>
-<pre><code>assets = models.Asset.objects.all()
-</code></pre><p>就搞定。当然，你也可以设置过滤条件，添加分页等等。</p>
+<p>数据的获取很简单，一句：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">assets = models.Asset.objects.all()</span><br></pre></td></tr></table></figure></p>
+<p>就搞定。当然，你也可以设置过滤条件，添加分页等等。</p>
 <p>而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 <strong>datatables</strong>，是一个非常好的表格插件，功能强大、配置简单。</p>
 <p>其官网为：<a href="https://datatables.net/" target="_blank" rel="noopener">https://datatables.net/</a> 中文网站：<a href="http://datatables.club/" target="_blank" rel="noopener">http://datatables.club/</a></p>
 <p>在AdminLTE中，集成了datatables插件，无需额外下载和安装，直接引入使用就可以。</p>
-<p>下面给出一个完整的index.html模板代码：</p>
-<pre><code>index.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html
-</code></pre><p>主要是新增了表格相关的html代码和初始化表格的js代码。</p>
-<pre><code>&lt;table id=&quot;assets_table&quot; class=&quot;table table-bordered table-striped&quot;&gt;
-</code></pre><p>id属性非常重要，用于关联相应的初始化js代码。</p>
+<p>下面给出一个完整的index.html模板代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">index.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html</span><br></pre></td></tr></table></figure></p>
+<p>主要是新增了表格相关的html代码和初始化表格的js代码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;table id=&quot;assets_table&quot; class=&quot;table table-bordered table-striped&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>id属性非常重要，用于关联相应的初始化js代码。</p>
 <p>表格中，循环每一个资产：</p>
 <ul>
 <li>首先生成一个排序的列；</li>
@@ -167,20 +164,8 @@ https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html
 <li>由于资产和tas标签属于多对多的关系，所以需要一个循环，遍历每个tas并打印其名称；</li>
 <li>通过asset.tags.all可以获取一个资产对应的多对多字段的全部对象，很类似ORM的做法。</li>
 </ul>
-<p>表格的初始化JS代码如下：</p>
-<pre><code>&lt;script&gt;
-  $(function () {
-    $(&#39;#assets_table&#39;).DataTable({
-      &quot;paging&quot;: true,       &lt;!-- 允许分页 --&gt;
-      &quot;lengthChange&quot;: true, &lt;!-- 允许改变每页显示的行数 --&gt;
-      &quot;searching&quot;: true,    &lt;!-- 允许内容搜索 --&gt;
-      &quot;ordering&quot;: true,     &lt;!-- 允许排序 --&gt;
-      &quot;info&quot;: true,         &lt;!-- 显示信息 --&gt;
-      &quot;autoWidth&quot;: false    &lt;!-- 固定宽度 --&gt;
-    });
-  });
-&lt;/script&gt;
-</code></pre><p>其中可定义是否允许分页、改变显示的行数、搜索、排序、显示信息、固定宽度等等，通过表格的id进行关联。</p>
+<p>表格的初始化JS代码如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  $(function () &#123;</span><br><span class="line">    $(&apos;#assets_table&apos;).DataTable(&#123;</span><br><span class="line">      &quot;paging&quot;: true,       &lt;!-- 允许分页 --&gt;</span><br><span class="line">      &quot;lengthChange&quot;: true, &lt;!-- 允许改变每页显示的行数 --&gt;</span><br><span class="line">      &quot;searching&quot;: true,    &lt;!-- 允许内容搜索 --&gt;</span><br><span class="line">      &quot;ordering&quot;: true,     &lt;!-- 允许排序 --&gt;</span><br><span class="line">      &quot;info&quot;: true,         &lt;!-- 显示信息 --&gt;</span><br><span class="line">      &quot;autoWidth&quot;: false    &lt;!-- 固定宽度 --&gt;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其中可定义是否允许分页、改变显示的行数、搜索、排序、显示信息、固定宽度等等，通过表格的id进行关联。</p>
 <p>下面，我们通过后台admin界面，多增加几个服务器实例，并修改其类型、业务线、状态、厂商、机房、标签，再刷新资产总表，可以看到效果如下：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190331/m7x7woCSatFa.png?imageslim" alt="mark"></p>
 <p>试着使用一下排序和搜索功能吧！datatables还是相当强大的！</p>

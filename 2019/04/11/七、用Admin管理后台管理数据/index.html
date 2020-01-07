@@ -141,45 +141,8 @@
             
             <p>django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。</p>
 <p>注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们的APP应用是blog，所以我们需要在blog/admin.py文件里进行注册：</p>
-<pre><code>blog/admin.py
-
-from django.contrib import admin
-from .models import Banner, Category, Tag, Tui, Article, Link 
-#导入需要管理的数据库表
-
-@admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
-    list_display = (&#39;id&#39;, &#39;category&#39;, &#39;title&#39;, &#39;tui&#39;, &#39;user&#39;, &#39;views&#39;, &#39;created_time&#39;)
-    # 文章列表里显示想要显示的字段
-    list_per_page = 50
-    # 满50条数据就自动分页
-    ordering = (&#39;-created_time&#39;,)
-    #后台数据列表排序方式
-    list_display_links = (&#39;id&#39;, &#39;title&#39;)
-    # 设置哪些字段可以点击进入编辑界面
-
-
-
-@admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
-    list_display = (&#39;id&#39;, &#39;text_info&#39;, &#39;img&#39;, &#39;link_url&#39;, &#39;is_active&#39;)
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = (&#39;id&#39;, &#39;name&#39;, &#39;index&#39;)
-
-@admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
-    list_display = (&#39;id&#39;, &#39;name&#39;)
-
-@admin.register(Tui)
-class TuiAdmin(admin.ModelAdmin):
-    list_display = (&#39;id&#39;, &#39;name&#39;)
-
-@admin.register(Link)
-class LinkAdmin(admin.ModelAdmin):
-    list_display = (&#39;id&#39;, &#39;name&#39;,&#39;linkurl&#39;)
-</code></pre><p>登录管理后台 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">http://127.0.0.1:8000/admin/</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">blog/admin.py</span><br><span class="line"></span><br><span class="line">from django.contrib import admin</span><br><span class="line">from .models import Banner, Category, Tag, Tui, Article, Link </span><br><span class="line">#导入需要管理的数据库表</span><br><span class="line"></span><br><span class="line">@admin.register(Article)</span><br><span class="line">class ArticleAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;category&apos;, &apos;title&apos;, &apos;tui&apos;, &apos;user&apos;, &apos;views&apos;, &apos;created_time&apos;)</span><br><span class="line">    # 文章列表里显示想要显示的字段</span><br><span class="line">    list_per_page = 50</span><br><span class="line">    # 满50条数据就自动分页</span><br><span class="line">    ordering = (&apos;-created_time&apos;,)</span><br><span class="line">    #后台数据列表排序方式</span><br><span class="line">    list_display_links = (&apos;id&apos;, &apos;title&apos;)</span><br><span class="line">    # 设置哪些字段可以点击进入编辑界面</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@admin.register(Banner)</span><br><span class="line">class BannerAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;text_info&apos;, &apos;img&apos;, &apos;link_url&apos;, &apos;is_active&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Category)</span><br><span class="line">class CategoryAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;, &apos;index&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Tag)</span><br><span class="line">class TagAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Tui)</span><br><span class="line">class TuiAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;)</span><br><span class="line"></span><br><span class="line">@admin.register(Link)</span><br><span class="line">class LinkAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = (&apos;id&apos;, &apos;name&apos;,&apos;linkurl&apos;)</span><br></pre></td></tr></table></figure>
+<p>登录管理后台 <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">http://127.0.0.1:8000/admin/</a></p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190420/GWW02Dwk8eGI.png?imageslim" alt="mark"></p>
 <p>多出了之前我们在models里创建的表。我们可以在后台里面对这些表进行增、删、改方面的操作。</p>
 

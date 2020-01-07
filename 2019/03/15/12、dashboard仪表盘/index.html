@@ -8,13 +8,13 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。 完整的dashboard.html文件代码如下： dashboard.html https://github.com/zhangduanya/mycmdb/blob/master/templates/as">
+  <meta name="description" content="对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。 完整的dashboard.html文件代码如下：dashboard.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/asse">
 <meta name="keywords" content="django,python,CMDB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMDB-dashboard仪表盘（十二）">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/03/15/12、dashboard仪表盘/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。 完整的dashboard.html文件代码如下： dashboard.html https://github.com/zhangduanya/mycmdb/blob/master/templates/as">
+<meta property="og:description" content="对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。 完整的dashboard.html文件代码如下：dashboard.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/asse">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190401/04T3X8UVz2tC.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190401/L8z1yQC8Dvb2.png?imageslim">
@@ -23,7 +23,7 @@
 <meta property="og:updated_time" content="2019-04-20T07:00:40.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMDB-dashboard仪表盘（十二）">
-<meta name="twitter:description" content="对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。 完整的dashboard.html文件代码如下： dashboard.html https://github.com/zhangduanya/mycmdb/blob/master/templates/as">
+<meta name="twitter:description" content="对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。 完整的dashboard.html文件代码如下：dashboard.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/asse">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190401/04T3X8UVz2tC.png?imageslim">
   
   
@@ -144,142 +144,28 @@
             
             <p>对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。</p>
 <p>dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。</p>
-<p>完整的dashboard.html文件代码如下：</p>
-<pre><code>dashboard.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/dashboard.html
-</code></pre><h3 id="一、资产状态占比图"><a href="#一、资产状态占比图" class="headerlink" title="一、资产状态占比图"></a>一、资产状态占比图</h3><p>首先，制作一个资产状态百分比表盘，用于显示上线、下线、未知、故障和备用五种资产在总资产中的占比。注意是占比，不是数量！</p>
+<p>完整的dashboard.html文件代码如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dashboard.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/dashboard.html</span><br></pre></td></tr></table></figure></p>
+<h3 id="一、资产状态占比图"><a href="#一、资产状态占比图" class="headerlink" title="一、资产状态占比图"></a>一、资产状态占比图</h3><p>首先，制作一个资产状态百分比表盘，用于显示上线、下线、未知、故障和备用五种资产在总资产中的占比。注意是占比，不是数量！</p>
 <p>按照AdminLTE中提供的示例，在HTML中添加相应的标签，在script中添加相应的JS代码（jQueryKnob）。JS代码基本照抄，不需要改动。对于显示的圆圈，可以修改其颜色、大小、形态、是否只读等属性，可以参照AdminLTE中的范例。</p>
-<p>最重要的是，需要从数据库中获取相应的数据，修改assets/views.py中的dashboard视图，最终如下：</p>
-<pre><code>def dashboard(request):
-    total = models.Asset.objects.count()
-    upline = models.Asset.objects.filter(status=0).count()
-    offline = models.Asset.objects.filter(status=1).count()
-    unknown = models.Asset.objects.filter(status=2).count()
-    breakdown = models.Asset.objects.filter(status=3).count()
-    backup = models.Asset.objects.filter(status=4).count()
-    up_rate = round(upline/total*100)
-    o_rate = round(offline/total*100)
-    un_rate = round(unknown/total*100)
-    bd_rate = round(breakdown/total*100)
-    bu_rate = round(backup/total*100)
-    server_number = models.Server.objects.count()
-    networkdevice_number = models.NetworkDevice.objects.count()
-    storagedevice_number = models.StorageDevice.objects.count()
-    securitydevice_number = models.SecurityDevice.objects.count()
-    software_number = models.Software.objects.count()
-
-    return render(request, &#39;assets/dashboard.html&#39;, locals())
-</code></pre><p>代码很简单，分别获取资产总数量，上线、下线、未知、故障和备用资产的数量，然后计算出各自的占比，例如上线率up_rate。同时获取服务器、网络设备、安全设备和软件设备的数量，后面需要使用。</p>
-<p>在dashboard.html中修改各input框的value属性为</p>
-<pre><code>value=&quot;{{ up_rate }}&quot;
-</code></pre><p>（以上线率为例），这是最关键的步骤，前端会根据这个值的大小，决定圆圈的幅度。</p>
+<p>最重要的是，需要从数据库中获取相应的数据，修改assets/views.py中的dashboard视图，最终如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def dashboard(request):</span><br><span class="line">    total = models.Asset.objects.count()</span><br><span class="line">    upline = models.Asset.objects.filter(status=0).count()</span><br><span class="line">    offline = models.Asset.objects.filter(status=1).count()</span><br><span class="line">    unknown = models.Asset.objects.filter(status=2).count()</span><br><span class="line">    breakdown = models.Asset.objects.filter(status=3).count()</span><br><span class="line">    backup = models.Asset.objects.filter(status=4).count()</span><br><span class="line">    up_rate = round(upline/total*100)</span><br><span class="line">    o_rate = round(offline/total*100)</span><br><span class="line">    un_rate = round(unknown/total*100)</span><br><span class="line">    bd_rate = round(breakdown/total*100)</span><br><span class="line">    bu_rate = round(backup/total*100)</span><br><span class="line">    server_number = models.Server.objects.count()</span><br><span class="line">    networkdevice_number = models.NetworkDevice.objects.count()</span><br><span class="line">    storagedevice_number = models.StorageDevice.objects.count()</span><br><span class="line">    securitydevice_number = models.SecurityDevice.objects.count()</span><br><span class="line">    software_number = models.Software.objects.count()</span><br><span class="line"></span><br><span class="line">    return render(request, &apos;assets/dashboard.html&apos;, locals())</span><br></pre></td></tr></table></figure></p>
+<p>代码很简单，分别获取资产总数量，上线、下线、未知、故障和备用资产的数量，然后计算出各自的占比，例如上线率up_rate。同时获取服务器、网络设备、安全设备和软件设备的数量，后面需要使用。</p>
+<p>在dashboard.html中修改各input框的value属性为<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">value=&quot;&#123;&#123; up_rate &#125;&#125;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>（以上线率为例），这是最关键的步骤，前端会根据这个值的大小，决定圆圈的幅度。</p>
 <p>完成后的页面如下图所示：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190401/04T3X8UVz2tC.png?imageslim" alt="mark"></p>
 <h3 id="二、不同状态资产数量统计柱状图"><a href="#二、不同状态资产数量统计柱状图" class="headerlink" title="二、不同状态资产数量统计柱状图"></a>二、不同状态资产数量统计柱状图</h3><p>要绘制柱状图，不可能我们自己一步步从无到有写起，建议使用第三方插件。AdminLTE中内置的是Chartjs插件，但更建议大家使用百度开源的Echarts插件，功能更强大，更容易学习。</p>
 <p><a href="http://echarts.baidu.com/" target="_blank" rel="noopener">百度Echarts的网址</a>，提供插件下载和说明文档、在线帮助等功能。</p>
 <p>教程提供了一个echarts.js源文件，当然你也可以自行下载并安装。</p>
-<p>使用Echarts的柱状图很简单，首先生成一个用于放置图形的容器：</p>
-<pre><code>&lt;div class=&quot;col-md-6&quot;&gt;
-    &lt;!-- BAR CHART --&gt;
-  &lt;div class=&quot;box box-success&quot;&gt;
-
-    &lt;div class=&quot;box-header with-border&quot;&gt;
-      &lt;h3 class=&quot;box-title&quot;&gt;各状态资产数量统计：&lt;/h3&gt;
-
-      &lt;div class=&quot;box-tools pull-right&quot;&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btn btn-box-tool&quot; data-widget=&quot;collapse&quot;&gt;&lt;i class=&quot;fa fa-minus&quot;&gt;&lt;/i&gt;
-        &lt;/button&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btn btn-box-tool&quot; data-widget=&quot;remove&quot;&gt;&lt;i class=&quot;fa fa-times&quot;&gt;&lt;/i&gt;&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;box-body&quot;&gt;
-        &lt;div id=&quot;barChart&quot; style=&quot;width: 600px;height:400px;&quot;&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;!-- /.box-body --&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre><p>上面的核心是</p>
-<pre><code>&lt;div id=&quot;barChart&quot; style=&quot;width: 600px;height:400px;&quot;&gt;&lt;/div&gt;
-</code></pre><p>这句，它指明了图表的id和容器大小。其它的都是AdminLTE框架需要的元素，用于生成表头和折叠、关闭动作按钮。我们的容器是可以折叠和删除的，也是移动端自适应的。</p>
+<p>使用Echarts的柱状图很简单，首先生成一个用于放置图形的容器：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;div class=&quot;col-md-6&quot;&gt;</span><br><span class="line">    &lt;!-- BAR CHART --&gt;</span><br><span class="line">  &lt;div class=&quot;box box-success&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;box-header with-border&quot;&gt;</span><br><span class="line">      &lt;h3 class=&quot;box-title&quot;&gt;各状态资产数量统计：&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;box-tools pull-right&quot;&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; class=&quot;btn btn-box-tool&quot; data-widget=&quot;collapse&quot;&gt;&lt;i class=&quot;fa fa-minus&quot;&gt;&lt;/i&gt;</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; class=&quot;btn btn-box-tool&quot; data-widget=&quot;remove&quot;&gt;&lt;i class=&quot;fa fa-times&quot;&gt;&lt;/i&gt;&lt;/button&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;box-body&quot;&gt;</span><br><span class="line">        &lt;div id=&quot;barChart&quot; style=&quot;width: 600px;height:400px;&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;!-- /.box-body --&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上面的核心是<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;div id=&quot;barChart&quot; style=&quot;width: 600px;height:400px;&quot;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这句，它指明了图表的id和容器大小。其它的都是AdminLTE框架需要的元素，用于生成表头和折叠、关闭动作按钮。我们的容器是可以折叠和删除的，也是移动端自适应的。</p>
 <p>构造了容器后，需要在页面底部首先引入 <strong>echarts.js</strong> 文件：</p>
-<pre><code>&lt;script src=&quot;{% static 'plugins/echarts.js' %}&quot;&gt;&lt;/script&gt;
-</code></pre><p>然后在<script></script>中，添加初始化的js代码：</p>
-<pre><code>$(function () {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById(&#39;barChart&#39;));
-
-        // 指定图表的配置项和数据
-        var option = {
-            color: [&#39;#3398DB&#39;],
-            title: {
-                text: &#39;数量&#39;
-            },
-            tooltip: {},
-            legend: { data:[&#39;&#39;]
-            },
-            xAxis: {
-                data: [&quot;在线&quot;, &quot;下线&quot;,&quot;故障&quot;,&quot;备用&quot;,&quot;未知&quot;] },
-            yAxis: {},
-            series:
-                [{
-                name: &#39;数量&#39;,
-                type: &#39;bar&#39;,
-                barWidth: &#39;50%&#39;,
-                data: [{{ upline }}, {{ offline }}, {{ breakdown }}, {{ backup }}, {{ unknown }}]
-            }]
-        };
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-    });
-</code></pre><p>上面的js代码中，中文文字部分很容易理解，就是x轴的说明文字。还可以设置柱状图的颜色、宽度等特性。关键是series列表，其中的type指定该charts是什么类型，bar表示柱状图，而data就是至关重要的具体数据了，利用模板语言，将从数据库中获取的具体数值传入进来，Echarts插件会根据数值进行动态调整。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script src=&quot;&#123;% static &apos;plugins/echarts.js&apos; %&#125;&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>然后在<script></script>中，添加初始化的js代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$(function () &#123;</span><br><span class="line">        // 基于准备好的dom，初始化echarts实例</span><br><span class="line">        var myChart = echarts.init(document.getElementById(&apos;barChart&apos;));</span><br><span class="line"></span><br><span class="line">        // 指定图表的配置项和数据</span><br><span class="line">        var option = &#123;</span><br><span class="line">            color: [&apos;#3398DB&apos;],</span><br><span class="line">            title: &#123;</span><br><span class="line">                text: &apos;数量&apos;</span><br><span class="line">            &#125;,</span><br><span class="line">            tooltip: &#123;&#125;,</span><br><span class="line">            legend: &#123; data:[&apos;&apos;]</span><br><span class="line">            &#125;,</span><br><span class="line">            xAxis: &#123;</span><br><span class="line">                data: [&quot;在线&quot;, &quot;下线&quot;,&quot;故障&quot;,&quot;备用&quot;,&quot;未知&quot;] &#125;,</span><br><span class="line">            yAxis: &#123;&#125;,</span><br><span class="line">            series:</span><br><span class="line">                [&#123;</span><br><span class="line">                name: &apos;数量&apos;,</span><br><span class="line">                type: &apos;bar&apos;,</span><br><span class="line">                barWidth: &apos;50%&apos;,</span><br><span class="line">                data: [&#123;&#123; upline &#125;&#125;, &#123;&#123; offline &#125;&#125;, &#123;&#123; breakdown &#125;&#125;, &#123;&#123; backup &#125;&#125;, &#123;&#123; unknown &#125;&#125;]</span><br><span class="line">            &#125;]</span><br><span class="line">        &#125;;</span><br><span class="line">            // 使用刚指定的配置项和数据显示图表。</span><br><span class="line">            myChart.setOption(option);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>上面的js代码中，中文文字部分很容易理解，就是x轴的说明文字。还可以设置柱状图的颜色、宽度等特性。关键是series列表，其中的type指定该charts是什么类型，bar表示柱状图，而data就是至关重要的具体数据了，利用模板语言，将从数据库中获取的具体数值传入进来，Echarts插件会根据数值进行动态调整。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190401/L8z1yQC8Dvb2.png?imageslim" alt="mark"></p>
-<h3 id="三、各类型资产数量统计饼图"><a href="#三、各类型资产数量统计饼图" class="headerlink" title="三、各类型资产数量统计饼图"></a>三、各类型资产数量统计饼图</h3><p>类似上面的柱状图，在HTML中需要先添加一个容器。不同之处在于初始化的JS代码：</p>
-<pre><code>//资产类型数量统计 饼图
-    $(function () {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById(&#39;donutChart&#39;));
-
-        // 指定图表的配置项和数据
-        option = {
-            title : {
-                x:&#39;center&#39;
-            },
-            tooltip : {
-                trigger: &#39;item&#39;,
-                formatter: &quot;{a} &lt;br/&gt;{b} : {c} ({d}%)&quot;
-            },
-            legend: {
-                orient: &#39;vertical&#39;,
-                left: &#39;left&#39;,
-                data: [&#39;服务器&#39;,&#39;网络设备&#39;,&#39;存储设备&#39;,&#39;安全设备&#39;,&#39;软件资产&#39;]
-            },
-            series : [
-                {
-                    name: &#39;资产类型&#39;,
-                    type: &#39;pie&#39;,
-                    radius : &#39;55%&#39;,
-                    center: [&#39;50%&#39;, &#39;60%&#39;],
-                    data:[
-                        {value:{{ server_number }}, name:&#39;服务器&#39;},
-                        {value:{{ networkdevice_number }}, name:&#39;网络设备&#39;},
-                        {value:{{ storagedevice_number }}, name:&#39;存储设备&#39;},
-                        {value:{{ securitydevice_number }}, name:&#39;安全设备&#39;},
-                        {value:{{ software_number }}, name:&#39;软件资产&#39;}
-                    ],
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: &#39;rgba(0, 0, 0, 0.5)&#39;
-                        }
-                    }
-                }
-            ]
-        };
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-    });
-</code></pre><p>series中的type指定为pie类型表示饼图，data列表动态传入各种资产类型的数量。其它的设置可参考官方文档。</p>
+<h3 id="三、各类型资产数量统计饼图"><a href="#三、各类型资产数量统计饼图" class="headerlink" title="三、各类型资产数量统计饼图"></a>三、各类型资产数量统计饼图</h3><p>类似上面的柱状图，在HTML中需要先添加一个容器。不同之处在于初始化的JS代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//资产类型数量统计 饼图</span><br><span class="line">    $(function () &#123;</span><br><span class="line">        // 基于准备好的dom，初始化echarts实例</span><br><span class="line">        var myChart = echarts.init(document.getElementById(&apos;donutChart&apos;));</span><br><span class="line"></span><br><span class="line">        // 指定图表的配置项和数据</span><br><span class="line">        option = &#123;</span><br><span class="line">            title : &#123;</span><br><span class="line">                x:&apos;center&apos;</span><br><span class="line">            &#125;,</span><br><span class="line">            tooltip : &#123;</span><br><span class="line">                trigger: &apos;item&apos;,</span><br><span class="line">                formatter: &quot;&#123;a&#125; &lt;br/&gt;&#123;b&#125; : &#123;c&#125; (&#123;d&#125;%)&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            legend: &#123;</span><br><span class="line">                orient: &apos;vertical&apos;,</span><br><span class="line">                left: &apos;left&apos;,</span><br><span class="line">                data: [&apos;服务器&apos;,&apos;网络设备&apos;,&apos;存储设备&apos;,&apos;安全设备&apos;,&apos;软件资产&apos;]</span><br><span class="line">            &#125;,</span><br><span class="line">            series : [</span><br><span class="line">                &#123;</span><br><span class="line">                    name: &apos;资产类型&apos;,</span><br><span class="line">                    type: &apos;pie&apos;,</span><br><span class="line">                    radius : &apos;55%&apos;,</span><br><span class="line">                    center: [&apos;50%&apos;, &apos;60%&apos;],</span><br><span class="line">                    data:[</span><br><span class="line">                        &#123;value:&#123;&#123; server_number &#125;&#125;, name:&apos;服务器&apos;&#125;,</span><br><span class="line">                        &#123;value:&#123;&#123; networkdevice_number &#125;&#125;, name:&apos;网络设备&apos;&#125;,</span><br><span class="line">                        &#123;value:&#123;&#123; storagedevice_number &#125;&#125;, name:&apos;存储设备&apos;&#125;,</span><br><span class="line">                        &#123;value:&#123;&#123; securitydevice_number &#125;&#125;, name:&apos;安全设备&apos;&#125;,</span><br><span class="line">                        &#123;value:&#123;&#123; software_number &#125;&#125;, name:&apos;软件资产&apos;&#125;</span><br><span class="line">                    ],</span><br><span class="line">                    itemStyle: &#123;</span><br><span class="line">                        emphasis: &#123;</span><br><span class="line">                            shadowBlur: 10,</span><br><span class="line">                            shadowOffsetX: 0,</span><br><span class="line">                            shadowColor: &apos;rgba(0, 0, 0, 0.5)&apos;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;;</span><br><span class="line">            // 使用刚指定的配置项和数据显示图表。</span><br><span class="line">            myChart.setOption(option);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>series中的type指定为pie类型表示饼图，data列表动态传入各种资产类型的数量。其它的设置可参考官方文档。</p>
 <p>为了展示的方便，我们在admin中新建一些网络设备、安全设备、软件资产等其它类型的资产，然后查看资产总表和饼图。这里我分别添加了一台网络、安全和存储设备和两个软件资产。</p>
 <p>查看资产总表如下图所示：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190401/DqvoWq85pJAV.png?imageslim" alt="mark"></p>

@@ -8,18 +8,18 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="案例1（基本转发，https配置与annotations基础使用）apiVersion: extensions/v1beta1 kind: Ingress metadata:   name: ingress   namespace: test   annotations:     kubernetes.io/ingress.class: &amp;quot;nginx&amp;quot;     nginx.in">
+  <meta name="description" content="案例1（基本转发，https配置与annotations基础使用）apiVersion: extensions/v1beta1kind: Ingressmetadata:  name: ingress  namespace: test  annotations:    kubernetes.io/ingress.class: &amp;quot;nginx&amp;quot;    nginx.ingress.k">
 <meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8s Ingress Nginx使用">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/18/K8s Ingress Nginx使用/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="案例1（基本转发，https配置与annotations基础使用）apiVersion: extensions/v1beta1 kind: Ingress metadata:   name: ingress   namespace: test   annotations:     kubernetes.io/ingress.class: &amp;quot;nginx&amp;quot;     nginx.in">
+<meta property="og:description" content="案例1（基本转发，https配置与annotations基础使用）apiVersion: extensions/v1beta1kind: Ingressmetadata:  name: ingress  namespace: test  annotations:    kubernetes.io/ingress.class: &amp;quot;nginx&amp;quot;    nginx.ingress.k">
 <meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2019-12-26T14:59:07.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="K8s Ingress Nginx使用">
-<meta name="twitter:description" content="案例1（基本转发，https配置与annotations基础使用）apiVersion: extensions/v1beta1 kind: Ingress metadata:   name: ingress   namespace: test   annotations:     kubernetes.io/ingress.class: &amp;quot;nginx&amp;quot;     nginx.in">
+<meta name="twitter:description" content="案例1（基本转发，https配置与annotations基础使用）apiVersion: extensions/v1beta1kind: Ingressmetadata:  name: ingress  namespace: test  annotations:    kubernetes.io/ingress.class: &amp;quot;nginx&amp;quot;    nginx.ingress.k">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -137,230 +137,34 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h4 id="案例1（基本转发，https配置与annotations基础使用）"><a href="#案例1（基本转发，https配置与annotations基础使用）" class="headerlink" title="案例1（基本转发，https配置与annotations基础使用）"></a>案例1（基本转发，https配置与annotations基础使用）</h4><pre><code>apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ingress
-  namespace: test
-  annotations:
-    kubernetes.io/ingress.class: &quot;nginx&quot;
-    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;
-spec:
-  tls:
-  - hosts:
-    - nginx-a.gogen.cn
-    secretName: gogen.cn
-  rules:
-  - host: nginx-a.gogen.cn
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: nginx-a
-          servicePort: 80
-      - path: /.*.(txt|css|doc)
-        backend:
-          serviceName: nginx-b
-          servicePort: 80
-      - path: /(api|app)/
-        backend:
-          serviceName: nginx-c
-          servicePort: 80
-      - path: /api
-        backend:
-          serviceName: nginx-d
-          servicePort: 80
-</code></pre><p>上面我们定义了一个ingress，并指定运行在test名称空间（此名名称空间需要自行创建）。后端我们定义了四组服务，分别为：nginx-a，nginx-b，nginx-c和nginx-d，并指定服务的port为80（这四组服务也需要自行定义）。</p>
-<p>然后我们ingress的主要配置里面我们定义了tls证书，并指定可使用的host和需要使用的secret。我们是将证书先导入进secret，然后直接引用secret，导入方法如下：</p>
-<pre><code>kubectl create secret tls gogen.cn --cert=1592339__gogen.cn.pem --key=1592339__gogen.cn.key -n test
-</code></pre><p>tls详解：</p>
-<pre><code>tls:
-- hosts:                        #此为固定项，是一个列表，我们可以有另外的证书对应其它域名
-  - nginx-a.gogen.cn            #此为列表，必须为一个域名，一个secret可以对多个域名
-  secretName: gogen.cn          #创建secret时指定的名称
-</code></pre><p>annotations配置：作用于server</p>
-<pre><code># 指定了我们使用后端ingress controller的类别，如果后端有多个ingress controller的时候很重要
-kubernetes.io/ingress.class: &quot;nginx&quot;
-
-# 指定我们的rules的path可以使用正则表达式，如果我们没有使用正则表达式，此项则可不使用
-nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;
-</code></pre><p>rules配置：作用于location</p>
-<pre><code>rules:
-- host: nginx-a.gogen.cn            #相当于定义了nginx的一个server_name
-  http:
-    paths:
-    - path: /                       #一个path就相当于一个location，path的值必须为“/”。这里为匹配的规则，根表示默认请求转发规则
-      backend:
-        serviceName: nginx-a        #定义后端的service
-        servicePort: 80             #定义后端service的访问端口，也就是service port指定的端口
-    - path: /.*.(txt|css|doc)        #这里使用的正则（低版本不支持）,默认情况下都是不区分大小写，可以进入到ingress controller查看nginx的配置,这里相当于把结尾为txt,css,doc的url请求转发到nginx-b service
-      backend:
-        serviceName: nginx-b
-        servicePort: 80
-    - path: /(api|app)/              #这里相当于将api和app开头的目录语法转发至nginx-c service
-      backend:
-        serviceName: nginx-c
-        servicePort: 80
-    - path: /api                    #这里相当于将api开头的url（可以是一个文件，也可以是一个目录）的请求，转发到nginx-d
-      backend:
-        serviceName: nginx-d
-        servicePort: 80
-</code></pre><p><strong>说明</strong>：<u>上面定义的所有path到ingress controller都将会转换成nginx location规则，那么关于location的优先级与nginx一样。path转换到nginx后，会将path规则最长的排在最前面，最短的排在最后面。</u></p>
+            <h4 id="案例1（基本转发，https配置与annotations基础使用）"><a href="#案例1（基本转发，https配置与annotations基础使用）" class="headerlink" title="案例1（基本转发，https配置与annotations基础使用）"></a>案例1（基本转发，https配置与annotations基础使用）</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress</span><br><span class="line">  namespace: test</span><br><span class="line">  annotations:</span><br><span class="line">    kubernetes.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    - nginx-a.gogen.cn</span><br><span class="line">    secretName: gogen.cn</span><br><span class="line">  rules:</span><br><span class="line">  - host: nginx-a.gogen.cn</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: /</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-a</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /.*.(txt|css|doc)</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-b</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /(api|app)/</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-c</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /api</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-d</span><br><span class="line">          servicePort: 80</span><br></pre></td></tr></table></figure>
+<p>上面我们定义了一个ingress，并指定运行在test名称空间（此名名称空间需要自行创建）。后端我们定义了四组服务，分别为：nginx-a，nginx-b，nginx-c和nginx-d，并指定服务的port为80（这四组服务也需要自行定义）。</p>
+<p>然后我们ingress的主要配置里面我们定义了tls证书，并指定可使用的host和需要使用的secret。我们是将证书先导入进secret，然后直接引用secret，导入方法如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl create secret tls gogen.cn --cert=1592339__gogen.cn.pem --key=1592339__gogen.cn.key -n test</span><br></pre></td></tr></table></figure></p>
+<p>tls详解：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tls:</span><br><span class="line">- hosts:                        #此为固定项，是一个列表，我们可以有另外的证书对应其它域名</span><br><span class="line">  - nginx-a.gogen.cn            #此为列表，必须为一个域名，一个secret可以对多个域名</span><br><span class="line">  secretName: gogen.cn          #创建secret时指定的名称</span><br></pre></td></tr></table></figure></p>
+<p>annotations配置：作用于server<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 指定了我们使用后端ingress controller的类别，如果后端有多个ingress controller的时候很重要</span><br><span class="line">kubernetes.io/ingress.class: &quot;nginx&quot;</span><br><span class="line"> </span><br><span class="line"># 指定我们的rules的path可以使用正则表达式，如果我们没有使用正则表达式，此项则可不使用</span><br><span class="line">nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;</span><br></pre></td></tr></table></figure></p>
+<p>rules配置：作用于location<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rules:</span><br><span class="line">- host: nginx-a.gogen.cn            #相当于定义了nginx的一个server_name</span><br><span class="line">  http:</span><br><span class="line">    paths:</span><br><span class="line">    - path: /                       #一个path就相当于一个location，path的值必须为“/”。这里为匹配的规则，根表示默认请求转发规则</span><br><span class="line">      backend:</span><br><span class="line">        serviceName: nginx-a        #定义后端的service</span><br><span class="line">        servicePort: 80             #定义后端service的访问端口，也就是service port指定的端口</span><br><span class="line">    - path: /.*.(txt|css|doc)        #这里使用的正则（低版本不支持）,默认情况下都是不区分大小写，可以进入到ingress controller查看nginx的配置,这里相当于把结尾为txt,css,doc的url请求转发到nginx-b service</span><br><span class="line">      backend:</span><br><span class="line">        serviceName: nginx-b</span><br><span class="line">        servicePort: 80</span><br><span class="line">    - path: /(api|app)/              #这里相当于将api和app开头的目录语法转发至nginx-c service</span><br><span class="line">      backend:</span><br><span class="line">        serviceName: nginx-c</span><br><span class="line">        servicePort: 80</span><br><span class="line">    - path: /api                    #这里相当于将api开头的url（可以是一个文件，也可以是一个目录）的请求，转发到nginx-d</span><br><span class="line">      backend:</span><br><span class="line">        serviceName: nginx-d</span><br><span class="line">        servicePort: 80</span><br></pre></td></tr></table></figure></p>
+<p><strong>说明</strong>：<u>上面定义的所有path到ingress controller都将会转换成nginx location规则，那么关于location的优先级与nginx一样。path转换到nginx后，会将path规则最长的排在最前面，最短的排在最后面。</u></p>
 <hr>
-<h4 id="案例2（通过annotations对nginx做个性化配置）"><a href="#案例2（通过annotations对nginx做个性化配置）" class="headerlink" title="案例2（通过annotations对nginx做个性化配置）"></a>案例2（通过annotations对nginx做个性化配置）</h4><pre><code>apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ingress
-  namespace: test
-  annotations:
-    kubernetes.io/ingress.class: &quot;nginx&quot;
-    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: &quot;600&quot;
-    nginx.ingress.kubernetes.io/proxy-send-timeout: &quot;600&quot;
-    nginx.ingress.kubernetes.io/proxy-read-timeout: &quot;600&quot;
-    nginx.ingress.kubernetes.io/proxy-body-size: &quot;10m&quot;
-spec:
-  tls:
-  - hosts:
-    - nginx-a.gogen.cn
-    secretName: gogen.cn
-  rules:
-  - host: nginx-a.gogen.cn
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: nginx-a
-          servicePort: 80
-      - path: /.*.(txt|css|doc)
-        backend:
-          serviceName: nginx-b
-          servicePort: 80
-      - path: /(api|app)/
-        backend:
-          serviceName: nginx-c
-          servicePort: 80
-      - path: /api
-        backend:
-          serviceName: nginx-d
-          servicePort: 80
-</code></pre><p>在案例1的基础上面我们增加了annotations的一些配置</p>
-<pre><code>kubernetes.io/ingress.class: &quot;nginx&quot;
-nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;
-
-#连接超时时间，默认为5s
-nginx.ingress.kubernetes.io/proxy-connect-timeout: &quot;600&quot;
-
-#后端服务器回转数据超时时间，默认为60s
-nginx.ingress.kubernetes.io/proxy-send-timeout: &quot;600&quot;
-
-#后端服务器响应超时时间，默认为60s
-nginx.ingress.kubernetes.io/proxy-read-timeout: &quot;600&quot;
-
-#客户端上传文件，最大大小，默认为20m
-nginx.ingress.kubernetes.io/proxy-body-size: &quot;10m&quot;
-</code></pre><p>上面我们自定义了四项基本配置，我们还可以定义更多的基本配置，可参考nginx-configuration annotations相关文档</p>
+<h4 id="案例2（通过annotations对nginx做个性化配置）"><a href="#案例2（通过annotations对nginx做个性化配置）" class="headerlink" title="案例2（通过annotations对nginx做个性化配置）"></a>案例2（通过annotations对nginx做个性化配置）</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress</span><br><span class="line">  namespace: test</span><br><span class="line">  annotations:</span><br><span class="line">    kubernetes.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/proxy-connect-timeout: &quot;600&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/proxy-send-timeout: &quot;600&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/proxy-read-timeout: &quot;600&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/proxy-body-size: &quot;10m&quot;</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    - nginx-a.gogen.cn</span><br><span class="line">    secretName: gogen.cn</span><br><span class="line">  rules:</span><br><span class="line">  - host: nginx-a.gogen.cn</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: /</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-a</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /.*.(txt|css|doc)</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-b</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /(api|app)/</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-c</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /api</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-d</span><br><span class="line">          servicePort: 80</span><br></pre></td></tr></table></figure>
+<p>在案例1的基础上面我们增加了annotations的一些配置<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubernetes.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;</span><br><span class="line"> </span><br><span class="line">#连接超时时间，默认为5s</span><br><span class="line">nginx.ingress.kubernetes.io/proxy-connect-timeout: &quot;600&quot;</span><br><span class="line"> </span><br><span class="line">#后端服务器回转数据超时时间，默认为60s</span><br><span class="line">nginx.ingress.kubernetes.io/proxy-send-timeout: &quot;600&quot;</span><br><span class="line"> </span><br><span class="line">#后端服务器响应超时时间，默认为60s</span><br><span class="line">nginx.ingress.kubernetes.io/proxy-read-timeout: &quot;600&quot;</span><br><span class="line"> </span><br><span class="line">#客户端上传文件，最大大小，默认为20m</span><br><span class="line">nginx.ingress.kubernetes.io/proxy-body-size: &quot;10m&quot;</span><br></pre></td></tr></table></figure></p>
+<p>上面我们自定义了四项基本配置，我们还可以定义更多的基本配置，可参考nginx-configuration annotations相关文档</p>
 <hr>
-<h4 id="案例3（通过annotations做rewrite基本配置）"><a href="#案例3（通过annotations做rewrite基本配置）" class="headerlink" title="案例3（通过annotations做rewrite基本配置）"></a>案例3（通过annotations做rewrite基本配置）</h4><pre><code>apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ingress-rewrite-tfs
-  namespace: test
-  annotations:
-    kubernetes.io/ingress.class: &quot;nginx&quot;
-    nginx.ingress.kubernetes.io/rewrite-target: https://gogen-test.oss-cn-hangzhou.aliyuncs.com
-spec:
-  tls:
-  - hosts:
-    - nginx-a.gogen.cn
-    secretName: gogen.cn
-  rules:
-  - host: nginx-a.gogen.cn
-    http:
-      paths:
-      - path: /v1/tfs
-        backend:
-          serviceName: nginx-a
-          servicePort: 80
-</code></pre><p>上面的方法也是官方的方法：</p>
+<h4 id="案例3（通过annotations做rewrite基本配置）"><a href="#案例3（通过annotations做rewrite基本配置）" class="headerlink" title="案例3（通过annotations做rewrite基本配置）"></a>案例3（通过annotations做rewrite基本配置）</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress-rewrite-tfs</span><br><span class="line">  namespace: test</span><br><span class="line">  annotations:</span><br><span class="line">    kubernetes.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/rewrite-target: https://gogen-test.oss-cn-hangzhou.aliyuncs.com</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    - nginx-a.gogen.cn</span><br><span class="line">    secretName: gogen.cn</span><br><span class="line">  rules:</span><br><span class="line">  - host: nginx-a.gogen.cn</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: /v1/tfs</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-a</span><br><span class="line">          servicePort: 80</span><br></pre></td></tr></table></figure>
+<p>上面的方法也是官方的方法：</p>
 <ul>
 <li>使用“nginx.ingress.kubernetes.io/rewrite-target”来定义。</li>
 </ul>
 <p>通过上面的的定义代表如果访问<a href="https://nginx-a.gogen.cn/v1/tfs/(.*)，则会rewrite为https://gogen-test.oss-cn-hangzhou.aliyuncs.com/$1，如果有多个path，每个都会被rewrite，所以如果只需要替换单个path（也就是location）的时候单独使用个manifests写。" target="_blank" rel="noopener">https://nginx-a.gogen.cn/v1/tfs/(.*)，则会rewrite为https://gogen-test.oss-cn-hangzhou.aliyuncs.com/$1，如果有多个path，每个都会被rewrite，所以如果只需要替换单个path（也就是location）的时候单独使用个manifests写。</a></p>
 <hr>
-<h4 id="案例4（介绍-nginx-ingress-kubernetes-io-server-snippet-使用方法）"><a href="#案例4（介绍-nginx-ingress-kubernetes-io-server-snippet-使用方法）" class="headerlink" title="案例4（介绍 nginx.ingress.kubernetes.io/server-snippet 使用方法）"></a>案例4（介绍 nginx.ingress.kubernetes.io/server-snippet 使用方法）</h4><pre><code>apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ingress
-  namespace: test
-  annotations:
-    kubernetes.io/ingress.class: &quot;nginx&quot;
-    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;
-    nginx.ingress.kubernetes.io/server-snippet: |
-        if ($uri ~* &quot;/v1/tfs/.*&quot;) {
-            rewrite ^/v1/tfs/(.*)$ https://gogen-test.oss-cn-hangzhou.aliyuncs.com/$1 permanent;
-        }
-spec:
-  tls:
-  - hosts:
-    - nginx-a.gogen.cn
-    secretName: gogen.cn
-  rules:
-  - host: nginx-a.gogen.cn
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: nginx-a
-          servicePort: 80
-      - path: /.*.(txt|css|doc)
-        backend:
-          serviceName: nginx-b
-          servicePort: 80
-      - path: /(api|app)/
-        backend:
-          serviceName: nginx-c
-          servicePort: 80
-      - path: /api
-        backend:
-          serviceName: nginx-d
-          servicePort: 80
-</code></pre><p>这里直接使用了“nginx.ingress.kubernetes.io/server-snippet”来指定配置，这里可以直接写nginx的配置，通过这里可以不止是实现rewrite重写，还可以实现更多的功能需求，只要是作用于server的都可以。</p>
+<h4 id="案例4（介绍-nginx-ingress-kubernetes-io-server-snippet-使用方法）"><a href="#案例4（介绍-nginx-ingress-kubernetes-io-server-snippet-使用方法）" class="headerlink" title="案例4（介绍 nginx.ingress.kubernetes.io/server-snippet 使用方法）"></a>案例4（介绍 nginx.ingress.kubernetes.io/server-snippet 使用方法）</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress</span><br><span class="line">  namespace: test</span><br><span class="line">  annotations:</span><br><span class="line">    kubernetes.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/server-snippet: |</span><br><span class="line">        if ($uri ~* &quot;/v1/tfs/.*&quot;) &#123;</span><br><span class="line">            rewrite ^/v1/tfs/(.*)$ https://gogen-test.oss-cn-hangzhou.aliyuncs.com/$1 permanent;</span><br><span class="line">        &#125;</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    - nginx-a.gogen.cn</span><br><span class="line">    secretName: gogen.cn</span><br><span class="line">  rules:</span><br><span class="line">  - host: nginx-a.gogen.cn</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: /</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-a</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /.*.(txt|css|doc)</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-b</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /(api|app)/</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-c</span><br><span class="line">          servicePort: 80</span><br><span class="line">      - path: /api</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: nginx-d</span><br><span class="line">          servicePort: 80</span><br></pre></td></tr></table></figure>
+<p>这里直接使用了“nginx.ingress.kubernetes.io/server-snippet”来指定配置，这里可以直接写nginx的配置，通过这里可以不止是实现rewrite重写，还可以实现更多的功能需求，只要是作用于server的都可以。</p>
 <hr>
 <h4 id="案例5（使用configMap做更多个性化配置）"><a href="#案例5（使用configMap做更多个性化配置）" class="headerlink" title="案例5（使用configMap做更多个性化配置）"></a>案例5（使用configMap做更多个性化配置）</h4><p>有些时候我们使用annotations并不能全完实现我们nginx灵活个性化配置，这时候就需要使用借助configMap配置。官方configMap使用文档，annotations与configMap对照关系表。</p>
-<p>首先创建一个configMap文件，如下所示：</p>
-<pre><code>apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nginx-configuration
-  namespace: kube-system
-data:
-  use-http2: &quot;false&quot;
-  ssl-protocols: &quot;TLSv1 TLSv1.1 TLSv1.2&quot;
-  ssl-ciphers: &quot;HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM&quot;
-</code></pre><p>data里面内容参考上面给出的【官方configMap使用文档】，metadata内的 name和namespace不可随意写，需要参考nginx-ingress-controller YAML配置文件的配置</p>
-<pre><code>      containers:
-      - args:
-        - /nginx-ingress-controller
-        - --configmap=$(POD_NAMESPACE)/nginx-configuration
-        - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
-        - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
-        - --annotations-prefix=nginx.ingress.kubernetes.io
-        - --publish-service=$(POD_NAMESPACE)/nginx-ingress-lb
-        - --v=2
-</code></pre><p>参考”- –configmap=$(POD_NAMESPACE)/nginx-configuration)“，其中configmap的名称空间需要与nginx-ingress-controller在同一个名称空间，名称为”/“后面的名称</p>
-<p>完成配置后apply配置清单，通过configMap配置的配置apply无法直接生效，需要重启pods，最简单的方法使用edit编辑nginx-ingress-controller的controller，改个不影响pods运行的参数，来触发pods升级，从而让我们的配置生效，如：</p>
-<pre><code>        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /healthz
-            port: 10254
-            scheme: HTTP
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
-</code></pre><p>可以将”initialDelaySeconds“改为11或者其它的，该值的含义为pod启动多少时候后开始执行健康检查，单位为秒。</p>
+<p>首先创建一个configMap文件，如下所示：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-configuration</span><br><span class="line">  namespace: kube-system</span><br><span class="line">data:</span><br><span class="line">  use-http2: &quot;false&quot;</span><br><span class="line">  ssl-protocols: &quot;TLSv1 TLSv1.1 TLSv1.2&quot;</span><br><span class="line">  ssl-ciphers: &quot;HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM&quot;</span><br></pre></td></tr></table></figure></p>
+<p>data里面内容参考上面给出的【官方configMap使用文档】，metadata内的 name和namespace不可随意写，需要参考nginx-ingress-controller YAML配置文件的配置<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">containers:</span><br><span class="line">- args:</span><br><span class="line">  - /nginx-ingress-controller</span><br><span class="line">  - --configmap=$(POD_NAMESPACE)/nginx-configuration</span><br><span class="line">  - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services</span><br><span class="line">  - --udp-services-configmap=$(POD_NAMESPACE)/udp-services</span><br><span class="line">  - --annotations-prefix=nginx.ingress.kubernetes.io</span><br><span class="line">  - --publish-service=$(POD_NAMESPACE)/nginx-ingress-lb</span><br><span class="line">  - --v=2</span><br></pre></td></tr></table></figure></p>
+<p>参考”- –configmap=$(POD_NAMESPACE)/nginx-configuration)“，其中configmap的名称空间需要与nginx-ingress-controller在同一个名称空间，名称为”/“后面的名称</p>
+<p>完成配置后apply配置清单，通过configMap配置的配置apply无法直接生效，需要重启pods，最简单的方法使用edit编辑nginx-ingress-controller的controller，改个不影响pods运行的参数，来触发pods升级，从而让我们的配置生效，如：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">livenessProbe:</span><br><span class="line">  failureThreshold: 3</span><br><span class="line">  httpGet:</span><br><span class="line">    path: /healthz</span><br><span class="line">    port: 10254</span><br><span class="line">    scheme: HTTP</span><br><span class="line">  initialDelaySeconds: 10</span><br><span class="line">  periodSeconds: 10</span><br><span class="line">  successThreshold: 1</span><br><span class="line">  timeoutSeconds: 1</span><br></pre></td></tr></table></figure></p>
+<p>可以将”initialDelaySeconds“改为11或者其它的，该值的含义为pod启动多少时候后开始执行健康检查，单位为秒。</p>
 
             <div class="post-copyright">
     <div class="content">

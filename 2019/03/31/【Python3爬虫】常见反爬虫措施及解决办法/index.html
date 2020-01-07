@@ -8,13 +8,13 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么： import requests  ur">
+  <meta name="description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl =">
 <meta name="keywords" content="python,爬虫">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Python3爬虫】常见反爬虫措施及解决办法">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么： import requests  ur">
+<meta property="og:description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl =">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/ign0DACblB5o.png?imageslim">
@@ -23,7 +23,7 @@
 <meta property="og:updated_time" content="2019-03-31T14:37:40.010Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Python3爬虫】常见反爬虫措施及解决办法">
-<meta name="twitter:description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么： import requests  ur">
+<meta name="twitter:description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl =">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim">
   
   
@@ -142,47 +142,18 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="一、UserAgent"><a href="#一、UserAgent" class="headerlink" title="一、UserAgent"></a>一、UserAgent</h3><p>UserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：</p>
-<pre><code>import requests
-
-url = &quot;http://www.baidu.com&quot;
-res = requests.get(url)
-</code></pre><h4 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h4><p>1、收集整理常见的UserAgent以供使用</p>
-<pre><code>ua_list = 
-    [&quot;Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,
-    &quot;Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,
-    &quot;MQQBrowser/25 (Linux; U; 2.3.3; zh-cn; HTC Desire S Build/GRI40;480*800)&quot;,
-    &quot;Mozilla/5.0 (Linux; U; Android 2.3.3; zh-cn; HTC_DesireS_S510e Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1&quot;,
-    &quot;Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2 NokiaE75-1 /110.48.125 Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413&quot; ...]
-</code></pre><p>2、使用第三方库–fake_useragent<br>使用方法如下：</p>
-<pre><code>from fake_useragent import UserAgent
-
-ua = UserAgent()
-for i in range(3):
-    print(ua.random)
-</code></pre><p>剖析：</p>
-<pre><code>print(ua.ie)   #随机打印ie浏览器任意版本
-print(ua.firefox) #随机打印firefox浏览器任意版本
-print(ua.chrome)  #随机打印chrome浏览器任意版本
-print(ua.random)  #随机打印任意厂家的浏览器
-</code></pre><h3 id="二、IP"><a href="#二、IP" class="headerlink" title="二、IP"></a>二、IP</h3><p>对于一些网站来说，如果某个IP在单位时间里的访问次数超过了某个阈值，那么服务器就会ban掉这个IP了，它就会返回给你一些错误的数据。一般来说，当我们的IP被ban了，我们的爬虫也就无法正常获取数据了，但是用浏览器还是可以正常访问，但是如果用浏览器都无法访问，那就真的GG了。很多网站都会对IP进行检测，比如知乎，如果单个IP访问频率过高就会被封掉。</p>
+            <h3 id="一、UserAgent"><a href="#一、UserAgent" class="headerlink" title="一、UserAgent"></a>一、UserAgent</h3><p>UserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &quot;http://www.baidu.com&quot;</span><br><span class="line">res = requests.get(url)</span><br></pre></td></tr></table></figure></p>
+<h4 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h4><p>1、收集整理常见的UserAgent以供使用<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ua_list = </span><br><span class="line">    [&quot;Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,</span><br><span class="line">    &quot;MQQBrowser/25 (Linux; U; 2.3.3; zh-cn; HTC Desire S Build/GRI40;480*800)&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Linux; U; Android 2.3.3; zh-cn; HTC_DesireS_S510e Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2 NokiaE75-1 /110.48.125 Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413&quot; ...]</span><br></pre></td></tr></table></figure></p>
+<p>2、使用第三方库–fake_useragent<br>使用方法如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from fake_useragent import UserAgent</span><br><span class="line"></span><br><span class="line">ua = UserAgent()</span><br><span class="line">for i in range(3):</span><br><span class="line">    print(ua.random)</span><br></pre></td></tr></table></figure></p>
+<p>剖析：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">print(ua.ie)   #随机打印ie浏览器任意版本</span><br><span class="line">print(ua.firefox) #随机打印firefox浏览器任意版本</span><br><span class="line">print(ua.chrome)  #随机打印chrome浏览器任意版本</span><br><span class="line">print(ua.random)  #随机打印任意厂家的浏览器</span><br></pre></td></tr></table></figure></p>
+<h3 id="二、IP"><a href="#二、IP" class="headerlink" title="二、IP"></a>二、IP</h3><p>对于一些网站来说，如果某个IP在单位时间里的访问次数超过了某个阈值，那么服务器就会ban掉这个IP了，它就会返回给你一些错误的数据。一般来说，当我们的IP被ban了，我们的爬虫也就无法正常获取数据了，但是用浏览器还是可以正常访问，但是如果用浏览器都无法访问，那就真的GG了。很多网站都会对IP进行检测，比如知乎，如果单个IP访问频率过高就会被封掉。</p>
 <h4 id="解决办法：-1"><a href="#解决办法：-1" class="headerlink" title="解决办法："></a>解决办法：</h4><p>使用代理IP。网上有很多免费代理和付费代理可供选择，免费代理比如：西刺代理、快代理等等，付费代理比如：代理云、阿布云等等。</p>
 <h3 id="三、Referer防盗链"><a href="#三、Referer防盗链" class="headerlink" title="三、Referer防盗链"></a>三、Referer防盗链</h3><p>防盗链主要是针对客户端请求过程中所携带的一些关键信息来验证请求的合法性，而防盗链又有很多种，比如Referer防盗链，还有Cookie防盗链和时间戳防盗链。</p>
 <p>Cookie防盗链常见于论坛、社区。当访客请求一个资源的时候，他会检查这个访客的Cookie，如果不是他自己的用户的Cookie，就不会给这个访客正确的资源，也就达到了防盗的目的。时间戳防盗链指的是在他的url后面加上一个时间戳参数，所以如果你直接请求网站的url是无法得到真实的页面的，只有带上时间戳才可以。</p>
 <p>这次的例子是<a href="http://pp.tianya.cn/" target="_blank" rel="noopener">天涯社区的图片分社区</a>：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim" alt="mark"></p>
-<p>这里我们先打开开发者工具，然后任意选择一张图片，得到这个图片的链接，然后用requests来下载一下这张图片，注意带上Referer字段，看结果如何：</p>
-<pre><code>import requests
-
-url = &quot;http://img3.laibafile.cn/p/l/305989961.jpg&quot;
-headers = {
-    &quot;Referer&quot;: &quot;http://pp.tianya.cn/&quot;,
-    &quot;UserAgent&quot;:&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36&quot;
-}
-res = requests.get(url)
-with open(&#39;test.jpg&#39;, &#39;wb&#39;) as f:
-    f.write(res.content)
-</code></pre><p>我们的爬虫正常运行了，也看到生成了一个test.jpg文件，先别急着高兴，打开图片看一下：</p>
+<p>这里我们先打开开发者工具，然后任意选择一张图片，得到这个图片的链接，然后用requests来下载一下这张图片，注意带上Referer字段，看结果如何：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &quot;http://img3.laibafile.cn/p/l/305989961.jpg&quot;</span><br><span class="line">headers = &#123;</span><br><span class="line">    &quot;Referer&quot;: &quot;http://pp.tianya.cn/&quot;,</span><br><span class="line">    &quot;UserAgent&quot;:&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36&quot;</span><br><span class="line">&#125;</span><br><span class="line">res = requests.get(url)</span><br><span class="line">with open(&apos;test.jpg&apos;, &apos;wb&apos;) as f:</span><br><span class="line">    f.write(res.content)</span><br></pre></td></tr></table></figure></p>
+<p>我们的爬虫正常运行了，也看到生成了一个test.jpg文件，先别急着高兴，打开图片看一下：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190331/ign0DACblB5o.png?imageslim" alt="mark"></p>
 <h4 id="解决办法：-2"><a href="#解决办法：-2" class="headerlink" title="解决办法："></a>解决办法：</h4><p>既然他说仅供天涯社区用户分享，那我们也成为他的用户不就行了吗？二话不说就去注册了个账号，然后登录，再拿到登录后的Cookie：</p>
 <p>注意：Cookie是有时效性的，具体多久就会失效我没测试。紧接着把Cookie添加到代码中，然后运行，可以看到成功把图片下载下来了；</p>
@@ -190,62 +161,9 @@ with open(&#39;test.jpg&#39;, &#39;wb&#39;) as f:
 <p><img src="http://myimage.okay686.cn/okay686cn/20190331/MVyHb54OJ3I7.png?imageslim" alt="mark"></p>
 <p>我们立马反应过来这是通过AJAX来加载的，于是打开开发者工具查看，可以找到如下内容：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190331/lxdyXKrzwVl7.png?imageslim" alt="mark"></p>
-<p>可以看到每个链接“？”前面的部分都是基本一样的，“list_”后面跟的数字表示页数，而“_=”后面这一串数字是什么呢？有经验的人很快就能意识到这是一个时间戳，所以我们来测试一下：</p>
-<pre><code>import time
-import requests
+<p>可以看到每个链接“？”前面的部分都是基本一样的，“list_”后面跟的数字表示页数，而“_=”后面这一串数字是什么呢？有经验的人很快就能意识到这是一个时间戳，所以我们来测试一下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import time</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">t = time.time()*1000</span><br><span class="line">url = &quot;http://pp.tianya.cn/qt/list_4.shtml?_=&#123;&#125;&quot;.format(t)</span><br><span class="line">res = requests.get(url)</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure></p>
+<p>最后编写程序并运行：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import re</span><br><span class="line">import time</span><br><span class="line">import requests</span><br><span class="line">from fake_useragent import UserAgent</span><br><span class="line"></span><br><span class="line">ua = UserAgent()</span><br><span class="line">headers = &#123;</span><br><span class="line">    &quot;Referer&quot;: &quot;http://pp.tianya.cn/&quot;,</span><br><span class="line">    &quot;Cookie&quot;: &quot;user=w=ASD9577&amp;id=139400111&amp;f=1; right=web4=n&amp;portal=n; __u_a=v2.2.4; sso=r=2037194054&amp;sid=&amp;wsid=54DECCFD58BB393C19060A02D963FFFC; temp=k=32072170&amp;s=&amp;t=1553817544&amp;b=bdacde9b28f59113991fd271bdba3f65&amp;ct=1553817544&amp;et=1556409544; temp4=rm=0e74c53c8e0cfe3ec18596583e42c38f; ty_msg=1553817664458_139400111_2_0_0_0_0_0_2_0_0_0_0_0; bbs_msg=1553817664463_139400111_0_0_0_0; time=ct=1553817677.647&quot;,</span><br><span class="line">    &quot;UserAgent&quot;: ua.random</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def crawl(url):</span><br><span class="line">    res = requests.get(url, headers=headers)</span><br><span class="line">    res.encoding = &quot;utf-8&quot;</span><br><span class="line">    print(&quot;status_code:&quot;, res.status_code)</span><br><span class="line">    # print(&quot;res.text:&quot;, res.text)</span><br><span class="line">    if res.status_code == 200:</span><br><span class="line">        # result = re.findall(r&apos;src=&quot;.*?&quot; alt=&quot;.*?&quot;&apos;, res.text)</span><br><span class="line">        result = re.findall(&apos;&lt;img.+src=&quot;(.*?)&quot; alt=&quot;(.*?)&quot;.+&gt;&apos;, res.text)</span><br><span class="line">        print(result)</span><br><span class="line">        for i in result:</span><br><span class="line">            # print(&quot;iiiiiiiiiii&quot;, i[0], i[1])</span><br><span class="line">            download(i[0], i[1])</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;Error Request!&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def download(href, name):</span><br><span class="line">    try:</span><br><span class="line">        res = requests.get(href, headers=headers)</span><br><span class="line">        with open(&apos;&#123;&#125;.jpg&apos;.format(name), &apos;wb&apos;) as f:</span><br><span class="line">            f.write(res.content)</span><br><span class="line">            print(&apos;[INFO]&#123;&#125;.jpg已下载！&apos;.format(name))</span><br><span class="line">    except:</span><br><span class="line">        print(&quot;Error Download!&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    for num in range(1, 3):  # 最大页数2页</span><br><span class="line">        time.sleep(2)</span><br><span class="line">        t = int(time.time() * 1000)  # 获取13位时间戳</span><br><span class="line">        print(t)</span><br><span class="line">        page_url = &quot;http://pp.tianya.cn/qt/list_&#123;&#125;.shtml?_=&#123;&#125;&quot;.format(num, t)  # 构造链接</span><br><span class="line">        crawl(page_url)</span><br></pre></td></tr></table></figure></p>
 
-t = time.time()*1000
-url = &quot;http://pp.tianya.cn/qt/list_4.shtml?_={}&quot;.format(t)
-res = requests.get(url)
-print(res.text)
-</code></pre><p>最后编写程序并运行：</p>
-<pre><code>import re
-import time
-import requests
-from fake_useragent import UserAgent
-
-ua = UserAgent()
-headers = {
-    &quot;Referer&quot;: &quot;http://pp.tianya.cn/&quot;,
-    &quot;Cookie&quot;: &quot;user=w=ASD9577&amp;id=139400111&amp;f=1; right=web4=n&amp;portal=n; __u_a=v2.2.4; sso=r=2037194054&amp;sid=&amp;wsid=54DECCFD58BB393C19060A02D963FFFC; temp=k=32072170&amp;s=&amp;t=1553817544&amp;b=bdacde9b28f59113991fd271bdba3f65&amp;ct=1553817544&amp;et=1556409544; temp4=rm=0e74c53c8e0cfe3ec18596583e42c38f; ty_msg=1553817664458_139400111_2_0_0_0_0_0_2_0_0_0_0_0; bbs_msg=1553817664463_139400111_0_0_0_0; time=ct=1553817677.647&quot;,
-    &quot;UserAgent&quot;: ua.random
-}
-
-
-def crawl(url):
-    res = requests.get(url, headers=headers)
-    res.encoding = &quot;utf-8&quot;
-    print(&quot;status_code:&quot;, res.status_code)
-    # print(&quot;res.text:&quot;, res.text)
-    if res.status_code == 200:
-        # result = re.findall(r&#39;src=&quot;.*?&quot; alt=&quot;.*?&quot;&#39;, res.text)
-        result = re.findall(&#39;&lt;img.+src=&quot;(.*?)&quot; alt=&quot;(.*?)&quot;.+&gt;&#39;, res.text)
-        print(result)
-        for i in result:
-            # print(&quot;iiiiiiiiiii&quot;, i[0], i[1])
-            download(i[0], i[1])
-    else:
-        print(&quot;Error Request!&quot;)
-
-
-def download(href, name):
-    try:
-        res = requests.get(href, headers=headers)
-        with open(&#39;{}.jpg&#39;.format(name), &#39;wb&#39;) as f:
-            f.write(res.content)
-            print(&#39;[INFO]{}.jpg已下载！&#39;.format(name))
-    except:
-        print(&quot;Error Download!&quot;)
-
-
-if __name__ == &#39;__main__&#39;:
-    for num in range(1, 3):  # 最大页数2页
-        time.sleep(2)
-        t = int(time.time() * 1000)  # 获取13位时间戳
-        print(t)
-        page_url = &quot;http://pp.tianya.cn/qt/list_{}.shtml?_={}&quot;.format(num, t)  # 构造链接
-        crawl(page_url)
-</code></pre>
             <div class="post-copyright">
     <div class="content">
         <p>最后更新： 2019年03月31日 22:37</p>

@@ -8,20 +8,20 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件： y">
+  <meta name="description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件：yu">
 <meta name="keywords" content="django,python,CMDB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMDB-Linux下收集数据（五）">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/03/04/5、Linux下收集数据/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件： y">
+<meta property="og:description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件：yu">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190304/fWKMrrjIgh2p.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190304/WUx9PrE2BOMP.png?imageslim">
 <meta property="og:updated_time" content="2019-04-20T07:01:24.342Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMDB-Linux下收集数据（五）">
-<meta name="twitter:description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件： y">
+<meta name="twitter:description" content="Linux下收集数据就有很多命令和工具了，比Windows方便多了。 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。 下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码： 前提需要现在被收集的虚机上面安装必须的组件：yu">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190304/fWKMrrjIgh2p.png?imageslim">
   
   
@@ -143,281 +143,11 @@
             <p>Linux下收集数据就有很多命令和工具了，比Windows方便多了。</p>
 <p>但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。</p>
 <p>下面，我们在<strong>Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件</strong>，写入下面的代码：</p>
-<p>前提需要现在被收集的虚机上面安装必须的组件：</p>
-<pre><code>yum install -y lsb
-</code></pre><p>关于disk的获取与原著有差别，更容易理解：</p>
-<pre><code>##获取厂商：
-[root@python_master pythontest]# dmidecode -s system-manufacturer
-VMware, Inc.
-
-##获取型号：
-[root@python_master pythontest]# dmidecode -s system-product-name
-VMware Virtual Platform
-
-##获取sn：
-[root@python_master pythontest]# dmidecode -s system-serial-number
-VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60
-</code></pre><pre><code>#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time    : 2019-3-3 13:16
-# @Author  : zhdya@zhdya.cn
-# @File    : sys_info.py
-
-import subprocess
-
-
-def collect():
-    filter_keys = [&#39;Manufacturer&#39;, &#39;Serial Number&#39;, &#39;Product Name&#39;, &#39;UUID&#39;, &#39;Wake-up Type&#39;]
-    raw_data = {}
-
-    for key in filter_keys:
-        try:
-            res = subprocess.Popen(&quot;sudo dmidecode -t system|grep &#39;%s&#39;&quot; % key,
-                                   stdout=subprocess.PIPE, shell=True)
-            result = res.stdout.read().decode()
-            data_list = result.split(&#39;:&#39;)
-
-            if len(data_list) &gt; 1:
-                raw_data[key] = data_list[1].strip()
-            else:
-                raw_data[key] = -1
-        except Exception as e:
-            print(e)
-            raw_data[key] = -2
-
-    data = dict()
-    data[&#39;asset_type&#39;] = &#39;server&#39;
-    data[&#39;manufacturer&#39;] = raw_data[&#39;Manufacturer&#39;]
-    data[&#39;sn&#39;] = raw_data[&#39;Serial Number&#39;]
-    data[&#39;model&#39;] = raw_data[&#39;Product Name&#39;]
-    data[&#39;uuid&#39;] = raw_data[&#39;UUID&#39;]
-    data[&#39;wake_up_type&#39;] = raw_data[&#39;Wake-up Type&#39;]
-
-    data.update(get_os_info())
-    data.update(get_cpu_info())
-    data.update(get_ram_info())
-    data.update(get_nic_info())
-    data.update(get_disk_info())
-    return data
-
-
-def get_os_info():
-    &quot;&quot;&quot;
-    获取操作系统信息
-    :return:
-    &quot;&quot;&quot;
-    distributor = subprocess.Popen(&quot;lsb_release -a|grep &#39;Distributor ID&#39;&quot;,
-                                   stdout=subprocess.PIPE, shell=True)
-    distributor = distributor.stdout.read().decode().split(&quot;:&quot;)
-
-    release = subprocess.Popen(&quot;lsb_release -a|grep &#39;Description&#39;&quot;,
-                               stdout=subprocess.PIPE, shell=True)
-
-    release = release.stdout.read().decode().split(&quot;:&quot;)
-    data_dic = {
-        &quot;os_distribution&quot;: distributor[1].strip() if len(distributor) &gt; 1 else &quot;&quot;,
-        &quot;os_release&quot;: release[1].strip() if len(release) &gt; 1 else &quot;&quot;,
-        &quot;os_type&quot;: &quot;Linux&quot;,
-    }
-    return data_dic
-
-
-def get_cpu_info():
-    &quot;&quot;&quot;
-    获取cpu信息
-    :return:
-    &quot;&quot;&quot;
-    base_cmd = &#39;cat /proc/cpuinfo&#39;
-
-    raw_data = {
-        &#39;cpu_model&#39;: &quot;%s |grep &#39;model name&#39; |head -1 &quot; % base_cmd,
-        &#39;cpu_count&#39;:  &quot;%s |grep  &#39;processor&#39;|wc -l &quot; % base_cmd,
-        &#39;cpu_core_count&#39;: &quot;%s |grep &#39;cpu cores&#39; |awk -F: &#39;{SUM +=$2} END {print SUM}&#39;&quot; % base_cmd,
-    }
-
-    for key, cmd in raw_data.items():
-        try:
-            cmd_res = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-            raw_data[key] = cmd_res.stdout.read().decode().strip()
-        except ValueError as e:
-            print(e)
-            raw_data[key] = &quot;&quot;
-
-    data = {
-        &quot;cpu_count&quot;: raw_data[&quot;cpu_count&quot;],
-        &quot;cpu_core_count&quot;: raw_data[&quot;cpu_core_count&quot;]
-        }
-
-    cpu_model = raw_data[&quot;cpu_model&quot;].split(&quot;:&quot;)
-
-    if len(cpu_model) &gt; 1:
-        data[&quot;cpu_model&quot;] = cpu_model[1].strip()
-    else:
-        data[&quot;cpu_model&quot;] = -1
-
-    return data
-
-
-def get_ram_info():
-    &quot;&quot;&quot;
-    获取内存信息
-    :return:
-    &quot;&quot;&quot;
-    raw_data = subprocess.Popen(&quot;sudo dmidecode -t memory&quot;, stdout=subprocess.PIPE, shell=True)
-    raw_list = raw_data.stdout.read().decode().split(&quot;\n&quot;)
-    raw_ram_list = []
-    item_list = []
-    for line in raw_list:
-        if line.startswith(&quot;Memory Device&quot;):
-            raw_ram_list.append(item_list)
-            item_list = []
-        else:
-            item_list.append(line.strip())
-
-    ram_list = []
-    for item in raw_ram_list:
-        item_ram_size = 0
-        ram_item_to_dic = {}
-        for i in item:
-            data = i.split(&quot;:&quot;)
-            if len(data) == 2:
-                key, v = data
-                if key == &#39;Size&#39;:
-                    if v.strip() != &quot;No Module Installed&quot;:
-                        ram_item_to_dic[&#39;capacity&#39;] = v.split()[0].strip()
-                        item_ram_size = round(float(v.split()[0]))
-                    else:
-                        ram_item_to_dic[&#39;capacity&#39;] = 0
-
-                if key == &#39;Type&#39;:
-                    ram_item_to_dic[&#39;model&#39;] = v.strip()
-                if key == &#39;Manufacturer&#39;:
-                    ram_item_to_dic[&#39;manufacturer&#39;] = v.strip()
-                if key == &#39;Serial Number&#39;:
-                    ram_item_to_dic[&#39;sn&#39;] = v.strip()
-                if key == &#39;Asset Tag&#39;:
-                    ram_item_to_dic[&#39;asset_tag&#39;] = v.strip()
-                if key == &#39;Locator&#39;:
-                    ram_item_to_dic[&#39;slot&#39;] = v.strip()
-
-        if item_ram_size == 0:
-            pass
-        else:
-            ram_list.append(ram_item_to_dic)
-
-    raw_total_size = subprocess.Popen(&quot;cat /proc/meminfo|grep MemTotal &quot;, stdout=subprocess.PIPE, shell=True)
-    raw_total_size = raw_total_size.stdout.read().decode().split(&quot;:&quot;)
-    ram_data = {&#39;ram&#39;: ram_list}
-    if len(raw_total_size) == 2:
-        total_gb_size = int(raw_total_size[1].split()[0]) / 1024**2
-        ram_data[&#39;ram_size&#39;] = total_gb_size
-
-    return ram_data
-
-
-def get_nic_info():
-    &quot;&quot;&quot;
-    获取网卡信息
-    :return:
-    &quot;&quot;&quot;
-    raw_data = subprocess.Popen(&quot;ifconfig -a&quot;, stdout=subprocess.PIPE, shell=True)
-
-    raw_data = raw_data.stdout.read().decode().split(&quot;\n&quot;)
-
-    nic_dic = dict()
-    next_ip_line = False
-    last_mac_addr = None
-
-    for line in raw_data:
-        if next_ip_line:
-            next_ip_line = False
-            nic_name = last_mac_addr.split()[0]
-            mac_addr = last_mac_addr.split(&quot;HWaddr&quot;)[1].strip()
-            raw_ip_addr = line.split(&quot;inet addr:&quot;)
-            raw_bcast = line.split(&quot;Bcast:&quot;)
-            raw_netmask = line.split(&quot;Mask:&quot;)
-            if len(raw_ip_addr) &gt; 1:
-                ip_addr = raw_ip_addr[1].split()[0]
-                network = raw_bcast[1].split()[0]
-                netmask = raw_netmask[1].split()[0]
-            else:
-                ip_addr = None
-                network = None
-                netmask = None
-            if mac_addr not in nic_dic:
-                nic_dic[mac_addr] = {&#39;name&#39;: nic_name,
-                                     &#39;mac&#39;: mac_addr,
-                                     &#39;net_mask&#39;: netmask,
-                                     &#39;network&#39;: network,
-                                     &#39;bonding&#39;: 0,
-                                     &#39;model&#39;: &#39;unknown&#39;,
-                                     &#39;ip_address&#39;: ip_addr,
-                                     }
-            else:
-                if &#39;%s_bonding_addr&#39; % (mac_addr,) not in nic_dic:
-                    random_mac_addr = &#39;%s_bonding_addr&#39; % (mac_addr,)
-                else:
-                    random_mac_addr = &#39;%s_bonding_addr2&#39; % (mac_addr,)
-
-                nic_dic[random_mac_addr] = {&#39;name&#39;: nic_name,
-                                            &#39;mac&#39;: random_mac_addr,
-                                            &#39;net_mask&#39;: netmask,
-                                            &#39;network&#39;: network,
-                                            &#39;bonding&#39;: 1,
-                                            &#39;model&#39;: &#39;unknown&#39;,
-                                            &#39;ip_address&#39;: ip_addr,
-                                            }
-
-        if &quot;HWaddr&quot; in line:
-            next_ip_line = True
-            last_mac_addr = line
-    nic_list = []
-    for k, v in nic_dic.items():
-        nic_list.append(v)
-
-    return {&#39;nic&#39;: nic_list}
-
-
-def get_disk_info():
-    &quot;&quot;&quot;
-    获取存储信息。
-    本脚本只针对centos7.6中使用sda2，且只有一块虚拟硬盘的情况。
-    具体查看硬盘信息的命令，请根据实际情况，实际调整。
-    如果需要查看Raid信息，可以尝试MegaCli工具。
-    :return:
-    &quot;&quot;&quot;
-    sn_raw_data = subprocess.Popen(&quot;sudo dmidecode -s system-serial-number&quot;, stdout=subprocess.PIPE, shell=True)
-    sn = sn_raw_data.stdout.read().decode()
-    model_raw_data = subprocess.Popen(&quot;sudo dmidecode -s system-product-name&quot;, stdout=subprocess.PIPE, shell=True)
-    model = model_raw_data.stdout.read().decode()
-
-    #size_data = subprocess.Popen(&quot;sudo fdisk -l /dev/sda2 | grep Disk|head -1&quot;, stdout=subprocess.PIPE, shell=True)
-    #size_data = size_data.stdout.read().decode()
-    #size = size_data.split(&quot;:&quot;)[1].strip().split(&quot; &quot;)[0]
-
-    size_raw_data = subprocess.Popen(&quot;sudo smartctl -a /dev/sda2 |grep Capacity&quot;, stdout=subprocess.PIPE, shell=True)
-    raw_data = size_raw_data.stdout.read().decode()
-    data_list = raw_data.split()[4]
-    size = data_list.split(&#39;[&#39;)[1]
-
-
-    result = {&#39;physical_disk_driver&#39;: []}
-    disk_dict = dict()
-    disk_dict[&quot;model&quot;] = model
-    disk_dict[&quot;size&quot;] = size
-    disk_dict[&quot;sn&quot;] = sn
-    result[&#39;physical_disk_driver&#39;].append(disk_dict)
-
-    return result
-
-
-if __name__ == &quot;__main__&quot;:
-    # 收集信息功能测试
-    d = collect()
-    print(d)
-</code></pre><p>先来个输出在 centos7.6虚机上面的测试（可以读出所有数据）：</p>
-<pre><code>{&#39;asset_type&#39;: &#39;server&#39;, &#39;manufacturer&#39;: &#39;VMware, Inc.&#39;, &#39;sn&#39;: &#39;VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60&#39;, &#39;model&#39;: &#39;VMware Virtual Platform&#39;, &#39;uuid&#39;: &#39;68254d56-ee5c-fbdc-a15e-776a5fe76660&#39;, &#39;wake_up_type&#39;: &#39;Power Switch&#39;, &#39;os_distribution&#39;: &#39;CentOS&#39;, &#39;os_release&#39;: &#39;CentOS Linux release 7.6.1810 (Core)&#39;, &#39;os_type&#39;: &#39;Linux&#39;, &#39;cpu_count&#39;: &#39;1&#39;, &#39;cpu_core_count&#39;: &#39;1&#39;, &#39;cpu_model&#39;: &#39;Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz&#39;, &#39;ram&#39;: [{&#39;capacity&#39;: &#39;1024&#39;, &#39;slot&#39;: &#39;RAM slot #0&#39;, &#39;model&#39;: &#39;DRAM&#39;, &#39;manufacturer&#39;: &#39;Not Specified&#39;, &#39;sn&#39;: &#39;Not Specified&#39;, &#39;asset_tag&#39;: &#39;Not Specified&#39;}], &#39;ram_size&#39;: 0.9497604370117188, &#39;nic&#39;: [], &#39;physical_disk_driver&#39;: [{&#39;model&#39;: &#39;VMware Virtual Platform\n&#39;, &#39;size&#39;: &#39;32.2&#39;, &#39;sn&#39;: &#39;VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60\n&#39;}]}
-</code></pre><p>代码整体没有什么难点，无非就是使用subprocess.Popen()方法执行Linux的命令，然后获取返回值，并以规定的格式打包到data字典里。</p>
+<p>前提需要现在被收集的虚机上面安装必须的组件：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install -y lsb</span><br></pre></td></tr></table></figure></p>
+<p>关于disk的获取与原著有差别，更容易理解：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">##获取厂商：</span><br><span class="line">[root@python_master pythontest]# dmidecode -s system-manufacturer</span><br><span class="line">VMware, Inc.</span><br><span class="line"></span><br><span class="line">##获取型号：</span><br><span class="line">[root@python_master pythontest]# dmidecode -s system-product-name</span><br><span class="line">VMware Virtual Platform</span><br><span class="line"></span><br><span class="line">##获取sn：</span><br><span class="line">[root@python_master pythontest]# dmidecode -s system-serial-number</span><br><span class="line">VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-3 13:16</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : sys_info.py</span><br><span class="line"></span><br><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def collect():</span><br><span class="line">    filter_keys = [&apos;Manufacturer&apos;, &apos;Serial Number&apos;, &apos;Product Name&apos;, &apos;UUID&apos;, &apos;Wake-up Type&apos;]</span><br><span class="line">    raw_data = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    for key in filter_keys:</span><br><span class="line">        try:</span><br><span class="line">            res = subprocess.Popen(&quot;sudo dmidecode -t system|grep &apos;%s&apos;&quot; % key,</span><br><span class="line">                                   stdout=subprocess.PIPE, shell=True)</span><br><span class="line">            result = res.stdout.read().decode()</span><br><span class="line">            data_list = result.split(&apos;:&apos;)</span><br><span class="line"></span><br><span class="line">            if len(data_list) &gt; 1:</span><br><span class="line">                raw_data[key] = data_list[1].strip()</span><br><span class="line">            else:</span><br><span class="line">                raw_data[key] = -1</span><br><span class="line">        except Exception as e:</span><br><span class="line">            print(e)</span><br><span class="line">            raw_data[key] = -2</span><br><span class="line"></span><br><span class="line">    data = dict()</span><br><span class="line">    data[&apos;asset_type&apos;] = &apos;server&apos;</span><br><span class="line">    data[&apos;manufacturer&apos;] = raw_data[&apos;Manufacturer&apos;]</span><br><span class="line">    data[&apos;sn&apos;] = raw_data[&apos;Serial Number&apos;]</span><br><span class="line">    data[&apos;model&apos;] = raw_data[&apos;Product Name&apos;]</span><br><span class="line">    data[&apos;uuid&apos;] = raw_data[&apos;UUID&apos;]</span><br><span class="line">    data[&apos;wake_up_type&apos;] = raw_data[&apos;Wake-up Type&apos;]</span><br><span class="line"></span><br><span class="line">    data.update(get_os_info())</span><br><span class="line">    data.update(get_cpu_info())</span><br><span class="line">    data.update(get_ram_info())</span><br><span class="line">    data.update(get_nic_info())</span><br><span class="line">    data.update(get_disk_info())</span><br><span class="line">    return data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_os_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取操作系统信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    distributor = subprocess.Popen(&quot;lsb_release -a|grep &apos;Distributor ID&apos;&quot;,</span><br><span class="line">                                   stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    distributor = distributor.stdout.read().decode().split(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">    release = subprocess.Popen(&quot;lsb_release -a|grep &apos;Description&apos;&quot;,</span><br><span class="line">                               stdout=subprocess.PIPE, shell=True)</span><br><span class="line"></span><br><span class="line">    release = release.stdout.read().decode().split(&quot;:&quot;)</span><br><span class="line">    data_dic = &#123;</span><br><span class="line">        &quot;os_distribution&quot;: distributor[1].strip() if len(distributor) &gt; 1 else &quot;&quot;,</span><br><span class="line">        &quot;os_release&quot;: release[1].strip() if len(release) &gt; 1 else &quot;&quot;,</span><br><span class="line">        &quot;os_type&quot;: &quot;Linux&quot;,</span><br><span class="line">    &#125;</span><br><span class="line">    return data_dic</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_cpu_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取cpu信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    base_cmd = &apos;cat /proc/cpuinfo&apos;</span><br><span class="line"></span><br><span class="line">    raw_data = &#123;</span><br><span class="line">        &apos;cpu_model&apos;: &quot;%s |grep &apos;model name&apos; |head -1 &quot; % base_cmd,</span><br><span class="line">        &apos;cpu_count&apos;:  &quot;%s |grep  &apos;processor&apos;|wc -l &quot; % base_cmd,</span><br><span class="line">        &apos;cpu_core_count&apos;: &quot;%s |grep &apos;cpu cores&apos; |awk -F: &apos;&#123;SUM +=$2&#125; END &#123;print SUM&#125;&apos;&quot; % base_cmd,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for key, cmd in raw_data.items():</span><br><span class="line">        try:</span><br><span class="line">            cmd_res = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">            raw_data[key] = cmd_res.stdout.read().decode().strip()</span><br><span class="line">        except ValueError as e:</span><br><span class="line">            print(e)</span><br><span class="line">            raw_data[key] = &quot;&quot;</span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">        &quot;cpu_count&quot;: raw_data[&quot;cpu_count&quot;],</span><br><span class="line">        &quot;cpu_core_count&quot;: raw_data[&quot;cpu_core_count&quot;]</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    cpu_model = raw_data[&quot;cpu_model&quot;].split(&quot;:&quot;)</span><br><span class="line"></span><br><span class="line">    if len(cpu_model) &gt; 1:</span><br><span class="line">        data[&quot;cpu_model&quot;] = cpu_model[1].strip()</span><br><span class="line">    else:</span><br><span class="line">        data[&quot;cpu_model&quot;] = -1</span><br><span class="line"></span><br><span class="line">    return data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_ram_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取内存信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    raw_data = subprocess.Popen(&quot;sudo dmidecode -t memory&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    raw_list = raw_data.stdout.read().decode().split(&quot;\n&quot;)</span><br><span class="line">    raw_ram_list = []</span><br><span class="line">    item_list = []</span><br><span class="line">    for line in raw_list:</span><br><span class="line">        if line.startswith(&quot;Memory Device&quot;):</span><br><span class="line">            raw_ram_list.append(item_list)</span><br><span class="line">            item_list = []</span><br><span class="line">        else:</span><br><span class="line">            item_list.append(line.strip())</span><br><span class="line"></span><br><span class="line">    ram_list = []</span><br><span class="line">    for item in raw_ram_list:</span><br><span class="line">        item_ram_size = 0</span><br><span class="line">        ram_item_to_dic = &#123;&#125;</span><br><span class="line">        for i in item:</span><br><span class="line">            data = i.split(&quot;:&quot;)</span><br><span class="line">            if len(data) == 2:</span><br><span class="line">                key, v = data</span><br><span class="line">                if key == &apos;Size&apos;:</span><br><span class="line">                    if v.strip() != &quot;No Module Installed&quot;:</span><br><span class="line">                        ram_item_to_dic[&apos;capacity&apos;] = v.split()[0].strip()</span><br><span class="line">                        item_ram_size = round(float(v.split()[0]))</span><br><span class="line">                    else:</span><br><span class="line">                        ram_item_to_dic[&apos;capacity&apos;] = 0</span><br><span class="line"></span><br><span class="line">                if key == &apos;Type&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;model&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Manufacturer&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;manufacturer&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Serial Number&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;sn&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Asset Tag&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;asset_tag&apos;] = v.strip()</span><br><span class="line">                if key == &apos;Locator&apos;:</span><br><span class="line">                    ram_item_to_dic[&apos;slot&apos;] = v.strip()</span><br><span class="line"></span><br><span class="line">        if item_ram_size == 0:</span><br><span class="line">            pass</span><br><span class="line">        else:</span><br><span class="line">            ram_list.append(ram_item_to_dic)</span><br><span class="line"></span><br><span class="line">    raw_total_size = subprocess.Popen(&quot;cat /proc/meminfo|grep MemTotal &quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    raw_total_size = raw_total_size.stdout.read().decode().split(&quot;:&quot;)</span><br><span class="line">    ram_data = &#123;&apos;ram&apos;: ram_list&#125;</span><br><span class="line">    if len(raw_total_size) == 2:</span><br><span class="line">        total_gb_size = int(raw_total_size[1].split()[0]) / 1024**2</span><br><span class="line">        ram_data[&apos;ram_size&apos;] = total_gb_size</span><br><span class="line"></span><br><span class="line">    return ram_data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_nic_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取网卡信息</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    raw_data = subprocess.Popen(&quot;ifconfig -a&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line"></span><br><span class="line">    raw_data = raw_data.stdout.read().decode().split(&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    nic_dic = dict()</span><br><span class="line">    next_ip_line = False</span><br><span class="line">    last_mac_addr = None</span><br><span class="line"></span><br><span class="line">    for line in raw_data:</span><br><span class="line">        if next_ip_line:</span><br><span class="line">            next_ip_line = False</span><br><span class="line">            nic_name = last_mac_addr.split()[0]</span><br><span class="line">            mac_addr = last_mac_addr.split(&quot;HWaddr&quot;)[1].strip()</span><br><span class="line">            raw_ip_addr = line.split(&quot;inet addr:&quot;)</span><br><span class="line">            raw_bcast = line.split(&quot;Bcast:&quot;)</span><br><span class="line">            raw_netmask = line.split(&quot;Mask:&quot;)</span><br><span class="line">            if len(raw_ip_addr) &gt; 1:</span><br><span class="line">                ip_addr = raw_ip_addr[1].split()[0]</span><br><span class="line">                network = raw_bcast[1].split()[0]</span><br><span class="line">                netmask = raw_netmask[1].split()[0]</span><br><span class="line">            else:</span><br><span class="line">                ip_addr = None</span><br><span class="line">                network = None</span><br><span class="line">                netmask = None</span><br><span class="line">            if mac_addr not in nic_dic:</span><br><span class="line">                nic_dic[mac_addr] = &#123;&apos;name&apos;: nic_name,</span><br><span class="line">                                     &apos;mac&apos;: mac_addr,</span><br><span class="line">                                     &apos;net_mask&apos;: netmask,</span><br><span class="line">                                     &apos;network&apos;: network,</span><br><span class="line">                                     &apos;bonding&apos;: 0,</span><br><span class="line">                                     &apos;model&apos;: &apos;unknown&apos;,</span><br><span class="line">                                     &apos;ip_address&apos;: ip_addr,</span><br><span class="line">                                     &#125;</span><br><span class="line">            else:</span><br><span class="line">                if &apos;%s_bonding_addr&apos; % (mac_addr,) not in nic_dic:</span><br><span class="line">                    random_mac_addr = &apos;%s_bonding_addr&apos; % (mac_addr,)</span><br><span class="line">                else:</span><br><span class="line">                    random_mac_addr = &apos;%s_bonding_addr2&apos; % (mac_addr,)</span><br><span class="line"></span><br><span class="line">                nic_dic[random_mac_addr] = &#123;&apos;name&apos;: nic_name,</span><br><span class="line">                                            &apos;mac&apos;: random_mac_addr,</span><br><span class="line">                                            &apos;net_mask&apos;: netmask,</span><br><span class="line">                                            &apos;network&apos;: network,</span><br><span class="line">                                            &apos;bonding&apos;: 1,</span><br><span class="line">                                            &apos;model&apos;: &apos;unknown&apos;,</span><br><span class="line">                                            &apos;ip_address&apos;: ip_addr,</span><br><span class="line">                                            &#125;</span><br><span class="line"></span><br><span class="line">        if &quot;HWaddr&quot; in line:</span><br><span class="line">            next_ip_line = True</span><br><span class="line">            last_mac_addr = line</span><br><span class="line">    nic_list = []</span><br><span class="line">    for k, v in nic_dic.items():</span><br><span class="line">        nic_list.append(v)</span><br><span class="line"></span><br><span class="line">    return &#123;&apos;nic&apos;: nic_list&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_disk_info():</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取存储信息。</span><br><span class="line">    本脚本只针对centos7.6中使用sda2，且只有一块虚拟硬盘的情况。</span><br><span class="line">    具体查看硬盘信息的命令，请根据实际情况，实际调整。</span><br><span class="line">    如果需要查看Raid信息，可以尝试MegaCli工具。</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    sn_raw_data = subprocess.Popen(&quot;sudo dmidecode -s system-serial-number&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    sn = sn_raw_data.stdout.read().decode()</span><br><span class="line">    model_raw_data = subprocess.Popen(&quot;sudo dmidecode -s system-product-name&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    model = model_raw_data.stdout.read().decode()</span><br><span class="line"></span><br><span class="line">    #size_data = subprocess.Popen(&quot;sudo fdisk -l /dev/sda2 | grep Disk|head -1&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    #size_data = size_data.stdout.read().decode()</span><br><span class="line">    #size = size_data.split(&quot;:&quot;)[1].strip().split(&quot; &quot;)[0]</span><br><span class="line"></span><br><span class="line">    size_raw_data = subprocess.Popen(&quot;sudo smartctl -a /dev/sda2 |grep Capacity&quot;, stdout=subprocess.PIPE, shell=True)</span><br><span class="line">    raw_data = size_raw_data.stdout.read().decode()</span><br><span class="line">    data_list = raw_data.split()[4]</span><br><span class="line">    size = data_list.split(&apos;[&apos;)[1]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    result = &#123;&apos;physical_disk_driver&apos;: []&#125;</span><br><span class="line">    disk_dict = dict()</span><br><span class="line">    disk_dict[&quot;model&quot;] = model</span><br><span class="line">    disk_dict[&quot;size&quot;] = size</span><br><span class="line">    disk_dict[&quot;sn&quot;] = sn</span><br><span class="line">    result[&apos;physical_disk_driver&apos;].append(disk_dict)</span><br><span class="line"></span><br><span class="line">    return result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    # 收集信息功能测试</span><br><span class="line">    d = collect()</span><br><span class="line">    print(d)</span><br></pre></td></tr></table></figure>
+<p>先来个输出在 centos7.6虚机上面的测试（可以读出所有数据）：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&apos;asset_type&apos;: &apos;server&apos;, &apos;manufacturer&apos;: &apos;VMware, Inc.&apos;, &apos;sn&apos;: &apos;VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60&apos;, &apos;model&apos;: &apos;VMware Virtual Platform&apos;, &apos;uuid&apos;: &apos;68254d56-ee5c-fbdc-a15e-776a5fe76660&apos;, &apos;wake_up_type&apos;: &apos;Power Switch&apos;, &apos;os_distribution&apos;: &apos;CentOS&apos;, &apos;os_release&apos;: &apos;CentOS Linux release 7.6.1810 (Core)&apos;, &apos;os_type&apos;: &apos;Linux&apos;, &apos;cpu_count&apos;: &apos;1&apos;, &apos;cpu_core_count&apos;: &apos;1&apos;, &apos;cpu_model&apos;: &apos;Intel(R) Core(TM) i5-7300HQ CPU @ 2.50GHz&apos;, &apos;ram&apos;: [&#123;&apos;capacity&apos;: &apos;1024&apos;, &apos;slot&apos;: &apos;RAM slot #0&apos;, &apos;model&apos;: &apos;DRAM&apos;, &apos;manufacturer&apos;: &apos;Not Specified&apos;, &apos;sn&apos;: &apos;Not Specified&apos;, &apos;asset_tag&apos;: &apos;Not Specified&apos;&#125;], &apos;ram_size&apos;: 0.9497604370117188, &apos;nic&apos;: [], &apos;physical_disk_driver&apos;: [&#123;&apos;model&apos;: &apos;VMware Virtual Platform\n&apos;, &apos;size&apos;: &apos;32.2&apos;, &apos;sn&apos;: &apos;VMware-56 4d 25 68 5c ee dc fb-a1 5e 77 6a 5f e7 66 60\n&apos;&#125;]&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码整体没有什么难点，无非就是使用subprocess.Popen()方法执行Linux的命令，然后获取返回值，并以规定的格式打包到data字典里。</p>
 <p>需要说明的问题有：</p>
 <ul>
 <li>当Linux中存在好几个Python解释器版本时，要注意调用方式，前面已经强调过了；</li>
@@ -428,15 +158,9 @@ if __name__ == &quot;__main__&quot;:
 <li>可以在Linux下配置cronb或其它定时服务，设置定期的数据收集、报告任务。<br>下面，我们在Linux虚拟机上，测试一下客户端。</li>
 </ul>
 <p>将Pycharm中的Client客户端文件夹，拷贝到Linux虚拟机中，我这里是centos7.6</p>
-<p>进入bin目录，运行：</p>
-<pre><code>python3 main.py report_data
-</code></pre><p>一切顺利的话应该能得到如下的反馈：</p>
-<pre><code>正在将数据发送至： [http://10.101.120.34:8000/assets/report/]  ......
-handler_data_encode--&gt;&gt; b&#39;asset_data=%7B%22asset_type%22%3A+%22server%22%2C+%22manufacturer%22%3A+%22VMware%2C+Inc.%22%2C+%22sn%22%3A+%22VMware-56+4d+25+68+5c+ee+dc+fb-a1+5e+77+6a+5f+e7+66+60%22%2C+%22model%22%3A+%22VMware+Virtual+Platform%22%2C+%22uuid%22%3A+%2268254d56-ee5c-fbdc-a15e-776a5fe76660%22%2C+%22wake_up_type%22%3A+%22Power+Switch%22%2C+%22os_distribution%22%3A+%22CentOS%22%2C+%22os_release%22%3A+%22CentOS+Linux+release+7.6.1810+%28Core%29%22%2C+%22os_type%22%3A+%22Linux%22%2C+%22cpu_count%22%3A+%221%22%2C+%22cpu_core_count%22%3A+%221%22%2C+%22cpu_model%22%3A+%22Intel%28R%29+Core%28TM%29+i5-7300HQ+CPU+%40+2.50GHz%22%2C+%22ram%22%3A+%5B%7B%22capacity%22%3A+%221024%22%2C+%22slot%22%3A+%22RAM+slot+%230%22%2C+%22model%22%3A+%22DRAM%22%2C+%22manufacturer%22%3A+%22Not+Specified%22%2C+%22sn%22%3A+%22Not+Specified%22%2C+%22asset_tag%22%3A+%22Not+Specified%22%7D%5D%2C+%22ram_size%22%3A+0.9497604370117188%2C+%22nic%22%3A+%5B%5D%2C+%22physical_disk_driver%22%3A+%5B%7B%22model%22%3A+%22VMware+Virtual+Platform%5Cn%22%2C+%22size%22%3A+%2232.2%22%2C+%22sn%22%3A+%22VMware-56+4d+25+68+5c+ee+dc+fb-a1+5e+77+6a+5f+e7+66+60%5Cn%22%7D%5D%7D&#39;
-发送完毕！
-返回结果：成功收到数据！
-日志记录成功！
-</code></pre><p>然后我们可以在pycharm 页面收到：</p>
+<p>进入bin目录，运行：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 main.py report_data</span><br></pre></td></tr></table></figure></p>
+<p>一切顺利的话应该能得到如下的反馈：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">正在将数据发送至： [http://10.101.120.34:8000/assets/report/]  ......</span><br><span class="line">handler_data_encode--&gt;&gt; b&apos;asset_data=%7B%22asset_type%22%3A+%22server%22%2C+%22manufacturer%22%3A+%22VMware%2C+Inc.%22%2C+%22sn%22%3A+%22VMware-56+4d+25+68+5c+ee+dc+fb-a1+5e+77+6a+5f+e7+66+60%22%2C+%22model%22%3A+%22VMware+Virtual+Platform%22%2C+%22uuid%22%3A+%2268254d56-ee5c-fbdc-a15e-776a5fe76660%22%2C+%22wake_up_type%22%3A+%22Power+Switch%22%2C+%22os_distribution%22%3A+%22CentOS%22%2C+%22os_release%22%3A+%22CentOS+Linux+release+7.6.1810+%28Core%29%22%2C+%22os_type%22%3A+%22Linux%22%2C+%22cpu_count%22%3A+%221%22%2C+%22cpu_core_count%22%3A+%221%22%2C+%22cpu_model%22%3A+%22Intel%28R%29+Core%28TM%29+i5-7300HQ+CPU+%40+2.50GHz%22%2C+%22ram%22%3A+%5B%7B%22capacity%22%3A+%221024%22%2C+%22slot%22%3A+%22RAM+slot+%230%22%2C+%22model%22%3A+%22DRAM%22%2C+%22manufacturer%22%3A+%22Not+Specified%22%2C+%22sn%22%3A+%22Not+Specified%22%2C+%22asset_tag%22%3A+%22Not+Specified%22%7D%5D%2C+%22ram_size%22%3A+0.9497604370117188%2C+%22nic%22%3A+%5B%5D%2C+%22physical_disk_driver%22%3A+%5B%7B%22model%22%3A+%22VMware+Virtual+Platform%5Cn%22%2C+%22size%22%3A+%2232.2%22%2C+%22sn%22%3A+%22VMware-56+4d+25+68+5c+ee+dc+fb-a1+5e+77+6a+5f+e7+66+60%5Cn%22%7D%5D%7D&apos;</span><br><span class="line">发送完毕！</span><br><span class="line">返回结果：成功收到数据！</span><br><span class="line">日志记录成功！</span><br></pre></td></tr></table></figure></p>
+<p>然后我们可以在pycharm 页面收到：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190304/fWKMrrjIgh2p.png?imageslim" alt="mark"></p>
 <p>规整如下：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190304/WUx9PrE2BOMP.png?imageslim" alt="mark"></p>

@@ -198,22 +198,8 @@
 <p>先问下开发此业务当然有没有什么其它动作？经查看业务日志发现，刚刚那一阵在跑job，为什么metadata区会爆掉呢？</p>
 <p>开发给的答案：</p>
 <p>类加载器创建过多，带来的一个问题是，在类加载器第一次加载类的时候，会在Metaspace里会给它分配内存块，为了分配高效，每个类加载器用来存放类信息的内存块都是独立的，所以哪怕你这个类加载器只加载一个类，也会为之分配一块空的内存给这个类加载器，其实是至少两个内存块，于是你有可能会发现Metaspace的内存使用率非常低，但是committed的内存已经达到了阈值，从而触发了Full GC，如果这种只加载很少类的类加载器非常多，那造成的后果就是很多碎片化的内存！</p>
-<pre><code>##先来看下目前的JVM参数：
-[root@xhy-18-175-61 dsf]# ps aux | grep java
-root         136 13.7  0.7 18846112 1968564 ?    Sl+  18:28   4:08 java -Duser.timezone=GMT+08 -server -Xms3840m -Xmx3840m -XX:NewSize=1024m -XX:MaxNewSize=1024m -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=128-XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_heapDump.hprof -XX:+UseParNewGC -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=1024M -XX:+ExplicitGCInvokesConcurrent -XX:-UseGCOverheadLimit -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=65 -XX:CMSFullGCsBeforeCompaction=2 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_gc.log -javaagent:/usr/local/apm_agent/apm.agent.bootstrap.jar -Dapm.applicationName=cxgc.java.dsf.zkt.service -Dapm.agentId=172.18.175.61-17851 -Dapm.env=product -classpath -DDSF_HOME=/usr/local/dsf -DDio.netty.leakDetectionLevel=PARANOID -jar /usr/local/dsf/dsfapps/dsf.zkt.service.jar
-
-##分析下：
-通过jstat -gcutil pid查看M的值为97.37，即Meta区使用率也达到了97.37%：
-[root@xhy-18-175-61 dsf]# jstat -gcutil 136
-  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
-  0.00  89.03  35.00   3.79  97.37  97.18     19    4.312     0    0.000    4.312
-
-那么-XX:MetaspaceSize=256m的含义到底是什么呢？其实，这个JVM参数是指Metaspace扩容时触发FullGC的初始化阈值，也是最小的阈值。
-
-先来解决下：
-- MetaspaceSize改成256m；
-增加 -XX:MinMetaspaceFreeRatio=40；
-</code></pre><p>这里有几个要点需要明确：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">##先来看下目前的JVM参数：</span><br><span class="line">[root@xhy-18-175-61 dsf]# ps aux | grep java</span><br><span class="line">root         136 13.7  0.7 18846112 1968564 ?    Sl+  18:28   4:08 java -Duser.timezone=GMT+08 -server -Xms3840m -Xmx3840m -XX:NewSize=1024m -XX:MaxNewSize=1024m -XX:MaxDirectMemorySize=256m -XX:MetaspaceSize=128-XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_heapDump.hprof -XX:+UseParNewGC -XX:+UseCMSInitiatingOccupancyOnly -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=1024M -XX:+ExplicitGCInvokesConcurrent -XX:-UseGCOverheadLimit -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=65 -XX:CMSFullGCsBeforeCompaction=2 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -Xloggc:/data/logs/skynet-cxgc.java.dsf.zkt.service/cxgc.java.dsf.zkt.service_gc.log -javaagent:/usr/local/apm_agent/apm.agent.bootstrap.jar -Dapm.applicationName=cxgc.java.dsf.zkt.service -Dapm.agentId=172.18.175.61-17851 -Dapm.env=product -classpath -DDSF_HOME=/usr/local/dsf -DDio.netty.leakDetectionLevel=PARANOID -jar /usr/local/dsf/dsfapps/dsf.zkt.service.jar</span><br><span class="line"></span><br><span class="line">##分析下：</span><br><span class="line">通过jstat -gcutil pid查看M的值为97.37，即Meta区使用率也达到了97.37%：</span><br><span class="line">[root@xhy-18-175-61 dsf]# jstat -gcutil 136</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">  0.00  89.03  35.00   3.79  97.37  97.18     19    4.312     0    0.000    4.312</span><br><span class="line"></span><br><span class="line">那么-XX:MetaspaceSize=256m的含义到底是什么呢？其实，这个JVM参数是指Metaspace扩容时触发FullGC的初始化阈值，也是最小的阈值。</span><br><span class="line"></span><br><span class="line">先来解决下：</span><br><span class="line">- MetaspaceSize改成256m；</span><br><span class="line">增加 -XX:MinMetaspaceFreeRatio=40；</span><br></pre></td></tr></table></figure>
+<p>这里有几个要点需要明确：</p>
 <ol>
 <li>无论<code>-XX:MetaspaceSize</code>配置什么值，Metaspace的初始容量一定是<code>21807104</code>（约20.8m）；</li>
 <li>Metaspace由于使用不断扩容到<code>-XX:MetaspaceSize</code>参数指定的量，就会发生FGC；且之后每次Metaspace扩容都会发生FGC；</li>

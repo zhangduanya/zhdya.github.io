@@ -156,112 +156,16 @@
 <li>plugins是插件或工具目录</li>
 </ul>
 <h3 id="二、开发数据收集客户端"><a href="#二、开发数据收集客户端" class="headerlink" title="二、开发数据收集客户端"></a>二、开发数据收集客户端</h3><h4 id="1-程序入口脚本"><a href="#1-程序入口脚本" class="headerlink" title="1.程序入口脚本"></a>1.程序入口脚本</h4><p>++在bin目录中新建main.py文件++，写入下面的代码：</p>
-<pre><code>#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-
-import os
-import sys
-
-BASE_DIR = os.path.dirname(os.getcwd())
-# 设置工作目录，使得包和模块能够正常导入
-sys.path.append(BASE_DIR)
-
-from core import handler
-
-if __name__ == &#39;__main__&#39;:
-
-    handler.ArgvHandler(sys.argv)   ##获取参数，传入到ArgvHandler()
-</code></pre><ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">BASE_DIR = os.path.dirname(os.getcwd())</span><br><span class="line"># 设置工作目录，使得包和模块能够正常导入</span><br><span class="line">sys.path.append(BASE_DIR)</span><br><span class="line"></span><br><span class="line">from core import handler</span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    handler.ArgvHandler(sys.argv)   ##获取参数，传入到ArgvHandler()</span><br></pre></td></tr></table></figure>
+<ul>
 <li>通过os和sys模块的配合，将当前客户端所在目录设置为工作目录，如果不这么做，会无法导入其它模块；</li>
 <li>handler模块是核心代码模块，在core目录中，我们一会来实现它。</li>
 <li>以后调用客户端就只需要执行python main.py 参数就可以了</li>
 </ul>
 <p><strong>++这里有个问题一定要强调一下，那就是Python解释器的调用，执行命令的方式和代码第一行#!/usr/bin/env python的指定方式一定不能冲突，要根据你的实际情况实际操作和修改代码，很多新手连Python本身都没搞明白就上来执行脚本，碰到各种解释器不合法的错误，请回去补足基础！++</strong></p>
 <h4 id="2-主功能模块"><a href="#2-主功能模块" class="headerlink" title="2.主功能模块"></a>2.主功能模块</h4><p>++在core下，创建handler.py文件++，写入下面的代码：</p>
-<pre><code>#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time    : 2019-3-2 13:51
-# @Author  : zhdya@zhdya.cn
-# @File    : handler.py
-
-
-import json
-import time
-import urllib.parse
-import urllib.request
-from core import info_collection
-from conf import settings
-
-class ArgvHandler(object):
-
-    def __init__(self, args):
-        self.args = args
-        self.parse_args()
-
-    def parse_args(self):
-        &quot;&quot;&quot;
-        分析参数，如果有参数指定的功能，则执行该功能，如果没有，打印帮助说明。
-        :return:
-        &quot;&quot;&quot;
-        if len(self.args) &gt; 1 and hasattr(self, self.args[1]):
-            func = getattr(self, self.args[1])
-            func()
-        else:
-            self.help_msg()     ##如果执行程序没有带参数就会提示如下信息：help_msg()
-
-    @staticmethod       #静态方法 类或实例均可调用,静态方法函数里不传入self，这样如上self.help_msg()就可以调用了
-    def help_msg():
-        &quot;&quot;&quot;
-        帮助说明
-        :return:
-        &quot;&quot;&quot;
-        msg = &#39;&#39;&#39;
-        collect_data        收集硬件信息
-        report_data         收集硬件信息并汇报
-        &#39;&#39;&#39;
-        print(msg)
-
-    @staticmethod
-    def collect_data():
-        &quot;&quot;&quot;收集硬件信息,用于测试！&quot;&quot;&quot;
-        info = info_collection.InfoCollection()
-        asset_data = info.collect()
-        print(asset_data)
-
-    @staticmethod
-    def report_data():
-        &quot;&quot;&quot;
-        收集硬件信息，然后发送到服务器。
-        :return:
-        &quot;&quot;&quot;
-        # 收集信息
-        info = info_collection.InfoCollection()
-        asset_data = info.collect()
-        # 将数据打包到一个字典内，并转换为json格式
-        data = {&quot;asset_data&quot;: json.dumps(asset_data)}
-        print(&quot;handler_data--&gt;&gt;&quot;, data)
-        # 根据settings中的配置，构造url
-        url = &quot;http://%s:%s%s&quot; % (settings.Params[&#39;server&#39;], settings.Params[&#39;port&#39;], settings.Params[&#39;url&#39;])
-        print(&quot;handler_url--&gt;&gt;&quot;, url)
-        print(&#39;正在将数据发送至： [%s]  ......&#39; % url)
-        try:
-            # 使用Python内置的urllib.request库，发送post请求。
-            # 需要先将数据进行封装，并转换成bytes类型
-            data_encode = urllib.parse.urlencode(data).encode()
-            print(&quot;handler_data_encode--&gt;&gt;&quot;, data_encode)
-            response = urllib.request.urlopen(url=url, data=data_encode, timeout=settings.Params[&#39;request_timeout&#39;])
-            print(&quot;\033[31;1m发送完毕！\033[0m &quot;)
-            message = response.read().decode()
-            print(&quot;返回结果：%s&quot; % message)
-        except Exception as e:
-            message = &quot;发送失败&quot;
-            print(&quot;\033[31;1m发送失败，%s\033[0m&quot; % e)
-        # 记录发送日志
-        with open(settings.PATH, &#39;ab&#39;) as f:        ##a追加,b二进制文件
-            string = &#39;发送时间：%s \t 服务器地址：%s \t 返回结果：%s \n&#39; % (time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;), url, message)
-            f.write(string.encode())
-            print(&quot;日志记录成功！&quot;)
-</code></pre><p><strong>说明：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-2 13:51</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : handler.py</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import json</span><br><span class="line">import time</span><br><span class="line">import urllib.parse</span><br><span class="line">import urllib.request</span><br><span class="line">from core import info_collection</span><br><span class="line">from conf import settings</span><br><span class="line"></span><br><span class="line">class ArgvHandler(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self, args):</span><br><span class="line">        self.args = args</span><br><span class="line">        self.parse_args()</span><br><span class="line"></span><br><span class="line">    def parse_args(self):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        分析参数，如果有参数指定的功能，则执行该功能，如果没有，打印帮助说明。</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        if len(self.args) &gt; 1 and hasattr(self, self.args[1]):</span><br><span class="line">            func = getattr(self, self.args[1])</span><br><span class="line">            func()</span><br><span class="line">        else:</span><br><span class="line">            self.help_msg()     ##如果执行程序没有带参数就会提示如下信息：help_msg()</span><br><span class="line"></span><br><span class="line">    @staticmethod       #静态方法 类或实例均可调用,静态方法函数里不传入self，这样如上self.help_msg()就可以调用了</span><br><span class="line">    def help_msg():</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        帮助说明</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        msg = &apos;&apos;&apos;</span><br><span class="line">        collect_data        收集硬件信息</span><br><span class="line">        report_data         收集硬件信息并汇报</span><br><span class="line">        &apos;&apos;&apos;</span><br><span class="line">        print(msg)</span><br><span class="line"></span><br><span class="line">    @staticmethod</span><br><span class="line">    def collect_data():</span><br><span class="line">        &quot;&quot;&quot;收集硬件信息,用于测试！&quot;&quot;&quot;</span><br><span class="line">        info = info_collection.InfoCollection()</span><br><span class="line">        asset_data = info.collect()</span><br><span class="line">        print(asset_data)</span><br><span class="line"></span><br><span class="line">    @staticmethod</span><br><span class="line">    def report_data():</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        收集硬件信息，然后发送到服务器。</span><br><span class="line">        :return:</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        # 收集信息</span><br><span class="line">        info = info_collection.InfoCollection()</span><br><span class="line">        asset_data = info.collect()</span><br><span class="line">        # 将数据打包到一个字典内，并转换为json格式</span><br><span class="line">        data = &#123;&quot;asset_data&quot;: json.dumps(asset_data)&#125;</span><br><span class="line">        print(&quot;handler_data--&gt;&gt;&quot;, data)</span><br><span class="line">        # 根据settings中的配置，构造url</span><br><span class="line">        url = &quot;http://%s:%s%s&quot; % (settings.Params[&apos;server&apos;], settings.Params[&apos;port&apos;], settings.Params[&apos;url&apos;])</span><br><span class="line">        print(&quot;handler_url--&gt;&gt;&quot;, url)</span><br><span class="line">        print(&apos;正在将数据发送至： [%s]  ......&apos; % url)</span><br><span class="line">        try:</span><br><span class="line">            # 使用Python内置的urllib.request库，发送post请求。</span><br><span class="line">            # 需要先将数据进行封装，并转换成bytes类型</span><br><span class="line">            data_encode = urllib.parse.urlencode(data).encode()</span><br><span class="line">            print(&quot;handler_data_encode--&gt;&gt;&quot;, data_encode)</span><br><span class="line">            response = urllib.request.urlopen(url=url, data=data_encode, timeout=settings.Params[&apos;request_timeout&apos;])</span><br><span class="line">            print(&quot;\033[31;1m发送完毕！\033[0m &quot;)</span><br><span class="line">            message = response.read().decode()</span><br><span class="line">            print(&quot;返回结果：%s&quot; % message)</span><br><span class="line">        except Exception as e:</span><br><span class="line">            message = &quot;发送失败&quot;</span><br><span class="line">            print(&quot;\033[31;1m发送失败，%s\033[0m&quot; % e)</span><br><span class="line">        # 记录发送日志</span><br><span class="line">        with open(settings.PATH, &apos;ab&apos;) as f:        ##a追加,b二进制文件</span><br><span class="line">            string = &apos;发送时间：%s \t 服务器地址：%s \t 返回结果：%s \n&apos; % (time.strftime(&apos;%Y-%m-%d %H:%M:%S&apos;), url, message)</span><br><span class="line">            f.write(string.encode())</span><br><span class="line">            print(&quot;日志记录成功！&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
 <ul>
 <li>handler模块中只有一个ArgvHandler类；</li>
 <li>在main模块中也是实例化了一个ArgvHandler类的对象，并将调用参数传递进去；</li>
@@ -277,83 +181,15 @@ class ArgvHandler(object):
 <li>接收服务器返回的信息；</li>
 <li>将成功或者失败的信息写入日志文件中。</li>
 </ul>
-<p>以后，我们要测试数据收集，执行：</p>
-<pre><code>python main.py collect_data
-</code></pre><p>要实际往服务器发送收集到的数据，则执行：</p>
-<pre><code>python main.py report_data
-</code></pre><h4 id="3-配置文件"><a href="#3-配置文件" class="headerlink" title="3.配置文件"></a>3.配置文件</h4><p>要将所有可能修改的数据、常量、配置等都尽量以配置文件的形式组织起来，尽量不要在代码中写死任何数据。</p>
-<p>++在conf中，新建settings.py文件++，写入下面的代码：</p>
-<pre><code>#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time    : 2019-3-2 14:21
-# @Author  : zhdya@zhdya.cn
-# @File    : settings.py
-
-import os
-
-# 远端服务器配置
-Params = {
-    &quot;server&quot;: &quot;10.10.7.26&quot;,
-    &quot;port&quot;: 8000,
-    &#39;url&#39;: &#39;/assets/report/&#39;,
-    &#39;request_timeout&#39;: 30,
-}
-
-# 日志文件配置
-
-PATH = os.path.join(os.path.dirname(os.getcwd()), &#39;log&#39;, &#39;cmdb.log&#39;)
-print(&quot;conf_settings--&gt;&gt;&quot;, PATH)
-
-# 更多配置，请都集中在此文件中
-</code></pre><p>这里，配置了服务器地址、端口、发送的url、请求的超时时间，以及日志文件路径。请根据你的实际情况进行修改。</p>
+<p>以后，我们要测试数据收集，执行：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python main.py collect_data</span><br></pre></td></tr></table></figure></p>
+<p>要实际往服务器发送收集到的数据，则执行：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python main.py report_data</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-配置文件"><a href="#3-配置文件" class="headerlink" title="3.配置文件"></a>3.配置文件</h4><p>要将所有可能修改的数据、常量、配置等都尽量以配置文件的形式组织起来，尽量不要在代码中写死任何数据。</p>
+<p>++在conf中，新建settings.py文件++，写入下面的代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-2 14:21</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : settings.py</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line"># 远端服务器配置</span><br><span class="line">Params = &#123;</span><br><span class="line">    &quot;server&quot;: &quot;10.10.7.26&quot;,</span><br><span class="line">    &quot;port&quot;: 8000,</span><br><span class="line">    &apos;url&apos;: &apos;/assets/report/&apos;,</span><br><span class="line">    &apos;request_timeout&apos;: 30,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 日志文件配置</span><br><span class="line"></span><br><span class="line">PATH = os.path.join(os.path.dirname(os.getcwd()), &apos;log&apos;, &apos;cmdb.log&apos;)</span><br><span class="line">print(&quot;conf_settings--&gt;&gt;&quot;, PATH)</span><br><span class="line"></span><br><span class="line"># 更多配置，请都集中在此文件中</span><br></pre></td></tr></table></figure></p>
+<p>这里，配置了服务器地址、端口、发送的url、请求的超时时间，以及日志文件路径。请根据你的实际情况进行修改。</p>
 <p>==如上server端我是直接启动的django服务 也就是如上10.10.7.26是我笔记本的IP地址，这样默认我笔记本的10.10.7.26:8000就对外开放了！==</p>
 <h4 id="4-信息收集模块"><a href="#4-信息收集模块" class="headerlink" title="4.信息收集模块"></a>4.信息收集模块</h4><p>++在core中新建info_collection.py文件++，写入下面的代码：</p>
-<p>==&lt;关于如下：from plugins.linux import sys_info 以及 from plugins.windows import sys_info as win_sys_info 稍后章节我们会建立一系列的目录！！&gt;==</p>
-<pre><code>#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# @Time    : 2019-3-2 14:48
-# @Author  : zhdya@zhdya.cn
-# @File    : info_collection.py
-
-
-import sys
-import platform
-
-
-def linux_sys_info():
-    from plugins.linux import sys_info
-    return sys_info.collect()
-
-
-def windows_sys_info():
-    from plugins.windows import sys_info as win_sys_info
-    return win_sys_info.collect()
-
-
-class InfoCollection(object):
-
-    def collect(self):
-        # 收集平台信息
-        # 首先判断当前平台，根据平台的不同，执行不同的方法
-        try:
-            func = getattr(self, platform.system())
-            info_data = func()
-            formatted_data = self.build_report_data(info_data)
-            return formatted_data
-        except AttributeError:
-            sys.exit(&quot;不支持当前操作系统： [%s]! &quot; % platform.system())
-
-    def Linux(self):
-
-        return linux_sys_info()
-
-    def Windows(self):
-        return windows_sys_info()
-
-    def build_report_data(self, data):
-        # 留下一个接口，方便以后增加功能或者过滤数据
-        return data
-</code></pre><p>该模块的作用很简单：</p>
+<p>==&lt;关于如下：from plugins.linux import sys_info 以及 from plugins.windows import sys_info as win_sys_info 稍后章节我们会建立一系列的目录！！&gt;==<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-2 14:48</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : info_collection.py</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import sys</span><br><span class="line">import platform</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def linux_sys_info():</span><br><span class="line">    from plugins.linux import sys_info</span><br><span class="line">    return sys_info.collect()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def windows_sys_info():</span><br><span class="line">    from plugins.windows import sys_info as win_sys_info</span><br><span class="line">    return win_sys_info.collect()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class InfoCollection(object):</span><br><span class="line"></span><br><span class="line">    def collect(self):</span><br><span class="line">        # 收集平台信息</span><br><span class="line">        # 首先判断当前平台，根据平台的不同，执行不同的方法</span><br><span class="line">        try:</span><br><span class="line">            func = getattr(self, platform.system())</span><br><span class="line">            info_data = func()</span><br><span class="line">            formatted_data = self.build_report_data(info_data)</span><br><span class="line">            return formatted_data</span><br><span class="line">        except AttributeError:</span><br><span class="line">            sys.exit(&quot;不支持当前操作系统： [%s]! &quot; % platform.system())</span><br><span class="line"></span><br><span class="line">    def Linux(self):</span><br><span class="line"></span><br><span class="line">        return linux_sys_info()</span><br><span class="line"></span><br><span class="line">    def Windows(self):</span><br><span class="line">        return windows_sys_info()</span><br><span class="line"></span><br><span class="line">    def build_report_data(self, data):</span><br><span class="line">        # 留下一个接口，方便以后增加功能或者过滤数据</span><br><span class="line">        return data</span><br></pre></td></tr></table></figure></p>
+<p>该模块的作用很简单：</p>
 <ul>
 <li>首先通过Python内置的platform模块获取执行main脚本的操作系统类别，通常是windows和Linux；</li>
 <li>根据操作系统的不同，反射获取相应的信息收集方法，并执行</li>

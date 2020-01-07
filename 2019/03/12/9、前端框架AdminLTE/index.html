@@ -152,71 +152,26 @@
 <p>但是AdminLTE的源文件包内，缺少font-awesome-4.6.3和ionicons-2.0.1这两个图标插件，它是通过CDN的形式加载的，如果网络不太好，加载可能比较困难或者缓慢，最好用本地静态文件的形式。教程在Github的包内附带上了这两个插件，可以直接使用，当然你自己下载安装也行。</p>
 <h3 id="一、创建base-html"><a href="#一、创建base-html" class="headerlink" title="一、创建base.html"></a>一、创建base.html</h3><p>AdminLTE源文件包里有个index.html页面文件，可以利用它修改出我们CMDB项目需要的基本框架。</p>
 <p>在项目的根目录cmdb下新建static目录，在settings文件中添加下面的配置：</p>
-<pre><code>STATIC_URL = &#39;/static/&#39;
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, &quot;mycmdb/static&quot;),
-]
-</code></pre><p>为了以后扩展的方便，将AdminLTE源文件包里的 <strong>bootstrap</strong>、<strong>dist</strong> 和 <strong>plugins</strong> 三个文件夹，全部拷贝到 <strong>static</strong> 目录中，这样做的话文件会比较大，比较多，但可以防止出现引用文件找不到、插件缺失等情况的发生，等以后对AdminLTE非常熟悉了，可以对static中无用的文件进行删减。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">STATIC_URL = &apos;/static/&apos;</span><br><span class="line"></span><br><span class="line">STATICFILES_DIRS = [</span><br><span class="line">    os.path.join(BASE_DIR, &quot;mycmdb/static&quot;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>为了以后扩展的方便，将AdminLTE源文件包里的 <strong>bootstrap</strong>、<strong>dist</strong> 和 <strong>plugins</strong> 三个文件夹，全部拷贝到 <strong>static</strong> 目录中，这样做的话文件会比较大，比较多，但可以防止出现引用文件找不到、插件缺失等情况的发生，等以后对AdminLTE非常熟悉了，可以对static中无用的文件进行删减。</p>
 <p>在cmdb根目录下的templates目录下，新建<strong>base.html</strong>文件，将AdminLTE源文件包中的index.html中的内容拷贝过去。然后，根据我们项目的具体情况修改文件引用、页面框架、title、CSS、主体和script块。</p>
-<pre><code>base.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/base.html
-</code></pre><p>这是一个适合当前CMDB的精简版本。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">base.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/base.html</span><br></pre></td></tr></table></figure>
+<p>这是一个适合当前CMDB的精简版本。</p>
 <h3 id="二、创建路由、视图"><a href="#二、创建路由、视图" class="headerlink" title="二、创建路由、视图"></a>二、创建路由、视图</h3><p>这里设计了三个视图和页面，分别是：</p>
 <ul>
 <li><strong>dashboard</strong>：仪表盘，图形化的数据展示</li>
 <li><strong>index</strong>：资产总表，表格的形式展示资产信息</li>
 <li><strong>detail</strong>：单个资产的详细信息页面</li>
 </ul>
-<p>将assets/urls.py修改成下面的样子：</p>
-<pre><code>from django.conf.urls import url
-from assets import views
-
-app_name = &#39;assets&#39;
-
-urlpatterns = [
-    url(r&#39;^report/&#39;, views.report, name=&#39;report&#39;),
-    url(r&#39;^dashboard/&#39;, views.dashboard, name=&#39;dashboard&#39;),
-    url(r&#39;^index/&#39;, views.index, name=&#39;index&#39;),
-    url(r&#39;^detail/(?P&lt;asset_id&gt;[0-9]+)/$&#39;, views.detail, name=&quot;detail&quot;),
-    url(r&#39;^$&#39;, views.dashboard),
-]
-</code></pre><p>在 <strong>assets/views.py</strong> 中，增加下面三个视图：</p>
-<pre><code>from django.shortcuts import get_object_or_404
-
-def index(request):
-
-    assets = models.Asset.objects.all()
-    return render(request, &#39;assets/index.html&#39;, locals())
-
-
-def dashboard(request):
-    pass
-    return render(request, &#39;assets/dashboard.html&#39;, locals())
-
-
-def detail(request, asset_id):
-    &quot;&quot;&quot;
-    以显示服务器类型资产详细为例，安全设备、存储设备、网络设备等参照此例。
-    :param request:
-    :param asset_id:
-    :return:
-    &quot;&quot;&quot;
-    asset = get_object_or_404(models.Asset, id=asset_id)
-    return render(request, &#39;assets/detail.html&#39;, locals())
-</code></pre><p>注意需要提前</p>
-<pre><code>from django.shortcuts import get_object_or_404
-</code></pre><p>导入get_object_or_404()方法，这是一个非常常用的内置方法。</p>
-<h3 id="三、创建模版"><a href="#三、创建模版" class="headerlink" title="三、创建模版"></a>三、创建模版</h3><h4 id="1-dashboard-html"><a href="#1-dashboard-html" class="headerlink" title="1.dashboard.html"></a>1.dashboard.html</h4><p>在assets目录下创建 <strong>templates/assets/dashboard.html</strong> 文件，写入下面的代码：</p>
-<pre><code>dashboard.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/dashboard.html
-</code></pre><h4 id="2-index-html"><a href="#2-index-html" class="headerlink" title="2.index.html"></a>2.index.html</h4><p>在assets目录下创建 <strong>templates/assets/index.html</strong> 文件，写入下面的代码：</p>
-<pre><code>index.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html
-</code></pre><h4 id="3-detail-html"><a href="#3-detail-html" class="headerlink" title="3.detail.html"></a>3.detail.html</h4><p>在assets目录下创建 <strong>templates/assets/detail.html</strong> 文件，写入下面的代码：</p>
-<pre><code>detail.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html
-</code></pre><p>以上三个模板都很简单，就是下面的流程：</p>
+<p>将assets/urls.py修改成下面的样子：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.conf.urls import url</span><br><span class="line">from assets import views</span><br><span class="line"></span><br><span class="line">app_name = &apos;assets&apos;</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^report/&apos;, views.report, name=&apos;report&apos;),</span><br><span class="line">    url(r&apos;^dashboard/&apos;, views.dashboard, name=&apos;dashboard&apos;),</span><br><span class="line">    url(r&apos;^index/&apos;, views.index, name=&apos;index&apos;),</span><br><span class="line">    url(r&apos;^detail/(?P&lt;asset_id&gt;[0-9]+)/$&apos;, views.detail, name=&quot;detail&quot;),</span><br><span class="line">    url(r&apos;^$&apos;, views.dashboard),</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>在 <strong>assets/views.py</strong> 中，增加下面三个视图：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.shortcuts import get_object_or_404</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line"></span><br><span class="line">    assets = models.Asset.objects.all()</span><br><span class="line">    return render(request, &apos;assets/index.html&apos;, locals())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def dashboard(request):</span><br><span class="line">    pass</span><br><span class="line">    return render(request, &apos;assets/dashboard.html&apos;, locals())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def detail(request, asset_id):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    以显示服务器类型资产详细为例，安全设备、存储设备、网络设备等参照此例。</span><br><span class="line">    :param request:</span><br><span class="line">    :param asset_id:</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    asset = get_object_or_404(models.Asset, id=asset_id)</span><br><span class="line">    return render(request, &apos;assets/detail.html&apos;, locals())</span><br></pre></td></tr></table></figure></p>
+<p>注意需要提前<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.shortcuts import get_object_or_404</span><br></pre></td></tr></table></figure></p>
+<p>导入get_object_or_404()方法，这是一个非常常用的内置方法。</p>
+<h3 id="三、创建模版"><a href="#三、创建模版" class="headerlink" title="三、创建模版"></a>三、创建模版</h3><h4 id="1-dashboard-html"><a href="#1-dashboard-html" class="headerlink" title="1.dashboard.html"></a>1.dashboard.html</h4><p>在assets目录下创建 <strong>templates/assets/dashboard.html</strong> 文件，写入下面的代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dashboard.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/dashboard.html</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-index-html"><a href="#2-index-html" class="headerlink" title="2.index.html"></a>2.index.html</h4><p>在assets目录下创建 <strong>templates/assets/index.html</strong> 文件，写入下面的代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">index.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-detail-html"><a href="#3-detail-html" class="headerlink" title="3.detail.html"></a>3.detail.html</h4><p>在assets目录下创建 <strong>templates/assets/detail.html</strong> 文件，写入下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">detail.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html</span><br></pre></td></tr></table></figure>
+<p>以上三个模板都很简单，就是下面的流程：</p>
 <ul>
 <li>extends继承‘base.html’；</li>
 <li>load staticfiles：载入静态文件；</li>

@@ -140,61 +140,11 @@
       
             
             <h3 id="一、Ceph-Dashboard介绍"><a href="#一、Ceph-Dashboard介绍" class="headerlink" title="一、Ceph Dashboard介绍"></a>一、Ceph Dashboard介绍</h3><p>Ceph 的监控可视化界面方案很多—-grafana、Kraken。但是从Luminous开始，Ceph 提供了原生的Dashboard功能，通过Dashboard可以获取Ceph集群的各种基本状态信息。<br>mimic版  (nautilus版)  dashboard 安装。如果是  (nautilus版) 需要安装 ceph-mgr-dashboard </p>
-<h3 id="二、配置Ceph-Dashboard"><a href="#二、配置Ceph-Dashboard" class="headerlink" title="二、配置Ceph Dashboard"></a>二、配置Ceph Dashboard</h3><p>配置yum源：</p>
-<pre><code># cat &gt; /etc/yum.repos.d/cephbak.repo &lt;&lt; EOF
-[ceph]
-name=ceph
-baseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/x86_64/
-gpgcheck=0
-priority=1
-
-[ceph-noarch]
-name=cephnoarch
-baseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/noarch/
-gpgcheck=0
-priority=1
-
-[ceph-source]
-name=Ceph source packages
-baseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/SRPMS
-gpgcheck=0
-priority=1
-EOF
-</code></pre><pre><code>1、在每个mgr节点安装
-# yum install ceph-mgr-dashboard -y
-2、开启mgr功能
-# ceph mgr module enable dashboard
-3、生成并安装自签名的证书
-# ceph dashboard create-self-signed-cert  
-4、创建一个dashboard登录用户名密码
-# ceph dashboard ac-user-create admin 1q2w3e4r administrator    ##创建用户admin 密码1q2w3e4r 权限是administrator
-5、查看服务访问方式
-# ceph mgr services
-6、查看已安装模块
-# ceph mgr module ls | more
-{
-    &quot;enabled_modules&quot;: [
-        &quot;balancer&quot;,
-        &quot;dashboard&quot;,
-        &quot;restful&quot;,
-        &quot;status&quot;
-    ],
-</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/20200102/x9598uoU4TEt.png?imageslim" alt="mark"></p>
-<h3 id="三、修改默认配置命令"><a href="#三、修改默认配置命令" class="headerlink" title="三、修改默认配置命令"></a>三、修改默认配置命令</h3><pre><code>指定集群dashboard的访问端口
-# ceph config-key set mgr/dashboard/server_port 7000
-指定集群 dashboard的访问IP
-# ceph config-key set mgr/dashboard/server_addr $IP 
-</code></pre><h3 id="四、开启Object-Gateway管理功能"><a href="#四、开启Object-Gateway管理功能" class="headerlink" title="四、开启Object Gateway管理功能"></a>四、开启Object Gateway管理功能</h3><pre><code>1、创建rgw用户
-# radosgw-admin user create --uid=user01 --display-name=user01
-1.1、查看rgw用户
-# radosgw-admin user info --uid=user01 --display-name=user01
-2、提供Dashboard证书
-# ceph dashboard set-rgw-api-access-key $access_key
-# ceph dashboard set-rgw-api-secret-key $secret_key
-3、配置rgw主机名和端口
-# ceph dashboard set-rgw-api-host 10.151.30.125
-4、刷新web页面
-</code></pre>
+<h3 id="二、配置Ceph-Dashboard"><a href="#二、配置Ceph-Dashboard" class="headerlink" title="二、配置Ceph Dashboard"></a>二、配置Ceph Dashboard</h3><p>配置yum源：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cat &gt; /etc/yum.repos.d/cephbak.repo &lt;&lt; EOF</span><br><span class="line">[ceph]</span><br><span class="line">name=ceph</span><br><span class="line">baseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/x86_64/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=1</span><br><span class="line"> </span><br><span class="line">[ceph-noarch]</span><br><span class="line">name=cephnoarch</span><br><span class="line">baseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/noarch/</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=1</span><br><span class="line"> </span><br><span class="line">[ceph-source]</span><br><span class="line">name=Ceph source packages</span><br><span class="line">baseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/SRPMS</span><br><span class="line">gpgcheck=0</span><br><span class="line">priority=1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、在每个mgr节点安装</span><br><span class="line"># yum install ceph-mgr-dashboard -y</span><br><span class="line">2、开启mgr功能</span><br><span class="line"># ceph mgr module enable dashboard</span><br><span class="line">3、生成并安装自签名的证书</span><br><span class="line"># ceph dashboard create-self-signed-cert  </span><br><span class="line">4、创建一个dashboard登录用户名密码</span><br><span class="line"># ceph dashboard ac-user-create admin 1q2w3e4r administrator    ##创建用户admin 密码1q2w3e4r 权限是administrator</span><br><span class="line">5、查看服务访问方式</span><br><span class="line"># ceph mgr services</span><br><span class="line">6、查看已安装模块</span><br><span class="line"># ceph mgr module ls | more</span><br><span class="line">&#123;</span><br><span class="line">    &quot;enabled_modules&quot;: [</span><br><span class="line">        &quot;balancer&quot;,</span><br><span class="line">        &quot;dashboard&quot;,</span><br><span class="line">        &quot;restful&quot;,</span><br><span class="line">        &quot;status&quot;</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200102/x9598uoU4TEt.png?imageslim" alt="mark"></p>
+<h3 id="三、修改默认配置命令"><a href="#三、修改默认配置命令" class="headerlink" title="三、修改默认配置命令"></a>三、修改默认配置命令</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">指定集群dashboard的访问端口</span><br><span class="line"># ceph config-key set mgr/dashboard/server_port 7000</span><br><span class="line">指定集群 dashboard的访问IP</span><br><span class="line"># ceph config-key set mgr/dashboard/server_addr $IP</span><br></pre></td></tr></table></figure>
+<h3 id="四、开启Object-Gateway管理功能"><a href="#四、开启Object-Gateway管理功能" class="headerlink" title="四、开启Object Gateway管理功能"></a>四、开启Object Gateway管理功能</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、创建rgw用户</span><br><span class="line"># radosgw-admin user create --uid=user01 --display-name=user01</span><br><span class="line">1.1、查看rgw用户</span><br><span class="line"># radosgw-admin user info --uid=user01 --display-name=user01</span><br><span class="line">2、提供Dashboard证书</span><br><span class="line"># ceph dashboard set-rgw-api-access-key $access_key</span><br><span class="line"># ceph dashboard set-rgw-api-secret-key $secret_key</span><br><span class="line">3、配置rgw主机名和端口</span><br><span class="line"># ceph dashboard set-rgw-api-host 10.151.30.125</span><br><span class="line">4、刷新web页面</span><br></pre></td></tr></table></figure>
             <div class="post-copyright">
     <div class="content">
         <p>最后更新： 2020年01月03日 15:16</p>

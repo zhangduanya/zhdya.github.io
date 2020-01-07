@@ -141,12 +141,8 @@
       
             
             <h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。</p>
-<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h4 id="Calico-官方定义如下："><a href="#Calico-官方定义如下：" class="headerlink" title="Calico 官方定义如下："></a>Calico 官方定义如下：</h4><pre><code>Calico provides secure network connectivity for containers and virtual machine workloads.
-
-Calico creates and manages a flat layer 3 network, assigning each workload a fully routable IP address. Workloads can communicate without IP encapsulation or network address translation for bare metal performance, easier troubleshooting, and better interoperability. In environments that require an overlay, Calico uses IP-in-IP tunneling or can work with other overlay networking such as flannel.
-
-Calico also provides dynamic enforcement of network security rules. Using Calico’s simple policy language, you can achieve fine-grained control over communications between containers, virtual machine workloads, and bare metal host endpoints.
-</code></pre><p>总结如下：</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><h4 id="Calico-官方定义如下："><a href="#Calico-官方定义如下：" class="headerlink" title="Calico 官方定义如下："></a>Calico 官方定义如下：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Calico provides secure network connectivity for containers and virtual machine workloads.</span><br><span class="line"></span><br><span class="line">Calico creates and manages a flat layer 3 network, assigning each workload a fully routable IP address. Workloads can communicate without IP encapsulation or network address translation for bare metal performance, easier troubleshooting, and better interoperability. In environments that require an overlay, Calico uses IP-in-IP tunneling or can work with other overlay networking such as flannel.</span><br><span class="line"></span><br><span class="line">Calico also provides dynamic enforcement of network security rules. Using Calico’s simple policy language, you can achieve fine-grained control over communications between containers, virtual machine workloads, and bare metal host endpoints.</span><br></pre></td></tr></table></figure>
+<p>总结如下：</p>
 <p>Calico 为容器和 vm 等提供一个安全的网路互联方法，我们把 VM、Container、白盒等实例统称为 workloads，通过给 workload 分配一个扁平的三层路由可达 IP 地址实现转发，是一种纯三层转发的方案，workload 之间不使用隧道或 NAT 技术，这种方式提供更好的网络性能，提高易维护和可交互性。同时也支持 IPIP 隧道和与 Flannel 集成能力。Calico 提供动态实施的网络安全策略，可使用简单的安全模型语言实现细粒度的安全控制。</p>
 <h4 id="相对-Overlay，为什么用-Calico？"><a href="#相对-Overlay，为什么用-Calico？" class="headerlink" title="相对 Overlay，为什么用 Calico？"></a>相对 Overlay，为什么用 Calico？</h4><p>Calico 是一种 workloads 之间互通的网络方案，并支持以上任意一种场景。在虚拟化平台中，比如 OpenStack、Docker 等都需要实现 workloads 之间互连，但同时也需要对 workloads 做隔离控制，就像在 Internet 中的服务仅开放80端口、公有云的多租户一样，提供隔离和管控机制。</p>
 <p>而在多数的虚拟化平台实现中，通常都使用二层隔离技术来实现 workloads 的网络，这些二层的技术有一些弊端，比如需要依赖 VLAN、bridge 和隧道等技术，其中 bridge 带来了复杂性，vlan 隔离和 tunnel 隧道则消耗更多的资源并对物理环境有要求，随着网络规模的增大，整体会变得越加复杂。</p>
@@ -191,24 +187,11 @@ Calico also provides dynamic enforcement of network security rules. Using Calico
 <li>开启 arp proxy 和 ip_forward 能力；</li>
 </ul>
 <p>网络连通性测试：</p>
-<pre><code># HOST0
-[root@i-7dlclo08 ~]# ip netns exec ns0 ping 10.20.2.2
-PING 10.20.2.2 (10.20.2.2) 56(84) bytes of data.
- bytes from 10.20.2.2: icmp_seq=1 ttl=62 time=0.774 ms
- bytes from 10.20.2.2: icmp_seq=2 ttl=62 time=0.332 ms
-</code></pre><p>10.20.1.2 与跨 Host 跨子网 10.20.2.2 互通成功</p>
-<pre><code># HOST0
-[root@i-7dlclo08 ~]# ip netns exec ns0 ping 10.20.1.3
-PING 10.20.1.3 (10.20.1.3) 56(84) bytes of data.
- bytes from 10.20.1.3: icmp_seq=1 ttl=62 time=957 ms
- bytes from 10.20.1.3: icmp_seq=2 ttl=62 time=0.432 ms
- bytes from 10.20.1.3: icmp_seq=3 ttl=62 time=0.563 ms
-</code></pre><p>10.20.1.2 与跨 Host 同子网 10.20.1.3 互通成功</p>
-<pre><code>[root@i-7dlclo08 ~]# ip netns exec ns0 ping 192.168.100.3
-PING 192.168.100.3 (192.168.100.3) 56(84) bytes of data.
- bytes from 192.168.100.3: icmp_seq=1 ttl=63 time=1.00 ms
- bytes from 192.168.100.3: icmp_seq=2 ttl=63 time=0.695 ms
-</code></pre><p>在未做安全策略下，10.20.1.2 与 Host 192.168.100.3 互通成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># HOST0</span><br><span class="line">[root@i-7dlclo08 ~]# ip netns exec ns0 ping 10.20.2.2</span><br><span class="line">PING 10.20.2.2 (10.20.2.2) 56(84) bytes of data.</span><br><span class="line"> bytes from 10.20.2.2: icmp_seq=1 ttl=62 time=0.774 ms</span><br><span class="line"> bytes from 10.20.2.2: icmp_seq=2 ttl=62 time=0.332 ms</span><br></pre></td></tr></table></figure>
+<p>10.20.1.2 与跨 Host 跨子网 10.20.2.2 互通成功<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># HOST0</span><br><span class="line">[root@i-7dlclo08 ~]# ip netns exec ns0 ping 10.20.1.3</span><br><span class="line">PING 10.20.1.3 (10.20.1.3) 56(84) bytes of data.</span><br><span class="line"> bytes from 10.20.1.3: icmp_seq=1 ttl=62 time=957 ms</span><br><span class="line"> bytes from 10.20.1.3: icmp_seq=2 ttl=62 time=0.432 ms</span><br><span class="line"> bytes from 10.20.1.3: icmp_seq=3 ttl=62 time=0.563 ms</span><br></pre></td></tr></table></figure></p>
+<p>10.20.1.2 与跨 Host 同子网 10.20.1.3 互通成功</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@i-7dlclo08 ~]# ip netns exec ns0 ping 192.168.100.3</span><br><span class="line">PING 192.168.100.3 (192.168.100.3) 56(84) bytes of data.</span><br><span class="line"> bytes from 192.168.100.3: icmp_seq=1 ttl=63 time=1.00 ms</span><br><span class="line"> bytes from 192.168.100.3: icmp_seq=2 ttl=63 time=0.695 ms</span><br></pre></td></tr></table></figure>
+<p>在未做安全策略下，10.20.1.2 与 Host 192.168.100.3 互通成功</p>
 <p>转发过程：</p>
 <ul>
 <li>guest0 本地所有数据包都转发到一个虚假的地址 169.254.1.1，发送 ARP Req。</li>

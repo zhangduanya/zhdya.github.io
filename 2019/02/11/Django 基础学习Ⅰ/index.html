@@ -162,171 +162,69 @@
 <li>4.模板系统</li>
 </ul>
 <p>MVC：</p>
-<pre><code>m modules 模型， 和数据库字段对应
-
-v views 视图 用来展示给用户的，就是我们所学到的前端
-
-c controll url控制， 一个url，对应一个方法或者类
-</code></pre><h3 id="二、Django特点"><a href="#二、Django特点" class="headerlink" title="二、Django特点"></a>二、Django特点</h3><p>1) 强大的数据库功能：用python的类继承，几行代码就可以拥有一个动态的数据库操作API，如果需要也能执行SQL语句。<br>2) 自带的强大的后台功能：几行代码就让网站拥有一个强大的后台，轻松管理内容。<br>3) 优雅的网址：用正则匹配网址，传递到对应函数。<br>4) 模板系统：强大，易扩展的模板系统，设计简易，代码和样式分开设计，更易管理。<br>5) 缓存系统：与memcached或其它缓存系统联用，表现更出色，加载速度更快。<br>6) 国际化：完全支持多语言应用，允许你定义翻译的字符，轻松翻译成不同国家的语言</p>
-<h3 id="三、安装Django"><a href="#三、安装Django" class="headerlink" title="三、安装Django"></a>三、安装Django</h3><p>使用pip工具来安装Django，直接通过下面命令来安装就可以。</p>
-<pre><code># pip install Django
-</code></pre><p>用一下测试django是否安装成功：</p>
-<pre><code>C:\Users\ZHDYA&gt;python
-Python 3.6.4 (v3.6.4:d48eceb, Dec 19 2017, 06:04:45) [MSC v.1900 32 bit (Intel)] on win32
-Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
-&gt;&gt;&gt; import django
-&gt;&gt;&gt; print (django.VERSION)
-(2, 0, 6, &#39;final&#39;, 0)
-</code></pre><h3 id="四、创建项目"><a href="#四、创建项目" class="headerlink" title="四、创建项目"></a>四、创建项目</h3><p>首先，我们先通过django来创建一个项目，命令如下：</p>
-<pre><code># django-admin startproject firstproject
-</code></pre><p>然后在当前目录下就自动生成了一个firstproject的项目<br>然后就可以启动这个项目了：</p>
-<pre><code># python manage.py runserver 127.0.0.1:8080
-</code></pre><p>默认不写ip绑定的是本机的所以ip地址，端口默认为8000</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">m modules 模型， 和数据库字段对应</span><br><span class="line"></span><br><span class="line">v views 视图 用来展示给用户的，就是我们所学到的前端</span><br><span class="line"></span><br><span class="line">c controll url控制， 一个url，对应一个方法或者类</span><br></pre></td></tr></table></figure>
+<h3 id="二、Django特点"><a href="#二、Django特点" class="headerlink" title="二、Django特点"></a>二、Django特点</h3><p>1) 强大的数据库功能：用python的类继承，几行代码就可以拥有一个动态的数据库操作API，如果需要也能执行SQL语句。<br>2) 自带的强大的后台功能：几行代码就让网站拥有一个强大的后台，轻松管理内容。<br>3) 优雅的网址：用正则匹配网址，传递到对应函数。<br>4) 模板系统：强大，易扩展的模板系统，设计简易，代码和样式分开设计，更易管理。<br>5) 缓存系统：与memcached或其它缓存系统联用，表现更出色，加载速度更快。<br>6) 国际化：完全支持多语言应用，允许你定义翻译的字符，轻松翻译成不同国家的语言</p>
+<h3 id="三、安装Django"><a href="#三、安装Django" class="headerlink" title="三、安装Django"></a>三、安装Django</h3><p>使用pip工具来安装Django，直接通过下面命令来安装就可以。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># pip install Django</span><br></pre></td></tr></table></figure></p>
+<p>用一下测试django是否安装成功：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\ZHDYA&gt;python</span><br><span class="line">Python 3.6.4 (v3.6.4:d48eceb, Dec 19 2017, 06:04:45) [MSC v.1900 32 bit (Intel)] on win32</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import django</span><br><span class="line">&gt;&gt;&gt; print (django.VERSION)</span><br><span class="line">(2, 0, 6, &apos;final&apos;, 0)</span><br></pre></td></tr></table></figure></p>
+<h3 id="四、创建项目"><a href="#四、创建项目" class="headerlink" title="四、创建项目"></a>四、创建项目</h3><p>首先，我们先通过django来创建一个项目，命令如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># django-admin startproject firstproject</span><br></pre></td></tr></table></figure></p>
+<p>然后在当前目录下就自动生成了一个firstproject的项目<br>然后就可以启动这个项目了：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># python manage.py runserver 127.0.0.1:8080</span><br></pre></td></tr></table></figure></p>
+<p>默认不写ip绑定的是本机的所以ip地址，端口默认为8000</p>
 <p><strong>也可以通过在pycharm中直接创建一个Django项目</strong>，就自动创建好了文件，然后配置manage.py脚本的参数。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/180725/D3jDggcidI.png?imageslim" alt="mark"></p>
 <p>直接再次运行manage.py文件就好。</p>
-<p>然后访问url：</p>
-<pre><code>http://127.0.0.1:8080
-</code></pre><p>有一个欢迎的首页</p>
+<p>然后访问url：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http://127.0.0.1:8080</span><br></pre></td></tr></table></figure></p>
+<p>有一个欢迎的首页</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/180725/mi76HkFJEd.png?imageslim" alt="mark"></p>
-<h4 id="4-1、项目目录结构"><a href="#4-1、项目目录结构" class="headerlink" title="4.1、项目目录结构"></a>4.1、项目目录结构</h4><pre><code>第一层：DjangoTest    项目名称
-
-第二层： DjangoTest目录和__init__.py文件，声明是一个包，表示项目实际的python包，不要随意更改该目录，与配置有关联
-
-settings.py        项目的全局（所有项目）配置中心
-
-urls.py          项目的url配置中心
-
-wsgi.py          项目的wsgi配置中心
-
-templates    模板目录
-
-manage.py    django命令管理脚本
-</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/180725/LIB0BALa1a.png?imageslim" alt="mark"></p>
-<h4 id="setting-py"><a href="#setting-py" class="headerlink" title="setting.py"></a>setting.py</h4><pre><code>BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))      ## 类似于环境变量
-
-SECRET_KEY =        ##密钥
-
-DEBUG = True        ##当报错时显示的错误信息
-
-ALLOWED_HOSTS = []       ##允许哪些机器可以访问
-</code></pre><h3 id="五、创建app"><a href="#五、创建app" class="headerlink" title="五、创建app"></a>五、创建app</h3><p>打个比方，jd网站：<a href="http://www.jd.com/，上面有各种各样的不同模块，我们划分为不同的app，那我们就需要在django里面创建不通的app啦。接下来，我们就来看看如何创建app" target="_blank" rel="noopener">http://www.jd.com/，上面有各种各样的不同模块，我们划分为不同的app，那我们就需要在django里面创建不通的app啦。接下来，我们就来看看如何创建app</a><br>如果是命令行模式：</p>
-<pre><code>#python manage.py startapp linux
-#python manage.py startapp python
-</code></pre><p>如果是<strong>pycharm</strong>，你就需要点击：</p>
-<pre><code>Tools-&gt;&gt;Run manage.py Task
-</code></pre><p>然后出现的交互命令行上输入：</p>
-<pre><code>startapp newapp
-</code></pre><p>这样就创建了newapp的app。</p>
+<h4 id="4-1、项目目录结构"><a href="#4-1、项目目录结构" class="headerlink" title="4.1、项目目录结构"></a>4.1、项目目录结构</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">第一层：DjangoTest    项目名称</span><br><span class="line"></span><br><span class="line">第二层： DjangoTest目录和__init__.py文件，声明是一个包，表示项目实际的python包，不要随意更改该目录，与配置有关联</span><br><span class="line"></span><br><span class="line">settings.py    	项目的全局（所有项目）配置中心</span><br><span class="line"></span><br><span class="line">urls.py      	项目的url配置中心</span><br><span class="line"></span><br><span class="line">wsgi.py      	项目的wsgi配置中心</span><br><span class="line"></span><br><span class="line">templates	模板目录</span><br><span class="line"></span><br><span class="line">manage.py	django命令管理脚本</span><br></pre></td></tr></table></figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/LIB0BALa1a.png?imageslim" alt="mark"></p>
+<h4 id="setting-py"><a href="#setting-py" class="headerlink" title="setting.py"></a>setting.py</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))      ## 类似于环境变量</span><br><span class="line"></span><br><span class="line">SECRET_KEY =        ##密钥</span><br><span class="line"></span><br><span class="line">DEBUG = True        ##当报错时显示的错误信息</span><br><span class="line"></span><br><span class="line">ALLOWED_HOSTS = []       ##允许哪些机器可以访问</span><br></pre></td></tr></table></figure>
+<h3 id="五、创建app"><a href="#五、创建app" class="headerlink" title="五、创建app"></a>五、创建app</h3><p>打个比方，jd网站：<a href="http://www.jd.com/，上面有各种各样的不同模块，我们划分为不同的app，那我们就需要在django里面创建不通的app啦。接下来，我们就来看看如何创建app" target="_blank" rel="noopener">http://www.jd.com/，上面有各种各样的不同模块，我们划分为不同的app，那我们就需要在django里面创建不通的app啦。接下来，我们就来看看如何创建app</a><br>如果是命令行模式：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#python manage.py startapp linux</span><br><span class="line">#python manage.py startapp python</span><br></pre></td></tr></table></figure>
+<p>如果是<strong>pycharm</strong>，你就需要点击：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Tools-&gt;&gt;Run manage.py Task</span><br></pre></td></tr></table></figure></p>
+<p>然后出现的交互命令行上输入：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">startapp newapp</span><br></pre></td></tr></table></figure></p>
+<p>这样就创建了newapp的app。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/180725/1Adim9ijfG.png?imageslim" alt="mark"></p>
 <h3 id="六、Django的解析顺序"><a href="#六、Django的解析顺序" class="headerlink" title="六、Django的解析顺序"></a>六、Django的解析顺序</h3><p>既然我们知道Django是使用的MVC的架构，那我们先来聊聊MVC是什么样的原理，首先，通过MVC中的C就是control，用来接收url请求，对应我们django中的url.py模块，M就代表Model，调用数据库的Model层，就是Django的model.py模块，然后经过业务逻辑层的处理，最后渲染到前端界面。前端就是MVC中的view层，对应django的view模块。</p>
 <p>其实所有的参数定义都是以setting.py为准，++首先django先去setting.py中找到ROOT_URLCONF = ‘firstproject.urls’找到总url++。然后在firstproject下的urls.py文件中的urlpatterns列表变量，然后根据里面的URL的正则表达式进行解析，如果解析到，就调用第二个参数，第二个参数对应一个类或者一个函数，或者直接是一个前端页面，在经过类或者函数处理完以后，在展现在前端界面。而前端是单独的html文件，前端界面和后端处理分开，架构更加清晰。</p>
 <p>在上面的目录结构中，每一个app都会有一个view.py， model.py，我们自己还要在创建一个url.py，通过include函数，在firstproject项目中的总url.py分出去，把属于各自的app的url分配到不通的APP的urls.py文件中，这样可以降低耦合度，增加代码的健壮性。<br>。</p>
 <h4 id="6-1、创建urls-py文件"><a href="#6-1、创建urls-py文件" class="headerlink" title="6.1、创建urls.py文件"></a>6.1、创建urls.py文件</h4><p>urls作为程序的url入口，支持正则匹配，讲访问的url映射到view中的函数中。为了能调用每个app管理自己的url，我们首先需要在DjangoTest的urls.py文件中做如下修改：</p>
-<pre><code>from django.conf.urls import url, include
-from django.contrib import admin
-
-
-urlpatterns = [
-    url(r&#39;^admin/&#39;, admin.site.urls),
-    url(r&#39;^newapp/&#39;, include(&#39;newapp.urls&#39;)),
-]
-</code></pre><p>注意事项：<br>为了避免和别的app取同样的名字，一般我们会在名字前加一个app名称作为前缀<br>url匹配，主url不需要/反斜杠：==因为django已经给域名加了一个反斜杠，如：<a href="http://127.0.0.1/" target="_blank" rel="noopener">http://127.0.0.1/</a><br>主url后面要加/， app的url前面就不需要加/了，<br>主url后面一般不要加$符号， app的url后面要加$符号==</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.conf.urls import url, include</span><br><span class="line">from django.contrib import admin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^admin/&apos;, admin.site.urls),</span><br><span class="line">    url(r&apos;^newapp/&apos;, include(&apos;newapp.urls&apos;)),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>注意事项：<br>为了避免和别的app取同样的名字，一般我们会在名字前加一个app名称作为前缀<br>url匹配，主url不需要/反斜杠：==因为django已经给域名加了一个反斜杠，如：<a href="http://127.0.0.1/" target="_blank" rel="noopener">http://127.0.0.1/</a><br>主url后面要加/， app的url前面就不需要加/了，<br>主url后面一般不要加$符号， app的url后面要加$符号==</p>
 <p>然后在创建newapp/urls.py文件，编辑如下：</p>
-<pre><code>from django.conf.urls import url, include
-
-from newapp import views
-
-urlpatterns = [
-    url(r&#39;^$&#39;, views.index)
-]
-</code></pre><h4 id="配置-view-py文件"><a href="#配置-view-py文件" class="headerlink" title="配置 view.py文件"></a>配置 view.py文件</h4><p>而以上：<a href="http://127.0.0.1:8080/newapp的url对应的就是view模块中的index函数，在linux的view.py中定义index函数" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp的url对应的就是view模块中的index函数，在linux的view.py中定义index函数</a></p>
-<pre><code>from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse(&quot;This is a test Django index!!!&quot;)
-</code></pre><p>然后在浏览器上访问：<a href="http://127.0.0.1:8080/newapp/，如下图所示：" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/，如下图所示：</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.conf.urls import url, include</span><br><span class="line"></span><br><span class="line">from newapp import views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&apos;^$&apos;, views.index)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h4 id="配置-view-py文件"><a href="#配置-view-py文件" class="headerlink" title="配置 view.py文件"></a>配置 view.py文件</h4><p>而以上：<a href="http://127.0.0.1:8080/newapp的url对应的就是view模块中的index函数，在linux的view.py中定义index函数" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp的url对应的就是view模块中的index函数，在linux的view.py中定义index函数</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    return HttpResponse(&quot;This is a test Django index!!!&quot;)</span><br></pre></td></tr></table></figure>
+<p>然后在浏览器上访问：<a href="http://127.0.0.1:8080/newapp/，如下图所示：" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/，如下图所示：</a></p>
 <p><img src="http://myimage.okay686.cn/okay686cn/180725/iF56db0A93.png?imageslim" alt="mark"></p>
-<h4 id="6-2、如果再次增加内容："><a href="#6-2、如果再次增加内容：" class="headerlink" title="6.2、如果再次增加内容："></a>6.2、如果再次增加内容：</h4><h5 id="urls-py"><a href="#urls-py" class="headerlink" title="urls.py"></a>urls.py</h5><pre><code>from django.conf.urls import url, include
-
-from newapp import views
-
-urlpatterns = [
-    url(r&quot;^$&quot;, views.index),
-    url(r&#39;newapp/&#39;, views.index),
-    url(r&#39;hello/&#39;, views.hello)
-]
-</code></pre><h5 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a>views.py</h5><pre><code>from django.http import HttpResponse
-
-def index(request):
-    return HttpResponse(&quot;This is a test Django index!!!&quot;)
-
-def hello(request):
-    return HttpResponse(&quot;&lt;h1 style=&#39;text-align:center&#39;&gt; hheello world!!!&lt;/h1&gt;&quot;)
-</code></pre><p>当访问：<a href="http://127.0.0.1:8000/newapp/hello/" target="_blank" rel="noopener">http://127.0.0.1:8000/newapp/hello/</a></p>
+<h4 id="6-2、如果再次增加内容："><a href="#6-2、如果再次增加内容：" class="headerlink" title="6.2、如果再次增加内容："></a>6.2、如果再次增加内容：</h4><h5 id="urls-py"><a href="#urls-py" class="headerlink" title="urls.py"></a>urls.py</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.conf.urls import url, include</span><br><span class="line"></span><br><span class="line">from newapp import views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&quot;^$&quot;, views.index),</span><br><span class="line">    url(r&apos;newapp/&apos;, views.index),</span><br><span class="line">    url(r&apos;hello/&apos;, views.hello)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h5 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a>views.py</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def index(request):</span><br><span class="line">    return HttpResponse(&quot;This is a test Django index!!!&quot;)</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">    return HttpResponse(&quot;&lt;h1 style=&apos;text-align:center&apos;&gt; hheello world!!!&lt;/h1&gt;&quot;)</span><br></pre></td></tr></table></figure>
+<p>当访问：<a href="http://127.0.0.1:8000/newapp/hello/" target="_blank" rel="noopener">http://127.0.0.1:8000/newapp/hello/</a></p>
 <p>这会出现一个一级标题且居中的字体。</p>
-<h4 id="6-3、urls捕获参数（匹配正则表达式）"><a href="#6-3、urls捕获参数（匹配正则表达式）" class="headerlink" title="6.3、urls捕获参数（匹配正则表达式）"></a>6.3、urls捕获参数（匹配正则表达式）</h4><p>在urls.py中增加如下：</p>
-<pre><code>url(r&#39;hello/p1(\w+)p2(.+)/$&#39;, views.hello, name=hello),
-</code></pre><p>在views.py中增加如下：</p>
-<pre><code>def hello(request, p1, p2):
-    return HttpResponse(&quot;hello {0}, hello {1}&quot;.format(p1, p2))
-</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/180725/72fac163f6.png?imageslim" alt="mark"></p>
+<h4 id="6-3、urls捕获参数（匹配正则表达式）"><a href="#6-3、urls捕获参数（匹配正则表达式）" class="headerlink" title="6.3、urls捕获参数（匹配正则表达式）"></a>6.3、urls捕获参数（匹配正则表达式）</h4><p>在urls.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url(r&apos;hello/p1(\w+)p2(.+)/$&apos;, views.hello, name=hello),</span><br></pre></td></tr></table></figure></p>
+<p>在views.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def hello(request, p1, p2):</span><br><span class="line">    return HttpResponse(&quot;hello &#123;0&#125;, hello &#123;1&#125;&quot;.format(p1, p2))</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/180725/72fac163f6.png?imageslim" alt="mark"></p>
 <h4 id="url参数的捕获有两种方式："><a href="#url参数的捕获有两种方式：" class="headerlink" title="url参数的捕获有两种方式："></a>url参数的捕获有两种方式：</h4><p>b 捕获关键字参数：在url函数中，正则表达是用（?P<keyword>）进行捕获，然后在views.py中定义即可</keyword></p>
-<p>在urls.py中增加如下：</p>
-<pre><code>url(r&#39;keyword/(?P&lt;ip&gt;\S+)/$&#39;, views.keyword, name=keyword),
-</code></pre><p>在views.py中增加如下：</p>
-<pre><code>def keyword(request, ip):
-    return HttpResponse(&quot;the ip is {0}&quot;.format(ip))
-</code></pre><p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/keyword/1.1.1.1/" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/keyword/1.1.1.1/</a></p>
+<p>在urls.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url(r&apos;keyword/(?P&lt;ip&gt;\S+)/$&apos;, views.keyword, name=keyword),</span><br></pre></td></tr></table></figure></p>
+<p>在views.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def keyword(request, ip):</span><br><span class="line">	return HttpResponse(&quot;the ip is &#123;0&#125;&quot;.format(ip))</span><br></pre></td></tr></table></figure></p>
+<p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/keyword/1.1.1.1/" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/keyword/1.1.1.1/</a></p>
 <h3 id="七、urls重定向"><a href="#七、urls重定向" class="headerlink" title="七、urls重定向"></a>七、urls重定向</h3><p>在学习url重定向之前，我们先来看看定义url的函数是怎样一个表达形式。</p>
-<p>注意如下，有个参数  name=  这个是必须要写的，类似于起个别名。</p>
-<pre><code>def url(regex, view, kwargs=None, name=None):
-</code></pre><pre><code>regex：url匹配的正则字符串
-
-view：一个可以调用的类型函数，或者使用include函数
-
-kwargs：关键字参数，必须是一个字典，可以通过这个传递更多参数给views.py，views通过kwargs.get(“key”)得到对应的value
-
-name：给URL取得名字，以后可以通过reverse函数进行重定向
-</code></pre><p>对于kwargs如何传递参数，我们来看一个例子：</p>
-<p>在urls.py中增加如下：</p>
-<pre><code>    url(r&#39;test/$&#39;, view=views.test, kwargs={&quot;name&quot;: &quot;zhdya&quot;}, name=&quot;test&quot;),
-</code></pre><p>在views.py中增加如下：</p>
-<pre><code>def test(request, **kwargs):
-    return HttpResponse(&quot;the name is : {0}&quot;.format(kwargs.get(&quot;name&quot;)))
-</code></pre><p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/test/" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/test/</a></p>
+<p>注意如下，有个参数  name=  这个是必须要写的，类似于起个别名。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def url(regex, view, kwargs=None, name=None):</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">regex：url匹配的正则字符串</span><br><span class="line"></span><br><span class="line">view：一个可以调用的类型函数，或者使用include函数</span><br><span class="line"></span><br><span class="line">kwargs：关键字参数，必须是一个字典，可以通过这个传递更多参数给views.py，views通过kwargs.get(“key”)得到对应的value</span><br><span class="line"></span><br><span class="line">name：给URL取得名字，以后可以通过reverse函数进行重定向</span><br></pre></td></tr></table></figure>
+<p>对于kwargs如何传递参数，我们来看一个例子：</p>
+<p>在urls.py中增加如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url(r&apos;test/$&apos;, view=views.test, kwargs=&#123;&quot;name&quot;: &quot;zhdya&quot;&#125;, name=&quot;test&quot;),</span><br></pre></td></tr></table></figure></p>
+<p>在views.py中增加如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def test(request, **kwargs):</span><br><span class="line">    return HttpResponse(&quot;the name is : &#123;0&#125;&quot;.format(kwargs.get(&quot;name&quot;)))</span><br></pre></td></tr></table></figure>
+<p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/test/" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/test/</a></p>
 <p><img src="http://myimage.okay686.cn/okay686cn/180726/3cfmb1HhgB.png?imageslim" alt="mark"></p>
 <p>既然已经知道name属性的用法，现在我们就来说重定向，重定向常用name属性来进行重定向</p>
-<h5 id="修改urls-py"><a href="#修改urls-py" class="headerlink" title="修改urls.py"></a>修改urls.py</h5><pre><code>url(r&quot;^$&quot;, views.index, name=&quot;index&quot;),
-url(r&quot;redirect/$&quot;, view=views.redirect,  name=&quot;redirect&quot;),
-</code></pre><h5 id="修改views-py"><a href="#修改views-py" class="headerlink" title="修改views.py"></a>修改views.py</h5><pre><code>from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-def redirect(request):
-    return HttpResponseRedirect(reverse(&quot;index&quot;))
-</code></pre><p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/redirect，直接跳转到http://127.0.0.1:8080/newapp/，" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/redirect，直接跳转到http://127.0.0.1:8080/newapp/，</a></p>
+<h5 id="修改urls-py"><a href="#修改urls-py" class="headerlink" title="修改urls.py"></a>修改urls.py</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url(r&quot;^$&quot;, views.index, name=&quot;index&quot;),</span><br><span class="line">url(r&quot;redirect/$&quot;, view=views.redirect,  name=&quot;redirect&quot;),</span><br></pre></td></tr></table></figure>
+<h5 id="修改views-py"><a href="#修改views-py" class="headerlink" title="修改views.py"></a>修改views.py</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.http import HttpResponse, HttpResponseRedirect</span><br><span class="line">from django.urls import reverse</span><br><span class="line">def redirect(request):</span><br><span class="line">    return HttpResponseRedirect(reverse(&quot;index&quot;))</span><br></pre></td></tr></table></figure>
+<p>在浏览器上访问url：<a href="http://127.0.0.1:8080/newapp/redirect，直接跳转到http://127.0.0.1:8080/newapp/，" target="_blank" rel="noopener">http://127.0.0.1:8080/newapp/redirect，直接跳转到http://127.0.0.1:8080/newapp/，</a></p>
 <p><img src="http://myimage.okay686.cn/okay686cn/180726/BHLAEfGfHD.png?imageslim" alt="mark"></p>
 <p>当然也可以指定返回数据的具体类型，例如：Json格式返回</p>
-<p>urls.py</p>
-<pre><code>from django.conf.urls import url, include
-
-from newapp import views
-
-urlpatterns = [
-    url(r&quot;^$&quot;, views.index, name=&quot;index&quot;),
-    # url(r&#39;hello/&#39;, views.hello)
-    url(r&#39;hello/p1(\w+)p2(.+)/$&#39;, views.hello, name=&quot;hello&quot;),
-    url(r&#39;test/$&#39;, view=views.test, kwargs={&quot;name&quot;: &quot;zhdya&quot;}, name=&quot;test&quot;),
-    url(r&quot;redirect/$&quot;, view=views.redirect, name=&quot;redirect&quot;)
-]
-</code></pre><p>在views.py中修改主页为：</p>
-<pre><code>def index(request):
-    test = dict()
-    test[&#39;name&#39;] = &quot;zhdya&quot;
-    test[&#39;sex&#39;] = &quot;man&quot;
-    test[&#39;age&#39;] = 28
-    # return HttpResponse(&quot;This is a test Django index!!!&quot;)
-    return HttpResponse(json.dumps(test))
-</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/180726/EFdI506ah8.png?imageslim" alt="mark"></p>
+<p>urls.py<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.conf.urls import url, include</span><br><span class="line"></span><br><span class="line">from newapp import views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    url(r&quot;^$&quot;, views.index, name=&quot;index&quot;),</span><br><span class="line">    # url(r&apos;hello/&apos;, views.hello)</span><br><span class="line">    url(r&apos;hello/p1(\w+)p2(.+)/$&apos;, views.hello, name=&quot;hello&quot;),</span><br><span class="line">    url(r&apos;test/$&apos;, view=views.test, kwargs=&#123;&quot;name&quot;: &quot;zhdya&quot;&#125;, name=&quot;test&quot;),</span><br><span class="line">    url(r&quot;redirect/$&quot;, view=views.redirect, name=&quot;redirect&quot;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>在views.py中修改主页为：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def index(request):</span><br><span class="line">    test = dict()</span><br><span class="line">    test[&apos;name&apos;] = &quot;zhdya&quot;</span><br><span class="line">    test[&apos;sex&apos;] = &quot;man&quot;</span><br><span class="line">    test[&apos;age&apos;] = 28</span><br><span class="line">    # return HttpResponse(&quot;This is a test Django index!!!&quot;)</span><br><span class="line">    return HttpResponse(json.dumps(test))</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/180726/EFdI506ah8.png?imageslim" alt="mark"></p>
 
             <div class="post-copyright">
     <div class="content">

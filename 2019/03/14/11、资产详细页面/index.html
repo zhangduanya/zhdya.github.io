@@ -8,19 +8,19 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。 完整的detail.html页面代码如下： detail.html https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html 主要代码全部">
+  <meta name="description" content="在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。 完整的detail.html页面代码如下：detail.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html 主要代码全部集中">
 <meta name="keywords" content="django,python,CMDB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMDB-资产详细页面（十一）">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/03/14/11、资产详细页面/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。 完整的detail.html页面代码如下： detail.html https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html 主要代码全部">
+<meta property="og:description" content="在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。 完整的detail.html页面代码如下：detail.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html 主要代码全部集中">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190401/uUQqPfLf2qQ8.png?imageslim">
 <meta property="og:updated_time" content="2019-04-20T07:00:47.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMDB-资产详细页面（十一）">
-<meta name="twitter:description" content="在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。 完整的detail.html页面代码如下： detail.html https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html 主要代码全部">
+<meta name="twitter:description" content="在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。 完整的detail.html页面代码如下：detail.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html 主要代码全部集中">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190401/uUQqPfLf2qQ8.png?imageslim">
   
   
@@ -141,15 +141,11 @@
             
             <p>在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。</p>
 <p>教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。</p>
-<p>完整的detail.html页面代码如下：</p>
-<pre><code>detail.html
-https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html
-</code></pre><p>主要代码全部集中在：</p>
-<pre><code>&lt;section class=&quot;content&quot;&gt;
-</code></pre><p>分别用几个表格将概览、服务器、CPU、内存、硬盘和网卡的信息展示出来了。并且，AdminLTE为我们提供了一个折叠的功能，也是非常酷的。</p>
-<p>这个HTML文件没有太多需要额外解释的内容，都是一些很基础的模板语言，构造</p>
-<pre><code>&lt;table&gt;
-</code></pre><p>然后插入数据。如果没有数据，就以‘N/A’代替。最后在底部添加一个返回资产总表的链接。</p>
+<p>完整的detail.html页面代码如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">detail.html</span><br><span class="line">https://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html</span><br></pre></td></tr></table></figure></p>
+<p>主要代码全部集中在：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;section class=&quot;content&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>分别用几个表格将概览、服务器、CPU、内存、硬盘和网卡的信息展示出来了。并且，AdminLTE为我们提供了一个折叠的功能，也是非常酷的。</p>
+<p>这个HTML文件没有太多需要额外解释的内容，都是一些很基础的模板语言，构造<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;table&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后插入数据。如果没有数据，就以‘N/A’代替。最后在底部添加一个返回资产总表的链接。</p>
 <p>下面是一个展示图：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190401/uUQqPfLf2qQ8.png?imageslim" alt="mark"></p>
 

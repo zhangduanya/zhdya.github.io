@@ -149,74 +149,25 @@
 <h4 id="1、首先我们先下载DjangoUeditor包"><a href="#1、首先我们先下载DjangoUeditor包" class="headerlink" title="1、首先我们先下载DjangoUeditor包"></a>1、首先我们先下载DjangoUeditor包</h4><p>点击下面的链接进行下载！下载完成然后解压到项目根目录里。</p>
 <p><a href="https://www.django.cn/media/upfile/DjangoUeditor_20181010013851_248.zip" target="_blank" rel="noopener">https://www.django.cn/media/upfile/DjangoUeditor_20181010013851_248.zip</a></p>
 <h4 id="2、settings-py里注册APP"><a href="#2、settings-py里注册APP" class="headerlink" title="2、settings.py里注册APP"></a>2、settings.py里注册APP</h4><p>在INSTALLED_APPS里添加’DjangoUeditor’</p>
-<pre><code>myblog/settings.y
-INSTALLED_APPS = [
-    &#39;django.contrib.admin&#39;,
-    ....
-    &#39;DjangoUeditor&#39;, #注册APP应用
-]
-
-##验证是否已经增加正确，按住 ctrl 点击DjangoUdeitor，只要能跳转到目录即可；
-</code></pre><h4 id="3、myblog-urls-py里添加url。"><a href="#3、myblog-urls-py里添加url。" class="headerlink" title="3、myblog/urls.py里添加url。"></a>3、myblog/urls.py里添加url。</h4><pre><code>myblog/urls.py
-...
-from django.urls import path, include
-#留意上面这行比原来多了一个include
-
-urlpatterns = [
-    path(&#39;admin/&#39;, admin.site.urls),
-    path(&#39;&#39;, views.hello),
-    path(&#39;ueditor/&#39;, include(&#39;DjangoUeditor.urls&#39;)), #添加DjangoUeditor的URL
-]
-</code></pre><p>4、修改blog/models.py里需要使用富文本编辑器渲染的字段。这里面我们要修改的是Article表里的body字段。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/settings.y</span><br><span class="line">INSTALLED_APPS = [</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    ....</span><br><span class="line">    &apos;DjangoUeditor&apos;, #注册APP应用</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">##验证是否已经增加正确，按住 ctrl 点击DjangoUdeitor，只要能跳转到目录即可；</span><br></pre></td></tr></table></figure>
+<h4 id="3、myblog-urls-py里添加url。"><a href="#3、myblog-urls-py里添加url。" class="headerlink" title="3、myblog/urls.py里添加url。"></a>3、myblog/urls.py里添加url。</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/urls.py</span><br><span class="line">...</span><br><span class="line">from django.urls import path, include</span><br><span class="line">#留意上面这行比原来多了一个include</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">    path(&apos;&apos;, views.hello),</span><br><span class="line">    path(&apos;ueditor/&apos;, include(&apos;DjangoUeditor.urls&apos;)), #添加DjangoUeditor的URL</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>4、修改blog/models.py里需要使用富文本编辑器渲染的字段。这里面我们要修改的是Article表里的body字段。</p>
 <p>把原来的：</p>
-<pre><code>blog/models.py
-
-body = models.TextField()
-</code></pre><p>修改成：</p>
-<pre><code>blog/models.py
-from DjangoUeditor.models import UEditorField #头部增加这行代码导入UEditorField
-
-body = UEditorField(&#39;内容&#39;, width=800, height=500, 
-                    toolbars=&quot;full&quot;, imagePath=&quot;upimg/&quot;, filePath=&quot;upfile/&quot;,
-                    upload_settings={&quot;imageMaxSize&quot;: 1204000},
-                    settings={}, command=None, blank=True
-                    )
-</code></pre><p>留意里面的</p>
-<pre><code>imagePath=&quot;upimg/&quot;, filePath=&quot;upfile/&quot;
-</code></pre><p> 这两个是图片和文件上传的路径，我们上传文件，++会自动上传到项目根目录media文件夹下对应的upimg和upfile目录里++，这个目录名可以自行定义。有的人问，为什么会上传到media目录里去呢？那是因为之前我们在基础配置文章里，设置了上传文件目录media。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">blog/models.py</span><br><span class="line"></span><br><span class="line">body = models.TextField()</span><br></pre></td></tr></table></figure>
+<p>修改成：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">blog/models.py</span><br><span class="line">from DjangoUeditor.models import UEditorField #头部增加这行代码导入UEditorField</span><br><span class="line"></span><br><span class="line">body = UEditorField(&apos;内容&apos;, width=800, height=500, </span><br><span class="line">                    toolbars=&quot;full&quot;, imagePath=&quot;upimg/&quot;, filePath=&quot;upfile/&quot;,</span><br><span class="line">                    upload_settings=&#123;&quot;imageMaxSize&quot;: 1204000&#125;,</span><br><span class="line">                    settings=&#123;&#125;, command=None, blank=True</span><br><span class="line">                    )</span><br></pre></td></tr></table></figure></p>
+<p>留意里面的<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">imagePath=&quot;upimg/&quot;, filePath=&quot;upfile/&quot;</span><br></pre></td></tr></table></figure></p>
+<p> 这两个是图片和文件上传的路径，我们上传文件，++会自动上传到项目根目录media文件夹下对应的upimg和upfile目录里++，这个目录名可以自行定义。有的人问，为什么会上传到media目录里去呢？那是因为之前我们在基础配置文章里，设置了上传文件目录media。</p>
 <p>上面步骤完成后，我们启动项目，进入文章发布页面。提示出错：</p>
-<h4 id="错误一："><a href="#错误一：" class="headerlink" title="错误一："></a>错误一：</h4><pre><code>File &quot;C:\Python37\lib\site-packages\django\views\debug.py&quot;, line 332, in get_traceback_html
-    t = DEBUG_ENGINE.from_string(fh.read())
-UnicodeDecodeError: &#39;gbk&#39; codec can&#39;t decode byte 0xa6 in position 9737: illegal multibyte sequence
-</code></pre><p>查看错误栈最后一行发现是 编码问题<br>找到django 源码 “C:\Python37\lib\site-packages\django\views\debug.py” 332行位置 ,增加utf-8编码  open( encoding=’utf-8’)，问题解决：</p>
-<pre><code>def get_traceback_html(self):
-  &quot;&quot;&quot;Return HTML version of debug 500 HTTP error page.&quot;&quot;&quot;
-  with Path(CURRENT_DIR, &#39;templates&#39;, &#39;technical_500.html&#39;).open( encoding=&#39;utf-8&#39;) as fh:
-      t = DEBUG_ENGINE.from_string(fh.read())
-  c = Context(self.get_traceback_data(), use_l10n=False)
-  return t.render(c)
-</code></pre><h4 id="错误二："><a href="#错误二：" class="headerlink" title="错误二："></a>错误二：</h4><pre><code>render() got an unexpected keyword argument &#39;renderer&#39;
-</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ki7f1qbrNjSm.png?imageslim" alt="mark"></p>
+<h4 id="错误一："><a href="#错误一：" class="headerlink" title="错误一："></a>错误一：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">File &quot;C:\Python37\lib\site-packages\django\views\debug.py&quot;, line 332, in get_traceback_html</span><br><span class="line">    t = DEBUG_ENGINE.from_string(fh.read())</span><br><span class="line">UnicodeDecodeError: &apos;gbk&apos; codec can&apos;t decode byte 0xa6 in position 9737: illegal multibyte sequence</span><br></pre></td></tr></table></figure>
+<p>查看错误栈最后一行发现是 编码问题<br>找到django 源码 “C:\Python37\lib\site-packages\django\views\debug.py” 332行位置 ,增加utf-8编码  open( encoding=’utf-8’)，问题解决：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def get_traceback_html(self):</span><br><span class="line">  &quot;&quot;&quot;Return HTML version of debug 500 HTTP error page.&quot;&quot;&quot;</span><br><span class="line">  with Path(CURRENT_DIR, &apos;templates&apos;, &apos;technical_500.html&apos;).open( encoding=&apos;utf-8&apos;) as fh:</span><br><span class="line">      t = DEBUG_ENGINE.from_string(fh.read())</span><br><span class="line">  c = Context(self.get_traceback_data(), use_l10n=False)</span><br><span class="line">  return t.render(c)</span><br></pre></td></tr></table></figure></p>
+<h4 id="错误二："><a href="#错误二：" class="headerlink" title="错误二："></a>错误二：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">render() got an unexpected keyword argument &apos;renderer&apos;</span><br></pre></td></tr></table></figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ki7f1qbrNjSm.png?imageslim" alt="mark"></p>
 <p>我这里使用的是最新版本的Django2.1.1所以报错，解决办法很简单。打开这个文件的93行，注释这行即可。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190420/HjUJX4IaD9Tq.png?imageslim" alt="mark"></p>
 <p>修改成之后，重新刷新页面，就可以看到我们的富文本编辑器正常显示。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190420/jdjuTJ862k5u.png?imageslim" alt="mark"></p>
-<p>留意，如果我们在富文本编辑器里，上传图片，在编辑器内容里不显示上传的图片。那我们还需要进行如下设置，打开myblog/urls.py文件，在里面输入如下代码：</p>
-<pre><code>myblog/urls.py
-....
-from django.urls import path, include, re_path
-#上面这行多加了一个re_path
-from django.views.static import serve
-#导入静态文件模块
-from django.conf import settings
-#导入配置文件里的文件上传配置
-
-urlpatterns = [
-    path(&#39;admin/&#39;, admin.site.urls),
-    ....
-    re_path(&#39;^media/(?P&lt;path&gt;.*)$&#39;, serve, {&#39;document_root&#39;: settings.MEDIA_ROOT}),#增加此行
-]
-</code></pre><p>设置好了之后，图片就会正常显示。这样我们就可以用DjangoUeditor富文本编辑器发布图文并茂的文章了。</p>
+<p>留意，如果我们在富文本编辑器里，上传图片，在编辑器内容里不显示上传的图片。那我们还需要进行如下设置，打开myblog/urls.py文件，在里面输入如下代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/urls.py</span><br><span class="line">....</span><br><span class="line">from django.urls import path, include, re_path</span><br><span class="line">#上面这行多加了一个re_path</span><br><span class="line">from django.views.static import serve</span><br><span class="line">#导入静态文件模块</span><br><span class="line">from django.conf import settings</span><br><span class="line">#导入配置文件里的文件上传配置</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">    ....</span><br><span class="line">    re_path(&apos;^media/(?P&lt;path&gt;.*)$&apos;, serve, &#123;&apos;document_root&apos;: settings.MEDIA_ROOT&#125;),#增加此行</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>设置好了之后，图片就会正常显示。这样我们就可以用DjangoUeditor富文本编辑器发布图文并茂的文章了。</p>
 <p>随便测试了一篇文章：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190420/Jw8Tpj1Ht24P.png?imageslim" alt="mark"></p>
 
