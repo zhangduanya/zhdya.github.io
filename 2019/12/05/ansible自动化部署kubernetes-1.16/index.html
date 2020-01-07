@@ -8,20 +8,20 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e 一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-masteransible-install-k8s-master">
+  <meta name="description" content="概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e 一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-master ansible-install-k8s-maste">
 <meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ansible自动化部署kubernetes-1.16">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/05/ansible自动化部署kubernetes-1.16/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e 一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-masteransible-install-k8s-master">
+<meta property="og:description" content="概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e 一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-master ansible-install-k8s-maste">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191204/RlnwtcB5dboO.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191204/7GzoI4FprwXv.png?imageslim">
 <meta property="og:updated_time" content="2019-12-05T09:13:48.858Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ansible自动化部署kubernetes-1.16">
-<meta name="twitter:description" content="概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e 一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-masteransible-install-k8s-master">
+<meta name="twitter:description" content="概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e 一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-master ansible-install-k8s-maste">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191204/RlnwtcB5dboO.png?imageslim">
   
   
@@ -142,21 +142,973 @@
             
             <h3 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h3><p>集群包含coreDNS、cni、nginx-ingress、HA、flanneld</p>
 <p>百度网盘链接：<a href="https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ</a> 提取码：vi5e</p>
-<h3 id="一、单master部署"><a href="#一、单master部署" class="headerlink" title="一、单master部署"></a>一、单master部署</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ~]# tree ansible-install-k8s-master</span><br><span class="line">ansible-install-k8s-master</span><br><span class="line">├── add-node.yml</span><br><span class="line">├── ansible.cfg</span><br><span class="line">├── group_vars</span><br><span class="line">│   └── all.yml</span><br><span class="line">├── hosts</span><br><span class="line">├── multi-master-deploy.yml</span><br><span class="line">├── multi-master.jpg</span><br><span class="line">├── README.md</span><br><span class="line">├── roles</span><br><span class="line">│   ├── addons</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   │   ├── coredns.yaml</span><br><span class="line">│   │   │   ├── ingress-controller.yaml</span><br><span class="line">│   │   │   ├── kube-flannel.yaml</span><br><span class="line">│   │   │   └── kubernetes-dashboard.yaml</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │       └── main.yml</span><br><span class="line">│   ├── common</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── templates</span><br><span class="line">│   │       └── hosts.j2</span><br><span class="line">│   ├── docker</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   │   ├── daemon.json</span><br><span class="line">│   │   │   └── docker.service</span><br><span class="line">│   │   └── tasks</span><br><span class="line">│   │       └── main.yml</span><br><span class="line">│   ├── etcd</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   │   └── etcd_cert</span><br><span class="line">│   │   │       ├── ca-key.pem</span><br><span class="line">│   │   │       ├── ca.pem</span><br><span class="line">│   │   │       ├── server-key.pem</span><br><span class="line">│   │   │       └── server.pem</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── templates</span><br><span class="line">│   │       ├── etcd.conf.j2</span><br><span class="line">│   │       ├── etcd.service.j2</span><br><span class="line">│   │       └── etcd.sh.j2</span><br><span class="line">│   ├── ha</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   │   └── check_nginx.sh</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── templates</span><br><span class="line">│   │       ├── keepalived.conf.j2</span><br><span class="line">│   │       └── nginx.conf.j2</span><br><span class="line">│   ├── master</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   │   ├── apiserver-to-kubelet-rbac.yaml</span><br><span class="line">│   │   │   ├── etcd_cert</span><br><span class="line">│   │   │   │   ├── ca.pem</span><br><span class="line">│   │   │   │   ├── server-key.pem</span><br><span class="line">│   │   │   │   └── server.pem</span><br><span class="line">│   │   │   ├── k8s_cert</span><br><span class="line">│   │   │   │   ├── admin-key.pem</span><br><span class="line">│   │   │   │   ├── admin.pem</span><br><span class="line">│   │   │   │   ├── ca-key.pem</span><br><span class="line">│   │   │   │   ├── ca.pem</span><br><span class="line">│   │   │   │   ├── kube-proxy-key.pem</span><br><span class="line">│   │   │   │   ├── kube-proxy.pem</span><br><span class="line">│   │   │   │   ├── server-key.pem</span><br><span class="line">│   │   │   │   └── server.pem</span><br><span class="line">│   │   │   ├── kubelet-bootstrap-rbac.yaml</span><br><span class="line">│   │   │   └── token.csv</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── templates</span><br><span class="line">│   │       ├── kube-apiserver.conf.j2</span><br><span class="line">│   │       ├── kube-apiserver.service.j2</span><br><span class="line">│   │       ├── kube-controller-manager.conf.j2</span><br><span class="line">│   │       ├── kube-controller-manager.service.j2</span><br><span class="line">│   │       ├── kube-scheduler.conf.j2</span><br><span class="line">│   │       └── kube-scheduler.service.j2</span><br><span class="line">│   ├── node</span><br><span class="line">│   │   ├── files</span><br><span class="line">│   │   │   └── k8s_cert</span><br><span class="line">│   │   │       ├── ca.pem</span><br><span class="line">│   │   │       ├── kube-proxy-key.pem</span><br><span class="line">│   │   │       └── kube-proxy.pem</span><br><span class="line">│   │   ├── tasks</span><br><span class="line">│   │   │   └── main.yml</span><br><span class="line">│   │   └── templates</span><br><span class="line">│   │       ├── bootstrap.kubeconfig.j2</span><br><span class="line">│   │       ├── kubelet-config.yml.j2</span><br><span class="line">│   │       ├── kubelet.conf.j2</span><br><span class="line">│   │       ├── kubelet.service.j2</span><br><span class="line">│   │       ├── kube-proxy-config.yml.j2</span><br><span class="line">│   │       ├── kube-proxy.conf.j2</span><br><span class="line">│   │       ├── kube-proxy.kubeconfig.j2</span><br><span class="line">│   │       └── kube-proxy.service.j2</span><br><span class="line">│   └── tls</span><br><span class="line">│       ├── files</span><br><span class="line">│       │   ├── generate_etcd_cert.sh</span><br><span class="line">│       │   └── generate_k8s_cert.sh</span><br><span class="line">│       ├── tasks</span><br><span class="line">│       │   └── main.yml</span><br><span class="line">│       └── templates</span><br><span class="line">│           ├── etcd</span><br><span class="line">│           │   ├── ca-config.json.j2</span><br><span class="line">│           │   ├── ca-csr.json.j2</span><br><span class="line">│           │   └── server-csr.json.j2</span><br><span class="line">│           └── k8s</span><br><span class="line">│               ├── admin-csr.json.j2</span><br><span class="line">│               ├── ca-config.json.j2</span><br><span class="line">│               ├── ca-csr.json.j2</span><br><span class="line">│               ├── kube-proxy-csr.json.j2</span><br><span class="line">│               └── server-csr.json.j2</span><br><span class="line">├── single-master-deploy.yml</span><br><span class="line">└── single-master.jpg</span><br></pre></td></tr></table></figure>
-<h4 id="1-1、解压缩binary-pkg-tar-gz"><a href="#1-1、解压缩binary-pkg-tar-gz" class="headerlink" title="1.1、解压缩binary_pkg.tar.gz"></a>1.1、解压缩binary_pkg.tar.gz</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ~]# ls</span><br><span class="line">anaconda-ks.cfg  ansible-install-k8s-master  ansible-install-k8s-master.zip  binary_pkg.tar.gz</span><br><span class="line">[root@k8s-ansible1 ~]# tar zxvf binary_pkg.tar.gz</span><br></pre></td></tr></table></figure>
-<h4 id="1-2、修改所以节点hosts-及ansible内的hosts"><a href="#1-2、修改所以节点hosts-及ansible内的hosts" class="headerlink" title="1.2、修改所以节点hosts 及ansible内的hosts"></a>1.2、修改所以节点hosts 及ansible内的hosts</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ~]# vim /etc/hosts</span><br><span class="line"></span><br><span class="line">127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4</span><br><span class="line">::1         localhost localhost.localdomain localhost6 localhost6.localdomain6</span><br><span class="line">192.168.171.11 k8s-ansible1     ##ansible机器</span><br><span class="line">192.168.171.12 k8s-ansible2     ##master</span><br><span class="line">192.168.171.13 k8s-ansible3     ##node1</span><br><span class="line">192.168.171.14 k8s-ansible4     ##node2</span><br><span class="line"></span><br><span class="line">[root@k8s-ansible1 ~]# cd ansible-install-k8s-master</span><br><span class="line"></span><br><span class="line">[root@k8s-ansible1 ansible-install-k8s-master]# cat hosts</span><br><span class="line">[master]</span><br><span class="line"># 如果部署单Master，只保留一个Master节点</span><br><span class="line">192.168.171.12 node_name=k8s-ansible2</span><br><span class="line">#192.168.171.111 node_name=k8s-master2</span><br><span class="line"></span><br><span class="line">[node]</span><br><span class="line">192.168.171.13 node_name=k8s-ansible3</span><br><span class="line">192.168.171.14 node_name=k8s-ansible4</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">192.168.171.12 etcd_name=k8s-ansible2</span><br><span class="line">192.168.171.13 etcd_name=k8s-ansible3</span><br><span class="line">192.168.171.14 etcd_name=k8s-ansible4</span><br><span class="line"></span><br><span class="line">[lb]</span><br><span class="line"># 如果部署单Master，该项忽略</span><br><span class="line">192.168.31.63 lb_name=lb-master</span><br><span class="line">192.168.31.71 lb_name=lb-backup</span><br><span class="line"></span><br><span class="line">[k8s:children]</span><br><span class="line">master</span><br><span class="line">node</span><br><span class="line"></span><br><span class="line">[newnode]</span><br><span class="line">#192.168.31.91 node_name=k8s-node3</span><br></pre></td></tr></table></figure>
-<h4 id="1-3、更改全局环境配置"><a href="#1-3、更改全局环境配置" class="headerlink" title="1.3、更改全局环境配置"></a>1.3、更改全局环境配置</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ansible-install-k8s-master]# cat group_vars/all.yml</span><br><span class="line"># 安装目录</span><br><span class="line">software_dir: &apos;/root/binary_pkg&apos;</span><br><span class="line">k8s_work_dir: &apos;/opt/kubernetes&apos;</span><br><span class="line">etcd_work_dir: &apos;/opt/etcd&apos;</span><br><span class="line">tmp_dir: &apos;/tmp/k8s&apos;</span><br><span class="line"></span><br><span class="line"># 集群网络</span><br><span class="line">service_cidr: &apos;10.0.0.0/24&apos;</span><br><span class="line">cluster_dns: &apos;10.0.0.2&apos;   # 与roles/addons/files/coredns.yaml中IP一致</span><br><span class="line">pod_cidr: &apos;10.244.0.0/16&apos; # 与roles/addons/files/kube-flannel.yaml中网段一致</span><br><span class="line">service_nodeport_range: &apos;30000-32767&apos;</span><br><span class="line">cluster_domain: &apos;cluster.local&apos;</span><br><span class="line"></span><br><span class="line"># 高可用，如果部署单Master，该项忽略</span><br><span class="line">vip: &apos;192.168.31.88&apos;</span><br><span class="line">nic: &apos;ens33&apos;</span><br><span class="line"></span><br><span class="line"># 自签证书可信任IP列表，为方便扩展，可添加多个预留IP</span><br><span class="line">cert_hosts:</span><br><span class="line">  # 包含所有LB、VIP、Master（多多益善，可以多余出来几个后期扩展用） IP和service_cidr的第一个IP</span><br><span class="line">  k8s:</span><br><span class="line">    - 10.0.0.1</span><br><span class="line">    - 192.168.171.11</span><br><span class="line">    - 192.168.171.12</span><br><span class="line">    - 192.168.171.13</span><br><span class="line">    - 192.168.171.14</span><br><span class="line">    - 192.168.171.15</span><br><span class="line">    - 192.168.171.16</span><br><span class="line">    - 192.168.171.17</span><br><span class="line">    - 192.168.171.18</span><br><span class="line">    - 192.168.171.19</span><br><span class="line">    - 192.168.171.111</span><br><span class="line">  # 包含所有etcd节点IP</span><br><span class="line">  etcd:</span><br><span class="line">    - 192.168.171.12</span><br><span class="line">    - 192.168.171.13</span><br><span class="line">    - 192.168.171.14</span><br></pre></td></tr></table></figure>
-<h3 id="二、准备部署"><a href="#二、准备部署" class="headerlink" title="二、准备部署"></a>二、准备部署</h3><h4 id="2-1、单Master版："><a href="#2-1、单Master版：" class="headerlink" title="2.1、单Master版："></a>2.1、单Master版：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ansible-playbook -i hosts single-master-deploy.yml -uroot -k</span><br></pre></td></tr></table></figure>
-<h4 id="2-2、历史记录"><a href="#2-2、历史记录" class="headerlink" title="2.2、历史记录"></a>2.2、历史记录</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ansible-install-k8s-master]# ansible-playbook -i hosts single-master-deploy.yml -uroot -k</span><br><span class="line">SSH password:</span><br><span class="line"></span><br><span class="line">PLAY [0.系统初始化] ********************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [common : 关闭firewalld] *******************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">TASK [common : 关闭selinux] *********************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [common : 关闭swap] ************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [common : 即时生效] **************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [common : 拷贝时区] **************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">TASK [common : 添加hosts] ***********************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">PLAY [1.自签证书] *********************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [tls : 获取Ansible工作目录] ********************************************************************************************************************************************</span><br><span class="line">changed: [localhost]</span><br><span class="line"></span><br><span class="line">TASK [tls : 创建工作目录] ***************************************************************************************************************************************************</span><br><span class="line">ok: [localhost] =&gt; (item=etcd)</span><br><span class="line">ok: [localhost] =&gt; (item=k8s)</span><br><span class="line"></span><br><span class="line">TASK [tls : 准备cfssl工具] ************************************************************************************************************************************************</span><br><span class="line">ok: [localhost]</span><br><span class="line"></span><br><span class="line">TASK [tls : 准备etcd证书请求文件] *********************************************************************************************************************************************</span><br><span class="line">ok: [localhost] =&gt; (item=ca-config.json.j2)</span><br><span class="line">ok: [localhost] =&gt; (item=ca-csr.json.j2)</span><br><span class="line">ok: [localhost] =&gt; (item=server-csr.json.j2)</span><br><span class="line"></span><br><span class="line">TASK [tls : 准备生成etcd证书脚本] *********************************************************************************************************************************************</span><br><span class="line">ok: [localhost]</span><br><span class="line"></span><br><span class="line">TASK [tls : 生成etcd证书] *************************************************************************************************************************************************</span><br><span class="line">changed: [localhost]</span><br><span class="line"></span><br><span class="line">TASK [tls : 准备k8s证书请求文件] **********************************************************************************************************************************************</span><br><span class="line">ok: [localhost] =&gt; (item=ca-config.json.j2)</span><br><span class="line">ok: [localhost] =&gt; (item=ca-csr.json.j2)</span><br><span class="line">ok: [localhost] =&gt; (item=server-csr.json.j2)</span><br><span class="line">ok: [localhost] =&gt; (item=admin-csr.json.j2)</span><br><span class="line">ok: [localhost] =&gt; (item=kube-proxy-csr.json.j2)</span><br><span class="line"></span><br><span class="line">TASK [tls : 准备生成k8s证书脚本] **********************************************************************************************************************************************</span><br><span class="line">ok: [localhost]</span><br><span class="line"></span><br><span class="line">TASK [tls : 生成k8s证书] **************************************************************************************************************************************************</span><br><span class="line">changed: [localhost]</span><br><span class="line"></span><br><span class="line">PLAY [2.部署Docker] *****************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [docker : 创建临时目录] ************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : 分发并解压docker二进制包] ***************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.14] =&gt; (item=/root/binary_pkg/docker-18.09.6.tgz)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=/root/binary_pkg/docker-18.09.6.tgz)</span><br><span class="line">ok: [192.168.171.13] =&gt; (item=/root/binary_pkg/docker-18.09.6.tgz)</span><br><span class="line"></span><br><span class="line">TASK [docker : 移动docker二进制文件] *****************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : 分发service文件] *******************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : 创建目录] **************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : 配置docker] **********************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : 启动docker] **********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : 查看状态] **************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [docker : debug] *************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.13] =&gt; &#123;</span><br><span class="line">    &quot;docker.stdout_lines&quot;: [</span><br><span class="line">        &quot;Containers: 0&quot;,</span><br><span class="line">        &quot; Running: 0&quot;,</span><br><span class="line">        &quot; Paused: 0&quot;,</span><br><span class="line">        &quot; Stopped: 0&quot;,</span><br><span class="line">        &quot;Images: 0&quot;,</span><br><span class="line">        &quot;Server Version: 18.09.6&quot;,</span><br><span class="line">        &quot;Storage Driver: overlay2&quot;,</span><br><span class="line">        &quot; Backing Filesystem: xfs&quot;,</span><br><span class="line">        &quot; Supports d_type: true&quot;,</span><br><span class="line">        &quot; Native Overlay Diff: true&quot;,</span><br><span class="line">        &quot;Logging Driver: json-file&quot;,</span><br><span class="line">        &quot;Cgroup Driver: cgroupfs&quot;,</span><br><span class="line">        &quot;Plugins:&quot;,</span><br><span class="line">        &quot; Volume: local&quot;,</span><br><span class="line">        &quot; Network: bridge host macvlan null overlay&quot;,</span><br><span class="line">        &quot; Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog&quot;,</span><br><span class="line">        &quot;Swarm: inactive&quot;,</span><br><span class="line">        &quot;Runtimes: runc&quot;,</span><br><span class="line">        &quot;Default Runtime: runc&quot;,</span><br><span class="line">        &quot;Init Binary: docker-init&quot;,</span><br><span class="line">        &quot;containerd version: bb71b10fd8f58240ca47fbb579b9d1028eea7c84&quot;,</span><br><span class="line">        &quot;runc version: 2b18fe1d885ee5083ef9f0838fee39b62d653e30&quot;,</span><br><span class="line">        &quot;init version: fec3683&quot;,</span><br><span class="line">        &quot;Security Options:&quot;,</span><br><span class="line">        &quot; seccomp&quot;,</span><br><span class="line">        &quot;  Profile: default&quot;,</span><br><span class="line">        &quot;Kernel Version: 3.10.0-957.el7.x86_64&quot;,</span><br><span class="line">        &quot;Operating System: CentOS Linux 7 (Core)&quot;,</span><br><span class="line">        &quot;OSType: linux&quot;,</span><br><span class="line">        &quot;Architecture: x86_64&quot;,</span><br><span class="line">        &quot;CPUs: 2&quot;,</span><br><span class="line">        &quot;Total Memory: 1.777GiB&quot;,</span><br><span class="line">        &quot;Name: k8s-ansible3&quot;,</span><br><span class="line">        &quot;ID: O3LF:KDZ3:CXD6:MU6T:3DKL:PS42:6ATX:R4QE:GMI7:QHNO:CVQO:7ZW6&quot;,</span><br><span class="line">        &quot;Docker Root Dir: /var/lib/docker&quot;,</span><br><span class="line">        &quot;Debug Mode (client): false&quot;,</span><br><span class="line">        &quot;Debug Mode (server): false&quot;,</span><br><span class="line">        &quot;Registry: https://index.docker.io/v1/&quot;,</span><br><span class="line">        &quot;Labels:&quot;,</span><br><span class="line">        &quot;Experimental: false&quot;,</span><br><span class="line">        &quot;Insecure Registries:&quot;,</span><br><span class="line">        &quot; 192.168.31.70&quot;,</span><br><span class="line">        &quot; 127.0.0.0/8&quot;,</span><br><span class="line">        &quot;Registry Mirrors:&quot;,</span><br><span class="line">        &quot; http://bc437cce.m.daocloud.io/&quot;,</span><br><span class="line">        &quot;Live Restore Enabled: false&quot;,</span><br><span class="line">        &quot;Product License: Community Engine&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">ok: [192.168.171.12] =&gt; &#123;</span><br><span class="line">    &quot;docker.stdout_lines&quot;: [</span><br><span class="line">        &quot;Containers: 0&quot;,</span><br><span class="line">        &quot; Running: 0&quot;,</span><br><span class="line">        &quot; Paused: 0&quot;,</span><br><span class="line">        &quot; Stopped: 0&quot;,</span><br><span class="line">        &quot;Images: 0&quot;,</span><br><span class="line">        &quot;Server Version: 18.09.6&quot;,</span><br><span class="line">        &quot;Storage Driver: overlay2&quot;,</span><br><span class="line">        &quot; Backing Filesystem: xfs&quot;,</span><br><span class="line">        &quot; Supports d_type: true&quot;,</span><br><span class="line">        &quot; Native Overlay Diff: true&quot;,</span><br><span class="line">        &quot;Logging Driver: json-file&quot;,</span><br><span class="line">        &quot;Cgroup Driver: cgroupfs&quot;,</span><br><span class="line">        &quot;Plugins:&quot;,</span><br><span class="line">        &quot; Volume: local&quot;,</span><br><span class="line">        &quot; Network: bridge host macvlan null overlay&quot;,</span><br><span class="line">        &quot; Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog&quot;,</span><br><span class="line">        &quot;Swarm: inactive&quot;,</span><br><span class="line">        &quot;Runtimes: runc&quot;,</span><br><span class="line">        &quot;Default Runtime: runc&quot;,</span><br><span class="line">        &quot;Init Binary: docker-init&quot;,</span><br><span class="line">        &quot;containerd version: bb71b10fd8f58240ca47fbb579b9d1028eea7c84&quot;,</span><br><span class="line">        &quot;runc version: 2b18fe1d885ee5083ef9f0838fee39b62d653e30&quot;,</span><br><span class="line">        &quot;init version: fec3683&quot;,</span><br><span class="line">        &quot;Security Options:&quot;,</span><br><span class="line">        &quot; seccomp&quot;,</span><br><span class="line">        &quot;  Profile: default&quot;,</span><br><span class="line">        &quot;Kernel Version: 3.10.0-957.el7.x86_64&quot;,</span><br><span class="line">        &quot;Operating System: CentOS Linux 7 (Core)&quot;,</span><br><span class="line">        &quot;OSType: linux&quot;,</span><br><span class="line">        &quot;Architecture: x86_64&quot;,</span><br><span class="line">        &quot;CPUs: 2&quot;,</span><br><span class="line">        &quot;Total Memory: 1.777GiB&quot;,</span><br><span class="line">        &quot;Name: k8s-ansible2&quot;,</span><br><span class="line">        &quot;ID: DFQT:2YYV:YWY5:IXSS:U6VS:BW7R:6MPH:WCLC:QKOW:Y63I:5TV6:C3HT&quot;,</span><br><span class="line">        &quot;Docker Root Dir: /var/lib/docker&quot;,</span><br><span class="line">        &quot;Debug Mode (client): false&quot;,</span><br><span class="line">        &quot;Debug Mode (server): false&quot;,</span><br><span class="line">        &quot;Registry: https://index.docker.io/v1/&quot;,</span><br><span class="line">        &quot;Labels:&quot;,</span><br><span class="line">        &quot;Experimental: false&quot;,</span><br><span class="line">        &quot;Insecure Registries:&quot;,</span><br><span class="line">        &quot; 192.168.31.70&quot;,</span><br><span class="line">        &quot; 127.0.0.0/8&quot;,</span><br><span class="line">        &quot;Registry Mirrors:&quot;,</span><br><span class="line">        &quot; http://bc437cce.m.daocloud.io/&quot;,</span><br><span class="line">        &quot;Live Restore Enabled: false&quot;,</span><br><span class="line">        &quot;Product License: Community Engine&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">ok: [192.168.171.14] =&gt; &#123;</span><br><span class="line">    &quot;docker.stdout_lines&quot;: [</span><br><span class="line">        &quot;Containers: 0&quot;,</span><br><span class="line">        &quot; Running: 0&quot;,</span><br><span class="line">        &quot; Paused: 0&quot;,</span><br><span class="line">        &quot; Stopped: 0&quot;,</span><br><span class="line">        &quot;Images: 0&quot;,</span><br><span class="line">        &quot;Server Version: 18.09.6&quot;,</span><br><span class="line">        &quot;Storage Driver: overlay2&quot;,</span><br><span class="line">        &quot; Backing Filesystem: xfs&quot;,</span><br><span class="line">        &quot; Supports d_type: true&quot;,</span><br><span class="line">        &quot; Native Overlay Diff: true&quot;,</span><br><span class="line">        &quot;Logging Driver: json-file&quot;,</span><br><span class="line">        &quot;Cgroup Driver: cgroupfs&quot;,</span><br><span class="line">        &quot;Plugins:&quot;,</span><br><span class="line">        &quot; Volume: local&quot;,</span><br><span class="line">        &quot; Network: bridge host macvlan null overlay&quot;,</span><br><span class="line">        &quot; Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog&quot;,</span><br><span class="line">        &quot;Swarm: inactive&quot;,</span><br><span class="line">        &quot;Runtimes: runc&quot;,</span><br><span class="line">        &quot;Default Runtime: runc&quot;,</span><br><span class="line">        &quot;Init Binary: docker-init&quot;,</span><br><span class="line">        &quot;containerd version: bb71b10fd8f58240ca47fbb579b9d1028eea7c84&quot;,</span><br><span class="line">        &quot;runc version: 2b18fe1d885ee5083ef9f0838fee39b62d653e30&quot;,</span><br><span class="line">        &quot;init version: fec3683&quot;,</span><br><span class="line">        &quot;Security Options:&quot;,</span><br><span class="line">        &quot; seccomp&quot;,</span><br><span class="line">        &quot;  Profile: default&quot;,</span><br><span class="line">        &quot;Kernel Version: 3.10.0-957.el7.x86_64&quot;,</span><br><span class="line">        &quot;Operating System: CentOS Linux 7 (Core)&quot;,</span><br><span class="line">        &quot;OSType: linux&quot;,</span><br><span class="line">        &quot;Architecture: x86_64&quot;,</span><br><span class="line">        &quot;CPUs: 2&quot;,</span><br><span class="line">        &quot;Total Memory: 1.777GiB&quot;,</span><br><span class="line">        &quot;Name: k8s-ansible4&quot;,</span><br><span class="line">        &quot;ID: M3EP:OAKQ:6AMI:RDC6:QX2H:U34M:5GTT:Q2E7:AFP7:C4M3:FUO2:UHS3&quot;,</span><br><span class="line">        &quot;Docker Root Dir: /var/lib/docker&quot;,</span><br><span class="line">        &quot;Debug Mode (client): false&quot;,</span><br><span class="line">        &quot;Debug Mode (server): false&quot;,</span><br><span class="line">        &quot;Registry: https://index.docker.io/v1/&quot;,</span><br><span class="line">        &quot;Labels:&quot;,</span><br><span class="line">        &quot;Experimental: false&quot;,</span><br><span class="line">        &quot;Insecure Registries:&quot;,</span><br><span class="line">        &quot; 192.168.31.70&quot;,</span><br><span class="line">        &quot; 127.0.0.0/8&quot;,</span><br><span class="line">        &quot;Registry Mirrors:&quot;,</span><br><span class="line">        &quot; http://bc437cce.m.daocloud.io/&quot;,</span><br><span class="line">        &quot;Live Restore Enabled: false&quot;,</span><br><span class="line">        &quot;Product License: Community Engine&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PLAY [3.部署ETCD集群] *****************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [etcd : 创建工作目录] **************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=bin)</span><br><span class="line">ok: [192.168.171.13] =&gt; (item=bin)</span><br><span class="line">ok: [192.168.171.14] =&gt; (item=bin)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=cfg)</span><br><span class="line">ok: [192.168.171.13] =&gt; (item=cfg)</span><br><span class="line">ok: [192.168.171.14] =&gt; (item=cfg)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=ssl)</span><br><span class="line">ok: [192.168.171.13] =&gt; (item=ssl)</span><br><span class="line">ok: [192.168.171.14] =&gt; (item=ssl)</span><br><span class="line"></span><br><span class="line">TASK [etcd : 创建临时目录] **************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [etcd : 分发并解压etcd二进制包] *******************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=/root/binary_pkg/etcd-v3.3.13-linux-amd64.tar.gz)</span><br><span class="line">ok: [192.168.171.14] =&gt; (item=/root/binary_pkg/etcd-v3.3.13-linux-amd64.tar.gz)</span><br><span class="line">ok: [192.168.171.13] =&gt; (item=/root/binary_pkg/etcd-v3.3.13-linux-amd64.tar.gz)</span><br><span class="line"></span><br><span class="line">TASK [etcd : 移动etcd二进制文件] *********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">TASK [etcd : 分发证书] ****************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=server.pem)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=server.pem)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=server.pem)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=server-key.pem)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=server-key.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=server-key.pem)</span><br><span class="line"></span><br><span class="line">TASK [etcd : 分发etcd配置文件] **********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [etcd : 分发service文件] *********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [etcd : 启动etcd] **************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">TASK [etcd : 分发etcd脚本] ************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">TASK [etcd : 获取etcd集群状态] **********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [etcd : debug] ***************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.13] =&gt; &#123;</span><br><span class="line">    &quot;status.stdout_lines&quot;: [</span><br><span class="line">        &quot;member 5da6acb8be0f9647 is healthy: got healthy result from https://192.168.171.14:2379&quot;,</span><br><span class="line">        &quot;member a747b20fc3712bbc is healthy: got healthy result from https://192.168.171.12:2379&quot;,</span><br><span class="line">        &quot;member f351513a2b4642ac is healthy: got healthy result from https://192.168.171.13:2379&quot;,</span><br><span class="line">        &quot;cluster is healthy&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">ok: [192.168.171.12] =&gt; &#123;</span><br><span class="line">    &quot;status.stdout_lines&quot;: [</span><br><span class="line">        &quot;member 5da6acb8be0f9647 is healthy: got healthy result from https://192.168.171.14:2379&quot;,</span><br><span class="line">        &quot;member a747b20fc3712bbc is healthy: got healthy result from https://192.168.171.12:2379&quot;,</span><br><span class="line">        &quot;member f351513a2b4642ac is healthy: got healthy result from https://192.168.171.13:2379&quot;,</span><br><span class="line">        &quot;cluster is healthy&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">ok: [192.168.171.14] =&gt; &#123;</span><br><span class="line">    &quot;status.stdout_lines&quot;: [</span><br><span class="line">        &quot;member 5da6acb8be0f9647 is healthy: got healthy result from https://192.168.171.14:2379&quot;,</span><br><span class="line">        &quot;member a747b20fc3712bbc is healthy: got healthy result from https://192.168.171.12:2379&quot;,</span><br><span class="line">        &quot;member f351513a2b4642ac is healthy: got healthy result from https://192.168.171.13:2379&quot;,</span><br><span class="line">        &quot;cluster is healthy&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PLAY [4.部署K8S Master] *************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [master : 创建工作目录] ************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=bin)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=cfg)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=ssl)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=logs)</span><br><span class="line"></span><br><span class="line">TASK [master : 创建临时目录] ************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [master : 分发并解压k8s二进制包] ******************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)</span><br><span class="line"></span><br><span class="line">TASK [master : 移动k8s master二进制文件] *************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [master : 分发k8s证书] ***********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=ca-key.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=server.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=server-key.pem)</span><br><span class="line"></span><br><span class="line">TASK [master : 分发etcd证书] **********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=server.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=server-key.pem)</span><br><span class="line"></span><br><span class="line">TASK [master : 分发token文件] *********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [master : 分发k8s配置文件] *********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-apiserver.conf.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-controller-manager.conf.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-scheduler.conf.j2)</span><br><span class="line"></span><br><span class="line">TASK [master : 分发service文件] *******************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-apiserver.service.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-controller-manager.service.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-scheduler.service.j2)</span><br><span class="line"></span><br><span class="line">TASK [master : 启动k8s master组件] ****************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-apiserver)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-controller-manager)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-scheduler)</span><br><span class="line"></span><br><span class="line">TASK [master : 查看集群状态] ************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [master : debug] *************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; &#123;</span><br><span class="line">    &quot;cs.stdout_lines&quot;: [</span><br><span class="line">        &quot;NAME                 AGE&quot;,</span><br><span class="line">        &quot;scheduler            &lt;unknown&gt;&quot;,</span><br><span class="line">        &quot;controller-manager   &lt;unknown&gt;&quot;,</span><br><span class="line">        &quot;etcd-0               &lt;unknown&gt;&quot;,</span><br><span class="line">        &quot;etcd-1               &lt;unknown&gt;&quot;,</span><br><span class="line">        &quot;etcd-2               &lt;unknown&gt;&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TASK [master : 拷贝RBAC文件] **********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kubelet-bootstrap-rbac.yaml)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=apiserver-to-kubelet-rbac.yaml)</span><br><span class="line"></span><br><span class="line">TASK [master : 授权APIServer访问Kubelet与授权kubelet bootstrap] **************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">PLAY [5.部署K8S Node] ***************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [node : 创建工作目录] **************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=bin)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=bin)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=bin)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=cfg)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=cfg)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=cfg)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=ssl)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=ssl)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=ssl)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=logs)</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=logs)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=logs)</span><br><span class="line"></span><br><span class="line">TASK [node : 创建cni插件目录] ***********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=/opt/cni/bin)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=/opt/cni/bin)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/opt/cni/bin)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=/etc/cni/net.d)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=/etc/cni/net.d)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/etc/cni/net.d)</span><br><span class="line"></span><br><span class="line">TASK [node : 创建临时目录] **************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12]</span><br><span class="line">ok: [192.168.171.13]</span><br><span class="line">ok: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [node : 分发并解压k8s二进制包] ********************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)</span><br><span class="line"></span><br><span class="line">TASK [node : 分发并解压cni插件二进制包] ******************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=/root/binary_pkg/cni-plugins-linux-amd64-v0.8.2.tgz)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/root/binary_pkg/cni-plugins-linux-amd64-v0.8.2.tgz)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=/root/binary_pkg/cni-plugins-linux-amd64-v0.8.2.tgz)</span><br><span class="line"></span><br><span class="line">TASK [node : 移动k8s node二进制文件] *****************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line"></span><br><span class="line">TASK [node : 分发k8s证书] *************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=ca.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy.pem)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy.pem)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy.pem)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy-key.pem)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy-key.pem)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy-key.pem)</span><br><span class="line"></span><br><span class="line">TASK [node : 分发k8s配置文件] ***********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=bootstrap.kubeconfig.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=bootstrap.kubeconfig.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=bootstrap.kubeconfig.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kubelet.conf.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kubelet.conf.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kubelet.conf.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kubelet-config.yml.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kubelet-config.yml.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kubelet-config.yml.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy.kubeconfig.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy.kubeconfig.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy.kubeconfig.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy.conf.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy.conf.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy.conf.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy-config.yml.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy-config.yml.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy-config.yml.j2)</span><br><span class="line"></span><br><span class="line">TASK [node : 分发service文件] *********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kubelet.service.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kubelet.service.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kubelet.service.j2)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy.service.j2)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy.service.j2)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy.service.j2)</span><br><span class="line"></span><br><span class="line">TASK [node : 启动k8s node组件] ********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kubelet)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kubelet)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kubelet)</span><br><span class="line">changed: [192.168.171.14] =&gt; (item=kube-proxy)</span><br><span class="line">changed: [192.168.171.13] =&gt; (item=kube-proxy)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=kube-proxy)</span><br><span class="line"></span><br><span class="line">TASK [node : 分发预准备镜像] *************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [node : 导入镜像] ****************************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line">changed: [192.168.171.14]</span><br><span class="line">changed: [192.168.171.13]</span><br><span class="line"></span><br><span class="line">PLAY [6.部署插件] *********************************************************************************************************************************************************</span><br><span class="line"></span><br><span class="line">TASK [addons : 允许Node加入集群] ********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [addons : 拷贝YAML文件到Master] ***************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/coredns.yaml)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/ingress-controller.yaml)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/kube-flannel.yaml)</span><br><span class="line">changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/kubernetes-dashboard.yaml)</span><br><span class="line"></span><br><span class="line">TASK [addons : 部署Flannel,Dashboard,CoreDNS,Ingress] *******************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [addons : 替换Dashboard证书] *****************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [addons : 查看Pod状态] ***********************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [addons : debug] *************************************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; &#123;</span><br><span class="line">    &quot;getall.stdout_lines&quot;: [</span><br><span class="line">        &quot;NAMESPACE              NAME                                             READY   STATUS    RESTARTS   AGE&quot;,</span><br><span class="line">        &quot;kube-system            pod/coredns-6d8cfdd59d-hcfw5                     0/1     Pending   0          2s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   pod/dashboard-metrics-scraper-566cddb686-nk7t8   0/1     Pending   0          1s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   pod/kubernetes-dashboard-c4bc5bd44-cxgb6         0/1     Pending   0          1s&quot;,</span><br><span class="line">        &quot;&quot;,</span><br><span class="line">        &quot;NAMESPACE              NAME                                TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE&quot;,</span><br><span class="line">        &quot;default                service/kubernetes                  ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP          2m19s&quot;,</span><br><span class="line">        &quot;ingress-nginx          service/ingress-nginx               ClusterIP   10.0.0.158   &lt;none&gt;        80/TCP,443/TCP   2s&quot;,</span><br><span class="line">        &quot;kube-system            service/kube-dns                    ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    2s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   service/dashboard-metrics-scraper   ClusterIP   10.0.0.38    &lt;none&gt;        8000/TCP         1s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   service/kubernetes-dashboard        NodePort    10.0.0.180   &lt;none&gt;        443:30001/TCP    1s&quot;,</span><br><span class="line">        &quot;&quot;,</span><br><span class="line">        &quot;NAMESPACE       NAME                                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE&quot;,</span><br><span class="line">        &quot;ingress-nginx   daemonset.apps/nginx-ingress-controller   0         0         0       0            0           &lt;none&gt;          2s&quot;,</span><br><span class="line">        &quot;kube-system     daemonset.apps/kube-flannel-ds-amd64      0         0         0       0            0           &lt;none&gt;          2s&quot;,</span><br><span class="line">        &quot;&quot;,</span><br><span class="line">        &quot;NAMESPACE              NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE&quot;,</span><br><span class="line">        &quot;kube-system            deployment.apps/coredns                     0/1     1            0           2s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   deployment.apps/dashboard-metrics-scraper   0/1     1            0           1s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   deployment.apps/kubernetes-dashboard        0/1     1            0           1s&quot;,</span><br><span class="line">        &quot;&quot;,</span><br><span class="line">        &quot;NAMESPACE              NAME                                                   DESIRED   CURRENT   READY   AGE&quot;,</span><br><span class="line">        &quot;kube-system            replicaset.apps/coredns-6d8cfdd59d                     1         1         0       2s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   replicaset.apps/dashboard-metrics-scraper-566cddb686   1         1         0       1s&quot;,</span><br><span class="line">        &quot;kubernetes-dashboard   replicaset.apps/kubernetes-dashboard-c4bc5bd44         1         1         0       1s&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TASK [addons : 创建Dashboard管理员令牌] **************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [addons : 获取Dashboard管理员令牌] **************************************************************************************************************************************</span><br><span class="line">changed: [192.168.171.12]</span><br><span class="line"></span><br><span class="line">TASK [addons : Kubernetes Dashboard登录信息] ******************************************************************************************************************************</span><br><span class="line">ok: [192.168.171.12] =&gt; &#123;</span><br><span class="line">    &quot;ui.stdout_lines&quot;: [</span><br><span class="line">        &quot;访问地址---&gt;https://NodeIP:30001&quot;,</span><br><span class="line">        &quot;令牌内容---&gt;eyJhbGciOiJSUzI1NiIsImtpZCI6IlhOV0FZU1ZXRU80MU5oRUlYeGsxbExFcVB1R1k0bEEzMDhQQWdWVE5oZG8ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tenQ2Y3ciLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMTU3YjEyYmYtNjNjNC00NzU1LWI4YTAtN2IyY2ZkZmRmNmE3Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.fKCHvmsmZmIErB9YLHtQrqWQBL_b89W0i_gDa4rwgV9x4UfzVAXskUiZiQs_yAHNmyUaIqPpBdUI64pvAoXilr-6wIk8-R8hpp4BJXLL4OsTtPXxrhIQF4_NP0D-4flg9sHba-I9X9A_2RWskcY53PAPTOjlyOQuldUyTdIT9tXi6jeSgj8CrDBc9O_A3xYWZ1f7RvrdEdU4Kkotc1rsBeGg-OzabU1nNLxWAaDHZJFciYeABtbPoY2fTkdz0JGoIxLpAqcQKoFp9ztGPcoOboCOqeb_hc-caBAmyvVIfbPvBiywdtuidjvb1IazETt_GQlzg7FMBoUpHhJYOTvnAA&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PLAY RECAP ************************************************************************************************************************************************************</span><br><span class="line">192.168.171.12             : ok=61   changed=40   unreachable=0    failed=0</span><br><span class="line">192.168.171.13             : ok=38   changed=23   unreachable=0    failed=0</span><br><span class="line">192.168.171.14             : ok=38   changed=23   unreachable=0    failed=0</span><br><span class="line">localhost                  : ok=9    changed=3    unreachable=0    failed=0</span><br></pre></td></tr></table></figure>
-<h4 id="2-3、测试"><a href="#2-3、测试" class="headerlink" title="2.3、测试"></a>2.3、测试</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible2 ~]# kubectl get nodes</span><br><span class="line">NAME           STATUS   ROLES    AGE    VERSION</span><br><span class="line">k8s-ansible2   Ready    &lt;none&gt;   117s   v1.16.0</span><br><span class="line">k8s-ansible3   Ready    &lt;none&gt;   117s   v1.16.0</span><br><span class="line">k8s-ansible4   Ready    &lt;none&gt;   117s   v1.16.0</span><br><span class="line"></span><br><span class="line">[root@k8s-ansible2 ~]# kubectl get po --all-namespaces -o wide</span><br><span class="line">NAMESPACE              NAME                                         READY   STATUS    RESTARTS   AGE     IP               NODE           NOMINATED NODE   READINESS GATES</span><br><span class="line">ingress-nginx          nginx-ingress-controller-7g9fh               1/1     Running   0          2m41s   192.168.171.13   k8s-ansible3   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">ingress-nginx          nginx-ingress-controller-hc492               1/1     Running   0          2m41s   192.168.171.14   k8s-ansible4   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">ingress-nginx          nginx-ingress-controller-s4slm               1/1     Running   0          2m41s   192.168.171.12   k8s-ansible2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            coredns-6d8cfdd59d-hcfw5                     1/1     Running   0          3m8s    10.244.1.2       k8s-ansible2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            kube-flannel-ds-amd64-6nbt4                  1/1     Running   0          2m51s   192.168.171.12   k8s-ansible2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            kube-flannel-ds-amd64-mfksz                  1/1     Running   0          2m51s   192.168.171.14   k8s-ansible4   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            kube-flannel-ds-amd64-vclgg                  1/1     Running   0          2m51s   192.168.171.13   k8s-ansible3   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kubernetes-dashboard   dashboard-metrics-scraper-566cddb686-nk7t8   1/1     Running   0          3m7s    10.244.2.2       k8s-ansible4   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kubernetes-dashboard   kubernetes-dashboard-c4bc5bd44-cxgb6         1/1     Running   0          3m7s    10.244.0.2       k8s-ansible3   &lt;none&gt;           &lt;none&gt;</span><br><span class="line"></span><br><span class="line">[root@k8s-ansible2 ~]# kubectl get csr</span><br><span class="line">NAME                                                   AGE    REQUESTOR           CONDITION</span><br><span class="line">node-csr-96KwqYYgTQ0ajISzq2pUc5Dzu07UzjaKRZqRWs31yUk   5m5s   kubelet-bootstrap   Approved,Issued</span><br><span class="line">node-csr-9PduNyHHpXtDmuNFj3fCkpoNkGcDkO2NPEk3uGQ3kIk   5m6s   kubelet-bootstrap   Approved,Issued</span><br><span class="line">node-csr-WLFKgflHlDK2f0RFvuTYKlkHcr8hz0iOrzYcp2V50JE   5m6s   kubelet-bootstrap   Approved,Issued</span><br></pre></td></tr></table></figure>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191204/RlnwtcB5dboO.png?imageslim" alt="mark"></p>
+<h3 id="一、单master部署"><a href="#一、单master部署" class="headerlink" title="一、单master部署"></a>一、单master部署</h3><pre><code>[root@k8s-ansible1 ~]# tree ansible-install-k8s-master
+ansible-install-k8s-master
+├── add-node.yml
+├── ansible.cfg
+├── group_vars
+│   └── all.yml
+├── hosts
+├── multi-master-deploy.yml
+├── multi-master.jpg
+├── README.md
+├── roles
+│   ├── addons
+│   │   ├── files
+│   │   │   ├── coredns.yaml
+│   │   │   ├── ingress-controller.yaml
+│   │   │   ├── kube-flannel.yaml
+│   │   │   └── kubernetes-dashboard.yaml
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── common
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       └── hosts.j2
+│   ├── docker
+│   │   ├── files
+│   │   │   ├── daemon.json
+│   │   │   └── docker.service
+│   │   └── tasks
+│   │       └── main.yml
+│   ├── etcd
+│   │   ├── files
+│   │   │   └── etcd_cert
+│   │   │       ├── ca-key.pem
+│   │   │       ├── ca.pem
+│   │   │       ├── server-key.pem
+│   │   │       └── server.pem
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── etcd.conf.j2
+│   │       ├── etcd.service.j2
+│   │       └── etcd.sh.j2
+│   ├── ha
+│   │   ├── files
+│   │   │   └── check_nginx.sh
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── keepalived.conf.j2
+│   │       └── nginx.conf.j2
+│   ├── master
+│   │   ├── files
+│   │   │   ├── apiserver-to-kubelet-rbac.yaml
+│   │   │   ├── etcd_cert
+│   │   │   │   ├── ca.pem
+│   │   │   │   ├── server-key.pem
+│   │   │   │   └── server.pem
+│   │   │   ├── k8s_cert
+│   │   │   │   ├── admin-key.pem
+│   │   │   │   ├── admin.pem
+│   │   │   │   ├── ca-key.pem
+│   │   │   │   ├── ca.pem
+│   │   │   │   ├── kube-proxy-key.pem
+│   │   │   │   ├── kube-proxy.pem
+│   │   │   │   ├── server-key.pem
+│   │   │   │   └── server.pem
+│   │   │   ├── kubelet-bootstrap-rbac.yaml
+│   │   │   └── token.csv
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── kube-apiserver.conf.j2
+│   │       ├── kube-apiserver.service.j2
+│   │       ├── kube-controller-manager.conf.j2
+│   │       ├── kube-controller-manager.service.j2
+│   │       ├── kube-scheduler.conf.j2
+│   │       └── kube-scheduler.service.j2
+│   ├── node
+│   │   ├── files
+│   │   │   └── k8s_cert
+│   │   │       ├── ca.pem
+│   │   │       ├── kube-proxy-key.pem
+│   │   │       └── kube-proxy.pem
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── bootstrap.kubeconfig.j2
+│   │       ├── kubelet-config.yml.j2
+│   │       ├── kubelet.conf.j2
+│   │       ├── kubelet.service.j2
+│   │       ├── kube-proxy-config.yml.j2
+│   │       ├── kube-proxy.conf.j2
+│   │       ├── kube-proxy.kubeconfig.j2
+│   │       └── kube-proxy.service.j2
+│   └── tls
+│       ├── files
+│       │   ├── generate_etcd_cert.sh
+│       │   └── generate_k8s_cert.sh
+│       ├── tasks
+│       │   └── main.yml
+│       └── templates
+│           ├── etcd
+│           │   ├── ca-config.json.j2
+│           │   ├── ca-csr.json.j2
+│           │   └── server-csr.json.j2
+│           └── k8s
+│               ├── admin-csr.json.j2
+│               ├── ca-config.json.j2
+│               ├── ca-csr.json.j2
+│               ├── kube-proxy-csr.json.j2
+│               └── server-csr.json.j2
+├── single-master-deploy.yml
+└── single-master.jpg
+</code></pre><h4 id="1-1、解压缩binary-pkg-tar-gz"><a href="#1-1、解压缩binary-pkg-tar-gz" class="headerlink" title="1.1、解压缩binary_pkg.tar.gz"></a>1.1、解压缩binary_pkg.tar.gz</h4><pre><code>[root@k8s-ansible1 ~]# ls
+anaconda-ks.cfg  ansible-install-k8s-master  ansible-install-k8s-master.zip  binary_pkg.tar.gz
+[root@k8s-ansible1 ~]# tar zxvf binary_pkg.tar.gz
+</code></pre><h4 id="1-2、修改所以节点hosts-及ansible内的hosts"><a href="#1-2、修改所以节点hosts-及ansible内的hosts" class="headerlink" title="1.2、修改所以节点hosts 及ansible内的hosts"></a>1.2、修改所以节点hosts 及ansible内的hosts</h4><pre><code>[root@k8s-ansible1 ~]# vim /etc/hosts
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.171.11 k8s-ansible1     ##ansible机器
+192.168.171.12 k8s-ansible2     ##master
+192.168.171.13 k8s-ansible3     ##node1
+192.168.171.14 k8s-ansible4     ##node2
+
+[root@k8s-ansible1 ~]# cd ansible-install-k8s-master
+
+[root@k8s-ansible1 ansible-install-k8s-master]# cat hosts
+[master]
+# 如果部署单Master，只保留一个Master节点
+192.168.171.12 node_name=k8s-ansible2
+#192.168.171.111 node_name=k8s-master2
+
+[node]
+192.168.171.13 node_name=k8s-ansible3
+192.168.171.14 node_name=k8s-ansible4
+
+[etcd]
+192.168.171.12 etcd_name=k8s-ansible2
+192.168.171.13 etcd_name=k8s-ansible3
+192.168.171.14 etcd_name=k8s-ansible4
+
+[lb]
+# 如果部署单Master，该项忽略
+192.168.31.63 lb_name=lb-master
+192.168.31.71 lb_name=lb-backup
+
+[k8s:children]
+master
+node
+
+[newnode]
+#192.168.31.91 node_name=k8s-node3
+</code></pre><h4 id="1-3、更改全局环境配置"><a href="#1-3、更改全局环境配置" class="headerlink" title="1.3、更改全局环境配置"></a>1.3、更改全局环境配置</h4><pre><code>[root@k8s-ansible1 ansible-install-k8s-master]# cat group_vars/all.yml
+# 安装目录
+software_dir: &#39;/root/binary_pkg&#39;
+k8s_work_dir: &#39;/opt/kubernetes&#39;
+etcd_work_dir: &#39;/opt/etcd&#39;
+tmp_dir: &#39;/tmp/k8s&#39;
+
+# 集群网络
+service_cidr: &#39;10.0.0.0/24&#39;
+cluster_dns: &#39;10.0.0.2&#39;   # 与roles/addons/files/coredns.yaml中IP一致
+pod_cidr: &#39;10.244.0.0/16&#39; # 与roles/addons/files/kube-flannel.yaml中网段一致
+service_nodeport_range: &#39;30000-32767&#39;
+cluster_domain: &#39;cluster.local&#39;
+
+# 高可用，如果部署单Master，该项忽略
+vip: &#39;192.168.31.88&#39;
+nic: &#39;ens33&#39;
+
+# 自签证书可信任IP列表，为方便扩展，可添加多个预留IP
+cert_hosts:
+  # 包含所有LB、VIP、Master（多多益善，可以多余出来几个后期扩展用） IP和service_cidr的第一个IP
+  k8s:
+    - 10.0.0.1
+    - 192.168.171.11
+    - 192.168.171.12
+    - 192.168.171.13
+    - 192.168.171.14
+    - 192.168.171.15
+    - 192.168.171.16
+    - 192.168.171.17
+    - 192.168.171.18
+    - 192.168.171.19
+    - 192.168.171.111
+  # 包含所有etcd节点IP
+  etcd:
+    - 192.168.171.12
+    - 192.168.171.13
+    - 192.168.171.14
+</code></pre><h3 id="二、准备部署"><a href="#二、准备部署" class="headerlink" title="二、准备部署"></a>二、准备部署</h3><h4 id="2-1、单Master版："><a href="#2-1、单Master版：" class="headerlink" title="2.1、单Master版："></a>2.1、单Master版：</h4><pre><code>ansible-playbook -i hosts single-master-deploy.yml -uroot -k
+</code></pre><h4 id="2-2、历史记录"><a href="#2-2、历史记录" class="headerlink" title="2.2、历史记录"></a>2.2、历史记录</h4><pre><code>[root@k8s-ansible1 ansible-install-k8s-master]# ansible-playbook -i hosts single-master-deploy.yml -uroot -k
+SSH password:
+
+PLAY [0.系统初始化] ********************************************************************************************************************************************************
+
+TASK [common : 关闭firewalld] *******************************************************************************************************************************************
+ok: [192.168.171.14]
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+
+TASK [common : 关闭selinux] *********************************************************************************************************************************************
+ok: [192.168.171.14]
+ok: [192.168.171.13]
+ok: [192.168.171.12]
+
+TASK [common : 关闭swap] ************************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [common : 即时生效] **************************************************************************************************************************************************
+changed: [192.168.171.13]
+changed: [192.168.171.12]
+changed: [192.168.171.14]
+
+TASK [common : 拷贝时区] **************************************************************************************************************************************************
+ok: [192.168.171.14]
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+
+TASK [common : 添加hosts] ***********************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.14]
+ok: [192.168.171.13]
+
+PLAY [1.自签证书] *********************************************************************************************************************************************************
+
+TASK [tls : 获取Ansible工作目录] ********************************************************************************************************************************************
+changed: [localhost]
+
+TASK [tls : 创建工作目录] ***************************************************************************************************************************************************
+ok: [localhost] =&gt; (item=etcd)
+ok: [localhost] =&gt; (item=k8s)
+
+TASK [tls : 准备cfssl工具] ************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [tls : 准备etcd证书请求文件] *********************************************************************************************************************************************
+ok: [localhost] =&gt; (item=ca-config.json.j2)
+ok: [localhost] =&gt; (item=ca-csr.json.j2)
+ok: [localhost] =&gt; (item=server-csr.json.j2)
+
+TASK [tls : 准备生成etcd证书脚本] *********************************************************************************************************************************************
+ok: [localhost]
+
+TASK [tls : 生成etcd证书] *************************************************************************************************************************************************
+changed: [localhost]
+
+TASK [tls : 准备k8s证书请求文件] **********************************************************************************************************************************************
+ok: [localhost] =&gt; (item=ca-config.json.j2)
+ok: [localhost] =&gt; (item=ca-csr.json.j2)
+ok: [localhost] =&gt; (item=server-csr.json.j2)
+ok: [localhost] =&gt; (item=admin-csr.json.j2)
+ok: [localhost] =&gt; (item=kube-proxy-csr.json.j2)
+
+TASK [tls : 准备生成k8s证书脚本] **********************************************************************************************************************************************
+ok: [localhost]
+
+TASK [tls : 生成k8s证书] **************************************************************************************************************************************************
+changed: [localhost]
+
+PLAY [2.部署Docker] *****************************************************************************************************************************************************
+
+TASK [docker : 创建临时目录] ************************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+ok: [192.168.171.14]
+
+TASK [docker : 分发并解压docker二进制包] ***************************************************************************************************************************************
+ok: [192.168.171.14] =&gt; (item=/root/binary_pkg/docker-18.09.6.tgz)
+ok: [192.168.171.12] =&gt; (item=/root/binary_pkg/docker-18.09.6.tgz)
+ok: [192.168.171.13] =&gt; (item=/root/binary_pkg/docker-18.09.6.tgz)
+
+TASK [docker : 移动docker二进制文件] *****************************************************************************************************************************************
+changed: [192.168.171.13]
+changed: [192.168.171.12]
+changed: [192.168.171.14]
+
+TASK [docker : 分发service文件] *******************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+ok: [192.168.171.14]
+
+TASK [docker : 创建目录] **************************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+ok: [192.168.171.14]
+
+TASK [docker : 配置docker] **********************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+ok: [192.168.171.14]
+
+TASK [docker : 启动docker] **********************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [docker : 查看状态] **************************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [docker : debug] *************************************************************************************************************************************************
+ok: [192.168.171.13] =&gt; {
+    &quot;docker.stdout_lines&quot;: [
+        &quot;Containers: 0&quot;,
+        &quot; Running: 0&quot;,
+        &quot; Paused: 0&quot;,
+        &quot; Stopped: 0&quot;,
+        &quot;Images: 0&quot;,
+        &quot;Server Version: 18.09.6&quot;,
+        &quot;Storage Driver: overlay2&quot;,
+        &quot; Backing Filesystem: xfs&quot;,
+        &quot; Supports d_type: true&quot;,
+        &quot; Native Overlay Diff: true&quot;,
+        &quot;Logging Driver: json-file&quot;,
+        &quot;Cgroup Driver: cgroupfs&quot;,
+        &quot;Plugins:&quot;,
+        &quot; Volume: local&quot;,
+        &quot; Network: bridge host macvlan null overlay&quot;,
+        &quot; Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog&quot;,
+        &quot;Swarm: inactive&quot;,
+        &quot;Runtimes: runc&quot;,
+        &quot;Default Runtime: runc&quot;,
+        &quot;Init Binary: docker-init&quot;,
+        &quot;containerd version: bb71b10fd8f58240ca47fbb579b9d1028eea7c84&quot;,
+        &quot;runc version: 2b18fe1d885ee5083ef9f0838fee39b62d653e30&quot;,
+        &quot;init version: fec3683&quot;,
+        &quot;Security Options:&quot;,
+        &quot; seccomp&quot;,
+        &quot;  Profile: default&quot;,
+        &quot;Kernel Version: 3.10.0-957.el7.x86_64&quot;,
+        &quot;Operating System: CentOS Linux 7 (Core)&quot;,
+        &quot;OSType: linux&quot;,
+        &quot;Architecture: x86_64&quot;,
+        &quot;CPUs: 2&quot;,
+        &quot;Total Memory: 1.777GiB&quot;,
+        &quot;Name: k8s-ansible3&quot;,
+        &quot;ID: O3LF:KDZ3:CXD6:MU6T:3DKL:PS42:6ATX:R4QE:GMI7:QHNO:CVQO:7ZW6&quot;,
+        &quot;Docker Root Dir: /var/lib/docker&quot;,
+        &quot;Debug Mode (client): false&quot;,
+        &quot;Debug Mode (server): false&quot;,
+        &quot;Registry: https://index.docker.io/v1/&quot;,
+        &quot;Labels:&quot;,
+        &quot;Experimental: false&quot;,
+        &quot;Insecure Registries:&quot;,
+        &quot; 192.168.31.70&quot;,
+        &quot; 127.0.0.0/8&quot;,
+        &quot;Registry Mirrors:&quot;,
+        &quot; http://bc437cce.m.daocloud.io/&quot;,
+        &quot;Live Restore Enabled: false&quot;,
+        &quot;Product License: Community Engine&quot;
+    ]
+}
+ok: [192.168.171.12] =&gt; {
+    &quot;docker.stdout_lines&quot;: [
+        &quot;Containers: 0&quot;,
+        &quot; Running: 0&quot;,
+        &quot; Paused: 0&quot;,
+        &quot; Stopped: 0&quot;,
+        &quot;Images: 0&quot;,
+        &quot;Server Version: 18.09.6&quot;,
+        &quot;Storage Driver: overlay2&quot;,
+        &quot; Backing Filesystem: xfs&quot;,
+        &quot; Supports d_type: true&quot;,
+        &quot; Native Overlay Diff: true&quot;,
+        &quot;Logging Driver: json-file&quot;,
+        &quot;Cgroup Driver: cgroupfs&quot;,
+        &quot;Plugins:&quot;,
+        &quot; Volume: local&quot;,
+        &quot; Network: bridge host macvlan null overlay&quot;,
+        &quot; Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog&quot;,
+        &quot;Swarm: inactive&quot;,
+        &quot;Runtimes: runc&quot;,
+        &quot;Default Runtime: runc&quot;,
+        &quot;Init Binary: docker-init&quot;,
+        &quot;containerd version: bb71b10fd8f58240ca47fbb579b9d1028eea7c84&quot;,
+        &quot;runc version: 2b18fe1d885ee5083ef9f0838fee39b62d653e30&quot;,
+        &quot;init version: fec3683&quot;,
+        &quot;Security Options:&quot;,
+        &quot; seccomp&quot;,
+        &quot;  Profile: default&quot;,
+        &quot;Kernel Version: 3.10.0-957.el7.x86_64&quot;,
+        &quot;Operating System: CentOS Linux 7 (Core)&quot;,
+        &quot;OSType: linux&quot;,
+        &quot;Architecture: x86_64&quot;,
+        &quot;CPUs: 2&quot;,
+        &quot;Total Memory: 1.777GiB&quot;,
+        &quot;Name: k8s-ansible2&quot;,
+        &quot;ID: DFQT:2YYV:YWY5:IXSS:U6VS:BW7R:6MPH:WCLC:QKOW:Y63I:5TV6:C3HT&quot;,
+        &quot;Docker Root Dir: /var/lib/docker&quot;,
+        &quot;Debug Mode (client): false&quot;,
+        &quot;Debug Mode (server): false&quot;,
+        &quot;Registry: https://index.docker.io/v1/&quot;,
+        &quot;Labels:&quot;,
+        &quot;Experimental: false&quot;,
+        &quot;Insecure Registries:&quot;,
+        &quot; 192.168.31.70&quot;,
+        &quot; 127.0.0.0/8&quot;,
+        &quot;Registry Mirrors:&quot;,
+        &quot; http://bc437cce.m.daocloud.io/&quot;,
+        &quot;Live Restore Enabled: false&quot;,
+        &quot;Product License: Community Engine&quot;
+    ]
+}
+ok: [192.168.171.14] =&gt; {
+    &quot;docker.stdout_lines&quot;: [
+        &quot;Containers: 0&quot;,
+        &quot; Running: 0&quot;,
+        &quot; Paused: 0&quot;,
+        &quot; Stopped: 0&quot;,
+        &quot;Images: 0&quot;,
+        &quot;Server Version: 18.09.6&quot;,
+        &quot;Storage Driver: overlay2&quot;,
+        &quot; Backing Filesystem: xfs&quot;,
+        &quot; Supports d_type: true&quot;,
+        &quot; Native Overlay Diff: true&quot;,
+        &quot;Logging Driver: json-file&quot;,
+        &quot;Cgroup Driver: cgroupfs&quot;,
+        &quot;Plugins:&quot;,
+        &quot; Volume: local&quot;,
+        &quot; Network: bridge host macvlan null overlay&quot;,
+        &quot; Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog&quot;,
+        &quot;Swarm: inactive&quot;,
+        &quot;Runtimes: runc&quot;,
+        &quot;Default Runtime: runc&quot;,
+        &quot;Init Binary: docker-init&quot;,
+        &quot;containerd version: bb71b10fd8f58240ca47fbb579b9d1028eea7c84&quot;,
+        &quot;runc version: 2b18fe1d885ee5083ef9f0838fee39b62d653e30&quot;,
+        &quot;init version: fec3683&quot;,
+        &quot;Security Options:&quot;,
+        &quot; seccomp&quot;,
+        &quot;  Profile: default&quot;,
+        &quot;Kernel Version: 3.10.0-957.el7.x86_64&quot;,
+        &quot;Operating System: CentOS Linux 7 (Core)&quot;,
+        &quot;OSType: linux&quot;,
+        &quot;Architecture: x86_64&quot;,
+        &quot;CPUs: 2&quot;,
+        &quot;Total Memory: 1.777GiB&quot;,
+        &quot;Name: k8s-ansible4&quot;,
+        &quot;ID: M3EP:OAKQ:6AMI:RDC6:QX2H:U34M:5GTT:Q2E7:AFP7:C4M3:FUO2:UHS3&quot;,
+        &quot;Docker Root Dir: /var/lib/docker&quot;,
+        &quot;Debug Mode (client): false&quot;,
+        &quot;Debug Mode (server): false&quot;,
+        &quot;Registry: https://index.docker.io/v1/&quot;,
+        &quot;Labels:&quot;,
+        &quot;Experimental: false&quot;,
+        &quot;Insecure Registries:&quot;,
+        &quot; 192.168.31.70&quot;,
+        &quot; 127.0.0.0/8&quot;,
+        &quot;Registry Mirrors:&quot;,
+        &quot; http://bc437cce.m.daocloud.io/&quot;,
+        &quot;Live Restore Enabled: false&quot;,
+        &quot;Product License: Community Engine&quot;
+    ]
+}
+
+PLAY [3.部署ETCD集群] *****************************************************************************************************************************************************
+
+TASK [etcd : 创建工作目录] **************************************************************************************************************************************************
+ok: [192.168.171.12] =&gt; (item=bin)
+ok: [192.168.171.13] =&gt; (item=bin)
+ok: [192.168.171.14] =&gt; (item=bin)
+ok: [192.168.171.12] =&gt; (item=cfg)
+ok: [192.168.171.13] =&gt; (item=cfg)
+ok: [192.168.171.14] =&gt; (item=cfg)
+ok: [192.168.171.12] =&gt; (item=ssl)
+ok: [192.168.171.13] =&gt; (item=ssl)
+ok: [192.168.171.14] =&gt; (item=ssl)
+
+TASK [etcd : 创建临时目录] **************************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+ok: [192.168.171.14]
+
+TASK [etcd : 分发并解压etcd二进制包] *******************************************************************************************************************************************
+ok: [192.168.171.12] =&gt; (item=/root/binary_pkg/etcd-v3.3.13-linux-amd64.tar.gz)
+ok: [192.168.171.14] =&gt; (item=/root/binary_pkg/etcd-v3.3.13-linux-amd64.tar.gz)
+ok: [192.168.171.13] =&gt; (item=/root/binary_pkg/etcd-v3.3.13-linux-amd64.tar.gz)
+
+TASK [etcd : 移动etcd二进制文件] *********************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.14]
+changed: [192.168.171.13]
+
+TASK [etcd : 分发证书] ****************************************************************************************************************************************************
+changed: [192.168.171.14] =&gt; (item=ca.pem)
+changed: [192.168.171.12] =&gt; (item=ca.pem)
+changed: [192.168.171.13] =&gt; (item=ca.pem)
+changed: [192.168.171.12] =&gt; (item=server.pem)
+changed: [192.168.171.13] =&gt; (item=server.pem)
+changed: [192.168.171.14] =&gt; (item=server.pem)
+changed: [192.168.171.14] =&gt; (item=server-key.pem)
+changed: [192.168.171.13] =&gt; (item=server-key.pem)
+changed: [192.168.171.12] =&gt; (item=server-key.pem)
+
+TASK [etcd : 分发etcd配置文件] **********************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [etcd : 分发service文件] *********************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [etcd : 启动etcd] **************************************************************************************************************************************************
+changed: [192.168.171.14]
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+
+TASK [etcd : 分发etcd脚本] ************************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.14]
+changed: [192.168.171.13]
+
+TASK [etcd : 获取etcd集群状态] **********************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [etcd : debug] ***************************************************************************************************************************************************
+ok: [192.168.171.13] =&gt; {
+    &quot;status.stdout_lines&quot;: [
+        &quot;member 5da6acb8be0f9647 is healthy: got healthy result from https://192.168.171.14:2379&quot;,
+        &quot;member a747b20fc3712bbc is healthy: got healthy result from https://192.168.171.12:2379&quot;,
+        &quot;member f351513a2b4642ac is healthy: got healthy result from https://192.168.171.13:2379&quot;,
+        &quot;cluster is healthy&quot;
+    ]
+}
+ok: [192.168.171.12] =&gt; {
+    &quot;status.stdout_lines&quot;: [
+        &quot;member 5da6acb8be0f9647 is healthy: got healthy result from https://192.168.171.14:2379&quot;,
+        &quot;member a747b20fc3712bbc is healthy: got healthy result from https://192.168.171.12:2379&quot;,
+        &quot;member f351513a2b4642ac is healthy: got healthy result from https://192.168.171.13:2379&quot;,
+        &quot;cluster is healthy&quot;
+    ]
+}
+ok: [192.168.171.14] =&gt; {
+    &quot;status.stdout_lines&quot;: [
+        &quot;member 5da6acb8be0f9647 is healthy: got healthy result from https://192.168.171.14:2379&quot;,
+        &quot;member a747b20fc3712bbc is healthy: got healthy result from https://192.168.171.12:2379&quot;,
+        &quot;member f351513a2b4642ac is healthy: got healthy result from https://192.168.171.13:2379&quot;,
+        &quot;cluster is healthy&quot;
+    ]
+}
+
+PLAY [4.部署K8S Master] *************************************************************************************************************************************************
+
+TASK [master : 创建工作目录] ************************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=bin)
+changed: [192.168.171.12] =&gt; (item=cfg)
+changed: [192.168.171.12] =&gt; (item=ssl)
+changed: [192.168.171.12] =&gt; (item=logs)
+
+TASK [master : 创建临时目录] ************************************************************************************************************************************************
+ok: [192.168.171.12]
+
+TASK [master : 分发并解压k8s二进制包] ******************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)
+
+TASK [master : 移动k8s master二进制文件] *************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [master : 分发k8s证书] ***********************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=ca.pem)
+changed: [192.168.171.12] =&gt; (item=ca-key.pem)
+changed: [192.168.171.12] =&gt; (item=server.pem)
+changed: [192.168.171.12] =&gt; (item=server-key.pem)
+
+TASK [master : 分发etcd证书] **********************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=ca.pem)
+changed: [192.168.171.12] =&gt; (item=server.pem)
+changed: [192.168.171.12] =&gt; (item=server-key.pem)
+
+TASK [master : 分发token文件] *********************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [master : 分发k8s配置文件] *********************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=kube-apiserver.conf.j2)
+changed: [192.168.171.12] =&gt; (item=kube-controller-manager.conf.j2)
+changed: [192.168.171.12] =&gt; (item=kube-scheduler.conf.j2)
+
+TASK [master : 分发service文件] *******************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=kube-apiserver.service.j2)
+changed: [192.168.171.12] =&gt; (item=kube-controller-manager.service.j2)
+changed: [192.168.171.12] =&gt; (item=kube-scheduler.service.j2)
+
+TASK [master : 启动k8s master组件] ****************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=kube-apiserver)
+changed: [192.168.171.12] =&gt; (item=kube-controller-manager)
+changed: [192.168.171.12] =&gt; (item=kube-scheduler)
+
+TASK [master : 查看集群状态] ************************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [master : debug] *************************************************************************************************************************************************
+ok: [192.168.171.12] =&gt; {
+    &quot;cs.stdout_lines&quot;: [
+        &quot;NAME                 AGE&quot;,
+        &quot;scheduler            &lt;unknown&gt;&quot;,
+        &quot;controller-manager   &lt;unknown&gt;&quot;,
+        &quot;etcd-0               &lt;unknown&gt;&quot;,
+        &quot;etcd-1               &lt;unknown&gt;&quot;,
+        &quot;etcd-2               &lt;unknown&gt;&quot;
+    ]
+}
+
+TASK [master : 拷贝RBAC文件] **********************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=kubelet-bootstrap-rbac.yaml)
+changed: [192.168.171.12] =&gt; (item=apiserver-to-kubelet-rbac.yaml)
+
+TASK [master : 授权APIServer访问Kubelet与授权kubelet bootstrap] **************************************************************************************************************
+changed: [192.168.171.12]
+
+PLAY [5.部署K8S Node] ***************************************************************************************************************************************************
+
+TASK [node : 创建工作目录] **************************************************************************************************************************************************
+changed: [192.168.171.13] =&gt; (item=bin)
+changed: [192.168.171.14] =&gt; (item=bin)
+ok: [192.168.171.12] =&gt; (item=bin)
+changed: [192.168.171.13] =&gt; (item=cfg)
+changed: [192.168.171.14] =&gt; (item=cfg)
+ok: [192.168.171.12] =&gt; (item=cfg)
+changed: [192.168.171.14] =&gt; (item=ssl)
+changed: [192.168.171.13] =&gt; (item=ssl)
+ok: [192.168.171.12] =&gt; (item=ssl)
+changed: [192.168.171.14] =&gt; (item=logs)
+ok: [192.168.171.12] =&gt; (item=logs)
+changed: [192.168.171.13] =&gt; (item=logs)
+
+TASK [node : 创建cni插件目录] ***********************************************************************************************************************************************
+changed: [192.168.171.14] =&gt; (item=/opt/cni/bin)
+changed: [192.168.171.13] =&gt; (item=/opt/cni/bin)
+changed: [192.168.171.12] =&gt; (item=/opt/cni/bin)
+changed: [192.168.171.13] =&gt; (item=/etc/cni/net.d)
+changed: [192.168.171.14] =&gt; (item=/etc/cni/net.d)
+changed: [192.168.171.12] =&gt; (item=/etc/cni/net.d)
+
+TASK [node : 创建临时目录] **************************************************************************************************************************************************
+ok: [192.168.171.12]
+ok: [192.168.171.13]
+ok: [192.168.171.14]
+
+TASK [node : 分发并解压k8s二进制包] ********************************************************************************************************************************************
+ok: [192.168.171.12] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)
+changed: [192.168.171.13] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)
+changed: [192.168.171.14] =&gt; (item=/root/binary_pkg/kubernetes-server-linux-amd64-1.16.tar.gz)
+
+TASK [node : 分发并解压cni插件二进制包] ******************************************************************************************************************************************
+changed: [192.168.171.14] =&gt; (item=/root/binary_pkg/cni-plugins-linux-amd64-v0.8.2.tgz)
+changed: [192.168.171.12] =&gt; (item=/root/binary_pkg/cni-plugins-linux-amd64-v0.8.2.tgz)
+changed: [192.168.171.13] =&gt; (item=/root/binary_pkg/cni-plugins-linux-amd64-v0.8.2.tgz)
+
+TASK [node : 移动k8s node二进制文件] *****************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.13]
+changed: [192.168.171.14]
+
+TASK [node : 分发k8s证书] *************************************************************************************************************************************************
+ok: [192.168.171.12] =&gt; (item=ca.pem)
+changed: [192.168.171.13] =&gt; (item=ca.pem)
+changed: [192.168.171.14] =&gt; (item=ca.pem)
+changed: [192.168.171.12] =&gt; (item=kube-proxy.pem)
+changed: [192.168.171.14] =&gt; (item=kube-proxy.pem)
+changed: [192.168.171.13] =&gt; (item=kube-proxy.pem)
+changed: [192.168.171.12] =&gt; (item=kube-proxy-key.pem)
+changed: [192.168.171.13] =&gt; (item=kube-proxy-key.pem)
+changed: [192.168.171.14] =&gt; (item=kube-proxy-key.pem)
+
+TASK [node : 分发k8s配置文件] ***********************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=bootstrap.kubeconfig.j2)
+changed: [192.168.171.13] =&gt; (item=bootstrap.kubeconfig.j2)
+changed: [192.168.171.14] =&gt; (item=bootstrap.kubeconfig.j2)
+changed: [192.168.171.14] =&gt; (item=kubelet.conf.j2)
+changed: [192.168.171.13] =&gt; (item=kubelet.conf.j2)
+changed: [192.168.171.12] =&gt; (item=kubelet.conf.j2)
+changed: [192.168.171.12] =&gt; (item=kubelet-config.yml.j2)
+changed: [192.168.171.13] =&gt; (item=kubelet-config.yml.j2)
+changed: [192.168.171.14] =&gt; (item=kubelet-config.yml.j2)
+changed: [192.168.171.14] =&gt; (item=kube-proxy.kubeconfig.j2)
+changed: [192.168.171.13] =&gt; (item=kube-proxy.kubeconfig.j2)
+changed: [192.168.171.12] =&gt; (item=kube-proxy.kubeconfig.j2)
+changed: [192.168.171.14] =&gt; (item=kube-proxy.conf.j2)
+changed: [192.168.171.12] =&gt; (item=kube-proxy.conf.j2)
+changed: [192.168.171.13] =&gt; (item=kube-proxy.conf.j2)
+changed: [192.168.171.12] =&gt; (item=kube-proxy-config.yml.j2)
+changed: [192.168.171.14] =&gt; (item=kube-proxy-config.yml.j2)
+changed: [192.168.171.13] =&gt; (item=kube-proxy-config.yml.j2)
+
+TASK [node : 分发service文件] *********************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=kubelet.service.j2)
+changed: [192.168.171.13] =&gt; (item=kubelet.service.j2)
+changed: [192.168.171.14] =&gt; (item=kubelet.service.j2)
+changed: [192.168.171.14] =&gt; (item=kube-proxy.service.j2)
+changed: [192.168.171.12] =&gt; (item=kube-proxy.service.j2)
+changed: [192.168.171.13] =&gt; (item=kube-proxy.service.j2)
+
+TASK [node : 启动k8s node组件] ********************************************************************************************************************************************
+changed: [192.168.171.13] =&gt; (item=kubelet)
+changed: [192.168.171.14] =&gt; (item=kubelet)
+changed: [192.168.171.12] =&gt; (item=kubelet)
+changed: [192.168.171.14] =&gt; (item=kube-proxy)
+changed: [192.168.171.13] =&gt; (item=kube-proxy)
+changed: [192.168.171.12] =&gt; (item=kube-proxy)
+
+TASK [node : 分发预准备镜像] *************************************************************************************************************************************************
+changed: [192.168.171.14]
+changed: [192.168.171.13]
+changed: [192.168.171.12]
+
+TASK [node : 导入镜像] ****************************************************************************************************************************************************
+changed: [192.168.171.12]
+changed: [192.168.171.14]
+changed: [192.168.171.13]
+
+PLAY [6.部署插件] *********************************************************************************************************************************************************
+
+TASK [addons : 允许Node加入集群] ********************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [addons : 拷贝YAML文件到Master] ***************************************************************************************************************************************
+changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/coredns.yaml)
+changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/ingress-controller.yaml)
+changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/kube-flannel.yaml)
+changed: [192.168.171.12] =&gt; (item=/root/ansible-install-k8s-master/roles/addons/files/kubernetes-dashboard.yaml)
+
+TASK [addons : 部署Flannel,Dashboard,CoreDNS,Ingress] *******************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [addons : 替换Dashboard证书] *****************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [addons : 查看Pod状态] ***********************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [addons : debug] *************************************************************************************************************************************************
+ok: [192.168.171.12] =&gt; {
+    &quot;getall.stdout_lines&quot;: [
+        &quot;NAMESPACE              NAME                                             READY   STATUS    RESTARTS   AGE&quot;,
+        &quot;kube-system            pod/coredns-6d8cfdd59d-hcfw5                     0/1     Pending   0          2s&quot;,
+        &quot;kubernetes-dashboard   pod/dashboard-metrics-scraper-566cddb686-nk7t8   0/1     Pending   0          1s&quot;,
+        &quot;kubernetes-dashboard   pod/kubernetes-dashboard-c4bc5bd44-cxgb6         0/1     Pending   0          1s&quot;,
+        &quot;&quot;,
+        &quot;NAMESPACE              NAME                                TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE&quot;,
+        &quot;default                service/kubernetes                  ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP          2m19s&quot;,
+        &quot;ingress-nginx          service/ingress-nginx               ClusterIP   10.0.0.158   &lt;none&gt;        80/TCP,443/TCP   2s&quot;,
+        &quot;kube-system            service/kube-dns                    ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    2s&quot;,
+        &quot;kubernetes-dashboard   service/dashboard-metrics-scraper   ClusterIP   10.0.0.38    &lt;none&gt;        8000/TCP         1s&quot;,
+        &quot;kubernetes-dashboard   service/kubernetes-dashboard        NodePort    10.0.0.180   &lt;none&gt;        443:30001/TCP    1s&quot;,
+        &quot;&quot;,
+        &quot;NAMESPACE       NAME                                      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE&quot;,
+        &quot;ingress-nginx   daemonset.apps/nginx-ingress-controller   0         0         0       0            0           &lt;none&gt;          2s&quot;,
+        &quot;kube-system     daemonset.apps/kube-flannel-ds-amd64      0         0         0       0            0           &lt;none&gt;          2s&quot;,
+        &quot;&quot;,
+        &quot;NAMESPACE              NAME                                        READY   UP-TO-DATE   AVAILABLE   AGE&quot;,
+        &quot;kube-system            deployment.apps/coredns                     0/1     1            0           2s&quot;,
+        &quot;kubernetes-dashboard   deployment.apps/dashboard-metrics-scraper   0/1     1            0           1s&quot;,
+        &quot;kubernetes-dashboard   deployment.apps/kubernetes-dashboard        0/1     1            0           1s&quot;,
+        &quot;&quot;,
+        &quot;NAMESPACE              NAME                                                   DESIRED   CURRENT   READY   AGE&quot;,
+        &quot;kube-system            replicaset.apps/coredns-6d8cfdd59d                     1         1         0       2s&quot;,
+        &quot;kubernetes-dashboard   replicaset.apps/dashboard-metrics-scraper-566cddb686   1         1         0       1s&quot;,
+        &quot;kubernetes-dashboard   replicaset.apps/kubernetes-dashboard-c4bc5bd44         1         1         0       1s&quot;
+    ]
+}
+
+TASK [addons : 创建Dashboard管理员令牌] **************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [addons : 获取Dashboard管理员令牌] **************************************************************************************************************************************
+changed: [192.168.171.12]
+
+TASK [addons : Kubernetes Dashboard登录信息] ******************************************************************************************************************************
+ok: [192.168.171.12] =&gt; {
+    &quot;ui.stdout_lines&quot;: [
+        &quot;访问地址---&gt;https://NodeIP:30001&quot;,
+        &quot;令牌内容---&gt;eyJhbGciOiJSUzI1NiIsImtpZCI6IlhOV0FZU1ZXRU80MU5oRUlYeGsxbExFcVB1R1k0bEEzMDhQQWdWVE5oZG8ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJkYXNoYm9hcmQtYWRtaW4tdG9rZW4tenQ2Y3ciLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGFzaGJvYXJkLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMTU3YjEyYmYtNjNjNC00NzU1LWI4YTAtN2IyY2ZkZmRmNmE3Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmVybmV0ZXMtZGFzaGJvYXJkOmRhc2hib2FyZC1hZG1pbiJ9.fKCHvmsmZmIErB9YLHtQrqWQBL_b89W0i_gDa4rwgV9x4UfzVAXskUiZiQs_yAHNmyUaIqPpBdUI64pvAoXilr-6wIk8-R8hpp4BJXLL4OsTtPXxrhIQF4_NP0D-4flg9sHba-I9X9A_2RWskcY53PAPTOjlyOQuldUyTdIT9tXi6jeSgj8CrDBc9O_A3xYWZ1f7RvrdEdU4Kkotc1rsBeGg-OzabU1nNLxWAaDHZJFciYeABtbPoY2fTkdz0JGoIxLpAqcQKoFp9ztGPcoOboCOqeb_hc-caBAmyvVIfbPvBiywdtuidjvb1IazETt_GQlzg7FMBoUpHhJYOTvnAA&quot;
+    ]
+}
+
+PLAY RECAP ************************************************************************************************************************************************************
+192.168.171.12             : ok=61   changed=40   unreachable=0    failed=0
+192.168.171.13             : ok=38   changed=23   unreachable=0    failed=0
+192.168.171.14             : ok=38   changed=23   unreachable=0    failed=0
+localhost                  : ok=9    changed=3    unreachable=0    failed=0
+</code></pre><h4 id="2-3、测试"><a href="#2-3、测试" class="headerlink" title="2.3、测试"></a>2.3、测试</h4><pre><code>[root@k8s-ansible2 ~]# kubectl get nodes
+NAME           STATUS   ROLES    AGE    VERSION
+k8s-ansible2   Ready    &lt;none&gt;   117s   v1.16.0
+k8s-ansible3   Ready    &lt;none&gt;   117s   v1.16.0
+k8s-ansible4   Ready    &lt;none&gt;   117s   v1.16.0
+
+[root@k8s-ansible2 ~]# kubectl get po --all-namespaces -o wide
+NAMESPACE              NAME                                         READY   STATUS    RESTARTS   AGE     IP               NODE           NOMINATED NODE   READINESS GATES
+ingress-nginx          nginx-ingress-controller-7g9fh               1/1     Running   0          2m41s   192.168.171.13   k8s-ansible3   &lt;none&gt;           &lt;none&gt;
+ingress-nginx          nginx-ingress-controller-hc492               1/1     Running   0          2m41s   192.168.171.14   k8s-ansible4   &lt;none&gt;           &lt;none&gt;
+ingress-nginx          nginx-ingress-controller-s4slm               1/1     Running   0          2m41s   192.168.171.12   k8s-ansible2   &lt;none&gt;           &lt;none&gt;
+kube-system            coredns-6d8cfdd59d-hcfw5                     1/1     Running   0          3m8s    10.244.1.2       k8s-ansible2   &lt;none&gt;           &lt;none&gt;
+kube-system            kube-flannel-ds-amd64-6nbt4                  1/1     Running   0          2m51s   192.168.171.12   k8s-ansible2   &lt;none&gt;           &lt;none&gt;
+kube-system            kube-flannel-ds-amd64-mfksz                  1/1     Running   0          2m51s   192.168.171.14   k8s-ansible4   &lt;none&gt;           &lt;none&gt;
+kube-system            kube-flannel-ds-amd64-vclgg                  1/1     Running   0          2m51s   192.168.171.13   k8s-ansible3   &lt;none&gt;           &lt;none&gt;
+kubernetes-dashboard   dashboard-metrics-scraper-566cddb686-nk7t8   1/1     Running   0          3m7s    10.244.2.2       k8s-ansible4   &lt;none&gt;           &lt;none&gt;
+kubernetes-dashboard   kubernetes-dashboard-c4bc5bd44-cxgb6         1/1     Running   0          3m7s    10.244.0.2       k8s-ansible3   &lt;none&gt;           &lt;none&gt;
+
+[root@k8s-ansible2 ~]# kubectl get csr
+NAME                                                   AGE    REQUESTOR           CONDITION
+node-csr-96KwqYYgTQ0ajISzq2pUc5Dzu07UzjaKRZqRWs31yUk   5m5s   kubelet-bootstrap   Approved,Issued
+node-csr-9PduNyHHpXtDmuNFj3fCkpoNkGcDkO2NPEk3uGQ3kIk   5m6s   kubelet-bootstrap   Approved,Issued
+node-csr-WLFKgflHlDK2f0RFvuTYKlkHcr8hz0iOrzYcp2V50JE   5m6s   kubelet-bootstrap   Approved,Issued
+</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/20191204/RlnwtcB5dboO.png?imageslim" alt="mark"></p>
 <hr>
-<h3 id="三、多master部署"><a href="#三、多master部署" class="headerlink" title="三、多master部署"></a>三、多master部署</h3><h4 id="3-1、hosts"><a href="#3-1、hosts" class="headerlink" title="3.1、hosts"></a>3.1、hosts</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ansible-install-k8s-master]# cat hosts</span><br><span class="line">[master]</span><br><span class="line"># 如果部署单Master，只保留一个Master节点</span><br><span class="line">192.168.171.11 node_name=k8s-master1</span><br><span class="line">192.168.171.12 node_name=k8s-master2</span><br><span class="line"></span><br><span class="line">[node]</span><br><span class="line">192.168.171.13 node_name=k8s-node1</span><br><span class="line">192.168.171.14 node_name=k8s-node2</span><br><span class="line"></span><br><span class="line">[etcd]</span><br><span class="line">192.168.171.11 etcd_name=etcd-1</span><br><span class="line">192.168.171.12 etcd_name=etcd-2</span><br><span class="line">192.168.171.13 etcd_name=etcd-3</span><br><span class="line"></span><br><span class="line">[lb]</span><br><span class="line"># 如果部署单Master，该项忽略</span><br><span class="line">192.168.171.15 lb_name=lb-master</span><br><span class="line">192.168.171.16 lb_name=lb-backup</span><br><span class="line"></span><br><span class="line">[k8s:children]</span><br><span class="line">master</span><br><span class="line">node</span><br><span class="line"></span><br><span class="line">[newnode]</span><br><span class="line">#192.168.31.91 node_name=k8s-node3</span><br></pre></td></tr></table></figure>
-<h4 id="3-2、全局参数配置"><a href="#3-2、全局参数配置" class="headerlink" title="3.2、全局参数配置"></a>3.2、全局参数配置</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ansible-install-k8s-master]# cat group_vars/all.yml</span><br><span class="line"># 安装目录</span><br><span class="line">software_dir: &apos;/root/binary_pkg&apos;</span><br><span class="line">k8s_work_dir: &apos;/opt/kubernetes&apos;</span><br><span class="line">etcd_work_dir: &apos;/opt/etcd&apos;</span><br><span class="line">tmp_dir: &apos;/tmp/k8s&apos;</span><br><span class="line"></span><br><span class="line"># 集群网络</span><br><span class="line">service_cidr: &apos;10.0.0.0/24&apos;</span><br><span class="line">cluster_dns: &apos;10.0.0.2&apos;   # 与roles/addons/files/coredns.yaml中IP一致</span><br><span class="line">pod_cidr: &apos;10.244.0.0/16&apos; # 与roles/addons/files/kube-flannel.yaml中网段一致</span><br><span class="line">service_nodeport_range: &apos;30000-32767&apos;</span><br><span class="line">cluster_domain: &apos;cluster.local&apos;</span><br><span class="line"></span><br><span class="line"># 高可用，如果部署单Master，该项忽略</span><br><span class="line">vip: &apos;192.168.171.88&apos;</span><br><span class="line">nic: &apos;ens33&apos;</span><br><span class="line"></span><br><span class="line"># 自签证书可信任IP列表，为方便扩展，可添加多个预留IP</span><br><span class="line">cert_hosts:</span><br><span class="line">  # 包含所有LB、VIP、Master IP和service_cidr的第一个IP（多多益善，可以多余出来几个后期扩展用）</span><br><span class="line">  k8s:</span><br><span class="line">    - 10.0.0.1</span><br><span class="line">    - 192.168.171.11</span><br><span class="line">    - 192.168.171.12</span><br><span class="line">    - 192.168.171.13</span><br><span class="line">    - 192.168.171.14</span><br><span class="line">    - 192.168.171.15</span><br><span class="line">    - 192.168.171.16</span><br><span class="line">    - 192.168.171.17</span><br><span class="line">    - 192.168.171.18</span><br><span class="line">    - 192.168.171.19</span><br><span class="line">    - 192.168.171.10</span><br><span class="line">    - 192.168.171.21</span><br><span class="line">    - 192.168.171.88</span><br><span class="line">  # 包含所有etcd节点IP</span><br><span class="line">  etcd:</span><br><span class="line">    - 192.168.171.11</span><br><span class="line">    - 192.168.171.12</span><br><span class="line">    - 192.168.171.13</span><br></pre></td></tr></table></figure>
-<h4 id="3-3、准备部署"><a href="#3-3、准备部署" class="headerlink" title="3.3、准备部署"></a>3.3、准备部署</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">多Master版：</span><br><span class="line"></span><br><span class="line">ansible-playbook -i hosts multi-master-deploy.yml -uroot -k</span><br></pre></td></tr></table></figure>
-<h4 id="3-4、输出历史（重点是结果）"><a href="#3-4、输出历史（重点是结果）" class="headerlink" title="3.4、输出历史（重点是结果）"></a>3.4、输出历史（重点是结果）</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">省略...</span><br></pre></td></tr></table></figure>
-<h4 id="3-5、测试"><a href="#3-5、测试" class="headerlink" title="3.5、测试"></a>3.5、测试</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-ansible1 ~]# kubectl get node</span><br><span class="line">NAME          STATUS   ROLES    AGE   VERSION</span><br><span class="line">k8s-master1   Ready    &lt;none&gt;   85s   v1.16.0</span><br><span class="line">k8s-master2   Ready    &lt;none&gt;   85s   v1.16.0</span><br><span class="line">k8s-node1     Ready    &lt;none&gt;   85s   v1.16.0</span><br><span class="line">k8s-node2     Ready    &lt;none&gt;   85s   v1.16.0</span><br><span class="line"></span><br><span class="line">[root@k8s-ansible1 ~]# kubectl get po,svc --all-namespaces</span><br><span class="line">NAMESPACE              NAME                                             READY   STATUS    RESTARTS   AGE</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-92b8v               1/1     Running   0          90s</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-dfkp5               1/1     Running   0          90s</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-hckvr               1/1     Running   0          91s</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-qckdd               1/1     Running   0          90s</span><br><span class="line">kube-system            pod/coredns-6d8cfdd59d-lsdps                     1/1     Running   0          117s</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-2mc74                  1/1     Running   1          100s</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-4hqq7                  1/1     Running   0          101s</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-dgzrb                  1/1     Running   0          100s</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-zjtpq                  1/1     Running   0          100s</span><br><span class="line">kubernetes-dashboard   pod/dashboard-metrics-scraper-566cddb686-9xh7b   1/1     Running   0          116s</span><br><span class="line">kubernetes-dashboard   pod/kubernetes-dashboard-c4bc5bd44-4f45q         1/1     Running   0          116s</span><br><span class="line"></span><br><span class="line">NAMESPACE              NAME                                TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">default                service/kubernetes                  ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP          5m40s</span><br><span class="line">ingress-nginx          service/ingress-nginx               ClusterIP   10.0.0.170   &lt;none&gt;        80/TCP,443/TCP   117s</span><br><span class="line">kube-system            service/kube-dns                    ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    117s</span><br><span class="line">kubernetes-dashboard   service/dashboard-metrics-scraper   ClusterIP   10.0.0.172   &lt;none&gt;        8000/TCP         116s</span><br><span class="line">kubernetes-dashboard   service/kubernetes-dashboard        NodePort    10.0.0.57    &lt;none&gt;        443:30001/TCP    116s</span><br><span class="line">[root@k8s-ansible1 ~]# kubectl get po,svc --all-namespaces -o wide</span><br><span class="line">NAMESPACE              NAME                                             READY   STATUS    RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-92b8v               1/1     Running   0          96s    192.168.171.11   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-dfkp5               1/1     Running   0          96s    192.168.171.12   k8s-master2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-hckvr               1/1     Running   0          97s    192.168.171.13   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">ingress-nginx          pod/nginx-ingress-controller-qckdd               1/1     Running   0          96s    192.168.171.14   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            pod/coredns-6d8cfdd59d-lsdps                     1/1     Running   0          2m3s   10.244.1.2       k8s-master2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-2mc74                  1/1     Running   1          106s   192.168.171.12   k8s-master2   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-4hqq7                  1/1     Running   0          107s   192.168.171.13   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-dgzrb                  1/1     Running   0          106s   192.168.171.14   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-system            pod/kube-flannel-ds-amd64-zjtpq                  1/1     Running   0          106s   192.168.171.11   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kubernetes-dashboard   pod/dashboard-metrics-scraper-566cddb686-9xh7b   1/1     Running   0          2m2s   10.244.2.2       k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kubernetes-dashboard   pod/kubernetes-dashboard-c4bc5bd44-4f45q         1/1     Running   0          2m2s   10.244.3.2       k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line"></span><br><span class="line">NAMESPACE              NAME                                TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE     SELECTOR</span><br><span class="line">default                service/kubernetes                  ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP          5m46s   &lt;none&gt;</span><br><span class="line">ingress-nginx          service/ingress-nginx               ClusterIP   10.0.0.170   &lt;none&gt;        80/TCP,443/TCP   2m3s    app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/part-of=ingress-nginx</span><br><span class="line">kube-system            service/kube-dns                    ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    2m3s    k8s-app=kube-dns</span><br><span class="line">kubernetes-dashboard   service/dashboard-metrics-scraper   ClusterIP   10.0.0.172   &lt;none&gt;        8000/TCP         2m2s    k8s-app=dashboard-metrics-scraper</span><br><span class="line">kubernetes-dashboard   service/kubernetes-dashboard        NodePort    10.0.0.57    &lt;none&gt;        443:30001/TCP    2m2s    k8s-app=kubernetes-dashboard</span><br><span class="line"></span><br><span class="line">### 检查高可用的两台机器：</span><br><span class="line"></span><br><span class="line">[root@k8s-ansible5 ~]# ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:85:37:e0 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.171.15/24 brd 192.168.171.255 scope global noprefixroute ens33</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet 192.168.171.88/24 scope global secondary ens33     ##虚拟VIP</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::d20b:b903:7edd:b18b/64 scope link tentative noprefixroute dadfailed</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::5d9e:cf1f:ea7f:801f/64 scope link tentative noprefixroute dadfailed</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::5c0:8885:2874:a77b/64 scope link tentative noprefixroute dadfailed</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">[root@k8s-ansible5 ~]# ps aux | grep nginx</span><br><span class="line">root       7895  0.0  0.0  46356  1168 ?        Ss   22:57   0:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">nginx      7896  0.1  0.1  47184  2308 ?        S    22:57   0:00 nginx: worker process</span><br><span class="line">nginx      7897  0.0  0.1  46780  1980 ?        S    22:57   0:00 nginx: worker process</span><br><span class="line">nginx      7898  0.0  0.1  46924  2216 ?        S    22:57   0:00 nginx: worker process</span><br><span class="line">nginx      7899  0.0  0.1  46876  2220 ?        S    22:57   0:00 nginx: worker process</span><br><span class="line">root      11331  0.0  0.0 112728   988 pts/0    S+   23:07   0:00 grep --color=auto nginx</span><br><span class="line">[root@k8s-ansible5 ~]# ps aux | grep keepalived</span><br><span class="line">root       7975  0.0  0.0 122884  1404 ?        Ss   22:57   0:00 /usr/sbin/keepalived -D</span><br><span class="line">root       7976  0.0  0.1 133844  3336 ?        S    22:57   0:00 /usr/sbin/keepalived -D</span><br><span class="line">root       7977  0.0  0.1 133784  2892 ?        S    22:57   0:00 /usr/sbin/keepalived -D</span><br><span class="line">root      11369  0.0  0.0 112724   992 pts/0    R+   23:07   0:00 grep --color=auto keepalived</span><br></pre></td></tr></table></figure>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191204/7GzoI4FprwXv.png?imageslim" alt="mark"></p>
+<h3 id="三、多master部署"><a href="#三、多master部署" class="headerlink" title="三、多master部署"></a>三、多master部署</h3><h4 id="3-1、hosts"><a href="#3-1、hosts" class="headerlink" title="3.1、hosts"></a>3.1、hosts</h4><pre><code>[root@k8s-ansible1 ansible-install-k8s-master]# cat hosts
+[master]
+# 如果部署单Master，只保留一个Master节点
+192.168.171.11 node_name=k8s-master1
+192.168.171.12 node_name=k8s-master2
+
+[node]
+192.168.171.13 node_name=k8s-node1
+192.168.171.14 node_name=k8s-node2
+
+[etcd]
+192.168.171.11 etcd_name=etcd-1
+192.168.171.12 etcd_name=etcd-2
+192.168.171.13 etcd_name=etcd-3
+
+[lb]
+# 如果部署单Master，该项忽略
+192.168.171.15 lb_name=lb-master
+192.168.171.16 lb_name=lb-backup
+
+[k8s:children]
+master
+node
+
+[newnode]
+#192.168.31.91 node_name=k8s-node3
+</code></pre><h4 id="3-2、全局参数配置"><a href="#3-2、全局参数配置" class="headerlink" title="3.2、全局参数配置"></a>3.2、全局参数配置</h4><pre><code>[root@k8s-ansible1 ansible-install-k8s-master]# cat group_vars/all.yml
+# 安装目录
+software_dir: &#39;/root/binary_pkg&#39;
+k8s_work_dir: &#39;/opt/kubernetes&#39;
+etcd_work_dir: &#39;/opt/etcd&#39;
+tmp_dir: &#39;/tmp/k8s&#39;
+
+# 集群网络
+service_cidr: &#39;10.0.0.0/24&#39;
+cluster_dns: &#39;10.0.0.2&#39;   # 与roles/addons/files/coredns.yaml中IP一致
+pod_cidr: &#39;10.244.0.0/16&#39; # 与roles/addons/files/kube-flannel.yaml中网段一致
+service_nodeport_range: &#39;30000-32767&#39;
+cluster_domain: &#39;cluster.local&#39;
+
+# 高可用，如果部署单Master，该项忽略
+vip: &#39;192.168.171.88&#39;
+nic: &#39;ens33&#39;
+
+# 自签证书可信任IP列表，为方便扩展，可添加多个预留IP
+cert_hosts:
+  # 包含所有LB、VIP、Master IP和service_cidr的第一个IP（多多益善，可以多余出来几个后期扩展用）
+  k8s:
+    - 10.0.0.1
+    - 192.168.171.11
+    - 192.168.171.12
+    - 192.168.171.13
+    - 192.168.171.14
+    - 192.168.171.15
+    - 192.168.171.16
+    - 192.168.171.17
+    - 192.168.171.18
+    - 192.168.171.19
+    - 192.168.171.10
+    - 192.168.171.21
+    - 192.168.171.88
+  # 包含所有etcd节点IP
+  etcd:
+    - 192.168.171.11
+    - 192.168.171.12
+    - 192.168.171.13
+</code></pre><h4 id="3-3、准备部署"><a href="#3-3、准备部署" class="headerlink" title="3.3、准备部署"></a>3.3、准备部署</h4><pre><code>多Master版：
+
+ansible-playbook -i hosts multi-master-deploy.yml -uroot -k
+</code></pre><h4 id="3-4、输出历史（重点是结果）"><a href="#3-4、输出历史（重点是结果）" class="headerlink" title="3.4、输出历史（重点是结果）"></a>3.4、输出历史（重点是结果）</h4><pre><code>省略...
+</code></pre><h4 id="3-5、测试"><a href="#3-5、测试" class="headerlink" title="3.5、测试"></a>3.5、测试</h4><pre><code>[root@k8s-ansible1 ~]# kubectl get node
+NAME          STATUS   ROLES    AGE   VERSION
+k8s-master1   Ready    &lt;none&gt;   85s   v1.16.0
+k8s-master2   Ready    &lt;none&gt;   85s   v1.16.0
+k8s-node1     Ready    &lt;none&gt;   85s   v1.16.0
+k8s-node2     Ready    &lt;none&gt;   85s   v1.16.0
+
+[root@k8s-ansible1 ~]# kubectl get po,svc --all-namespaces
+NAMESPACE              NAME                                             READY   STATUS    RESTARTS   AGE
+ingress-nginx          pod/nginx-ingress-controller-92b8v               1/1     Running   0          90s
+ingress-nginx          pod/nginx-ingress-controller-dfkp5               1/1     Running   0          90s
+ingress-nginx          pod/nginx-ingress-controller-hckvr               1/1     Running   0          91s
+ingress-nginx          pod/nginx-ingress-controller-qckdd               1/1     Running   0          90s
+kube-system            pod/coredns-6d8cfdd59d-lsdps                     1/1     Running   0          117s
+kube-system            pod/kube-flannel-ds-amd64-2mc74                  1/1     Running   1          100s
+kube-system            pod/kube-flannel-ds-amd64-4hqq7                  1/1     Running   0          101s
+kube-system            pod/kube-flannel-ds-amd64-dgzrb                  1/1     Running   0          100s
+kube-system            pod/kube-flannel-ds-amd64-zjtpq                  1/1     Running   0          100s
+kubernetes-dashboard   pod/dashboard-metrics-scraper-566cddb686-9xh7b   1/1     Running   0          116s
+kubernetes-dashboard   pod/kubernetes-dashboard-c4bc5bd44-4f45q         1/1     Running   0          116s
+
+NAMESPACE              NAME                                TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
+default                service/kubernetes                  ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP          5m40s
+ingress-nginx          service/ingress-nginx               ClusterIP   10.0.0.170   &lt;none&gt;        80/TCP,443/TCP   117s
+kube-system            service/kube-dns                    ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    117s
+kubernetes-dashboard   service/dashboard-metrics-scraper   ClusterIP   10.0.0.172   &lt;none&gt;        8000/TCP         116s
+kubernetes-dashboard   service/kubernetes-dashboard        NodePort    10.0.0.57    &lt;none&gt;        443:30001/TCP    116s
+[root@k8s-ansible1 ~]# kubectl get po,svc --all-namespaces -o wide
+NAMESPACE              NAME                                             READY   STATUS    RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES
+ingress-nginx          pod/nginx-ingress-controller-92b8v               1/1     Running   0          96s    192.168.171.11   k8s-master1   &lt;none&gt;           &lt;none&gt;
+ingress-nginx          pod/nginx-ingress-controller-dfkp5               1/1     Running   0          96s    192.168.171.12   k8s-master2   &lt;none&gt;           &lt;none&gt;
+ingress-nginx          pod/nginx-ingress-controller-hckvr               1/1     Running   0          97s    192.168.171.13   k8s-node1     &lt;none&gt;           &lt;none&gt;
+ingress-nginx          pod/nginx-ingress-controller-qckdd               1/1     Running   0          96s    192.168.171.14   k8s-node2     &lt;none&gt;           &lt;none&gt;
+kube-system            pod/coredns-6d8cfdd59d-lsdps                     1/1     Running   0          2m3s   10.244.1.2       k8s-master2   &lt;none&gt;           &lt;none&gt;
+kube-system            pod/kube-flannel-ds-amd64-2mc74                  1/1     Running   1          106s   192.168.171.12   k8s-master2   &lt;none&gt;           &lt;none&gt;
+kube-system            pod/kube-flannel-ds-amd64-4hqq7                  1/1     Running   0          107s   192.168.171.13   k8s-node1     &lt;none&gt;           &lt;none&gt;
+kube-system            pod/kube-flannel-ds-amd64-dgzrb                  1/1     Running   0          106s   192.168.171.14   k8s-node2     &lt;none&gt;           &lt;none&gt;
+kube-system            pod/kube-flannel-ds-amd64-zjtpq                  1/1     Running   0          106s   192.168.171.11   k8s-master1   &lt;none&gt;           &lt;none&gt;
+kubernetes-dashboard   pod/dashboard-metrics-scraper-566cddb686-9xh7b   1/1     Running   0          2m2s   10.244.2.2       k8s-master1   &lt;none&gt;           &lt;none&gt;
+kubernetes-dashboard   pod/kubernetes-dashboard-c4bc5bd44-4f45q         1/1     Running   0          2m2s   10.244.3.2       k8s-node2     &lt;none&gt;           &lt;none&gt;
+
+NAMESPACE              NAME                                TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE     SELECTOR
+default                service/kubernetes                  ClusterIP   10.0.0.1     &lt;none&gt;        443/TCP          5m46s   &lt;none&gt;
+ingress-nginx          service/ingress-nginx               ClusterIP   10.0.0.170   &lt;none&gt;        80/TCP,443/TCP   2m3s    app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/part-of=ingress-nginx
+kube-system            service/kube-dns                    ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    2m3s    k8s-app=kube-dns
+kubernetes-dashboard   service/dashboard-metrics-scraper   ClusterIP   10.0.0.172   &lt;none&gt;        8000/TCP         2m2s    k8s-app=dashboard-metrics-scraper
+kubernetes-dashboard   service/kubernetes-dashboard        NodePort    10.0.0.57    &lt;none&gt;        443:30001/TCP    2m2s    k8s-app=kubernetes-dashboard
+
+### 检查高可用的两台机器：
+
+[root@k8s-ansible5 ~]# ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 00:0c:29:85:37:e0 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.171.15/24 brd 192.168.171.255 scope global noprefixroute ens33
+       valid_lft forever preferred_lft forever
+    inet 192.168.171.88/24 scope global secondary ens33     ##虚拟VIP
+       valid_lft forever preferred_lft forever
+    inet6 fe80::d20b:b903:7edd:b18b/64 scope link tentative noprefixroute dadfailed
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5d9e:cf1f:ea7f:801f/64 scope link tentative noprefixroute dadfailed
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5c0:8885:2874:a77b/64 scope link tentative noprefixroute dadfailed
+       valid_lft forever preferred_lft forever
+[root@k8s-ansible5 ~]# ps aux | grep nginx
+root       7895  0.0  0.0  46356  1168 ?        Ss   22:57   0:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+nginx      7896  0.1  0.1  47184  2308 ?        S    22:57   0:00 nginx: worker process
+nginx      7897  0.0  0.1  46780  1980 ?        S    22:57   0:00 nginx: worker process
+nginx      7898  0.0  0.1  46924  2216 ?        S    22:57   0:00 nginx: worker process
+nginx      7899  0.0  0.1  46876  2220 ?        S    22:57   0:00 nginx: worker process
+root      11331  0.0  0.0 112728   988 pts/0    S+   23:07   0:00 grep --color=auto nginx
+[root@k8s-ansible5 ~]# ps aux | grep keepalived
+root       7975  0.0  0.0 122884  1404 ?        Ss   22:57   0:00 /usr/sbin/keepalived -D
+root       7976  0.0  0.1 133844  3336 ?        S    22:57   0:00 /usr/sbin/keepalived -D
+root       7977  0.0  0.1 133784  2892 ?        S    22:57   0:00 /usr/sbin/keepalived -D
+root      11369  0.0  0.0 112724   992 pts/0    R+   23:07   0:00 grep --color=auto keepalived
+</code></pre><p><img src="http://myimage.okay686.cn/okay686cn/20191204/7GzoI4FprwXv.png?imageslim" alt="mark"></p>
 <hr>
 
             <div class="post-copyright">

@@ -139,8 +139,8 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">不多说了，2019年底再开始~~</span><br></pre></td></tr></table></figure>
-<h3 id="一、K8S特性"><a href="#一、K8S特性" class="headerlink" title="一、K8S特性"></a>一、K8S特性</h3><h4 id="①自我修复"><a href="#①自我修复" class="headerlink" title="①自我修复"></a>①自我修复</h4><p>在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。</p>
+            <pre><code>不多说了，2019年底再开始~~
+</code></pre><h3 id="一、K8S特性"><a href="#一、K8S特性" class="headerlink" title="一、K8S特性"></a>一、K8S特性</h3><h4 id="①自我修复"><a href="#①自我修复" class="headerlink" title="①自我修复"></a>①自我修复</h4><p>在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。</p>
 <h4 id="②弹性伸缩"><a href="#②弹性伸缩" class="headerlink" title="②弹性伸缩"></a>②弹性伸缩</h4><p>使用命令、UI管控或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行业务。</p>
 <h4 id="③自动部署和回滚"><a href="#③自动部署和回滚" class="headerlink" title="③自动部署和回滚"></a>③自动部署和回滚</h4><p>K8S采用滚动更新策略更新应用，一次更新一个Pod，而不是同时删除所有Pod，如果更新过程中出现问题，将回滚更改，确保升级不影响业务。</p>
 <h4 id="④服务发现和负载均衡"><a href="#④服务发现和负载均衡" class="headerlink" title="④服务发现和负载均衡"></a>④服务发现和负载均衡</h4><p>K8S为多个容器提供一个统一的访问入口（内部IP地址和一个DNS名称），并且负载均衡关联的所有容器，使得用户无需考虑容器IP问题。</p>

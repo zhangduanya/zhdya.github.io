@@ -139,22 +139,35 @@
             
             <p>在爬取网页中有用的信息时，通常是对存在于网页中的文本或各种不同标签的属性值进行查找，Beautiful Soup中内置了一些查找方式，最常用的是 find() 和 find_all() 函数。</p>
 <p><strong>同时通过soup.find_all()得到的所有符合条件的结果和soup.select()一样都是列表list，而soup.find()只返回第一个符合条件的结果，所以soup.find()后面可以直接接.text或者get_text()来获得标签中的文本。</strong></p>
-<h3 id="一、find-用法"><a href="#一、find-用法" class="headerlink" title="一、find()用法"></a>一、find()用法</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find(name,attrs,recursive,text,**wargs)</span><br></pre></td></tr></table></figure>
-<h4 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;ul id=&quot;producers&quot;&gt;  </span><br><span class="line">        &lt;li class=&quot;producerlist&quot;&gt;  </span><br><span class="line">            &lt;div class=&quot;name&quot;&gt;plants&lt;/div&gt;  </span><br><span class="line">            &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt;  </span><br><span class="line">        &lt;/li&gt;  </span><br><span class="line">        &lt;li class=&quot;producerlist&quot;&gt;  </span><br><span class="line">            &lt;div class=&quot;name&quot;&gt;algae&lt;/div&gt;  </span><br><span class="line">            &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt;  </span><br><span class="line">        &lt;/li&gt;  </span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure>
-<p>(1)ul,li,div这些就是标签；</p>
-<pre><code>用法p=soup.find(&apos;ul&apos;) ，那么返回结果是第一个ul标签以及&lt;xx&gt;...&lt;/xx&gt;的所有内容，即上面的代码；注意若用p=soup.find(&apos;ul&apos;).get_text()那么结果不是...的所有内    容，而应该是plants 10000 algae 10000，即...中的标签不算text文本。
+<h3 id="一、find-用法"><a href="#一、find-用法" class="headerlink" title="一、find()用法"></a>一、find()用法</h3><pre><code>find(name,attrs,recursive,text,**wargs)
+</code></pre><h4 id="例子："><a href="#例子：" class="headerlink" title="例子："></a>例子：</h4><pre><code>&lt;ul id=&quot;producers&quot;&gt;  
+        &lt;li class=&quot;producerlist&quot;&gt;  
+            &lt;div class=&quot;name&quot;&gt;plants&lt;/div&gt;  
+            &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt;  
+        &lt;/li&gt;  
+        &lt;li class=&quot;producerlist&quot;&gt;  
+            &lt;div class=&quot;name&quot;&gt;algae&lt;/div&gt;  
+            &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt;  
+        &lt;/li&gt;  
+&lt;/ul&gt;  
+</code></pre><p>(1)ul,li,div这些就是标签；</p>
+<pre><code>用法p=soup.find(&#39;ul&#39;) ，那么返回结果是第一个ul标签以及&lt;xx&gt;...&lt;/xx&gt;的所有内容，即上面的代码；注意若用p=soup.find(&#39;ul&#39;).get_text()那么结果不是...的所有内    容，而应该是plants 10000 algae 10000，即...中的标签不算text文本。
 </code></pre><p>(2)<xx>…</xx>之间的内容就是文本；<br>基于文本内容的查找也可以用soup.find()，但必须用到参数text，</p>
-<pre><code>用法p=soup.find(text=&apos;algae&apos;)，print(p)得到的结果就是algae
+<pre><code>用法p=soup.find(text=&#39;algae&#39;)，print(p)得到的结果就是algae
 </code></pre><p>(3)正则表达式后面自己另外去学习；</p>
 <p>(4)ul id=”producers”&gt;中的id即标签属性，那么我们可以查找具有特定标签的属性；</p>
-<pre><code>用法p=soup.find(&apos;ul&apos;, id=&quot;producers&quot;)，那么可以得到&lt;xx&gt;...&lt;/xx&gt;的所有结果，其特点是把标签更一步精确化以便于查找。
+<pre><code>用法p=soup.find(&#39;ul&#39;, id=&quot;producers&quot;)，那么可以得到&lt;xx&gt;...&lt;/xx&gt;的所有结果，其特点是把标签更一步精确化以便于查找。
 
 对于大多数的情况可以用上面的方法解决，但是有两种情况则要用到参数attrs:一是标签字符中带有-，比如data-custom;二是class不能看作标签属性。解决的办法是在attrs属性用字典进行传递参数：
-</code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">soup.find(attrs=&#123;&apos;data-custom&apos;:&apos;xxx&apos;&#125;)</span><br><span class="line">以及：</span><br><span class="line">soup.find(attrs=&#123;&apos;class&apos;:&apos;xxx&apos;&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="二、find-all-用法"><a href="#二、find-all-用法" class="headerlink" title="二、find_all()用法"></a>二、find_all()用法</h3><pre><code>应用到find()中的不同过滤参数同理可以用到find_all()中，相比find()，find_all()有个额外的参数limit；
+</code></pre><pre><code>soup.find(attrs={&#39;data-custom&#39;:&#39;xxx&#39;})
+以及：
+soup.find(attrs={&#39;class&#39;:&#39;xxx&#39;})
+</code></pre><h3 id="二、find-all-用法"><a href="#二、find-all-用法" class="headerlink" title="二、find_all()用法"></a>二、find_all()用法</h3><pre><code>应用到find()中的不同过滤参数同理可以用到find_all()中，相比find()，find_all()有个额外的参数limit；
 </code></pre><p>如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">p=soup.find_all(text=&apos;algae&apos;,limit=2)</span><br><span class="line"></span><br><span class="line">实际上find()也就是当limit=1时的find_all()。</span><br></pre></td></tr></table></figure>
-<p><a href="http://blog.csdn.net/abclixu123/article/details/38502993" target="_blank" rel="noopener">[参考文档引自]</a></p>
+<pre><code>p=soup.find_all(text=&#39;algae&#39;,limit=2)
+
+实际上find()也就是当limit=1时的find_all()。
+</code></pre><p><a href="http://blog.csdn.net/abclixu123/article/details/38502993" target="_blank" rel="noopener">[参考文档引自]</a></p>
 
             <div class="post-copyright">
     <div class="content">

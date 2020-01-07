@@ -8,18 +8,18 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;lt; EOFn">
+  <meta name="description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;lt; EOF">
 <meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K8S集群优化之路由转发：使用IPVS替代iptables">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;lt; EOFn">
+<meta property="og:description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;lt; EOF">
 <meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2019-12-06T05:06:47.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="K8S集群优化之路由转发：使用IPVS替代iptables">
-<meta name="twitter:description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;lt; EOFn">
+<meta name="twitter:description" content="一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。 二、具体步骤2.1、开启内核参数cat &amp;gt;&amp;gt; /etc/sysctl.conf &amp;lt;&amp;lt; EOF">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -138,12 +138,87 @@
       
             
             <h4 id="一、为什么要使用IPVS"><a href="#一、为什么要使用IPVS" class="headerlink" title="一、为什么要使用IPVS"></a>一、为什么要使用IPVS</h4><p>从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。</p>
-<h4 id="二、具体步骤"><a href="#二、具体步骤" class="headerlink" title="二、具体步骤"></a>二、具体步骤</h4><h5 id="2-1、开启内核参数"><a href="#2-1、开启内核参数" class="headerlink" title="2.1、开启内核参数"></a>2.1、开启内核参数</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOF</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
-<h5 id="2-2、开启ipvs支持"><a href="#2-2、开启ipvs支持" class="headerlink" title="2.2、开启ipvs支持"></a>2.2、开启ipvs支持</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum -y install ipvsadm  ipset</span><br><span class="line"></span><br><span class="line"># 临时生效</span><br><span class="line">modprobe -- ip_vs</span><br><span class="line">modprobe -- ip_vs_rr</span><br><span class="line">modprobe -- ip_vs_wrr</span><br><span class="line">modprobe -- ip_vs_sh</span><br><span class="line">modprobe -- nf_conntrack_ipv4</span><br><span class="line"></span><br><span class="line"># 永久生效</span><br><span class="line">cat &gt; /etc/sysconfig/modules/ipvs.modules &lt;&lt;EOF</span><br><span class="line">modprobe -- ip_vs</span><br><span class="line">modprobe -- ip_vs_rr</span><br><span class="line">modprobe -- ip_vs_wrr</span><br><span class="line">modprobe -- ip_vs_sh</span><br><span class="line">modprobe -- nf_conntrack_ipv4</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<h5 id="2-3、配置kube-proxy"><a href="#2-3、配置kube-proxy" class="headerlink" title="2.3、配置kube-proxy"></a>2.3、配置kube-proxy</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 添加下面两行</span><br><span class="line">  --proxy-mode=ipvs  \</span><br><span class="line">  --masquerade-all=true \</span><br><span class="line"></span><br><span class="line"># 修改服务文件</span><br><span class="line">vim /usr/lib/systemd/system/kube-proxy.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kube-Proxy Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/data/k8s/kube-proxy</span><br><span class="line">ExecStart=/data/k8s/bin/kube-proxy \</span><br><span class="line">  --bind-address=192.168.1.145 \</span><br><span class="line">  --hostname-override=192.168.1.145 \</span><br><span class="line">  --cluster-cidr=10.254.0.0/16 \</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \</span><br><span class="line">  --logtostderr=true \</span><br><span class="line">  --proxy-mode=ipvs  \</span><br><span class="line">  --masquerade-all=true \</span><br><span class="line">  --v=2</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-<h5 id="2-4、重启kube-proxy"><a href="#2-4、重启kube-proxy" class="headerlink" title="2.4、重启kube-proxy"></a>2.4、重启kube-proxy</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart kube-proxy</span><br><span class="line">systemctl status kube-proxy</span><br></pre></td></tr></table></figure>
-<h3 id="三、测试"><a href="#三、测试" class="headerlink" title="三、测试"></a>三、测试</h3><p>测试是否生效<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8sNode01 docker]# ipvsadm -Ln</span><br><span class="line">IP Virtual Server version 1.2.1 (size=4096)</span><br><span class="line">Prot LocalAddress:Port Scheduler Flags</span><br><span class="line">  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn</span><br><span class="line">TCP  10.254.0.1:443 rr</span><br><span class="line">  -&gt; 192.168.1.142:6443           Masq    1      0          0         </span><br><span class="line">  -&gt; 192.168.1.143:6443           Masq    1      1          0         </span><br><span class="line">  -&gt; 192.168.1.144:6443           Masq    1      1          0         </span><br><span class="line">TCP  10.254.27.38:80 rr</span><br><span class="line">  -&gt; 172.30.36.4:9090             Masq    1      0          0         </span><br><span class="line">TCP  10.254.72.60:80 rr</span><br><span class="line">  -&gt; 172.30.90.4:8080             Masq    1      0          0         </span><br><span class="line">TCP  10.254.72.247:80 rr</span><br><span class="line">  -&gt; 172.30.36.5:3000             Masq    1      0          0         </span><br><span class="line">TCP  127.0.0.1:27841 rr</span><br><span class="line">  -&gt; 172.30.36.2:80               Masq    1      0          0         </span><br><span class="line">  -&gt; 172.30.90.2:80               Masq    1      0          0         </span><br><span class="line">TCP  127.0.0.1:28453 rr</span><br><span class="line">  -&gt; 172.30.36.5:3000             Masq    1      0          0         </span><br><span class="line">TCP  127.0.0.1:36018 rr</span><br><span class="line">  -&gt; 172.30.36.4:9090             Masq    1      0          0         </span><br><span class="line">TCP  172.30.90.0:27841 rr</span><br><span class="line">  -&gt; 172.30.36.2:80               Masq    1      0          0         </span><br><span class="line">  -&gt; 172.30.90.2:80               Masq    1      0          0</span><br></pre></td></tr></table></figure></p>
-<hr>
+<h4 id="二、具体步骤"><a href="#二、具体步骤" class="headerlink" title="二、具体步骤"></a>二、具体步骤</h4><h5 id="2-1、开启内核参数"><a href="#2-1、开启内核参数" class="headerlink" title="2.1、开启内核参数"></a>2.1、开启内核参数</h5><pre><code>cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOF
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sysctl -p
+</code></pre><h5 id="2-2、开启ipvs支持"><a href="#2-2、开启ipvs支持" class="headerlink" title="2.2、开启ipvs支持"></a>2.2、开启ipvs支持</h5><pre><code>yum -y install ipvsadm  ipset
+
+# 临时生效
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack_ipv4
+
+# 永久生效
+cat &gt; /etc/sysconfig/modules/ipvs.modules &lt;&lt;EOF
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack_ipv4
+EOF
+</code></pre><h5 id="2-3、配置kube-proxy"><a href="#2-3、配置kube-proxy" class="headerlink" title="2.3、配置kube-proxy"></a>2.3、配置kube-proxy</h5><pre><code># 添加下面两行
+  --proxy-mode=ipvs  \
+  --masquerade-all=true \
+
+# 修改服务文件
+vim /usr/lib/systemd/system/kube-proxy.service
+[Unit]
+Description=Kubernetes Kube-Proxy Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=network.target
+
+[Service]
+WorkingDirectory=/data/k8s/kube-proxy
+ExecStart=/data/k8s/bin/kube-proxy \
+  --bind-address=192.168.1.145 \
+  --hostname-override=192.168.1.145 \
+  --cluster-cidr=10.254.0.0/16 \
+  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \
+  --logtostderr=true \
+  --proxy-mode=ipvs  \
+  --masquerade-all=true \
+  --v=2
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target 
+</code></pre><h5 id="2-4、重启kube-proxy"><a href="#2-4、重启kube-proxy" class="headerlink" title="2.4、重启kube-proxy"></a>2.4、重启kube-proxy</h5><pre><code>systemctl daemon-reload
+systemctl restart kube-proxy
+systemctl status kube-proxy
+</code></pre><h3 id="三、测试"><a href="#三、测试" class="headerlink" title="三、测试"></a>三、测试</h3><p>测试是否生效</p>
+<pre><code>[root@k8sNode01 docker]# ipvsadm -Ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  10.254.0.1:443 rr
+  -&gt; 192.168.1.142:6443           Masq    1      0          0         
+  -&gt; 192.168.1.143:6443           Masq    1      1          0         
+  -&gt; 192.168.1.144:6443           Masq    1      1          0         
+TCP  10.254.27.38:80 rr
+  -&gt; 172.30.36.4:9090             Masq    1      0          0         
+TCP  10.254.72.60:80 rr
+  -&gt; 172.30.90.4:8080             Masq    1      0          0         
+TCP  10.254.72.247:80 rr
+  -&gt; 172.30.36.5:3000             Masq    1      0          0         
+TCP  127.0.0.1:27841 rr
+  -&gt; 172.30.36.2:80               Masq    1      0          0         
+  -&gt; 172.30.90.2:80               Masq    1      0          0         
+TCP  127.0.0.1:28453 rr
+  -&gt; 172.30.36.5:3000             Masq    1      0          0         
+TCP  127.0.0.1:36018 rr
+  -&gt; 172.30.36.4:9090             Masq    1      0          0         
+TCP  172.30.90.0:27841 rr
+  -&gt; 172.30.36.2:80               Masq    1      0          0         
+  -&gt; 172.30.90.2:80               Masq    1      0          0         
+</code></pre><hr>
 
             <div class="post-copyright">
     <div class="content">

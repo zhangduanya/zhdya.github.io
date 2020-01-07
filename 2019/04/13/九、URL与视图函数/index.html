@@ -148,20 +148,45 @@
 <p>myblog/myblog/urls.py</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190420/06SOp1CAFwPa.png?imageslim" alt="mark"></p>
 <p>表现形式如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    path(正则表达式, views视图函数，参数，别名),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">括号里的参数说明：</span><br><span class="line">1、一个正则表达式字符串</span><br><span class="line">2、一个可调用对象，通常为一个视图函数或一个指定视图函数路径的字符串</span><br><span class="line">3、可选的要传递给视图函数的默认参数（字典形式）</span><br><span class="line">4、一个可选的name参数(别名)</span><br></pre></td></tr></table></figure>
-<p>完整的URL应该要这么写：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">path(正则表达式, views视图函数，参数，别名)</span><br><span class="line">：</span><br><span class="line">里面的正则表达式, views视图函数，是必须要写的，而参数，别名是可选的。我们在有特殊需要的时候才写。</span><br></pre></td></tr></table></figure></p>
-<p>通过上面我们可以看到，每个URL都对应一个views视图函数名，视图函数名不能相同，否则会报错。视图函数，Django中约定写在APP应用里的views.py文件里。然后在urls.py文件里通过下面的方式导入：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from APP应用名 import views</span><br><span class="line">from APP应用名.vews import 函数名或类名</span><br></pre></td></tr></table></figure></p>
-<p>视图函数是一个简单的Python 函数，它接受Web请求并且返回Web响应。响应可以是一张网页的HTML内容，一个重定向，一个404错误，一个XML文档，或者一张图片. . . 是任何东西都可以。无论视图本身包含什么逻辑，都要返回响应。这个视图函数代码一般约定是放置在项目或应用程序目录中的名为views.py的文件中。</p>
+<pre><code>urlpatterns = [
+    path(正则表达式, views视图函数，参数，别名),
+]
+
+括号里的参数说明：
+1、一个正则表达式字符串
+2、一个可调用对象，通常为一个视图函数或一个指定视图函数路径的字符串
+3、可选的要传递给视图函数的默认参数（字典形式）
+4、一个可选的name参数(别名)
+</code></pre><p>完整的URL应该要这么写：</p>
+<pre><code>path(正则表达式, views视图函数，参数，别名)
+：
+里面的正则表达式, views视图函数，是必须要写的，而参数，别名是可选的。我们在有特殊需要的时候才写。
+</code></pre><p>通过上面我们可以看到，每个URL都对应一个views视图函数名，视图函数名不能相同，否则会报错。视图函数，Django中约定写在APP应用里的views.py文件里。然后在urls.py文件里通过下面的方式导入：</p>
+<pre><code>from APP应用名 import views
+from APP应用名.vews import 函数名或类名
+</code></pre><p>视图函数是一个简单的Python 函数，它接受Web请求并且返回Web响应。响应可以是一张网页的HTML内容，一个重定向，一个404错误，一个XML文档，或者一张图片. . . 是任何东西都可以。无论视图本身包含什么逻辑，都要返回响应。这个视图函数代码一般约定是放置在项目或应用程序目录中的名为views.py的文件中。</p>
 <p>http请求中产生两个核心对象：</p>
 <ul>
 <li>1、http请求—-&gt;HttpRequest对象，用户请求相关的所有信息（对象）</li>
 <li>2、http响应—-&gt;HttpResponse对象，响应字符串</li>
 </ul>
-<p>首先，打开打开bolg目录下的views.py文件，写一个hello视图函数，在里面输入：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">  &quot;&quot;&quot;</span><br><span class="line">  写一个hello函数，通过request接收URL或者说是http请求信息，</span><br><span class="line">  然后给这个请求返回一个HttpResponse对象</span><br><span class="line">  &quot;&quot;&quot;</span><br><span class="line">    return HttpResponse(&apos;欢迎使用Django！&apos;)</span><br></pre></td></tr></table></figure></p>
-<p>例子里，我们用到的request，就是HttpRequest对象。HttpResponse(“欢迎使用Django！”)，就是HttpRequest对象，它向http请求响应了一段字符串对象。</p>
+<p>首先，打开打开bolg目录下的views.py文件，写一个hello视图函数，在里面输入：</p>
+<pre><code>from django.http import HttpResponse
+
+def hello(request):
+  &quot;&quot;&quot;
+  写一个hello函数，通过request接收URL或者说是http请求信息，
+  然后给这个请求返回一个HttpResponse对象
+  &quot;&quot;&quot;
+    return HttpResponse(&#39;欢迎使用Django！&#39;)
+</code></pre><p>例子里，我们用到的request，就是HttpRequest对象。HttpResponse(“欢迎使用Django！”)，就是HttpRequest对象，它向http请求响应了一段字符串对象。</p>
 <p>我们打开myblog目录下的urls.py文件中先导入视图函数，然后构造一个URL，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from blog import views  #导入视图函数</span><br><span class="line">urlpatterns = [</span><br><span class="line">    ...</span><br><span class="line">    path(&apos;&apos;, views.hello),   #这个是我们构造的URL</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>代码写完之后，启动项目就可以在浏览器里看到视图函数返回的字符串”欢迎使用Django！”</p>
+<pre><code>from blog import views  #导入视图函数
+urlpatterns = [
+    ...
+    path(&#39;&#39;, views.hello),   #这个是我们构造的URL
+]
+</code></pre><p>代码写完之后，启动项目就可以在浏览器里看到视图函数返回的字符串”欢迎使用Django！”</p>
 <p>每一个URL都会对应一个视图函数，当一个用户请求访问Django站点的一个页面时，然后就由Django路由系统（URL配置文件）去决定要执行哪个视图函数使用的算法。</p>
 <p>通过URL对应关系匹配 -&gt;找到对应的函数（或者类）-&gt;返回字符串(或者读取Html之后返回渲染的字符串）这个过程也就是我们Django请求的生命周期。</p>
 <p>视图函数，就是围绕着HttpRequest和HttpResponse这两个对象进行的。</p>

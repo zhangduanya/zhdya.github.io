@@ -464,8 +464,9 @@
         <div class="article-feed">
             <p>
                 基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。
-python manage.py makemigrationspython manage.py migrate
-迁移数据之后，网站目录里自...
+python manage.py makemigrations
+python manage.py migrate
+迁移数据之后，网站目录里...
             </p>
         </div>
       
@@ -532,7 +533,12 @@ python manage.py makemigrationspython manage.py migrate
         <div class="article-feed">
             <p>
                 打开myblog目录下的settings.py文件：
-一、设置域名访问权限myblog/settings.pyALLOWED_HOSTS = []      #修改前ALLOWED_HOSTS = [&apos;*&apos;]#修改...
+一、设置域名访问权限myblog/settings.py
+
+ALLOWED_HOSTS = []      #修改前
+ALLOWED_HOSTS = [&#39;*&#39;]
+
+...
             </p>
         </div>
       

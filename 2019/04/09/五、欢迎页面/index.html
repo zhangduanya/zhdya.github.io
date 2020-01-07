@@ -8,20 +8,20 @@
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： python manage.py createsuperus">
+  <meta name="description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 python manage.py makemigrations python manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： python manage.py createsuperu">
 <meta name="keywords" content="python,django2.0,django_blog">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django博客开发：欢迎页面（五）">
 <meta property="og:url" content="http://zhdya.okay686.cn/2019/04/09/五、欢迎页面/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： python manage.py createsuperus">
+<meta property="og:description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 python manage.py makemigrations python manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： python manage.py createsuperu">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim">
 <meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190417/EfVJ0Ar9T6Tt.png?imageslim">
 <meta property="og:updated_time" content="2019-04-20T05:31:46.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Django博客开发：欢迎页面（五）">
-<meta name="twitter:description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 python manage.py makemigrationspython manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： python manage.py createsuperus">
+<meta name="twitter:description" content="基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。 python manage.py makemigrations python manage.py migrate 迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。 之后输入下面命令创建管理帐号和密码： python manage.py createsuperu">
 <meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim">
   
   
@@ -141,20 +141,34 @@
       
             
             <p>基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
-<p>迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。</p>
+<pre><code>python manage.py makemigrations
+python manage.py migrate
+</code></pre><p>迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。</p>
 <p>之后输入下面命令创建管理帐号和密码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python manage.py createsuperuser</span><br></pre></td></tr></table></figure>
-<p>最后，我们设置下启动命令，启动我们的Django项目：</p>
+<pre><code>python manage.py createsuperuser
+</code></pre><p>最后，我们设置下启动命令，启动我们的Django项目：</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim" alt="mark"></p>
 <p>启动后登陆 <a href="http://0.0.0.0:8000/" target="_blank" rel="noopener">http://0.0.0.0:8000/</a> 就可以看到我们的欢迎页。</p>
 <p><img src="http://myimage.okay686.cn/okay686cn/20190417/EfVJ0Ar9T6Tt.png?imageslim" alt="mark"></p>
 <p>另外一点，我们当然也可以设置自定义的主页：</p>
 <p>首先，打开打开bolg目录下的views.py文件，在里面输入：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/blog/views.py</span><br><span class="line"></span><br><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">    return HttpResponse(&apos;Welcome to Django Zone！&apos;)</span><br></pre></td></tr></table></figure>
-<p>再打开myblog目录下的urls.py文件，在文件里添加两行代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/myblog/urls.py</span><br><span class="line"></span><br><span class="line">from django.contrib import admin</span><br><span class="line">from django.urls import path</span><br><span class="line">from blog import views</span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">    path(&apos;&apos;, views.hello),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>再次刷新启动后，即可看到新的欢迎页面。</p>
+<pre><code>myblog/blog/views.py
+
+from django.http import HttpResponse
+
+def hello(request):
+    return HttpResponse(&#39;Welcome to Django Zone！&#39;)
+</code></pre><p>再打开myblog目录下的urls.py文件，在文件里添加两行代码：</p>
+<pre><code>myblog/myblog/urls.py
+
+from django.contrib import admin
+from django.urls import path
+from blog import views
+urlpatterns = [
+    path(&#39;admin/&#39;, admin.site.urls),
+    path(&#39;&#39;, views.hello),
+]   
+</code></pre><p>再次刷新启动后，即可看到新的欢迎页面。</p>
 <p>当然，我们在浏览器里面访问：<a href="http://127.0.0.1:8000/admin" target="_blank" rel="noopener">http://127.0.0.1:8000/admin</a>  就可以进入Django自带的后台管理。</p>
 
             <div class="post-copyright">
