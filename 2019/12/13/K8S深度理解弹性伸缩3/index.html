@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>K8S弹性伸缩之基于Metrics Server CPU指标的HPA | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？ 它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。 当然看如下图↓：你也可以把agg当作一个nginx的">
+<meta name="keywords" content="Kubernets,K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8S弹性伸缩之基于Metrics Server CPU指标的HPA">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？ 它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。 当然看如下图↓：你也可以把agg当作一个nginx的">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/4ltOHHqMSpAC.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/zvXGP2D8wtDk.png?imageslim">
+<meta property="og:updated_time" content="2020-01-07T13:22:09.501Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="K8S弹性伸缩之基于Metrics Server CPU指标的HPA">
+<meta name="twitter:description" content="基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？ 它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。 当然看如下图↓：你也可以把agg当作一个nginx的">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191213/4ltOHHqMSpAC.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-K8S深度理解弹性伸缩3" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      K8S弹性伸缩之基于Metrics Server CPU指标的HPA
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s/">K8s</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-13
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="基于CPU指标缩放"><a href="#基于CPU指标缩放" class="headerlink" title="基于CPU指标缩放"></a>基于CPU指标缩放</h3><h4 id="1、-Kubernetes-API-Aggregation"><a href="#1、-Kubernetes-API-Aggregation" class="headerlink" title="1、 Kubernetes API Aggregation"></a>1、 Kubernetes API Aggregation</h4><p>什么是k8sapi聚合？</p>
+<pre><code>它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
+</code></pre><p>当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。</p>
+<p>在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/4ltOHHqMSpAC.png?imageslim" alt="mark"></p>
+<p>当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apiserver，正是这个代理的一个后端；而 Metrics Server，则是另一个后端 。通过这种方式，我们就可以很方便地扩展 Kubernetes 的 API 了。</p>
+<p>如果你使用kubeadm部署的，默认已开启。<strong>如果你使用==二进制方式部署==的话，需要在kube-APIServer中添加启动参数</strong>，增加以下配置：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># vi /opt/kubernetes/cfg/kube-apiserver.conf</span><br><span class="line">...</span><br><span class="line">--requestheader-client-ca-file=/opt/kubernetes/ssl/ca.pem \</span><br><span class="line">--proxy-client-cert-file=/opt/kubernetes/ssl/server.pem \</span><br><span class="line">--proxy-client-key-file=/opt/kubernetes/ssl/server-key.pem \</span><br><span class="line">--requestheader-allowed-names=kubernetes \</span><br><span class="line">--requestheader-extra-headers-prefix=X-Remote-Extra- \</span><br><span class="line">--requestheader-group-headers=X-Remote-Group \</span><br><span class="line">--requestheader-username-headers=X-Remote-User \</span><br><span class="line">--enable-aggregator-routing=true \</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>  在设置完成重启 kube-apiserver 服务，就启用 API 聚合功能了。  </p>
+<h5 id="2、部署-Metrics-Server"><a href="#2、部署-Metrics-Server" class="headerlink" title="2、部署 Metrics Server"></a>2、部署 Metrics Server</h5><p>Metrics Server是一个集群范围的资源使用情况的数据聚合器。作为一个应用部署在集群中。</p>
+<p>Metric server从每个节点上Kubelet公开的摘要API收集指标。 </p>
+<p>Metrics server通过Kubernetes聚合器注册在Master APIServer中。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/zvXGP2D8wtDk.png?imageslim" alt="mark"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># git clone https://github.com/kubernetes-incubator/metrics-server</span><br><span class="line"># cd metrics-server/deploy/1.8+/</span><br><span class="line"># vi metrics-server-deployment.yaml   # 添加2条启动参数   </span><br><span class="line">...</span><br><span class="line">      containers:</span><br><span class="line">      - name: metrics-server</span><br><span class="line">        image: zhdya/metrics-server-amd64:v0.3.1</span><br><span class="line">        command:</span><br><span class="line">        - /metrics-server</span><br><span class="line">        - --kubelet-insecure-tls        ##忽略证书的验证</span><br><span class="line">        - --kubelet-preferred-address-types=InternalIP      ##一般node都是用主机名注册的，但是metricserver是通过pod启动的，解析不到hostname，所以需要采集节点的IP</span><br><span class="line">...</span><br><span class="line"># kubectl create -f .</span><br></pre></td></tr></table></figure>
+<p>可通过Metrics API在Kubernetes中获得资源使用率指标，例如容器CPU和内存使用率。这些度量标准既可以由用户直接访问（例如，通过使用<code>kubectl top</code>命令），也可以由集群中的控制器（例如，Horizontal Pod Autoscaler）用于进行决策。 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 metrics-server]# kubectl get po -n kube-system -o wide</span><br><span class="line">NAME                             READY   STATUS    RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">coredns-6d8cfdd59d-pbbbc         1/1     Running   0          131m   10.244.2.2       k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-4gj8p      1/1     Running   1          142m   192.168.171.11   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-k5lfh      1/1     Running   1          75m    192.168.171.14   k8s-node3     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-kddhv      1/1     Running   1          142m   192.168.171.12   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-q8g25      1/1     Running   1          141m   192.168.171.13   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-server-7dbbcf4c7-v5zpm   1/1     Running   0          49s    10.244.2.4       k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
+<p>查看是否注册到apiservice<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 metrics-server]# kubectl get apiservice</span><br><span class="line">v1beta1.metrics.k8s.io                 kube-system/metrics-server   True        3m22s</span><br></pre></td></tr></table></figure></p>
+<p>测试：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 metrics-server]# kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes</span><br><span class="line">&#123;&quot;kind&quot;:&quot;NodeMetricsList&quot;,&quot;apiVersion&quot;:&quot;metrics.k8s.io/v1beta1&quot;,&quot;metadata&quot;:&#123;&quot;selfLink&quot;:&quot;/apis/metrics.k8s.io/v1beta1/nodes&quot;&#125;,&quot;items&quot;:[&#123;&quot;metadata&quot;:&#123;&quot;name&quot;:&quot;k8s-master1&quot;,&quot;selfLink&quot;:&quot;/apis/metrics.k8s.io/v1beta1/nodes/k8s-master1&quot;,&quot;creationTimestamp&quot;:&quot;2019-12-10T15:41:01Z&quot;&#125;,&quot;timestamp&quot;:&quot;2019-12-10T15:40:34Z&quot;,&quot;window&quot;:&quot;30s&quot;,&quot;usage&quot;:&#123;&quot;cpu&quot;:&quot;104718141n&quot;,&quot;memory&quot;:&quot;1158508Ki&quot;&#125;&#125;,&#123;&quot;metadata&quot;:&#123;&quot;name&quot;:&quot;k8s-node1&quot;,&quot;selfLink&quot;:&quot;/apis/metrics.k8s.io/v1beta1/nodes/k8s-node1&quot;,&quot;creationTimestamp&quot;:&quot;2019-12-10T15:41:01Z&quot;&#125;,&quot;timestamp&quot;:&quot;2019-12-10T15:40:26Z&quot;,&quot;window&quot;:&quot;30s&quot;,&quot;usage&quot;:&#123;&quot;cpu&quot;:&quot;61460193n&quot;,&quot;memory&quot;:&quot;556328Ki&quot;&#125;&#125;,&#123;&quot;metadata&quot;:&#123;&quot;name&quot;:&quot;k8s-node2&quot;,&quot;selfLink&quot;:&quot;/apis/metrics.k8s.io/v1beta1/nodes/k8s-node2&quot;,&quot;creationTimestamp&quot;:&quot;2019-12-10T15:41:01Z&quot;&#125;,&quot;timestamp&quot;:&quot;2019-12-10T15:40:32Z&quot;,&quot;window&quot;:&quot;30s&quot;,&quot;usage&quot;:&#123;&quot;cpu&quot;:&quot;57896643n&quot;,&quot;memory&quot;:&quot;570056Ki&quot;&#125;&#125;,&#123;&quot;metadata&quot;:&#123;&quot;name&quot;:&quot;k8s-node3&quot;,&quot;selfLink&quot;:&quot;/apis/metrics.k8s.io/v1beta1/nodes/k8s-node3&quot;,&quot;creationTimestamp&quot;:&quot;2019-12-10T15:41:01Z&quot;&#125;,&quot;timestamp&quot;:&quot;2019-12-10T15:40:30Z&quot;,&quot;window&quot;:&quot;30s&quot;,&quot;usage&quot;:&#123;&quot;cpu&quot;:&quot;30890872n&quot;,&quot;memory&quot;:&quot;403264Ki&quot;&#125;&#125;]&#125;</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 metrics-server]# kubectl top node</span><br><span class="line">NAME          CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%</span><br><span class="line">k8s-master1   105m         5%     1131Mi          65%</span><br><span class="line">k8s-node1     62m          3%     543Mi           31%</span><br><span class="line">k8s-node2     58m          2%     556Mi           32%</span><br><span class="line">k8s-node3     31m          1%     393Mi           22%</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 metrics-server]# kubectl top pod</span><br><span class="line">NAME                  CPU(cores)   MEMORY(bytes)</span><br><span class="line">web-944cddf48-4x6qr   0m           3Mi</span><br><span class="line">web-944cddf48-64d7r   0m           2Mi</span><br><span class="line">web-944cddf48-hjwng   0m           3Mi</span><br><span class="line">web-944cddf48-skh82   0m           3Mi</span><br></pre></td></tr></table></figure>
+<h5 id="3、autoscaling-v1（CPU指标实践）"><a href="#3、autoscaling-v1（CPU指标实践）" class="headerlink" title="3、autoscaling/v1（CPU指标实践）"></a>3、autoscaling/v1（CPU指标实践）</h5><p>autoscaling/v1版本只支持CPU一个指标。</p>
+<p>首先部署一个应用：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 hpa]# kubectl run web --image=nginx --replicas=8 --requests=&quot;cpu=100m,memory=100Mi&quot; --expose 80 --port 80 --dry-run -o yaml &gt;app.yaml</span><br></pre></td></tr></table></figure>
+<p>创建HPA策略：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 hpa]# kubectl autoscale deployment web --min=2 --max=8 -o yaml --dry-run &gt;hpav1.yaml</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 hpa]# kubectl apply -f hpav1.yaml</span><br><span class="line">horizontalpodautoscaler.autoscaling/web created</span><br><span class="line"></span><br><span class="line">###cat hpav1.yaml</span><br><span class="line">apiVersion: autoscaling/v1</span><br><span class="line">kind: HorizontalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: web</span><br><span class="line">spec:</span><br><span class="line">  maxReplicas: 8</span><br><span class="line">  minReplicas: 2</span><br><span class="line">  scaleTargetRef:</span><br><span class="line">    apiVersion: apps/v1</span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: web</span><br><span class="line">  targetCPUUtilizationPercentage: 60</span><br></pre></td></tr></table></figure>
+<p>scaleTargetRef：表示当前要伸缩对象是谁</p>
+<p>targetCPUUtilizationPercentage：当整体的资源利用率超过50%的时候，会进行扩容。</p>
+<p>查看当前状态：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 hpa]# kubectl get hpa</span><br><span class="line">NAME   REFERENCE        TARGETS   MINPODS   MAXPODS   REPLICAS   AGE</span><br><span class="line">web    Deployment/web   0%/60%    2         8         3          24s</span><br></pre></td></tr></table></figure></p>
+<p>开启压测：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># yum install httpd-tools</span><br><span class="line"># ab -n 100000 -c 100  http://10.1.206.176/status.php</span><br></pre></td></tr></table></figure>
+<p>10.0.0.147 为ClusterIP。</p>
+<p>检查扩容状态：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubectl get hpa</span><br><span class="line"># kubectl top pods</span><br><span class="line"># kubectl get pods</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 hpa]# ab -n 1000000 -c 1000  http://10.0.0.201/index.html    ##压测</span><br><span class="line"></span><br><span class="line">关闭压测，过一会检查缩容状态。</span><br><span class="line">[root@k8s-master1 ~]# kubectl top po</span><br><span class="line">NAME                   CPU(cores)   MEMORY(bytes)</span><br><span class="line">web-77cfdb7c6c-dpm5t   116m         5Mi</span><br><span class="line">web-77cfdb7c6c-lwkbj   343m         5Mi</span><br><span class="line">[root@k8s-master1 ~]# kubectl get po</span><br><span class="line">NAME                   READY   STATUS    RESTARTS   AGE</span><br><span class="line">web-77cfdb7c6c-94p6x   1/1     Running   0          7s</span><br><span class="line">web-77cfdb7c6c-9xwbj   1/1     Running   0          23s</span><br><span class="line">web-77cfdb7c6c-dpm5t   1/1     Running   0          33m</span><br><span class="line">web-77cfdb7c6c-gpk6d   1/1     Running   0          7s</span><br><span class="line">web-77cfdb7c6c-l7b4r   1/1     Running   0          23s</span><br><span class="line">web-77cfdb7c6c-lwkbj   1/1     Running   0          33m</span><br><span class="line">web-77cfdb7c6c-w6lz6   1/1     Running   0          7s</span><br><span class="line">web-77cfdb7c6c-wpzb5   1/1     Running   0          7s</span><br></pre></td></tr></table></figure>
+<p><strong>==工作流程==</strong>：hpa -&gt; apiserver -&gt; kube aggregation -&gt; metrics-server -&gt; kubelet(cadvisor)</p>
+<h5 id="4、autoscaling-v2beta2（多指标）"><a href="#4、autoscaling-v2beta2（多指标）" class="headerlink" title="4、autoscaling/v2beta2（多指标）"></a>4、autoscaling/v2beta2（多指标）</h5><p>为满足更多的需求， HPA 还有 autoscaling/v2beta1和 autoscaling/v2beta2两个版本。</p>
+<p>这两个版本的区别是 autoscaling/v1beta1支持了 Resource Metrics（CPU）和 Custom Metrics（应用程序指标），而在 autoscaling/v2beta2的版本中额外增加了 External Metrics的支持。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubectl get hpa.v2beta2.autoscaling -o yaml &gt; /tmp/hpa-v2.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: autoscaling/v2beta2</span><br><span class="line">kind: HorizontalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: web</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  scaleTargetRef:</span><br><span class="line">    apiVersion: apps/v1</span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: web</span><br><span class="line">  minReplicas: 1</span><br><span class="line">  maxReplicas: 10</span><br><span class="line">  metrics:</span><br><span class="line">  - resource:</span><br><span class="line">    type: Resource</span><br><span class="line">      name: cpu</span><br><span class="line">      target:</span><br><span class="line">        averageUtilization: 60</span><br><span class="line">        type: Utilization</span><br></pre></td></tr></table></figure>
+<p>与上面v1版本效果一样，只不过这里格式有所变化。</p>
+<p>v2还支持其他另种类型的度量指标，：Pods和Object。  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type: Pods</span><br><span class="line">pods:</span><br><span class="line">  metric:</span><br><span class="line">    name: packets-per-second</span><br><span class="line">  target:</span><br><span class="line">    type: AverageValue</span><br><span class="line">    averageValue: 1k</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type: Object</span><br><span class="line">object:</span><br><span class="line">  metric:</span><br><span class="line">    name: requests-per-second</span><br><span class="line">  describedObject:</span><br><span class="line">    apiVersion: networking.k8s.io/v1beta1</span><br><span class="line">    kind: Ingress</span><br><span class="line">    name: main-route</span><br><span class="line">  target:</span><br><span class="line">    type: Value</span><br><span class="line">    value: 2k</span><br></pre></td></tr></table></figure>
+<p>metrics中的type字段有四种类型的值：Object、Pods、Resource、External。 </p>
+<ul>
+<li><p>Resource：指的是当前伸缩对象下的pod的cpu和memory指标，只支持Utilization和AverageValue类型的目标值。</p>
+</li>
+<li><p>Object：指的是指定k8s内部对象的指标，数据需要第三方adapter提供，只支持Value和AverageValue类型的目标值。</p>
+</li>
+<li><p>Pods：指的是伸缩对象Pods的指标，数据需要第三方的adapter提供，只允许AverageValue类型的目标值。</p>
+</li>
+<li><p>External：指的是k8s外部的指标，数据同样需要第三方的adapter提供，只支持Value和AverageValue类型的目标值。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># hpa-v2.yaml</span><br><span class="line">apiVersion: autoscaling/v2beta2</span><br><span class="line">kind: HorizontalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: web</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  scaleTargetRef:</span><br><span class="line">    apiVersion: apps/v1</span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: web</span><br><span class="line">  minReplicas: 1</span><br><span class="line">  maxReplicas: 10</span><br><span class="line">  metrics:</span><br><span class="line">  - type: Resource</span><br><span class="line">    resource:</span><br><span class="line">      name: cpu</span><br><span class="line">      target:</span><br><span class="line">        type: Utilization</span><br><span class="line">        averageUtilization: 50</span><br><span class="line">  - type: Pods</span><br><span class="line">    pods:</span><br><span class="line">      metric:</span><br><span class="line">        name: packets-per-second</span><br><span class="line">      target:</span><br><span class="line">        type: AverageValue</span><br><span class="line">        averageValue: 1k</span><br><span class="line">  - type: Object</span><br><span class="line">    object:</span><br><span class="line">      metric:</span><br><span class="line">        name: requests-per-second</span><br><span class="line">      describedObject:</span><br><span class="line">        apiVersion: networking.k8s.io/v1beta1</span><br><span class="line">        kind: Ingress</span><br><span class="line">        name: main-route</span><br><span class="line">      target:</span><br><span class="line">        type: Value</span><br><span class="line">        value: 10k</span><br></pre></td></tr></table></figure>
+<p><strong>==工作流程==</strong>：hpa -&gt; apiserver -&gt; kube aggregation  -&gt; prometheus-adapter -&gt; prometheus -&gt; pods</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年01月07日 21:22</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/13/K8S深度理解弹性伸缩3/" title="K8S弹性伸缩之基于Metrics Server CPU指标的HPA">http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/&title=《K8S弹性伸缩之基于Metrics Server CPU指标的HPA》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/&title=《K8S弹性伸缩之基于Metrics Server CPU指标的HPA》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S弹性伸缩之基于Metrics Server CPU指标的HPA》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩3/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于CPU指标缩放"><span class="post-toc-text">基于CPU指标缩放</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、-Kubernetes-API-Aggregation"><span class="post-toc-text">1、 Kubernetes API Aggregation</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、部署-Metrics-Server"><span class="post-toc-text">2、部署 Metrics Server</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3、autoscaling-v1（CPU指标实践）"><span class="post-toc-text">3、autoscaling/v1（CPU指标实践）</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#4、autoscaling-v2beta2（多指标）"><span class="post-toc-text">4、autoscaling/v2beta2（多指标）</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/12/13/K8S深度理解弹性伸缩/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/12/10/K8S之Ingress-Nginx实现高可用/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">K8S之Ingress-Nginx实现高可用</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="K8S深度理解弹性伸缩3"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 18.57px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 18.57px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
