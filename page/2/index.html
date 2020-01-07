@@ -101,6 +101,137 @@
       <div class="outer">
         <section id="main" class="body-wrap">
   
+    <article id="post-k8s二进制安装环境下证书过期问题" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/17/k8s二进制安装环境下证书过期问题/">k8s二进制安装环境下证书过期问题</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/K8s/">K8s</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2019/12/17/k8s二进制安装环境下证书过期问题/">
+                
+                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="k8s二进制安装环境下证书过期问题" title="k8s二进制安装环境下证书过期问题">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                k8s配置信息的工作目录一般为/etc/kubernetes，证书目录一般为/etc/kubernetes/ssl
+一、重新生成证书当你的kubernetes报错：certificate has expired or is not y...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2019-12-17</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2019/12/17/k8s二进制安装环境下证书过期问题/#more" class="article-more-link">more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article id="post-Helm应用包管理器（上）" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/16/Helm应用包管理器（上）/">Helm应用包管理器（上）</a>
+    </h1>
+  
+
+          
+              <span class="header-cate">
+                <i class="fa fa-map-marker"></i>
+                  
+                  <a href="/categories/K8s/">K8s</a>
+                  
+              </span>
+          
+      </header>
+    
+    <div class="article-entry " itemprop="articleBody">
+      
+        <div class="article-img">
+            <a href="/2019/12/16/Helm应用包管理器（上）/">
+                
+                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="Helm应用包管理器（上）" title="Helm应用包管理器（上）">
+                
+            </a>
+        </div>
+        <div class="article-feed">
+            <p>
+                三、Helm应用包管理器3.1 为什么需要Helm？K8S上的应用对象，都是由特定的资源描述组成，包括deployment、service等。都保存各自文件中或者集中写到一个配置文件。然后kubectl apply –f 部署。
+
+如...
+            </p>
+        </div>
+      
+        
+    </div>
+    <footer class="article-footer">
+        
+        <ul class="article-footer-menu">
+            
+                <li><i class="fa fa-calendar"></i>2019-12-16</li>
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+            <a href="/2019/12/16/Helm应用包管理器（上）/#more" class="article-more-link">more&gt;&gt;</a>
+        
+    </footer>
+  </div>
+</article>
+
+
+  
     <article id="post-Java参数深入分析" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -624,136 +755,6 @@
 
 
   
-    <article id="post-搭建一个生产级K8S高可用集群（1）" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/">搭建一个生产级K8S高可用集群（1）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="搭建一个生产级K8S高可用集群（1）" title="搭建一个生产级K8S高可用集群（1）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                不多说了，2019年底再开始~~
-一、K8S特性①自我修复在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。
-②弹性伸缩使用命令、UI管...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-11-26</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-生产级k8s二进制v14.1高可用部署" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/生产级k8s二进制v14.1高可用部署/">生产级k8s二进制v14.1高可用部署</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/06/18/生产级k8s二进制v14.1高可用部署/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="生产级k8s二进制v14.1高可用部署" title="生产级k8s二进制v14.1高可用部署">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、环境准备1.1、角色划分10.8.13.80   vip  10.8.13.81   master01  haproxy、keepalived、etcd、kube-apiserver、kube-controller-manager...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-06-18</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/06/18/生产级k8s二进制v14.1高可用部署/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -815,7 +816,7 @@
             <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
         </div>
         <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
         </div>
     </div>
     <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
@@ -848,7 +849,7 @@
     <div class="mobile-header-tag-container">
         <span class="title">Tags</span>
         <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 18.57px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
         </div>
     </div>
 </div>

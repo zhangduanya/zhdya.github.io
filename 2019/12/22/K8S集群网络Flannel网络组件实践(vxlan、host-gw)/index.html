@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Flannel网络组件实践(vxlan、host-gw) | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。 1、Flannel 部署https://github.com/coreos/flannel  kubectl">
+<meta name="keywords" content="Kubernets,K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flannel网络组件实践(vxlan、host-gw)">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。 1、Flannel 部署https://github.com/coreos/flannel  kubectl">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191223/ogSxtUBuvNax.png?imageslim">
+<meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/vxlan-pkg.png">
+<meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/flanneld-hostgw.png">
+<meta property="og:updated_time" content="2020-01-07T12:56:06.688Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flannel网络组件实践(vxlan、host-gw)">
+<meta name="twitter:description" content="Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。 1、Flannel 部署https://github.com/coreos/flannel  kubectl">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191223/ogSxtUBuvNax.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-K8S集群网络Flannel网络组件实践(vxlan、host-gw)" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Flannel网络组件实践(vxlan、host-gw)
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s/">K8s</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-22
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h4 id="Kubernetes网络组件之-Flannel"><a href="#Kubernetes网络组件之-Flannel" class="headerlink" title="Kubernetes网络组件之 Flannel"></a>Kubernetes网络组件之 Flannel</h4><p>Flannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供<strong>全局唯一的IP</strong>，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。</p>
+<h5 id="1、Flannel-部署"><a href="#1、Flannel-部署" class="headerlink" title="1、Flannel 部署"></a>1、Flannel 部署</h5><p><a href="https://github.com/coreos/flannel" target="_blank" rel="noopener">https://github.com/coreos/flannel</a> </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
+<h5 id="2、-Flannel工作模式及原理"><a href="#2、-Flannel工作模式及原理" class="headerlink" title="2、 Flannel工作模式及原理"></a>2、 Flannel工作模式及原理</h5><p>Flannel支持多种数据转发方式：</p>
+<ul>
+<li>UDP：最早支持的一种方式，由于性能最差，目前已经弃用。</li>
+<li>VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==</li>
+<li>Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的路由数据了。==（node数量超过130台,性能瓶颈）==</li>
+</ul>
+<p>查看flannel 分配子网信息：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 ~]# cat /var/run/flannel/subnet.env</span><br><span class="line">FLANNEL_NETWORK=10.244.0.0/16</span><br><span class="line">FLANNEL_SUBNET=10.244.0.1/24</span><br><span class="line">FLANNEL_MTU=1450</span><br><span class="line">FLANNEL_IPMASQ=true</span><br></pre></td></tr></table></figure></p>
+<p>查看flannel配置文件：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 ~]# more /etc/cni/net.d/10-flannel.conflist</span><br></pre></td></tr></table></figure></p>
+<h5 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubeadm部署指定Pod网段</span><br><span class="line">kubeadm init --pod-network-cidr=10.244.0.0/16</span><br><span class="line"></span><br><span class="line"># 二进制部署指定（启用cni）</span><br><span class="line">cat /opt/kubernetes/cfg/kube-controller-manager.conf</span><br><span class="line">--allocate-node-cidrs=true \</span><br><span class="line">--cluster-cidr=10.244.0.0/16 \</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kube-flannel.yml</span><br><span class="line">net-conf.json: |</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">      &quot;Backend&quot;: &#123;</span><br><span class="line">        &quot;Type&quot;: &quot;vxlan&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>为了能够在二层网络上打通“隧道”，VXLAN 会在宿主机上设置一个特殊的网络设备作为“隧道”的两端。这个设备就叫作 VTEP，即：VXLAN Tunnel End Point（虚拟隧道端点）。下图flannel.1的设备就是VXLAN所需的VTEP设备。示意图如下：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191223/ogSxtUBuvNax.png?imageslim" alt="mark"></p>
+<p>如果Pod 1访问Pod 2，源地址10.244.1.10，目的地址10.244.2.10 ，数据包传输流程如下：</p>
+<ol>
+<li><p><strong>容器路由</strong>：容器根据路由表从eth0发出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/ # ip route</span><br><span class="line">default via 10.244.0.1 dev eth0 </span><br><span class="line">10.244.0.0/24 dev eth0 scope link  src 10.244.0.45 </span><br><span class="line">10.244.0.0/16 via 10.244.0.1 dev eth0</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p><strong>主机路由</strong>：数据包进入到宿主机虚拟网卡cni0，根据路由表转发到flannel.1虚拟网卡，也就是，来到了隧道的入口。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ip route</span><br><span class="line">default via 192.168.31.1 dev ens33 proto static metric 100 </span><br><span class="line">10.244.0.0/24 dev cni0 proto kernel scope link src 10.244.0.1 </span><br><span class="line">10.244.1.0/24 via 10.244.1.0 dev flannel.1 onlink </span><br><span class="line">10.244.2.0/24 via 10.244.2.0 dev flannel.1 onlink</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>VXLAN封装</strong>：而这些VTEP设备（二层）之间组成二层网络必须要知道目的MAC地址。这个MAC地址从哪获取到呢？其实在flanneld进程启动后，就会自动添加其他节点ARP记录，可以通过ip命令查看，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ip neigh show dev flannel.1</span><br><span class="line">10.244.1.0 lladdr ca:2a:a4:59:b6:55 PERMANENT</span><br><span class="line">10.244.2.0 lladdr d2:d0:1b:a7:a9:cd PERMANENT</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p><strong>二次封包</strong>：知道了目的MAC地址，封装二层数据帧（容器源IP和目的IP）后，对于宿主机网络来说这个帧并没有什么实际意义。接下来，Linux内核还要把这个数据帧进一步封装成为宿主机网络的一个普通数据帧，好让它载着内部数据帧，通过宿主机的eth0网卡进行传输。</p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/vxlan-pkg.png" alt=""></p>
+</li>
+<li><p><strong>封装到UDP包发出去</strong>：现在能直接发UDP包嘛？到目前为止，我们只知道另一端的flannel.1设备的MAC地址，却不知道对应的宿主机地址是什么。</p>
+<p>flanneld进程也维护着一个叫做FDB的转发数据库，可以通过bridge fdb命令查看：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># bridge fdb show  dev flannel.1</span><br><span class="line"></span><br><span class="line">   d2:d0:1b:a7:a9:cd dst 192.168.31.61 self permanent</span><br><span class="line">   ca:2a:a4:59:b6:55 dst 192.168.31.63 self permanent</span><br></pre></td></tr></table></figure>
+<p>可以看到，上面用的对方flannel.1的MAC地址对应宿主机IP，也就是UDP要发往的目的地。使用这个目的IP进行封装。</p>
+</li>
+<li><p><strong>数据包到达目的宿主机</strong>：Node1的eth0网卡发出去，发现是VXLAN数据包，把它交给flannel.1设备。flannel.1设备则会进一步拆包，取出原始二层数据帧包，发送ARP请求，经由cni0网桥转发给container。</p>
+</li>
+</ol>
+<h5 id="Host-GW"><a href="#Host-GW" class="headerlink" title="Host-GW"></a>Host-GW</h5><p><u>host-gw模式相比vxlan简单了许多， 直接添加路由，将目的主机当做网关，直接路由原始封包。</u> </p>
+<p>下面是示意图：</p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/flanneld-hostgw.png" alt=""></p>
+<p>==线上更改网路模式一定要放在夜深人静去变更！！==<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># more /tmp/k8s/kube-flannel.yaml</span><br><span class="line"></span><br><span class="line">net-conf.json: |</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">      &quot;Backend&quot;: &#123;</span><br><span class="line">        &quot;Type&quot;: &quot;host-gw&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">修改如上为host-gw然后应用：</span><br><span class="line">[root@k8s-master1 ~]# kubectl apply -f kube-flannel.yml</span><br><span class="line">podsecuritypolicy.policy/psp.flannel.unprivileged configured</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/flannel unchanged</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/flannel unchanged</span><br><span class="line">serviceaccount/flannel unchanged</span><br><span class="line">configmap/kube-flannel-cfg configured</span><br><span class="line">daemonset.apps/kube-flannel-ds-amd64 configured</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm64 created</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm created</span><br><span class="line">daemonset.apps/kube-flannel-ds-ppc64le created</span><br><span class="line">daemonset.apps/kube-flannel-ds-s390x created</span><br><span class="line"></span><br><span class="line">###如上如果未生效，评估下风险，可删除后再次重建</span><br><span class="line">[root@k8s-master1 ~]# kubectl delete -f kube-flannel.yml</span><br><span class="line">[root@k8s-master1 ~]# kubectl apply -f kube-flannel.yml</span><br></pre></td></tr></table></figure></p>
+<p>当你设置flannel使用host-gw模式,flanneld会在宿主机上创建节点的路由表：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ip route  ##这样我们就看到了如上host-gw的特色，将目的主机当做网关。</span><br><span class="line"></span><br><span class="line">default via 192.168.31.1 dev ens33 proto static metric 100 </span><br><span class="line">10.244.0.0/24 dev cni0 proto kernel scope link src 10.244.0.1 </span><br><span class="line">10.244.1.0/24 via 192.168.31.63 dev ens33   ##集群另外两台node的路由</span><br><span class="line">10.244.2.0/24 via 192.168.31.61 dev ens33   ##集群另外两台node的路由</span><br><span class="line">192.168.31.0/24 dev ens33 proto kernel scope link src 192.168.31.62 metric 100</span><br></pre></td></tr></table></figure>
+<p>目的 IP 地址属于 10.244.1.0/24 网段的 IP 包，应该经过本机的 eth0 设备发出去（即：dev eth0）；并且，它下一跳地址是 192.168.31.63（即：via 192.168.31.63）。</p>
+<p>一旦配置了下一跳地址，那么接下来，当 IP 包从网络层进入链路层封装成帧的时候，eth0 设备就会使用下一跳地址对应的 MAC 地址，作为该数据帧的目的 MAC 地址。</p>
+<p>而 Node 2 的内核网络栈从二层数据帧里拿到 IP 包后，会“看到”这个 IP 包的目的 IP 地址是 10.244.1.20，即 container-2 的 IP 地址。这时候，根据 Node 2 上的路由表，该目的地址会匹配到第二条路由规则（也就是 10.244.1.0 对应的路由规则），从而进入 cni0 网桥，进而进入到 container-2 当中。</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年01月07日 20:56</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/" title="Flannel网络组件实践(vxlan、host-gw)">http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/&title=《Flannel网络组件实践(vxlan、host-gw)》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/&title=《Flannel网络组件实践(vxlan、host-gw)》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Flannel网络组件实践(vxlan、host-gw)》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Kubernetes网络组件之-Flannel"><span class="post-toc-text">Kubernetes网络组件之 Flannel</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、Flannel-部署"><span class="post-toc-text">1、Flannel 部署</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、-Flannel工作模式及原理"><span class="post-toc-text">2、 Flannel工作模式及原理</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#VXLAN"><span class="post-toc-text">VXLAN</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Host-GW"><span class="post-toc-text">Host-GW</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/12/22/K8S集群网络生产级探究/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          K8S集群网络生产级探究
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Calico网络组件实践(BGP、RR、IPIP)</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="K8S集群网络Flannel网络组件实践(vxlan、host-gw)"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.67px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 15px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.33px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 16.67px;">django</a> <a href="/tags/django2-0/" style="font-size: 13.33px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 13.33px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python3/" style="font-size: 11.67px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
