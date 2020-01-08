@@ -3,26 +3,31 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>K8S弹性伸缩之Pods 资源扩容方案 | 拼！就对了！</title>
+  <title>从运维角度看微服务架构 | 拼！就对了！</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="laoqi,laoqi's Blog">
   
-  <meta name="description" content="Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。  1、HPA基本原理Kubernetes">
+  <meta name="description" content="一、引言 微服务架构是一项在云中部署应用和服务的新技术。  1.1、微服务是什么？微服务是一种软件设计风格，开发人员在开发项目时，是一种微服务这种标准去设计的，这种的设计风格是一种将单体的应用，拆分为多个小的组件去开发，那每个组件是独立的部署，独立的测试，服务之间采用轻量级的通信。 1.2、微服务的特点 服务的组件化  每个服务独立开发、部署、有效避免一个服务的修改引起整个系统重新部署。  技术栈">
 <meta name="keywords" content="Kubernets,K8S">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8S弹性伸缩之Pods 资源扩容方案">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/index.html">
+<meta property="og:title" content="从运维角度看微服务架构">
+<meta property="og:url" content="http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/index.html">
 <meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。  1、HPA基本原理Kubernetes">
+<meta property="og:description" content="一、引言 微服务架构是一项在云中部署应用和服务的新技术。  1.1、微服务是什么？微服务是一种软件设计风格，开发人员在开发项目时，是一种微服务这种标准去设计的，这种的设计风格是一种将单体的应用，拆分为多个小的组件去开发，那每个组件是独立的部署，独立的测试，服务之间采用轻量级的通信。 1.2、微服务的特点 服务的组件化  每个服务独立开发、部署、有效避免一个服务的修改引起整个系统重新部署。  技术栈">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/q08Axxe9Bt3p.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/jIal8CEvNnLr.png?imageslim">
-<meta property="og:updated_time" content="2020-01-07T13:18:36.799Z">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/UwHX0mtnrXyk.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/JoFq5ueNFmkM.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/NElkGotI17eP.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/Cetm7OMlyfs2.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/bHUzIC1b2Kjr.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/C3p1GVh7n9mi.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200107/52xDEGsdYfbk.png?imageslim">
+<meta property="og:updated_time" content="2020-01-07T14:11:22.247Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="K8S弹性伸缩之Pods 资源扩容方案">
-<meta name="twitter:description" content="Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。  1、HPA基本原理Kubernetes">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191213/q08Axxe9Bt3p.png?imageslim">
+<meta name="twitter:title" content="从运维角度看微服务架构">
+<meta name="twitter:description" content="一、引言 微服务架构是一项在云中部署应用和服务的新技术。  1.1、微服务是什么？微服务是一种软件设计风格，开发人员在开发项目时，是一种微服务这种标准去设计的，这种的设计风格是一种将单体的应用，拆分为多个小的组件去开发，那每个组件是独立的部署，独立的测试，服务之间采用轻量级的通信。 1.2、微服务的特点 服务的组件化  每个服务独立开发、部署、有效避免一个服务的修改引起整个系统重新部署。  技术栈">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20200107/UwHX0mtnrXyk.png?imageslim">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -104,14 +109,14 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-K8S深度理解弹性伸缩2" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-6.1、从运维角度看微服务架构" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      K8S弹性伸缩之Pods 资源扩容方案
+      从运维角度看微服务架构
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -124,7 +129,7 @@
               </li>
           
         <li>
-          <i class="fa fa-calendar"></i>  2019-12-13
+          <i class="fa fa-calendar"></i>  2020-01-01
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -140,30 +145,105 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h3 id="Pod自动扩容-缩容（HPA）"><a href="#Pod自动扩容-缩容（HPA）" class="headerlink" title="Pod自动扩容/缩容（HPA）"></a>Pod自动扩容/缩容（HPA）</h3><p>Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/q08Axxe9Bt3p.png?imageslim" alt="mark"></p>
-<h5 id="1、HPA基本原理"><a href="#1、HPA基本原理" class="headerlink" title="1、HPA基本原理"></a>1、HPA基本原理</h5><p>Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/jIal8CEvNnLr.png?imageslim" alt="mark"></p>
-<p>在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸， 所以在每次做出扩容缩容后，冷却时间是多少。</p>
-<p>在 HPA 中，<strong>默认的扩容冷却周期是 3 分钟，缩容冷却周期是 5 分钟。</strong></p>
-<p>可以通过调整kube-controller-manager组件启动参数设置冷却时间：</p>
-<ul>
-<li>–horizontal-pod-autoscaler-downscale-delay ：扩容冷却</li>
-<li>–horizontal-pod-autoscaler-upscale-delay ：缩容冷却</li>
+            <h3 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h3><blockquote>
+<p>微服务架构是一项在云中部署应用和服务的新技术。</p>
+</blockquote>
+<h4 id="1-1、微服务是什么？"><a href="#1-1、微服务是什么？" class="headerlink" title="1.1、微服务是什么？"></a>1.1、微服务是什么？</h4><p>微服务是一种软件设计风格，开发人员在开发项目时，是一种微服务这种标准去设计的，这种的设计风格是一种将单体的应用，拆分为多个小的组件去开发，那每个组件是独立的部署，独立的测试，服务之间采用轻量级的通信。</p>
+<h4 id="1-2、微服务的特点"><a href="#1-2、微服务的特点" class="headerlink" title="1.2、微服务的特点"></a>1.2、微服务的特点</h4><ul>
+<li>服务的组件化</li>
 </ul>
-<h5 id="2、HPA的演进历程"><a href="#2、HPA的演进历程" class="headerlink" title="2、HPA的演进历程"></a>2、HPA的演进历程</h5><p>目前 HPA 已经支持了 autoscaling/v1、autoscaling/v2beta1和autoscaling/v2beta2  三个大版本 。</p>
-<p>目前大多数人比较熟悉是autoscaling/v1，这个版本只支持CPU一个指标的弹性伸缩。</p>
-<p>而autoscaling/v2beta1增加了支持自定义指标，autoscaling/v2beta2又额外增加了外部指标支持。</p>
-<p>而产生这些变化不得不提的是Kubernetes社区对监控与监控指标的认识与转变。从早期Heapster到Metrics Server再到将指标边界进行划分，一直在丰富监控生态。</p>
-<p>示例：</p>
-<p>v1版本：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: autoscaling/v1</span><br><span class="line">kind: HorizontalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: php-apache</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  scaleTargetRef:</span><br><span class="line">    apiVersion: apps/v1</span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: php-apache    ##指定对象</span><br><span class="line">  minReplicas: 1        ##指定副本范围</span><br><span class="line">  maxReplicas: 10</span><br><span class="line">  targetCPUUtilizationPercentage: 50        ##指定阈值</span><br></pre></td></tr></table></figure>
-<p>v2beta2版本：（可以基于resource，pod，object，external等）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: autoscaling/v2beta2</span><br><span class="line">kind: HorizontalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: php-apache</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  scaleTargetRef:</span><br><span class="line">    apiVersion: apps/v1</span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: php-apache    ##选择对象</span><br><span class="line">  minReplicas: 1        ##范围</span><br><span class="line">  maxReplicas: 10</span><br><span class="line">  metrics:</span><br><span class="line">  - type: Resource</span><br><span class="line">    resource:</span><br><span class="line">      name: cpu     ##基于cpu</span><br><span class="line">      target:</span><br><span class="line">        type: Utilization</span><br><span class="line">        averageUtilization: 50</span><br><span class="line">  - type: Pods      ##基于pod</span><br><span class="line">    pods:</span><br><span class="line">      metric:</span><br><span class="line">        name: packets-per-second</span><br><span class="line">      target:</span><br><span class="line">        type: AverageValue</span><br><span class="line">        averageValue: 1k</span><br><span class="line">  - type: Object    ##基于qps</span><br><span class="line">    object:</span><br><span class="line">      metric:</span><br><span class="line">        name: requests-per-second</span><br><span class="line">      describedObject:</span><br><span class="line">        apiVersion: networking.k8s.io/v1beta1</span><br><span class="line">        kind: Ingress</span><br><span class="line">        name: main-route</span><br><span class="line">      target:</span><br><span class="line">        type: Value</span><br><span class="line">        value: 10k</span><br><span class="line">  - type: External</span><br><span class="line">    external:</span><br><span class="line">      metric:</span><br><span class="line">        name: queue_messages_ready</span><br><span class="line">        selector: &quot;queue=worker_tasks&quot;</span><br><span class="line">      target:</span><br><span class="line">        type: AverageValue</span><br><span class="line">        averageValue: 30</span><br></pre></td></tr></table></figure>
+<p>每个服务独立开发、部署、有效避免一个服务的修改引起整个系统重新部署。</p>
+<ul>
+<li>技术栈灵活</li>
+</ul>
+<p>约定通信方式，使得服务本身功能实现对技术要求不再那么敏感，可以根据不停语言进行开发。</p>
+<ul>
+<li>独立部署</li>
+</ul>
+<p>每个微服务独立部署，加快部署速度，方便扩展，比起单体应用来讲要小，轻量级的，方便快速部署，扩展。</p>
+<ul>
+<li>扩展性强</li>
+</ul>
+<p>每个微服务可以部署多个，没有多少依赖，并且有负载均衡能力，比如一个服务部署一个副本或5个副本，通过k8s可以更好的去扩展我们的应用。</p>
+<ul>
+<li>独立数据</li>
+</ul>
+<p>每个微服务有独立的基本组件，例如数据库、缓存等，可能有不同的开放人员，不依赖。</p>
+<h4 id="1-3、微服务不足"><a href="#1-3、微服务不足" class="headerlink" title="1.3、微服务不足"></a>1.3、微服务不足</h4><ul>
+<li><p>沟通成本：由于组件都是分开来开发的，不同的项目组，沟通起来不方便，单体应用就是集中起来开发的。</p>
+</li>
+<li><p>数据一致性：保证这个数据，独立的组件数据是一致性。</p>
+</li>
+<li><p>运维成本：虚拟机部署，需要考虑组件性，调用关系，监控，配置。</p>
+</li>
+<li><p>内部架构复杂性：分布式的，需要轻量级的通信，rbac,MQ,还有很多的数据库。</p>
+</li>
+</ul>
+<h4 id="1-4、单体应用-vs-微服务"><a href="#1-4、单体应用-vs-微服务" class="headerlink" title="1.4、单体应用 vs 微服务"></a>1.4、单体应用 vs 微服务</h4><table>
+<thead>
+<tr>
+<th>单体架构优势：</th>
+<th>单体架构不足：</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>易于部署</td>
+<td>代码膨胀，难以维护</td>
+</tr>
+<tr>
+<td>易于测试</td>
+<td>构建、部署成本大、新人上手难</td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/UwHX0mtnrXyk.png?imageslim" alt="mark"></p>
+<p><strong>单体应用</strong>：适合于轻量级的应用，不提供复杂的应用。</p>
+<p><strong>微服务适合</strong>：比较大的应用，复杂一些的。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/JoFq5ueNFmkM.png?imageslim" alt="mark"></p>
+<h4 id="1-5、java微服务框架"><a href="#1-5、java微服务框架" class="headerlink" title="1.5、java微服务框架"></a>1.5、java微服务框架</h4><p>spring Boot 是独立的。</p>
+<p>spring cloud ,基于spring boot的。</p>
+<p>Dubbo 阿里巴巴的开源微服务框架，通过rbc实现组件之间的通信。</p>
+<p>微服务架构图：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/NElkGotI17eP.png?imageslim" alt="mark"></p>
+<p><strong>为什么要用注册中心？（主流注册中心： Eureka， Nacos）</strong></p>
+<ul>
+<li>1、需要记录一个或者多个微服务多个副本接口地址；</li>
+<li>2、需要实现一个或者多个微服务多个副本负载均衡；</li>
+<li>3、需要判断一个或者多个微服务的副本是否可用；</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/Cetm7OMlyfs2.png?imageslim" alt="mark"></p>
+<p><strong>不同环境如何区分配置文件？</strong></p>
+<p><strong>第一种</strong>：java-jar –spring.profile.active=dev xxx.jar</p>
+<p><strong>第二种</strong>：统一的配置中心，例如携程的Apollo，百度的Disconf,动态根据不同的环境进行配置，页面进行管理，需要二次开发。</p>
+<h4 id="1-6、项目迁移到k8s平台是怎样的流程"><a href="#1-6、项目迁移到k8s平台是怎样的流程" class="headerlink" title="1.6、项目迁移到k8s平台是怎样的流程"></a>1.6、项目迁移到k8s平台是怎样的流程</h4><p>举个例子了解一下大概的一个怎样的流程：</p>
+<p>1制作镜像 –&gt; 2控制管理pod –&gt; 3暴露应用 –&gt; 4对外发布应用 –&gt; 5日志/监控</p>
+<p><strong>控制器管理Pod：</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deployment :无状态部署</span><br><span class="line"></span><br><span class="line">statefulset ：有状态部署</span><br><span class="line"></span><br><span class="line">Daemonset :守护进程部署</span><br><span class="line"></span><br><span class="line">job &amp; cronjob：批处理</span><br></pre></td></tr></table></figure>
+<p><strong>暴露应用Service</strong></p>
+<p>service定义pod的逻辑集合，提供服务发现及负载均衡</p>
+<p>支持cluster ip， nodeport， loadbalancer三种类型</p>
+<p>底层实现iptables/ipvs两种网络模式</p>
+<p>通过label关联pod</p>
+<p>使用Coredns解析service名称</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/bHUzIC1b2Kjr.png?imageslim" alt="mark"></p>
+<p><strong>ingress</strong></p>
+<p>通过service关联pod</p>
+<p>基于域名访问</p>
+<p>通过ingress controller实现pod的负载均衡</p>
+<p>支持tcp、udp 4层和http7层</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/C3p1GVh7n9mi.png?imageslim" alt="mark"></p>
+<p><strong>pod数据持久化</strong></p>
+<p>容器部署过程中一般有以下三种数据：</p>
+<p>启动时需要的初始数据，可以是配置文件；</p>
+<p>启动过程中产生的临时数据，该数据需要多个容器间共享；</p>
+<p>启动过程中产生的持久化数据；</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200107/52xDEGsdYfbk.png?imageslim" alt="mark"></p>
+
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2020年01月07日 21:18</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/13/K8S深度理解弹性伸缩2/" title="K8S弹性伸缩之Pods 资源扩容方案">http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/</a></p>
+        <p>最后更新： 2020年01月07日 22:11</p>
+        <p>原始链接： <a class="post-url" href="/2020/01/01/6.1、从运维角度看微服务架构/" title="从运维角度看微服务架构">http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/</a></p>
         <footer>
             <a href="http://zhdya.okay686.cn">
                 <img src="/images/logo.png" alt="Zhdya">
@@ -220,7 +300,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/&title=《K8S弹性伸缩之Pods 资源扩容方案》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/&title=《从运维角度看微服务架构》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -230,22 +310,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/&title=《K8S弹性伸缩之Pods 资源扩容方案》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/&title=《从运维角度看微服务架构》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S弹性伸缩之Pods 资源扩容方案》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/&via=http://zhdya.okay686.cn" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《从运维角度看微服务架构》 — 拼！就对了！&url=http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/&via=http://zhdya.okay686.cn" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -255,7 +335,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩2/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2020/01/01/6.1、从运维角度看微服务架构/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -282,26 +362,16 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Pod自动扩容-缩容（HPA）"><span class="post-toc-text">Pod自动扩容/缩容（HPA）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、HPA基本原理"><span class="post-toc-text">1、HPA基本原理</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、HPA的演进历程"><span class="post-toc-text">2、HPA的演进历程</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、引言"><span class="post-toc-text">一、引言</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-1、微服务是什么？"><span class="post-toc-text">1.1、微服务是什么？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-2、微服务的特点"><span class="post-toc-text">1.2、微服务的特点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-3、微服务不足"><span class="post-toc-text">1.3、微服务不足</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-4、单体应用-vs-微服务"><span class="post-toc-text">1.4、单体应用 vs 微服务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-5、java微服务框架"><span class="post-toc-text">1.5、java微服务框架</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-6、项目迁移到k8s平台是怎样的流程"><span class="post-toc-text">1.6、项目迁移到k8s平台是怎样的流程</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2019/12/13/K8S深度理解弹性伸缩/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）
-        
-      </span>
-    </a>
   
-  
-    <a href="/2019/12/10/K8S之Ingress-Nginx实现高可用/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">K8S之Ingress-Nginx实现高可用</span>
+    <a href="/2019/12/29/七、Ceph日常运维管理/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">七、Ceph日常运维管理</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
@@ -310,7 +380,7 @@
 
 
     
-        <div id="SOHUCS" sid="K8S深度理解弹性伸缩2"></div>
+        <div id="SOHUCS" sid="6.1、从运维角度看微服务架构"></div>
 <script type="text/javascript">
     (function(){
         var appid = 'cyu4TKmA0';

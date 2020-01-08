@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>七、Ceph日常运维管理 | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="一、集群监控管理集群整体运行状态[root@cephnode01 ~]# ceph -s cluster:    id:     8230a918-a0de-4784-9ab8-cd2a2b8671d0    health: HEALTH_WARN            application not enabled on 1 pool(s)   services:    mon: 3 daemo">
+<meta name="keywords" content="K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="七、Ceph日常运维管理">
+<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="一、集群监控管理集群整体运行状态[root@cephnode01 ~]# ceph -s cluster:    id:     8230a918-a0de-4784-9ab8-cd2a2b8671d0    health: HEALTH_WARN            application not enabled on 1 pool(s)   services:    mon: 3 daemo">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-01-07T13:35:52.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="七、Ceph日常运维管理">
+<meta name="twitter:description" content="一、集群监控管理集群整体运行状态[root@cephnode01 ~]# ceph -s cluster:    id:     8230a918-a0de-4784-9ab8-cd2a2b8671d0    health: HEALTH_WARN            application not enabled on 1 pool(s)   services:    mon: 3 daemo">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-七、Ceph日常运维管理" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      七、Ceph日常运维管理
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s,ceph/">K8s, ceph</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-12-29
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="一、集群监控管理"><a href="#一、集群监控管理" class="headerlink" title="一、集群监控管理"></a>一、集群监控管理</h3><p>集群整体运行状态<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@cephnode01 ~]# ceph -s </span><br><span class="line">cluster:</span><br><span class="line">    id:     8230a918-a0de-4784-9ab8-cd2a2b8671d0</span><br><span class="line">    health: HEALTH_WARN</span><br><span class="line">            application not enabled on 1 pool(s)</span><br><span class="line"> </span><br><span class="line">  services:</span><br><span class="line">    mon: 3 daemons, quorum cephnode01,cephnode02,cephnode03 (age 27h)</span><br><span class="line">    mgr: cephnode01(active, since 53m), standbys: cephnode03, cephnode02</span><br><span class="line">    osd: 4 osds: 4 up (since 27h), 4 in (since 19h)</span><br><span class="line">    rgw: 1 daemon active (cephnode01)</span><br><span class="line"> </span><br><span class="line">  data:</span><br><span class="line">    pools:   6 pools, 96 pgs</span><br><span class="line">    objects: 235 objects, 3.6 KiB</span><br><span class="line">    usage:   4.0 GiB used, 56 GiB / 60 GiB avail</span><br><span class="line">    pgs:     96 active+clean</span><br></pre></td></tr></table></figure></p>
+<pre><code>id：集群ID
+health：集群运行状态，这里有一个警告，说明是有问题，意思是pg数大于pgp数，通常此数值相等。
+mon：Monitors运行状态。
+osd：OSDs运行状态。
+mgr：Managers运行状态。
+mds：Metadatas运行状态。
+pools：存储池与PGs的数量。
+objects：存储对象的数量。
+usage：存储的理论用量。
+pgs：PGs的运行状态
+</code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~]$ ceph -w</span><br><span class="line">~]$ ceph health detail</span><br></pre></td></tr></table></figure>
+<h4 id="PG状态"><a href="#PG状态" class="headerlink" title="PG状态"></a>PG状态</h4><p>查看pg状态查看通常使用下面两个命令即可，dump可以查看更详细信息，如。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~]$ ceph pg dump</span><br><span class="line">~]$ ceph pg stat</span><br></pre></td></tr></table></figure></p>
+<h4 id="Pool状态"><a href="#Pool状态" class="headerlink" title="Pool状态"></a>Pool状态</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~]$ ceph osd pool stats</span><br><span class="line">~]$ ceph osd pool stats</span><br></pre></td></tr></table></figure>
+<h4 id="OSD状态"><a href="#OSD状态" class="headerlink" title="OSD状态"></a>OSD状态</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~]$ ceph osd stat</span><br><span class="line">~]$ ceph osd dump</span><br><span class="line">~]$ ceph osd tree</span><br><span class="line">~]$ ceph osd df</span><br></pre></td></tr></table></figure>
+<h4 id="Monitor状态和查看仲裁状态"><a href="#Monitor状态和查看仲裁状态" class="headerlink" title="Monitor状态和查看仲裁状态"></a>Monitor状态和查看仲裁状态</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~]$ ceph mon stat</span><br><span class="line">~]$ ceph mon dump</span><br><span class="line">~]$ ceph quorum_status</span><br></pre></td></tr></table></figure>
+<h4 id="集群空间用量"><a href="#集群空间用量" class="headerlink" title="集群空间用量"></a>集群空间用量</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">~]$ ceph df</span><br><span class="line">~]$ ceph df detail</span><br></pre></td></tr></table></figure>
+<h3 id="二、集群配置管理-临时和全局，服务平滑重启"><a href="#二、集群配置管理-临时和全局，服务平滑重启" class="headerlink" title="二、集群配置管理(临时和全局，服务平滑重启)"></a>二、集群配置管理(临时和全局，服务平滑重启)</h3><p>有时候需要更改服务的配置，但不想重启服务，或者是临时修改。这时候就可以使用tell和daemon子命令来完成此需求。</p>
+<h4 id="1、查看运行配置"><a href="#1、查看运行配置" class="headerlink" title="1、查看运行配置"></a>1、查看运行配置</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">命令格式：</span><br><span class="line"># ceph daemon &#123;daemon-type&#125;.&#123;id&#125; config show </span><br><span class="line"></span><br><span class="line">命令举例：</span><br><span class="line"># ceph daemon osd.0 config show</span><br></pre></td></tr></table></figure>
+<h4 id="2、tell子命令格式"><a href="#2、tell子命令格式" class="headerlink" title="2、tell子命令格式"></a>2、tell子命令格式</h4><p>使用 tell 的方式适合对整个集群进行设置，使用 * 号进行匹配，就可以对整个集群的角色进行设置。而出现节点异常无法设置时候，只会在命令行当中进行报错，不太便于查找。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">命令格式：</span><br><span class="line"># ceph tell &#123;daemon-type&#125;.&#123;daemon id or *&#125; injectargs --&#123;name&#125;=&#123;value&#125; [--&#123;name&#125;=&#123;value&#125;]</span><br><span class="line">命令举例：</span><br><span class="line"># ceph tell osd.0 injectargs --debug-osd 20 --debug-ms 1</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>daemon-type：为要操作的对象类型如osd、mon、mds等。</li>
+<li>daemon id：该对象的名称，osd通常为0、1等，mon为ceph -s显示的名称，这里可以输入*表示全部。</li>
+<li>injectargs：表示参数注入，后面必须跟一个参数，也可以跟多个</li>
+</ul>
+<h4 id="3、daemon子命令"><a href="#3、daemon子命令" class="headerlink" title="3、daemon子命令"></a>3、daemon子命令</h4><p>使用 daemon 进行设置的方式就是一个个的去设置，这样可以比较好的反馈，此方法是需要在设置的角色所在的主机上进行设置。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">命令格式：</span><br><span class="line"># ceph daemon &#123;daemon-type&#125;.&#123;id&#125; config set &#123;name&#125;=&#123;value&#125;</span><br><span class="line">命令举例：</span><br><span class="line"># ceph daemon mon.ceph-monitor-1 config set mon_allow_pool_delete false</span><br></pre></td></tr></table></figure></p>
+<h3 id="三、集群操作"><a href="#三、集群操作" class="headerlink" title="三、集群操作"></a>三、集群操作</h3><p>命令包含start、restart、status<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、启动所有守护进程</span><br><span class="line"># systemctl start ceph.target</span><br><span class="line">2、按类型启动守护进程</span><br><span class="line"># systemctl start ceph-mgr.target</span><br><span class="line"># systemctl start ceph-osd@id</span><br><span class="line"># systemctl start ceph-mon.target</span><br><span class="line"># systemctl start ceph-mds.target</span><br><span class="line"># systemctl start ceph-radosgw.target</span><br></pre></td></tr></table></figure></p>
+<h3 id="四、添加和删除OSD"><a href="#四、添加和删除OSD" class="headerlink" title="四、添加和删除OSD"></a>四、添加和删除OSD</h3><h4 id="1、添加OSD"><a href="#1、添加OSD" class="headerlink" title="1、添加OSD"></a>1、添加OSD</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、格式化磁盘</span><br><span class="line">ceph-volume lvm zap /dev/sd&lt;id&gt;</span><br><span class="line">2、进入到ceph-deploy执行目录/my-cluster，添加OSD</span><br><span class="line"># ceph-deploy osd create --data /dev/sd&lt;id&gt; $hostname</span><br></pre></td></tr></table></figure>
+<h4 id="2、删除OSD"><a href="#2、删除OSD" class="headerlink" title="2、删除OSD"></a>2、删除OSD</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、调整osd的crush weight为 0</span><br><span class="line">ceph osd crush reweight osd.&lt;ID&gt; 0.0</span><br><span class="line">2、将osd进程stop</span><br><span class="line">systemctl stop ceph-osd@&lt;ID&gt;</span><br><span class="line">3、将osd设置out</span><br><span class="line">ceph osd out &lt;ID&gt;</span><br><span class="line">4、立即执行删除OSD中数据</span><br><span class="line">ceph osd purge osd.&lt;ID&gt; --yes-i-really-mean-it</span><br><span class="line">5、卸载磁盘</span><br><span class="line">umount /var/lib/ceph/osd/ceph-？</span><br></pre></td></tr></table></figure>
+<h3 id="五、扩容PG"><a href="#五、扩容PG" class="headerlink" title="五、扩容PG"></a>五、扩容PG</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool set &#123;pool-name&#125; pg_num 128</span><br><span class="line">ceph osd pool set &#123;pool-name&#125; pgp_num 128</span><br></pre></td></tr></table></figure>
+<p>注：<br>1、扩容大小取跟它接近的2的N次方<br>2、在更改pool的PG数量时，需同时更改PGP的数量。PGP是为了管理placement而存在的专门的PG，它和PG的数量应该保持一致。如果你增加pool的pg_num，就需要同时增加pgp_num，保持它们大小一致，这样集群才能正常rebalancing。</p>
+<h3 id="六、Pool操作"><a href="#六、Pool操作" class="headerlink" title="六、Pool操作"></a>六、Pool操作</h3><h4 id="列出存储池"><a href="#列出存储池" class="headerlink" title="列出存储池"></a>列出存储池</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd lspools</span><br></pre></td></tr></table></figure>
+<h4 id="创建存储池"><a href="#创建存储池" class="headerlink" title="创建存储池"></a>创建存储池</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">命令格式：</span><br><span class="line"># ceph osd pool create &#123;pool-name&#125; &#123;pg-num&#125; [&#123;pgp-num&#125;]</span><br><span class="line">命令举例：</span><br><span class="line"># ceph osd pool create rbd  32 32</span><br></pre></td></tr></table></figure>
+<h4 id="设置存储池配额"><a href="#设置存储池配额" class="headerlink" title="设置存储池配额"></a>设置存储池配额</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">命令格式：</span><br><span class="line"># ceph osd pool set-quota &#123;pool-name&#125; [max_objects &#123;obj-count&#125;] [max_bytes &#123;bytes&#125;]</span><br><span class="line">命令举例：</span><br><span class="line"># ceph osd pool set-quota rbd max_objects 10000</span><br></pre></td></tr></table></figure>
+<h4 id="删除存储池"><a href="#删除存储池" class="headerlink" title="删除存储池"></a>删除存储池</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool delete &#123;pool-name&#125; [&#123;pool-name&#125; --yes-i-really-really-mean-it]</span><br></pre></td></tr></table></figure>
+<h4 id="重命名存储池"><a href="#重命名存储池" class="headerlink" title="重命名存储池"></a>重命名存储池</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool rename &#123;current-pool-name&#125; &#123;new-pool-name&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="查看存储池统计信息"><a href="#查看存储池统计信息" class="headerlink" title="查看存储池统计信息"></a>查看存储池统计信息</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rados df</span><br></pre></td></tr></table></figure>
+<h4 id="给存储池做快照"><a href="#给存储池做快照" class="headerlink" title="给存储池做快照"></a>给存储池做快照</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool mksnap &#123;pool-name&#125; &#123;snap-name&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除存储池的快照"><a href="#删除存储池的快照" class="headerlink" title="删除存储池的快照"></a>删除存储池的快照</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool rmsnap &#123;pool-name&#125; &#123;snap-name&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="获取存储池选项值"><a href="#获取存储池选项值" class="headerlink" title="获取存储池选项值"></a>获取存储池选项值</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool get &#123;pool-name&#125; &#123;key&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="调整存储池选项值"><a href="#调整存储池选项值" class="headerlink" title="调整存储池选项值"></a>调整存储池选项值</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd pool set &#123;pool-name&#125; &#123;key&#125; &#123;value&#125;</span><br><span class="line">size：设置存储池中的对象副本数，详情参见设置对象副本数。仅适用于副本存储池。</span><br><span class="line">min_size：设置 I/O 需要的最小副本数，详情参见设置对象副本数。仅适用于副本存储池。</span><br><span class="line">pg_num：计算数据分布时的有效 PG 数。只能大于当前 PG 数。</span><br><span class="line">pgp_num：计算数据分布时使用的有效 PGP 数量。小于等于存储池的 PG 数。</span><br><span class="line">hashpspool：给指定存储池设置/取消 HASHPSPOOL 标志。</span><br><span class="line">target_max_bytes：达到 max_bytes 阀值时会触发 Ceph 冲洗或驱逐对象。</span><br><span class="line">target_max_objects：达到 max_objects 阀值时会触发 Ceph 冲洗或驱逐对象。</span><br><span class="line">scrub_min_interval：在负载低时，洗刷存储池的最小间隔秒数。如果是 0 ，就按照配置文件里的 osd_scrub_min_interval 。</span><br><span class="line">scrub_max_interval：不管集群负载如何，都要洗刷存储池的最大间隔秒数。如果是 0 ，就按照配置文件里的 osd_scrub_max_interval 。</span><br><span class="line">deep_scrub_interval：“深度”洗刷存储池的间隔秒数。如果是 0 ，就按照配置文件里的 osd_deep_scrub_interval 。</span><br></pre></td></tr></table></figure>
+<h4 id="获取对象副本数"><a href="#获取对象副本数" class="headerlink" title="获取对象副本数"></a>获取对象副本数</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd dump | grep &apos;replicated size&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="七、用户管理"><a href="#七、用户管理" class="headerlink" title="七、用户管理"></a>七、用户管理</h3><p>Ceph 把数据以对象的形式存于各存储池中。Ceph 用户必须具有访问存储池的权限才能够读写数据。另外，Ceph 用户必须具有执行权限才能够使用 Ceph 的管理命令。</p>
+<h4 id="1、查看用户信息"><a href="#1、查看用户信息" class="headerlink" title="1、查看用户信息"></a>1、查看用户信息</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">查看所有用户信息</span><br><span class="line"># ceph auth list</span><br><span class="line">获取所有用户的key与权限相关信息</span><br><span class="line"># ceph auth get client.admin</span><br><span class="line">如果只需要某个用户的key信息，可以使用pring-key子命令</span><br><span class="line"># ceph auth print-key client.admin</span><br></pre></td></tr></table></figure>
+<h4 id="2、添加用户"><a href="#2、添加用户" class="headerlink" title="2、添加用户"></a>2、添加用户</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ceph auth add client.john mon &apos;allow r&apos; osd &apos;allow rw pool=liverpool&apos;</span><br><span class="line"># ceph auth get-or-create client.paul mon &apos;allow r&apos; osd &apos;allow rw pool=liverpool&apos;</span><br><span class="line"># ceph auth get-or-create client.george mon &apos;allow r&apos; osd &apos;allow rw pool=liverpool&apos; -o george.keyring</span><br><span class="line"># ceph auth get-or-create-key client.ringo mon &apos;allow r&apos; osd &apos;allow rw pool=liverpool&apos; -o ringo.key</span><br></pre></td></tr></table></figure>
+<h4 id="3、修改用户权限"><a href="#3、修改用户权限" class="headerlink" title="3、修改用户权限"></a>3、修改用户权限</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ceph auth caps client.john mon &apos;allow r&apos; osd &apos;allow rw pool=liverpool&apos;</span><br><span class="line"># ceph auth caps client.paul mon &apos;allow rw&apos; osd &apos;allow rwx pool=liverpool&apos;</span><br><span class="line"># ceph auth caps client.brian-manager mon &apos;allow *&apos; osd &apos;allow *&apos;</span><br><span class="line"># ceph auth caps client.ringo mon &apos; &apos; osd &apos; &apos;</span><br></pre></td></tr></table></figure>
+<h4 id="4、删除用户"><a href="#4、删除用户" class="headerlink" title="4、删除用户"></a>4、删除用户</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ceph auth del &#123;TYPE&#125;.&#123;ID&#125;</span><br><span class="line">其中， &#123;TYPE&#125; 是 client，osd，mon 或 mds 的其中一种。&#123;ID&#125; 是用户的名字或守护进程的 ID 。</span><br></pre></td></tr></table></figure>
+<h3 id="八、增加和删除Monitor"><a href="#八、增加和删除Monitor" class="headerlink" title="八、增加和删除Monitor"></a>八、增加和删除Monitor</h3><p>一个集群可以只有一个 monitor，推荐生产环境至少部署 3 个。 Ceph 使用 Paxos 算法的一个变种对各种 map 、以及其它对集群来说至关重要的信息达成共识。建议（但不是强制）部署奇数个 monitor 。Ceph 需要 mon 中的大多数在运行并能够互相通信，比如单个 mon，或 2 个中的 2 个，3 个中的 2 个，4 个中的 3 个等。初始部署时，建议部署 3 个 monitor。后续如果要增加，请一次增加 2 个。  </p>
+<h4 id="1、新增一个monitor"><a href="#1、新增一个monitor" class="headerlink" title="1、新增一个monitor"></a>1、新增一个monitor</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ceph-deploy mon create $hostname</span><br><span class="line">注意：执行ceph-deploy之前要进入之前安装时候配置的目录。/my-cluster</span><br></pre></td></tr></table></figure>
+<h4 id="2、删除Monitor"><a href="#2、删除Monitor" class="headerlink" title="2、删除Monitor"></a>2、删除Monitor</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ceph-deploy mon destroy $hostname</span><br><span class="line">注意： 确保你删除某个 Mon 后，其余 Mon 仍能达成一致。如果不可能，删除它之前可能需要先增加一个。</span><br></pre></td></tr></table></figure>
+<h4 id="nearfull-osd-s-or-pool-s-nearfull"><a href="#nearfull-osd-s-or-pool-s-nearfull" class="headerlink" title="nearfull osd(s) or pool(s) nearfull"></a>nearfull osd(s) or pool(s) nearfull</h4><p>此时说明部分osd的存储已经超过阈值，mon会监控ceph集群中OSD空间使用情况。如果要消除WARN,可以修改这两个参数，提高阈值，但是通过实践发现并不能解决问题，可以通过观察osd的数据分布情况来分析原因。</p>
+<h3 id="配置文件设置阈值"><a href="#配置文件设置阈值" class="headerlink" title="配置文件设置阈值"></a>配置文件设置阈值</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  &quot;mon_osd_full_ratio&quot;: &quot;0.95&quot;,</span><br><span class="line">  &quot;mon_osd_nearfull_ratio&quot;: &quot;0.85&quot;</span><br><span class="line">，</span><br></pre></td></tr></table></figure>
+<p>自动处理<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd reweight-by-utilization</span><br><span class="line">ceph osd reweight-by-pg 105 cephfs_data(pool_name)</span><br></pre></td></tr></table></figure></p>
+<p>手动处理：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph osd reweight osd.2 0.8</span><br></pre></td></tr></table></figure></p>
+<p>全局处理<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ceph mgr module ls</span><br><span class="line">ceph mgr module enable balancer</span><br><span class="line">ceph balancer on</span><br><span class="line">ceph balancer mode crush-compat</span><br><span class="line">ceph config-key set &quot;mgr/balancer/max_misplaced&quot;: &quot;0.01&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="PG-故障状态"><a href="#PG-故障状态" class="headerlink" title="PG 故障状态"></a>PG 故障状态</h4><p>PG状态概述<br>一个PG在它的生命周期的不同时刻可能会处于以下几种状态中:</p>
+<p>Creating(创建中)<br>在创建POOL时,需要指定PG的数量,此时PG的状态便处于creating,意思是Ceph正在创建PG。</p>
+<p>Peering(互联中)<br>peering的作用主要是在PG及其副本所在的OSD之间建立互联,并使得OSD之间就这些PG中的object及其元数据达成一致。</p>
+<p>Active(活跃的)<br>处于该状态意味着数据已经完好的保存到了主PG及副本PG中,并且Ceph已经完成了peering工作。</p>
+<p>Clean(整洁的)<br>当某个PG处于clean状态时,则说明对应的主OSD及副本OSD已经成功互联,并且没有偏离的PG。也意味着Ceph已经将该PG中的对象按照规定的副本数进行了复制操作。</p>
+<p>Degraded(降级的)<br>当某个PG的副本数未达到规定个数时,该PG便处于degraded状态,例如:</p>
+<p>在客户端向主OSD写入object的过程,object的副本是由主OSD负责向副本OSD写入的,直到副本OSD在创建object副本完成,并向主OSD发出完成信息前,该PG的状态都会一直处于degraded状态。又或者是某个OSD的状态变成了down,那么该OSD上的所有PG都会被标记为degraded。<br>当Ceph因为某些原因无法找到某个PG内的一个或多个object时,该PG也会被标记为degraded状态。此时客户端不能读写找不到的对象,但是仍然能访问位于该PG内的其他object。</p>
+<p>Recovering(恢复中)<br>当某个OSD因为某些原因down了,该OSD内PG的object会落后于它所对应的PG副本。而在该OSD重新up之后,该OSD中的内容必须更新到当前状态,处于此过程中的PG状态便是recovering。</p>
+<p>Backfilling(回填)<br>当有新的OSD加入集群时,CRUSH会把现有集群内的部分PG分配给它。这些被重新分配到新OSD的PG状态便处于backfilling。</p>
+<p>Remapped(重映射)<br>当负责维护某个PG的acting set变更时,PG需要从原来的acting set迁移至新的acting set。这个过程需要一段时间,所以在此期间,相关PG的状态便会标记为remapped。</p>
+<p>Stale(陈旧的)<br>默认情况下,OSD守护进程每半秒钟便会向Monitor报告其PG等相关状态,如果某个PG的主OSD所在acting set没能向Monitor发送报告,或者其他的Monitor已经报告该OSD为down时,该PG便会被标记为stale。</p>
+<h3 id="OSD状态-1"><a href="#OSD状态-1" class="headerlink" title="OSD状态"></a>OSD状态</h3><p>单个OSD有两组状态需要关注,其中一组使用in/out标记该OSD是否在集群内,另一组使用up/down标记该OSD是否处于运行中状态。两组状态之间并不互斥,换句话说,当一个OSD处于“in”状态时,它仍然可以处于up或down的状态。</p>
+<p>OSD状态为in且up<br>这是一个OSD正常的状态,说明该OSD处于集群内,并且运行正常。</p>
+<p>OSD状态为in且down<br>此时该OSD尚处于集群中,但是守护进程状态已经不正常,默认在300秒后会被踢出集群,状态进而变为out且down,之后处于该OSD上的PG会迁移至其它OSD。</p>
+<p>OSD状态为out且up<br>这种状态一般会出现在新增OSD时,意味着该OSD守护进程正常,但是尚未加入集群。</p>
+<p>OSD状态为out且down<br>在该状态下的OSD不在集群内,并且守护进程运行不正常,CRUSH不会再分配PG到该OSD上。</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年01月07日 21:35</p>
+        <p>原始链接： <a class="post-url" href="/2019/12/29/七、Ceph日常运维管理/" title="七、Ceph日常运维管理">http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/&title=《七、Ceph日常运维管理》 — 拼！就对了！&pic=/images/ceph.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/&title=《七、Ceph日常运维管理》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《七、Ceph日常运维管理》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/29/七、Ceph日常运维管理/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、集群监控管理"><span class="post-toc-text">一、集群监控管理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PG状态"><span class="post-toc-text">PG状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Pool状态"><span class="post-toc-text">Pool状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OSD状态"><span class="post-toc-text">OSD状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Monitor状态和查看仲裁状态"><span class="post-toc-text">Monitor状态和查看仲裁状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#集群空间用量"><span class="post-toc-text">集群空间用量</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、集群配置管理-临时和全局，服务平滑重启"><span class="post-toc-text">二、集群配置管理(临时和全局，服务平滑重启)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、查看运行配置"><span class="post-toc-text">1、查看运行配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、tell子命令格式"><span class="post-toc-text">2、tell子命令格式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3、daemon子命令"><span class="post-toc-text">3、daemon子命令</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、集群操作"><span class="post-toc-text">三、集群操作</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、添加和删除OSD"><span class="post-toc-text">四、添加和删除OSD</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、添加OSD"><span class="post-toc-text">1、添加OSD</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、删除OSD"><span class="post-toc-text">2、删除OSD</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#五、扩容PG"><span class="post-toc-text">五、扩容PG</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#六、Pool操作"><span class="post-toc-text">六、Pool操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#列出存储池"><span class="post-toc-text">列出存储池</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建存储池"><span class="post-toc-text">创建存储池</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#设置存储池配额"><span class="post-toc-text">设置存储池配额</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#删除存储池"><span class="post-toc-text">删除存储池</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#重命名存储池"><span class="post-toc-text">重命名存储池</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看存储池统计信息"><span class="post-toc-text">查看存储池统计信息</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#给存储池做快照"><span class="post-toc-text">给存储池做快照</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#删除存储池的快照"><span class="post-toc-text">删除存储池的快照</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#获取存储池选项值"><span class="post-toc-text">获取存储池选项值</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#调整存储池选项值"><span class="post-toc-text">调整存储池选项值</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#获取对象副本数"><span class="post-toc-text">获取对象副本数</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#七、用户管理"><span class="post-toc-text">七、用户管理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、查看用户信息"><span class="post-toc-text">1、查看用户信息</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、添加用户"><span class="post-toc-text">2、添加用户</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3、修改用户权限"><span class="post-toc-text">3、修改用户权限</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4、删除用户"><span class="post-toc-text">4、删除用户</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#八、增加和删除Monitor"><span class="post-toc-text">八、增加和删除Monitor</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、新增一个monitor"><span class="post-toc-text">1、新增一个monitor</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、删除Monitor"><span class="post-toc-text">2、删除Monitor</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#nearfull-osd-s-or-pool-s-nearfull"><span class="post-toc-text">nearfull osd(s) or pool(s) nearfull</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置文件设置阈值"><span class="post-toc-text">配置文件设置阈值</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PG-故障状态"><span class="post-toc-text">PG 故障状态</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OSD状态-1"><span class="post-toc-text">OSD状态</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2020/01/01/6.1、从运维角度看微服务架构/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          从运维角度看微服务架构
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/12/28/六、K8S 使用Ceph存储/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">六、K8S 使用Ceph存储</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="七、Ceph日常运维管理"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 18.57px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 18.57px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
