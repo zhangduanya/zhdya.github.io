@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>K8S中部署SpringCloud微服务项目 | 拼！就对了！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="laoqi,laoqi's Blog">
+  
+  <meta name="description" content="一、熟悉SpringCloud项目1.1、主机分配   主机IP 角色     192.168.171.11 k8s-master   192.168.171.12 k8s-node1   192.168.171.13 k8s-node2   192.168.171.10 harbor-mysql    1.2、代码分支详情： Dev1 交付代码； Dev2 编写Dockerfile构建镜像； D">
+<meta name="keywords" content="Kubernets,K8S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8S中部署SpringCloud微服务项目">
+<meta property="og:url" content="http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/index.html">
+<meta property="og:site_name" content="拼！就对了！">
+<meta property="og:description" content="一、熟悉SpringCloud项目1.1、主机分配   主机IP 角色     192.168.171.11 k8s-master   192.168.171.12 k8s-node1   192.168.171.13 k8s-node2   192.168.171.10 harbor-mysql    1.2、代码分支详情： Dev1 交付代码； Dev2 编写Dockerfile构建镜像； D">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200109/gNlmApv33vAW.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200112/WoT92exlsnEm.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200112/F8hpWDRG2KCT.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200112/O2rftodcCRve.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200112/g6rnQqgIQIHc.png?imageslim">
+<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20200112/wus4lmXQkbH6.png?imageslim">
+<meta property="og:updated_time" content="2020-01-13T07:34:44.621Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="K8S中部署SpringCloud微服务项目">
+<meta name="twitter:description" content="一、熟悉SpringCloud项目1.1、主机分配   主机IP 角色     192.168.171.11 k8s-master   192.168.171.12 k8s-node1   192.168.171.13 k8s-node2   192.168.171.10 harbor-mysql    1.2、代码分支详情： Dev1 交付代码； Dev2 编写Dockerfile构建镜像； D">
+<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20200109/gNlmApv33vAW.png?imageslim">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">五谷杂粮，百味人生。</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>主页</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>归档</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>关于</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        五谷杂粮，百味人生。
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        K8S生态，Django，python专列！
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-K8S中部署SpringCloud微服务项目" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      K8S中部署SpringCloud微服务项目
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/K8s/">K8s</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2020-01-02
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="一、熟悉SpringCloud项目"><a href="#一、熟悉SpringCloud项目" class="headerlink" title="一、熟悉SpringCloud项目"></a>一、熟悉SpringCloud项目</h3><h4 id="1-1、主机分配"><a href="#1-1、主机分配" class="headerlink" title="1.1、主机分配"></a>1.1、主机分配</h4><table>
+<thead>
+<tr>
+<th>主机IP</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.171.11</td>
+<td>k8s-master</td>
+</tr>
+<tr>
+<td>192.168.171.12</td>
+<td>k8s-node1</td>
+</tr>
+<tr>
+<td>192.168.171.13</td>
+<td>k8s-node2</td>
+</tr>
+<tr>
+<td>192.168.171.10</td>
+<td>harbor-mysql</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-2、代码分支详情："><a href="#1-2、代码分支详情：" class="headerlink" title="1.2、代码分支详情："></a>1.2、代码分支详情：</h4><ul>
+<li>Dev1 交付代码；</li>
+<li>Dev2 编写Dockerfile构建镜像；</li>
+<li>Dev3 k8s资源编排文件；</li>
+<li>Dev4 微服务链路监控；</li>
+<li>Dev5 新功能测试；</li>
+<li>Master 最终上线；</li>
+</ul>
+<h3 id="二、代码编译构建（Maven）"><a href="#二、代码编译构建（Maven）" class="headerlink" title="二、代码编译构建（Maven）"></a>二、代码编译构建（Maven）</h3><h4 id="2-1、拉取项目代码"><a href="#2-1、拉取项目代码" class="headerlink" title="2.1、拉取项目代码"></a>2.1、拉取项目代码</h4><p>代码分支：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# git clone -b dev1 https://github.com/xxxxx/simple-microservice</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-2、部署须知"><a href="#2-2、部署须知" class="headerlink" title="2.2、部署须知"></a>2.2、部署须知</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、导入db目录下数据库文件到自己的MySQL服务器</span><br><span class="line">2、修改配置环境（xxx-service/src/main/resources/application.yml，active值决定启用环境配置文件）</span><br><span class="line">3、修改连接数据库配置（xxx-service/src/main/resources/application-fat.yml）</span><br><span class="line">4、修改前端页面连接网关地址（portal-service/src/main/resources/static/js/productList.js和orderList.js）</span><br><span class="line">5、服务启动顺序：eureka -&gt; mysql -&gt; product,stock,order -&gt; gateway -&gt; portal</span><br></pre></td></tr></table></figure>
+<h4 id="2-3、架构介绍："><a href="#2-3、架构介绍：" class="headerlink" title="2.3、架构介绍："></a>2.3、架构介绍：</h4><p><img src="http://myimage.okay686.cn/okay686cn/20200109/gNlmApv33vAW.png?imageslim" alt="mark"></p>
+<ul>
+<li>用户访问==》portal（前端）；</li>
+<li>通过负载均衡调用后端api（通过ingress把网关的service暴露下）；</li>
+<li>后端服务分别注册到Eureka，并由Eureka进行服务发现，注册，心跳等；</li>
+</ul>
+<h4 id="2-4、准备编译"><a href="#2-4、准备编译" class="headerlink" title="2.4、准备编译"></a>2.4、准备编译</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">编译需要安装jdk , jdk版本要看开发那边使用什么，注意一下。我这里用的1.8.0</span><br><span class="line"></span><br><span class="line"># yum install java-1.8.0-openjdk maven -y</span><br><span class="line"></span><br><span class="line"># java -version</span><br><span class="line">openjdk version &quot;1.8.0_232&quot;</span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_232-b09)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.232-b09, mixed mode)</span><br></pre></td></tr></table></figure>
+<p>进行编译：</p>
+<p>进入源代码里，我们先进入交付的分支，开发工程师原封不动的把源代码交给我们，然后我们运维进行编译构建，把源代码打成jar包。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 simple-microservice-dev1]# ll</span><br><span class="line">总用量 28</span><br><span class="line">drwxr-xr-x 4 root root    70 7月  28 11:56 basic-common</span><br><span class="line">drwxr-xr-x 2 root root    59 7月  28 11:56 db</span><br><span class="line">drwxr-xr-x 3 root root    32 7月  28 11:56 eureka-service</span><br><span class="line">drwxr-xr-x 3 root root    32 7月  28 11:56 gateway-service</span><br><span class="line">-rw-r--r-- 1 root root 11357 7月  28 11:56 LICENSE</span><br><span class="line">-rw-r--r-- 1 root root   420 7月  28 11:56 lombok.config</span><br><span class="line">drwxr-xr-x 4 root root    71 7月  28 11:56 order-service</span><br><span class="line">-rw-r--r-- 1 root root  5419 7月  28 11:56 pom.xml</span><br><span class="line">drwxr-xr-x 3 root root    32 7月  28 11:56 portal-service</span><br><span class="line">drwxr-xr-x 4 root root    75 7月  28 11:56 product-service</span><br><span class="line">-rw-r--r-- 1 root root    24 7月  28 11:56 README.md</span><br><span class="line">drwxr-xr-x 4 root root    71 7月  28 11:56 stock-service</span><br><span class="line"></span><br><span class="line">每个微服务的配置文件均在：</span><br><span class="line">XXX/src/main/resources/application-fat.yml</span><br><span class="line"></span><br><span class="line">需要修改的微服务为：stock-service，product-service， order-service中的mysql配置文件；</span><br></pre></td></tr></table></figure>
+<p>Maven项目对象模型(POM),可以通过一小段描述信息来观念里项目的构建，报告和文档的项目管理工具软件<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mvn clean package -D maven.test.skip=true -P prod</span><br><span class="line"></span><br><span class="line">mvn clean package：清除目录中生成的结果，做一个清除，重新打新的包。</span><br><span class="line">-D maven.test.skip: 跳过单元测试，写的测试用例，如果写的有问题，是编译不过去的</span><br><span class="line">-P prod: 使用哪一套配置文件</span><br><span class="line"></span><br><span class="line">[root@k8s-master simple-microservice-dev1]# mvn clean package -D maven.test.skip=true</span><br><span class="line"></span><br><span class="line">构建完成会多出一个target且根据pom文件生成指定jar包：</span><br><span class="line"># cd product-service/product-service-api/target/</span><br><span class="line">classes/                 maven-archiver/          maven-status/            product-service-api.jar</span><br></pre></td></tr></table></figure></p>
+<h3 id="三、构建项目镜像并推送到镜像仓库"><a href="#三、构建项目镜像并推送到镜像仓库" class="headerlink" title="三、构建项目镜像并推送到镜像仓库"></a>三、构建项目镜像并推送到镜像仓库</h3><p>构建镜像使用Docker和结合Dockerfile<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 product-service-biz]# cat Dockerfile</span><br><span class="line">FROM java:8-jdk-alpine</span><br><span class="line">RUN  apk add -U tzdata &amp;&amp; \</span><br><span class="line">     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">COPY ./target/product-service-biz.jar ./</span><br><span class="line">EXPOSE 8010</span><br><span class="line">CMD java -jar /product-service-biz.jar</span><br></pre></td></tr></table></figure></p>
+<p>打包：</p>
+<p>如果不是https的Harbor需要在docker里面添加信任才能访问到镜像</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ~]# vim /etc/docker/daemon.json </span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">        &quot;registry-mirrors&quot;: [&quot;http://f1361db2.m.daocloud.io&quot;],</span><br><span class="line">        &quot;insecure-registries&quot;: [&quot;192.168.171.10&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker build -t product .</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 product-service-biz]# docker images</span><br><span class="line">REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">product                                    latest              f8d58232cd1b        5 seconds ago       191MB</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 product-service-biz]# docker tag product 192.168.171.10/microservice/product:latest</span><br><span class="line"></span><br><span class="line">[root@k8s-master ~]# docker login 192.168.171.10</span><br><span class="line">Username: admin</span><br><span class="line">Password: </span><br><span class="line">WARNING! Your password will be stored unencrypted in /root/.docker/config.json.</span><br><span class="line">Configure a credential helper to remove this warning. See</span><br><span class="line">https://docs.docker.com/engine/reference/commandline/login/#credentials-store</span><br><span class="line"></span><br><span class="line">Login Succeeded</span><br><span class="line"></span><br><span class="line">推送镜像到Harbor仓库中：</span><br><span class="line">docker push 192.168.171.10/microservice/product:latest</span><br></pre></td></tr></table></figure>
+<h3 id="四、推送镜像到harbor"><a href="#四、推送镜像到harbor" class="headerlink" title="四、推送镜像到harbor"></a>四、推送镜像到harbor</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 simple-microservice-dev3]# ll</span><br><span class="line">总用量 28</span><br><span class="line">drwxr-xr-x 4 root root    70 7月  28 11:50 basic-common</span><br><span class="line">drwxr-xr-x 2 root root    59 7月  28 11:50 db</span><br><span class="line">drwxr-xr-x 3 root root    50 7月  28 11:50 eureka-service</span><br><span class="line">drwxr-xr-x 3 root root    50 7月  28 11:50 gateway-service</span><br><span class="line">drwxr-xr-x 2 root root   143 7月  28 11:50 k8s</span><br><span class="line">-rw-r--r-- 1 root root 11357 7月  28 11:50 LICENSE</span><br><span class="line">-rw-r--r-- 1 root root   420 7月  28 11:50 lombok.config</span><br><span class="line">drwxr-xr-x 4 root root    71 7月  28 11:50 order-service</span><br><span class="line">-rw-r--r-- 1 root root  5419 7月  28 11:50 pom.xml</span><br><span class="line">drwxr-xr-x 3 root root    50 7月  28 11:50 portal-service</span><br><span class="line">drwxr-xr-x 4 root root    75 7月  28 11:50 product-service</span><br><span class="line">-rw-r--r-- 1 root root    24 7月  28 11:50 README.md</span><br><span class="line">drwxr-xr-x 4 root root    71 7月  28 11:50 stock-service</span><br></pre></td></tr></table></figure>
+<p>具体来看下批量将所有的微服务推送到镜像仓库并在K8S集群中发布：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">##创建拉取镜像的认证信息</span><br><span class="line">docker_registry=192.168.171.10</span><br><span class="line">kubectl create secret docker-registry registry-pull-secret --docker-server=$docker_registry --docker-username=admin --docker-password=XXXXXX --docker-email=zhdya@zhdya.cn -n ms</span><br><span class="line"></span><br><span class="line">##服务list</span><br><span class="line">service_list=&quot;eureka-service gateway-service order-service product-service stock-service portal-service&quot;</span><br><span class="line">service_list=$&#123;1:-$&#123;service_list&#125;&#125;</span><br><span class="line">work_dir=$(dirname $PWD)</span><br><span class="line">current_dir=$PWD</span><br><span class="line"></span><br><span class="line">##编译</span><br><span class="line">cd $work_dir</span><br><span class="line">mvn clean package -Dmaven.test.skip=true</span><br><span class="line"></span><br><span class="line">##推送镜像并在K8S中发布（此dev3先取消发布）</span><br><span class="line">for service in $service_list; do</span><br><span class="line">   cd $work_dir/$service</span><br><span class="line">   if ls |grep biz &amp;&gt;/dev/null; then</span><br><span class="line">      cd $&#123;service&#125;-biz</span><br><span class="line">   fi</span><br><span class="line">   service=$&#123;service%-*&#125;</span><br><span class="line">   image_name=$docker_registry/microservice/$&#123;service&#125;:$(date +%F-%H-%M-%S)</span><br><span class="line">   docker build -t $&#123;image_name&#125; .</span><br><span class="line">   docker push $&#123;image_name&#125;</span><br><span class="line">#   sed -i -r &quot;s#(image: )(.*)#\1$image_name#&quot; $&#123;current_dir&#125;/$&#123;service&#125;.yaml</span><br><span class="line">#   kubectl apply -f $&#123;current_dir&#125;/$&#123;service&#125;.yaml</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>其中一个service的dockerfile<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 product-service-biz]# vim Dockerfile</span><br><span class="line">FROM java:8-jdk-alpine</span><br><span class="line">RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">COPY ./target/product-service-biz.jar ./</span><br><span class="line">EXPOSE 8010</span><br><span class="line">CMD java -jar /product-service-biz.jar</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200112/WoT92exlsnEm.png?imageslim" alt="mark"></p>
+<h3 id="五、部署springCloud项目"><a href="#五、部署springCloud项目" class="headerlink" title="五、部署springCloud项目"></a>五、部署springCloud项目</h3><ul>
+<li>1、服务编排</li>
+<li>2、在k8s平台部署Erueka</li>
+<li>3、导入数据库文件到Mysql</li>
+<li>4、部署网关gateway</li>
+<li>5、部署业务程序（product、stock、order）</li>
+<li>6、部署前端（portal）</li>
+</ul>
+<p>编译打成jar包，在<strong>dev3</strong>分支</p>
+<h4 id="5-1、创建命名空间"><a href="#5-1、创建命名空间" class="headerlink" title="5.1、创建命名空间"></a>5.1、创建命名空间</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl create ns ms</span><br></pre></td></tr></table></figure>
+<p>部署环境要求：</p>
+<ul>
+<li>跨主机网络：使用flannel或者Calico ，需要网络来打通主机之间资源的通信</li>
+<li>CoreDNS: k8s内部的DNS。 ,用于对pod对service做记录的，好让其他的pod做访问。</li>
+<li>Harbor镜像仓库：这个我们已经准备好了，并将项目镜像推送上去了。</li>
+<li>Ingress Controller：同一暴露我们的应用，写yaml文件实现。</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200112/F8hpWDRG2KCT.png?imageslim" alt="mark"></p>
+<p>这里portal是门户网站-前端，用户访问<a href="http://www.XXX.com的页面，通过域名访问之后，进行的一个页面展示，我们我们通过pod来进行实现，ingress来定义我们的域名，域名定义哪个service，来定义到某个pod上，来影响静态页面，下订单请求交给网关api,采用异步调用，暴露网关，进行来用户访问，ingress也来调用，service来实现pod副本gateway网关，通过一些前端页面的页面功能，同gateway来调用实现，用户点击某个功能gateway拿到这个请求之后,通过路由转发规则，到后端的业务程序，比如商品信息（product）库存，订单，他会根据不同的业务需要来处理，库存服务会根据订单的使用来和内部的调用接口来实现，pod直接调用，需要跨主机网络，怎么找到这个服务，就需要这个注册中心，应用间的互相调用就需要这个注册中心，所有的服务都会放在这里，来进行消息通信，现在比较流行的就是erueka,订单服务都会放入到我们的mysql数据库中的，mysql是部署在外部的，有状态应用，这个部署在k8s中是比较麻烦大的，erueka是部署在k8s集群内的，只需要保证他的id是唯一性就可以了,不需要考虑他的存储。" target="_blank" rel="noopener">www.XXX.com的页面，通过域名访问之后，进行的一个页面展示，我们我们通过pod来进行实现，ingress来定义我们的域名，域名定义哪个service，来定义到某个pod上，来影响静态页面，下订单请求交给网关api,采用异步调用，暴露网关，进行来用户访问，ingress也来调用，service来实现pod副本gateway网关，通过一些前端页面的页面功能，同gateway来调用实现，用户点击某个功能gateway拿到这个请求之后,通过路由转发规则，到后端的业务程序，比如商品信息（product）库存，订单，他会根据不同的业务需要来处理，库存服务会根据订单的使用来和内部的调用接口来实现，pod直接调用，需要跨主机网络，怎么找到这个服务，就需要这个注册中心，应用间的互相调用就需要这个注册中心，所有的服务都会放在这里，来进行消息通信，现在比较流行的就是erueka,订单服务都会放入到我们的mysql数据库中的，mysql是部署在外部的，有状态应用，这个部署在k8s中是比较麻烦大的，erueka是部署在k8s集群内的，只需要保证他的id是唯一性就可以了,不需要考虑他的存储。</a></p>
+<p>先来看一个yaml（eureka，需要通过域名暴露服务）<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# cat eureka.yaml</span><br><span class="line">---</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: eureka</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">    - host: eureka.zhdya.cn</span><br><span class="line">      http:</span><br><span class="line">        paths:</span><br><span class="line">        - path: /</span><br><span class="line">          backend:</span><br><span class="line">            serviceName: eureka</span><br><span class="line">            servicePort: 8888</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: eureka</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  clusterIP: None       ##无头服务</span><br><span class="line">  ports:</span><br><span class="line">  - port: 8888</span><br><span class="line">    name: eureka</span><br><span class="line">  selector:</span><br><span class="line">    project: ms</span><br><span class="line">    app: eureka</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: StatefulSet</span><br><span class="line">metadata:</span><br><span class="line">  name: eureka</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  replicas: 3</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      project: ms</span><br><span class="line">      app: eureka</span><br><span class="line">  serviceName: &quot;eureka&quot;</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        project: ms</span><br><span class="line">        app: eureka</span><br><span class="line">    spec:</span><br><span class="line">      imagePullSecrets:</span><br><span class="line">      - name: registry-pull-secret</span><br><span class="line">      containers:</span><br><span class="line">      - name: eureka</span><br><span class="line">        image: 192.168.171.10/microservice/eureka:2020-01-12-13-14-40</span><br><span class="line">        ports:</span><br><span class="line">          - protocol: TCP</span><br><span class="line">            containerPort: 8888</span><br><span class="line">        env:</span><br><span class="line">          - name: MY_POD_NAME</span><br><span class="line">            valueFrom:</span><br><span class="line">              fieldRef:</span><br><span class="line">                fieldPath: metadata.name</span><br><span class="line">        resources:</span><br><span class="line">          requests:</span><br><span class="line">            cpu: 0.5</span><br><span class="line">            memory: 256Mi</span><br><span class="line">          limits:</span><br><span class="line">            cpu: 1</span><br><span class="line">            memory: 1Gi</span><br><span class="line">        readinessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 8888</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br><span class="line">        livenessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 8888</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br></pre></td></tr></table></figure></p>
+<p>注释：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如上名为eureka的service，其clusterIP为None，所以它是无头服务。下边为名eureka的StatefulSet，其.spec.serviceName的值为eureka，指明通过上边的eureka无头服务提供DNS解析功能功。</span><br></pre></td></tr></table></figure></p>
+<p>Dockerfile：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# cat ../eureka-service/Dockerfile</span><br><span class="line">FROM java:8-jdk-alpine</span><br><span class="line">RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">COPY ./target/eureka-service.jar ./</span><br><span class="line">EXPOSE 8888</span><br><span class="line">CMD java -jar -Deureka.instance.hostname=$&#123;MY_POD_NAME&#125;.eureka.ms /eureka-service.jar</span><br></pre></td></tr></table></figure></p>
+<p>再来看一个微服务（不需要暴露域名）：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# cat product.yaml</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: product</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  replicas: 2</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      project: ms</span><br><span class="line">      app: product</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        project: ms</span><br><span class="line">        app: product</span><br><span class="line">    spec:</span><br><span class="line">      imagePullSecrets:</span><br><span class="line">      - name: registry-pull-secret</span><br><span class="line">      containers:</span><br><span class="line">      - name: product</span><br><span class="line">        image: 192.168.171.10/microservice/product:2020-01-12-13-14-56</span><br><span class="line">        imagePullPolicy: Always</span><br><span class="line">        ports:</span><br><span class="line">          - protocol: TCP</span><br><span class="line">            containerPort: 8010</span><br><span class="line">        resources:</span><br><span class="line">          requests:</span><br><span class="line">            cpu: 0.5</span><br><span class="line">            memory: 256Mi</span><br><span class="line">          limits:</span><br><span class="line">            cpu: 1</span><br><span class="line">            memory: 1Gi</span><br><span class="line">        readinessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 8010</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br><span class="line">        livenessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 8010</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br></pre></td></tr></table></figure></p>
+<p>创建k8s登录harbor信息认证：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# kubectl create secret docker-registry registry-pull-secret --docker-server=192.168.171.10 --docker-username=admin --docker-password=Zhang --docker-email=zhdya@zhdya.cn -n ms</span><br><span class="line">secret/registry-pull-secret created</span><br></pre></td></tr></table></figure></p>
+<p>查看其中一个微服务的配置信息：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# cat ../stock-service/stock-service-biz/src/main/resources/application-fat.yml</span><br><span class="line">spring:</span><br><span class="line">  datasource:</span><br><span class="line">    url: jdbc:mysql://192.168.171.10:3306/tb_stock?characterEncoding=utf-8</span><br><span class="line">    username: root</span><br><span class="line">    password: XXXXXX</span><br><span class="line">    driver-class-name: com.mysql.jdbc.Driver</span><br><span class="line"></span><br><span class="line">eureka:</span><br><span class="line">  instance:</span><br><span class="line">    prefer-ip-address: true</span><br><span class="line">  client:</span><br><span class="line">    register-with-eureka: true</span><br><span class="line">    fetch-registry: true</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http://eureka-0.eureka.ms:8888/eureka,http://eureka-1.eureka.ms:8888/eureka,http://eureka-2.eureka.ms:8888/eureka</span><br></pre></td></tr></table></figure></p>
+<p>部署eureka：</p>
+<p>补充说明：<br>StatefulSet的应用特点:</p>
+<ul>
+<li>稳定且有唯一的网络标识符 当节点挂掉，既pod重新调度后其PodName和HostName不变，基于Headless Service来实现。</li>
+</ul>
+<p>我们知道kubernetes中的service是定义pod暴露外部访问的一种机制，例如：3个pod，我们可以定义一个service通过标签选择器选到这三个pod，然后让问这个service就可以访问这个pod。</p>
+<p>Headless service是Service通过DNS访问的其中一种方式，只要我们访问”mypod.stsname.namespace.svc.cluster.local”，我们就会访问到stsname下的mypod。而Service DNS的方式下有两种处理方法：</p>
+<ul>
+<li>Normal Service 这里访问”mypod.stsname.namespace.svc.cluster.local”的时候会得到mypod的service的IP，既VIP。</li>
+<li>Headless Service 这里访问”mypod.stsname.namespace.svc.cluster.local”的时候会得到mypod的IP，这里我们可以看到区别是，Headless Service 不需要分配一个VIP，而是通过DNS访问的方式可以解析出带代理的Pod的IP<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# kubectl apply -f eureka.yaml</span><br><span class="line">ingress.extensions/eureka created</span><br><span class="line">service/eureka created</span><br><span class="line">statefulset.apps/eureka created</span><br><span class="line"></span><br><span class="line">##因为是有状态应用，所以是一个一个的启动</span><br><span class="line">[root@k8s-master1 k8s]# kubectl get po -n ms</span><br><span class="line">NAME       READY   STATUS    RESTARTS   AGE</span><br><span class="line">eureka-0   1/1     Running   0          5m37s</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 k8s]# kubectl get po -n ms</span><br><span class="line">NAME       READY   STATUS    RESTARTS   AGE</span><br><span class="line">eureka-0   1/1     Running   0          8m19s</span><br><span class="line">eureka-1   1/1     Running   0          3m7s</span><br><span class="line">eureka-2   1/1     Running   0          108s</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 k8s]# kubectl exec -it eureka-1 sh -n ms</span><br><span class="line">/ # nslookup eureka</span><br><span class="line">nslookup: can&apos;t resolve &apos;(null)&apos;: Name does not resolve</span><br><span class="line"></span><br><span class="line">Name:      eureka</span><br><span class="line">Address 1: 10.244.36.123 eureka-1.eureka.ms.svc.cluster.local       ##通过headless的stateful部署的应用 就算IP变了之后，eureka-1.eureka.ms.svc.cluster.local这个也会自动的绑定新的IP上，且不会变！</span><br><span class="line">Address 2: 10.244.169.176 eureka-2.eureka.ms.svc.cluster.local</span><br><span class="line">Address 3: 10.244.159.171 eureka-0.eureka.ms.svc.cluster.local</span><br><span class="line"></span><br><span class="line">StatefulSet+Headless DNS名称格式：</span><br><span class="line">&lt;statefulsetName-index&gt;.&lt;service-name&gt; .&lt;namespacename&gt;.svc.cluster.local</span><br><span class="line"></span><br><span class="line">Eureka集群节点Pod名称：</span><br><span class="line">http://eureka-0.eureka.ms.svc.cluster.local</span><br><span class="line">http://eureka-1.eureka.ms.svc.cluster.local</span><br><span class="line">http://eureka-2.eureka.ms.svc.cluster.local</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-master1 k8s]# kubectl get ing -n ms</span><br><span class="line">NAME     HOSTS             ADDRESS   PORTS   AGE</span><br><span class="line">eureka   eureka.zhdya.cn             80      23m</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200112/O2rftodcCRve.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200112/g6rnQqgIQIHc.png?imageslim" alt="mark"></p>
+<p>部署gateway（<u>线上环境务必部署至少要2个副本，测试</u>）：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cat gateway.yaml</span><br><span class="line">---</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: gateway</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">    - host: gateway.zhdya.cn</span><br><span class="line">      http:</span><br><span class="line">        paths:</span><br><span class="line">        - path: /</span><br><span class="line">          backend:</span><br><span class="line">            serviceName: gateway</span><br><span class="line">            servicePort: 9999</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: gateway</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - port: 9999</span><br><span class="line">    name: gateway</span><br><span class="line">  selector:</span><br><span class="line">    project: ms</span><br><span class="line">    app: gateway</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: gateway</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      project: ms</span><br><span class="line">      app: gateway</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        project: ms</span><br><span class="line">        app: gateway</span><br><span class="line">    spec:</span><br><span class="line">      imagePullSecrets:</span><br><span class="line">      - name: registry-pull-secret</span><br><span class="line">      containers:</span><br><span class="line">      - name: gateway</span><br><span class="line">        image: 192.168.171.10/microservice/gateway:2020-01-12-13-14-44</span><br><span class="line">        imagePullPolicy: Always</span><br><span class="line">        ports:</span><br><span class="line">          - protocol: TCP</span><br><span class="line">            containerPort: 9999</span><br><span class="line">        resources:</span><br><span class="line">          requests:</span><br><span class="line">            cpu: 0.5</span><br><span class="line">            memory: 256Mi</span><br><span class="line">          limits:</span><br><span class="line">            cpu: 1</span><br><span class="line">            memory: 1Gi</span><br><span class="line">        readinessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 9999</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br><span class="line">        livenessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 9999</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@k8s-master1 k8s]# kubectl apply -f gateway.yaml</span><br><span class="line">ingress.extensions/gateway created</span><br><span class="line">service/gateway created</span><br><span class="line">deployment.apps/gateway created</span><br></pre></td></tr></table></figure></p>
+<p>部署portal:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cat portal.yaml</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: portal</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">    - host: portal.zhdya.cn</span><br><span class="line">      http:</span><br><span class="line">        paths:</span><br><span class="line">        - path: /</span><br><span class="line">          backend:</span><br><span class="line">            serviceName: portal</span><br><span class="line">            servicePort: 8080</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: portal</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - port: 8080</span><br><span class="line">    name: portal</span><br><span class="line">  selector:</span><br><span class="line">    project: ms</span><br><span class="line">    app: portal</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: portal</span><br><span class="line">  namespace: ms</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      project: ms</span><br><span class="line">      app: portal</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        project: ms</span><br><span class="line">        app: portal</span><br><span class="line">    spec:</span><br><span class="line">      imagePullSecrets:</span><br><span class="line">      - name: registry-pull-secret</span><br><span class="line">      containers:</span><br><span class="line">      - name: portal</span><br><span class="line">        image: 192.168.171.10/microservice/portal:2020-01-12-13-15-06</span><br><span class="line">        imagePullPolicy: Always</span><br><span class="line">        ports:</span><br><span class="line">          - protocol: TCP</span><br><span class="line">            containerPort: 8080</span><br><span class="line">        resources:</span><br><span class="line">          requests:</span><br><span class="line">            cpu: 0.5</span><br><span class="line">            memory: 256Mi</span><br><span class="line">          limits:</span><br><span class="line">            cpu: 1</span><br><span class="line">            memory: 1Gi</span><br><span class="line">        readinessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 8080</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br><span class="line">        livenessProbe:</span><br><span class="line">          tcpSocket:</span><br><span class="line">            port: 8080</span><br><span class="line">          initialDelaySeconds: 60</span><br><span class="line">          periodSeconds: 10</span><br><span class="line"></span><br><span class="line"># kubectl apply -f portal.yaml</span><br><span class="line">ingress.extensions/portal created</span><br><span class="line">service/portal created</span><br><span class="line">deployment.apps/portal created</span><br></pre></td></tr></table></figure></p>
+<p>部署其它微服务：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# kubectl get po -n ms</span><br><span class="line">NAME                       READY   STATUS    RESTARTS   AGE</span><br><span class="line">eureka-0                   1/1     Running   0          39m</span><br><span class="line">eureka-1                   1/1     Running   0          34m</span><br><span class="line">eureka-2                   1/1     Running   0          33m</span><br><span class="line">gateway-5b6b78b54c-vjq2l   1/1     Running   0          10m</span><br><span class="line">order-58cc95cf96-4t9pb     1/1     Running   0          2m35s</span><br><span class="line">portal-5574cbd9d6-56tzc    1/1     Running   0          8m53s</span><br><span class="line">product-74bb9d98d-8hz95    1/1     Running   0          2m42s</span><br><span class="line">stock-845f745db5-q868l     1/1     Running   0          2m39s</span><br></pre></td></tr></table></figure></p>
+<p>查看部署情况：<br><img src="http://myimage.okay686.cn/okay686cn/20200112/wus4lmXQkbH6.png?imageslim" alt="mark"></p>
+<h3 id="六、总结："><a href="#六、总结：" class="headerlink" title="六、总结："></a>六、总结：</h3><ul>
+<li>第一步：熟悉Spring Cloud微服务项目</li>
+<li>第二步：源代码编译构建</li>
+<li>第三步：构建项目镜像并推送到镜像仓库</li>
+<li>第四步：在K8S中部署Spring Cloud微服务项目的逻辑架构</li>
+<li>第五步： K8S服务编排</li>
+<li>第六步：在K8S中部署Eureka集群（注册中心）</li>
+<li>第七步：部署微服务网关服务</li>
+<li>第八步：部署微服务业务程序</li>
+<li>第九步：部署微服务前端</li>
+<li>第十步：微服务扩容与发布</li>
+</ul>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2020年01月13日 15:34</p>
+        <p>原始链接： <a class="post-url" href="/2020/01/02/K8S中部署SpringCloud微服务项目/" title="K8S中部署SpringCloud微服务项目">http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/</a></p>
+        <footer>
+            <a href="http://zhdya.okay686.cn">
+                <img src="/images/logo.png" alt="Zhdya">
+                Zhdya
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        老板，中午饭可否加餐？
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/&title=《K8S中部署SpringCloud微服务项目》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/&title=《K8S中部署SpringCloud微服务项目》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S中部署SpringCloud微服务项目》 — 拼！就对了！&url=http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/&via=http://zhdya.okay686.cn" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2020/01/02/K8S中部署SpringCloud微服务项目/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
+      
+    <a href="/tags/K8S/" class="color4">K8S</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、熟悉SpringCloud项目"><span class="post-toc-text">一、熟悉SpringCloud项目</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-1、主机分配"><span class="post-toc-text">1.1、主机分配</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-2、代码分支详情："><span class="post-toc-text">1.2、代码分支详情：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、代码编译构建（Maven）"><span class="post-toc-text">二、代码编译构建（Maven）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-1、拉取项目代码"><span class="post-toc-text">2.1、拉取项目代码</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-2、部署须知"><span class="post-toc-text">2.2、部署须知</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-3、架构介绍："><span class="post-toc-text">2.3、架构介绍：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-4、准备编译"><span class="post-toc-text">2.4、准备编译</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、构建项目镜像并推送到镜像仓库"><span class="post-toc-text">三、构建项目镜像并推送到镜像仓库</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、推送镜像到harbor"><span class="post-toc-text">四、推送镜像到harbor</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#五、部署springCloud项目"><span class="post-toc-text">五、部署springCloud项目</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5-1、创建命名空间"><span class="post-toc-text">5.1、创建命名空间</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#六、总结："><span class="post-toc-text">六、总结：</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/01/01/6.1、从运维角度看微服务架构/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">从运维角度看微服务架构</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+        <div id="SOHUCS" sid="K8S中部署SpringCloud微服务项目"></div>
+<script type="text/javascript">
+    (function(){
+        var appid = 'cyu4TKmA0';
+        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if (width < 960) {
+            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2020 Zhdya<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://zhdya.okay686.cn",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 18.57px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>主页</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>归档</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 17.14px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 18.57px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
