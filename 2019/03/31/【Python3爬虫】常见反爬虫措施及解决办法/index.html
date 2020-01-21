@@ -1,147 +1,170 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>【Python3爬虫】常见反爬虫措施及解决办法 | 拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
-  
-  <meta name="description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl =">
-<meta name="keywords" content="python,爬虫">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【Python3爬虫】常见反爬虫措施及解决办法">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl =">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/ign0DACblB5o.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/MVyHb54OJ3I7.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190331/lxdyXKrzwVl7.png?imageslim">
-<meta property="og:updated_time" content="2019-03-31T14:37:40.010Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Python3爬虫】常见反爬虫措施及解决办法">
-<meta name="twitter:description" content="一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl =">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+<html lang="">
 
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>【Python3爬虫】常见反爬虫措施及解决办法 ~ 拼！就对了！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-【Python3爬虫】常见反爬虫措施及解决办法" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 class="post-title" itemprop="name">
-      【Python3爬虫】常见反爬虫措施及解决办法
-    </h1>
-    <div class="post-title-bar">
-      <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/Python3/">Python3</a>
-                  
-              </li>
           
-        <li>
-          <i class="fa fa-calendar"></i>  2019-03-31
-        </li>
-        <li>
-          <i class="fa fa-eye"></i>
-          <span id="busuanzi_value_page_pv"></span>
-        </li>
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
       </ul>
     </div>
-  
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Sunday, March 31st 2019, 12:00 am
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.6k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      6 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
 
           
-      </header>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
     
-    <div class="article-entry post-content" itemprop="articleBody">
       
-            
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
             <h3 id="一、UserAgent"><a href="#一、UserAgent" class="headerlink" title="一、UserAgent"></a>一、UserAgent</h3><p>UserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &quot;http://www.baidu.com&quot;</span><br><span class="line">res = requests.get(url)</span><br></pre></td></tr></table></figure></p>
 <h4 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h4><p>1、收集整理常见的UserAgent以供使用<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ua_list = </span><br><span class="line">    [&quot;Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,</span><br><span class="line">    &quot;MQQBrowser/25 (Linux; U; 2.3.3; zh-cn; HTC Desire S Build/GRI40;480*800)&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (Linux; U; Android 2.3.3; zh-cn; HTC_DesireS_S510e Build/GRI40) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1&quot;,</span><br><span class="line">    &quot;Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2 NokiaE75-1 /110.48.125 Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413&quot; ...]</span><br></pre></td></tr></table></figure></p>
 <p>2、使用第三方库–fake_useragent<br>使用方法如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from fake_useragent import UserAgent</span><br><span class="line"></span><br><span class="line">ua = UserAgent()</span><br><span class="line">for i in range(3):</span><br><span class="line">    print(ua.random)</span><br></pre></td></tr></table></figure></p>
@@ -151,317 +174,258 @@
 <h3 id="三、Referer防盗链"><a href="#三、Referer防盗链" class="headerlink" title="三、Referer防盗链"></a>三、Referer防盗链</h3><p>防盗链主要是针对客户端请求过程中所携带的一些关键信息来验证请求的合法性，而防盗链又有很多种，比如Referer防盗链，还有Cookie防盗链和时间戳防盗链。</p>
 <p>Cookie防盗链常见于论坛、社区。当访客请求一个资源的时候，他会检查这个访客的Cookie，如果不是他自己的用户的Cookie，就不会给这个访客正确的资源，也就达到了防盗的目的。时间戳防盗链指的是在他的url后面加上一个时间戳参数，所以如果你直接请求网站的url是无法得到真实的页面的，只有带上时间戳才可以。</p>
 <p>这次的例子是<a href="http://pp.tianya.cn/" target="_blank" rel="noopener">天涯社区的图片分社区</a>：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/tRIXfNxTqme0.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>这里我们先打开开发者工具，然后任意选择一张图片，得到这个图片的链接，然后用requests来下载一下这张图片，注意带上Referer字段，看结果如何：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url = &quot;http://img3.laibafile.cn/p/l/305989961.jpg&quot;</span><br><span class="line">headers = &#123;</span><br><span class="line">    &quot;Referer&quot;: &quot;http://pp.tianya.cn/&quot;,</span><br><span class="line">    &quot;UserAgent&quot;:&quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36&quot;</span><br><span class="line">&#125;</span><br><span class="line">res = requests.get(url)</span><br><span class="line">with open(&apos;test.jpg&apos;, &apos;wb&apos;) as f:</span><br><span class="line">    f.write(res.content)</span><br></pre></td></tr></table></figure></p>
 <p>我们的爬虫正常运行了，也看到生成了一个test.jpg文件，先别急着高兴，打开图片看一下：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190331/ign0DACblB5o.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/ign0DACblB5o.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <h4 id="解决办法：-2"><a href="#解决办法：-2" class="headerlink" title="解决办法："></a>解决办法：</h4><p>既然他说仅供天涯社区用户分享，那我们也成为他的用户不就行了吗？二话不说就去注册了个账号，然后登录，再拿到登录后的Cookie：</p>
 <p>注意：Cookie是有时效性的，具体多久就会失效我没测试。紧接着把Cookie添加到代码中，然后运行，可以看到成功把图片下载下来了；</p>
 <p>搞了这么久才下了一张图片，我们怎么可能就这么满足呢？分析页面可知一个页面上有十五张图片，然后往下拉的时候会看到”正在加载，请稍后”：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190331/MVyHb54OJ3I7.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/MVyHb54OJ3I7.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>我们立马反应过来这是通过AJAX来加载的，于是打开开发者工具查看，可以找到如下内容：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190331/lxdyXKrzwVl7.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/lxdyXKrzwVl7.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>可以看到每个链接“？”前面的部分都是基本一样的，“list_”后面跟的数字表示页数，而“_=”后面这一串数字是什么呢？有经验的人很快就能意识到这是一个时间戳，所以我们来测试一下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import time</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">t = time.time()*1000</span><br><span class="line">url = &quot;http://pp.tianya.cn/qt/list_4.shtml?_=&#123;&#125;&quot;.format(t)</span><br><span class="line">res = requests.get(url)</span><br><span class="line">print(res.text)</span><br></pre></td></tr></table></figure></p>
 <p>最后编写程序并运行：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import re</span><br><span class="line">import time</span><br><span class="line">import requests</span><br><span class="line">from fake_useragent import UserAgent</span><br><span class="line"></span><br><span class="line">ua = UserAgent()</span><br><span class="line">headers = &#123;</span><br><span class="line">    &quot;Referer&quot;: &quot;http://pp.tianya.cn/&quot;,</span><br><span class="line">    &quot;Cookie&quot;: &quot;user=w=ASD9577&amp;id=139400111&amp;f=1; right=web4=n&amp;portal=n; __u_a=v2.2.4; sso=r=2037194054&amp;sid=&amp;wsid=54DECCFD58BB393C19060A02D963FFFC; temp=k=32072170&amp;s=&amp;t=1553817544&amp;b=bdacde9b28f59113991fd271bdba3f65&amp;ct=1553817544&amp;et=1556409544; temp4=rm=0e74c53c8e0cfe3ec18596583e42c38f; ty_msg=1553817664458_139400111_2_0_0_0_0_0_2_0_0_0_0_0; bbs_msg=1553817664463_139400111_0_0_0_0; time=ct=1553817677.647&quot;,</span><br><span class="line">    &quot;UserAgent&quot;: ua.random</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def crawl(url):</span><br><span class="line">    res = requests.get(url, headers=headers)</span><br><span class="line">    res.encoding = &quot;utf-8&quot;</span><br><span class="line">    print(&quot;status_code:&quot;, res.status_code)</span><br><span class="line">    # print(&quot;res.text:&quot;, res.text)</span><br><span class="line">    if res.status_code == 200:</span><br><span class="line">        # result = re.findall(r&apos;src=&quot;.*?&quot; alt=&quot;.*?&quot;&apos;, res.text)</span><br><span class="line">        result = re.findall(&apos;&lt;img.+src=&quot;(.*?)&quot; alt=&quot;(.*?)&quot;.+&gt;&apos;, res.text)</span><br><span class="line">        print(result)</span><br><span class="line">        for i in result:</span><br><span class="line">            # print(&quot;iiiiiiiiiii&quot;, i[0], i[1])</span><br><span class="line">            download(i[0], i[1])</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;Error Request!&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def download(href, name):</span><br><span class="line">    try:</span><br><span class="line">        res = requests.get(href, headers=headers)</span><br><span class="line">        with open(&apos;&#123;&#125;.jpg&apos;.format(name), &apos;wb&apos;) as f:</span><br><span class="line">            f.write(res.content)</span><br><span class="line">            print(&apos;[INFO]&#123;&#125;.jpg已下载！&apos;.format(name))</span><br><span class="line">    except:</span><br><span class="line">        print(&quot;Error Download!&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    for num in range(1, 3):  # 最大页数2页</span><br><span class="line">        time.sleep(2)</span><br><span class="line">        t = int(time.time() * 1000)  # 获取13位时间戳</span><br><span class="line">        print(t)</span><br><span class="line">        page_url = &quot;http://pp.tianya.cn/qt/list_&#123;&#125;.shtml?_=&#123;&#125;&quot;.format(num, t)  # 构造链接</span><br><span class="line">        crawl(page_url)</span><br></pre></td></tr></table></figure></p>
 
-            <div class="post-copyright">
-    <div class="content">
-        <p>最后更新： 2019年03月31日 22:37</p>
-        <p>原始链接： <a class="post-url" href="/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/" title="【Python3爬虫】常见反爬虫措施及解决办法">http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/</a></p>
-        <footer>
-            <a href="http://zhdya.okay686.cn">
-                <img src="/images/logo.png" alt="Zhdya">
-                Zhdya
-            </a>
-        </footer>
-    </div>
-</div>
-
-      
-        
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
             
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;">赏</a>
-</div>
-
-<div id="reward" class="post-modal reward-lay">
-    <a class="close" href="javascript:;" id="reward-close">×</a>
-    <span class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        老板，中午饭可否加餐？
-        <i class="icon icon-quote-right"></i>
-    </span>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Python3">Python3</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/python">python</a>
+                
+                  <a class="hover-with-bg" href="/tags/%E7%88%AC%E8%99%AB">爬虫</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
         </div>
-        <div class="reward-select">
-            
-            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
-                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
-            </label>
-            
-            
-            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
-                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
-            </label>
-            
-        </div>
-    </div>
-</div>
-
-
-        
-    </div>
-    <footer class="article-footer">
-        
-        
-<div class="post-share">
-    <a href="javascript:;" id="share-sub" class="post-share-fab">
-        <i class="fa fa-share-alt"></i>
-    </a>
-    <div class="post-share-list" id="share-list">
-        <ul class="share-icons">
-          <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/&title=《【Python3爬虫】常见反爬虫措施及解决办法》 — 拼！就对了！&pic=/images/21.jpg" data-title="微博">
-              <i class="fa fa-weibo"></i>
-            </a>
-          </li>
-          <li>
-            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
-              <i class="fa fa-weixin"></i>
-            </a>
-          </li>
-          <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/&title=《【Python3爬虫】常见反爬虫措施及解决办法》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
-              <i class="fa fa-qq"></i>
-            </a>
-          </li>
-          <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/" data-title="Facebook">
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Python3爬虫】常见反爬虫措施及解决办法》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/&via=http://zhdya.okay686.cn" data-title="Twitter">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/" data-title="Google+">
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </li>
-        </ul>
-     </div>
-</div>
-<div class="post-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;" id="wxShare-close">×</a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/" alt="微信分享二维码">
-</div>
-
-<div class="mask"></div>
-
-        
-        <ul class="article-footer-menu">
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/爬虫/" class="color3">爬虫</a>
-      
-  </li>
-
-        </ul>
-        
-    </footer>
-  </div>
-</article>
-
-
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、UserAgent"><span class="post-toc-text">一、UserAgent</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解决办法："><span class="post-toc-text">解决办法：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、IP"><span class="post-toc-text">二、IP</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解决办法：-1"><span class="post-toc-text">解决办法：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、Referer防盗链"><span class="post-toc-text">三、Referer防盗链</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解决办法：-2"><span class="post-toc-text">解决办法：</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-    
-
-<nav id="article-nav">
-  
-    <a href="/2019/04/03/python3爬取墨迹天气并发送给微信好友/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          python3爬取墨迹天气并发送给微信好友
-        
-      </span>
-    </a>
-  
-  
-    <a href="/2019/03/22/urllib.parse.urlencode转换get请求参数/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">urllib.parse.urlencode转换get请求参数</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
-  
-</nav>
-
-
-
-    
-        <div id="SOHUCS" sid="【Python3爬虫】常见反爬虫措施及解决办法"></div>
-<script type="text/javascript">
-    (function(){
-        var appid = 'cyu4TKmA0';
-        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
-        var width = window.innerWidth || document.documentElement.clientWidth;
-        if (width < 960) {
-            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
-    
-</section>
-        
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;ディレクトリ</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: false,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
-</div>
-<script src="/js/search.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
 
 
 
-
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
 
 
-  <script src="/js/pop-img.js"></script>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
   <script>
-     $(".article-entry p img").popImg();
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
   </script>
 
-  </div>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "【Python3爬虫】常见反爬虫措施及解决办法&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

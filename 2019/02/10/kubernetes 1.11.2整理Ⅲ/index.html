@@ -1,146 +1,170 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>kubernetes 1.11.2整理Ⅲ | 拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
-  
-  <meta name="description" content="测试集群# 创建一个 nginx deplymentapiVersion: extensions/v1beta1 kind: Deployment metadata:   name: nginx-dmspec:   replicas: 2  template:     metadata:       labels:         name: nginx     spec:       conta">
-<meta name="keywords" content="Kubernets,K8S">
-<meta property="og:type" content="article">
-<meta property="og:title" content="kubernetes 1.11.2整理Ⅲ">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="测试集群# 创建一个 nginx deplymentapiVersion: extensions/v1beta1 kind: Deployment metadata:   name: nginx-dmspec:   replicas: 2  template:     metadata:       labels:         name: nginx     spec:       conta">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/180925/i4fDbJme64.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/180925/laCAm1Jb43.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/180925/iaIfdiBega.png?imageslim">
-<meta property="og:updated_time" content="2019-03-07T00:55:25.672Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kubernetes 1.11.2整理Ⅲ">
-<meta name="twitter:description" content="测试集群# 创建一个 nginx deplymentapiVersion: extensions/v1beta1 kind: Deployment metadata:   name: nginx-dmspec:   replicas: 2  template:     metadata:       labels:         name: nginx     spec:       conta">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/180925/i4fDbJme64.png?imageslim">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+<html lang="">
 
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>kubernetes 1.11.2整理Ⅲ ~ 拼！就对了！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-kubernetes 1.11.2整理Ⅲ" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 class="post-title" itemprop="name">
-      kubernetes 1.11.2整理Ⅲ
-    </h1>
-    <div class="post-title-bar">
-      <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/K8s/">K8s</a>
-                  
-              </li>
           
-        <li>
-          <i class="fa fa-calendar"></i>  2019-02-10
-        </li>
-        <li>
-          <i class="fa fa-eye"></i>
-          <span id="busuanzi_value_page_pv"></span>
-        </li>
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
       </ul>
     </div>
-  
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Sunday, February 10th 2019, 12:00 am
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    5.3k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      29 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
 
           
-      </header>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
     
-    <div class="article-entry post-content" itemprop="articleBody">
       
-            
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
             <h2 id="测试集群"><a href="#测试集群" class="headerlink" title="测试集群"></a>测试集群</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建一个 nginx deplyment</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1 </span><br><span class="line">kind: Deployment </span><br><span class="line">metadata: </span><br><span class="line">  name: nginx-dm</span><br><span class="line">spec: </span><br><span class="line">  replicas: 2</span><br><span class="line">  template: </span><br><span class="line">    metadata: </span><br><span class="line">      labels: </span><br><span class="line">        name: nginx </span><br><span class="line">    spec: </span><br><span class="line">      containers: </span><br><span class="line">        - name: nginx </span><br><span class="line">          image: nginx:alpine </span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          ports: </span><br><span class="line">            - containerPort: 80</span><br><span class="line">            </span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1 </span><br><span class="line">kind: Service</span><br><span class="line">metadata: </span><br><span class="line">  name: nginx-svc </span><br><span class="line">spec: </span><br><span class="line">  ports: </span><br><span class="line">    - port: 80</span><br><span class="line">      targetPort: 80</span><br><span class="line">      protocol: TCP </span><br><span class="line">  selector: </span><br><span class="line">    name: nginx</span><br></pre></td></tr></table></figure>
 <p>创建testnginx deployment<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@master1 ~]# kubectl create -f testnginx.yaml</span><br><span class="line">deployment.extensions/nginx-dm created</span><br><span class="line">service/nginx-svc created</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@master1 ~]# kubectl get po -o wide</span><br><span class="line">NAME                       READY     STATUS              RESTARTS   AGE       IP               NODE      NOMINATED NODE</span><br><span class="line">nginx-dm-fff68d674-j7dlk   1/1       Running             0          9m        10.254.108.115   node2     &lt;none&gt;</span><br><span class="line">nginx-dm-fff68d674-r5hb6   1/1       Running             0          9m        10.254.102.133   node1     &lt;none&gt;</span><br></pre></td></tr></table></figure>
@@ -184,312 +208,253 @@
 <h4 id="导入-yaml-文件"><a href="#导入-yaml-文件" class="headerlink" title="导入 yaml 文件"></a>导入 yaml 文件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@master1 ingress-service]# kubectl apply -f namespace.yaml</span><br><span class="line">namespace/ingress-nginx created</span><br><span class="line"></span><br><span class="line">[root@master1 ingress-service]# kubectl get ns</span><br><span class="line">NAME            STATUS    AGE</span><br><span class="line">default         Active    20d</span><br><span class="line">ingress-nginx   Active    6s</span><br><span class="line">kube-public     Active    20d</span><br><span class="line">kube-system     Active    20d</span><br><span class="line"></span><br><span class="line">[root@master1 ingress-service]# kubectl apply -f .</span><br><span class="line">configmap/nginx-configuration created</span><br><span class="line">deployment.extensions/default-http-backend created</span><br><span class="line">service/default-http-backend created</span><br><span class="line">namespace/ingress-nginx configured</span><br><span class="line">serviceaccount/nginx-ingress-serviceaccount created</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/nginx-ingress-clusterrole created</span><br><span class="line">role.rbac.authorization.k8s.io/nginx-ingress-role created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/nginx-ingress-role-nisa-binding created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/nginx-ingress-clusterrole-nisa-binding created</span><br><span class="line">configmap/tcp-services created</span><br><span class="line">configmap/udp-services created</span><br><span class="line">deployment.extensions/nginx-ingress-controller created</span><br><span class="line"></span><br><span class="line"># 查看服务，可以看到这两个 pods 被分别调度到 77 与 78 中</span><br><span class="line"></span><br><span class="line">[root@master1 ingress-service]# kubectl get pods -n ingress-nginx -o wide</span><br><span class="line">NAME                                       READY     STATUS    RESTARTS   AGE       IP               NODE      NOMINATED NODE</span><br><span class="line">default-http-backend-6b89c8bdcb-vvl9f      1/1       Running   0          9m        10.254.102.163   node1     &lt;none&gt;</span><br><span class="line">nginx-ingress-controller-cf8d4564d-5vz7h   1/1       Running   0          9m        10.254.75.16     node2     &lt;none&gt;</span><br><span class="line">nginx-ingress-controller-cf8d4564d-z7q4b   1/1       Running   0          9m        10.254.102.158   node1     &lt;none&gt;</span><br><span class="line"></span><br><span class="line"># 查看我们原有的 svc</span><br><span class="line"></span><br><span class="line">[root@master1 ingress-service]#  kubectl get pods -o wide</span><br><span class="line">NAME                       READY     STATUS    RESTARTS   AGE       IP               NODE      NOMINATED NODE</span><br><span class="line">alpine                     1/1       Running   3          6h        10.254.102.141   node1     &lt;none&gt;</span><br><span class="line">nginx-dm-fff68d674-fzhqk   1/1       Running   0          6h        10.254.102.140   node1     &lt;none&gt;</span><br><span class="line">nginx-dm-fff68d674-h8n79   1/1       Running   0          6h        10.254.75.22     node2     &lt;none&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="创建一个-基于-nginx-dm-的-ingress"><a href="#创建一个-基于-nginx-dm-的-ingress" class="headerlink" title="创建一个 基于 nginx-dm 的 ingress"></a>创建一个 基于 nginx-dm 的 ingress</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi nginx-ingress.yaml</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-ingress</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">  - host: nginx.zhdya.cn</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - backend:</span><br><span class="line">          serviceName: nginx-svc</span><br><span class="line">          servicePort: 80</span><br><span class="line">          </span><br><span class="line">理解如下:</span><br><span class="line"></span><br><span class="line">- host指虚拟出来的域名，具体地址(我理解应该是Ingress-controller那台Pod所在的主机的地址)应该加入/etc/hosts中,这样所有去nginx.zhdya.cn的请求都会发到nginx</span><br><span class="line"></span><br><span class="line">- servicePort主要是定义服务的时候的端口，不是NodePort.</span><br><span class="line"></span><br><span class="line"># 查看服务</span><br><span class="line"></span><br><span class="line">[root@master1 ingress-service]# kubectl create -f nginx-ingress.yaml</span><br><span class="line">ingress.extensions/nginx-ingress created</span><br><span class="line"></span><br><span class="line">[root@master1 ingress-service]#  kubectl get ingress</span><br><span class="line">NAME            HOSTS            ADDRESS   PORTS     AGE</span><br><span class="line">nginx-ingress   nginx.zhdya.cn             80        10s</span><br><span class="line"></span><br><span class="line"># 测试访问</span><br><span class="line"></span><br><span class="line">[root@node1 ~]# curl nginx.zhdya.cn</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">    body &#123;</span><br><span class="line">        width: 35em;</span><br><span class="line">        margin: 0 auto;</span><br><span class="line">        font-family: Tahoma, Verdana, Arial, sans-serif;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;</span><br><span class="line">&lt;p&gt;If you see this page, the nginx web server is successfully installed and</span><br><span class="line">working. Further configuration is required.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;For online documentation and support please refer to</span><br><span class="line">&lt;a href=&quot;http://nginx.org/&quot;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;</span><br><span class="line">Commercial support is available at</span><br><span class="line">&lt;a href=&quot;http://nginx.com/&quot;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <p>当然如果本地浏览器访问的话 我们也需要绑定hosts</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/180925/i4fDbJme64.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/180925/i4fDbJme64.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建一个基于 dashboard 的 https 的 ingress</span><br><span class="line"># 新版本的 dashboard 默认就是 ssl ,所以这里使用 tcp 代理到 443 端口</span><br><span class="line"></span><br><span class="line"># 查看 dashboard svc</span><br><span class="line"></span><br><span class="line">[root@master1 ~]# kubectl get svc -n kube-system</span><br><span class="line">NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)         AGE</span><br><span class="line">heapster               ClusterIP   10.254.4.11    &lt;none&gt;        80/TCP          2d</span><br><span class="line">kube-dns               ClusterIP   10.254.0.2     &lt;none&gt;        53/UDP,53/TCP   3d</span><br><span class="line">kubernetes-dashboard   ClusterIP   10.254.3.42    &lt;none&gt;        443/TCP         2d</span><br><span class="line">monitoring-grafana     ClusterIP   10.254.25.50   &lt;none&gt;        80/TCP          2d</span><br><span class="line">monitoring-influxdb    ClusterIP   10.254.37.83   &lt;none&gt;        8086/TCP        2d</span><br><span class="line"></span><br><span class="line"># 修改 tcp-services-configmap.yaml 文件</span><br><span class="line"></span><br><span class="line">[root@master1 src]# vim tcp-services-configmap.yaml</span><br><span class="line"></span><br><span class="line">kind: ConfigMap</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  name: tcp-services</span><br><span class="line">  namespace: ingress-nginx</span><br><span class="line">data:</span><br><span class="line">  8888: &quot;kube-system/kubernetes-dashboard:443&quot;</span><br><span class="line"></span><br><span class="line"># 载入配置文件</span><br><span class="line"></span><br><span class="line">[root@master1 src]# kubectl apply -f tcp-services-configmap.yaml</span><br><span class="line">configmap/tcp-services configured</span><br><span class="line"></span><br><span class="line"># 查看服务</span><br><span class="line"></span><br><span class="line">[root@master1 src]#  kubectl get configmap/tcp-services -n ingress-nginx</span><br><span class="line">NAME           DATA      AGE</span><br><span class="line">tcp-services   1         2d</span><br><span class="line"></span><br><span class="line">[root@master1 src]# kubectl describe configmap/tcp-services -n ingress-nginx</span><br><span class="line">Name:         tcp-services</span><br><span class="line">Namespace:    ingress-nginx</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  kubectl.kubernetes.io/last-applied-configuration=&#123;&quot;apiVersion&quot;:&quot;v1&quot;,&quot;data&quot;:&#123;&quot;8888&quot;:&quot;kube-system/kubernetes-dashboard:443&quot;&#125;,&quot;kind&quot;:&quot;ConfigMap&quot;,&quot;metadata&quot;:&#123;&quot;annotations&quot;:&#123;&#125;,&quot;name&quot;:&quot;tcp-services&quot;,&quot;namesp...</span><br><span class="line"></span><br><span class="line">Data</span><br><span class="line">====</span><br><span class="line">8888:</span><br><span class="line">----</span><br><span class="line">kube-system/kubernetes-dashboard:443</span><br><span class="line">Events:</span><br><span class="line">  Type    Reason  Age   From                      Message</span><br><span class="line">  ----    ------  ----  ----                      -------</span><br><span class="line">  Normal  CREATE  2d    nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  CREATE  2d    nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  CREATE  2d    nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  CREATE  2d    nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  CREATE  20m   nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  CREATE  19m   nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  CREATE  19m   nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line">  Normal  UPDATE  1m    nginx-ingress-controller  ConfigMap ingress-nginx/tcp-services</span><br><span class="line"></span><br><span class="line"># 测试访问</span><br><span class="line"></span><br><span class="line">[root@node1 ~]# curl -I -k https://dashboard.zhdya.cn:8888</span><br><span class="line">curl: (6) Could not resolve host: dashboard.zhdya.cn; 未知的名称或服务</span><br><span class="line">当然如上报错很正常，咱们需要绑定下hosts</span><br><span class="line"></span><br><span class="line">在master 上查询下：</span><br><span class="line">[root@master1 src]# kubectl get svc -n kube-system -o wide | grep dashboard</span><br><span class="line">kubernetes-dashboard   ClusterIP   10.254.3.42    &lt;none&gt;        443/TCP         2d        k8s-app=kubernetes-dashboard</span><br><span class="line"></span><br><span class="line">然后再node端绑定hosts </span><br><span class="line">[root@node1 ~]# vim /etc/hosts</span><br><span class="line"></span><br><span class="line">10.254.3.42 dashboard.zhdya.cn</span><br><span class="line"></span><br><span class="line">[root@node1 ~]# curl -I -k https://dashboard.zhdya.cn:8888</span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Cache-Control: no-store</span><br><span class="line">Content-Length: 990</span><br><span class="line">Content-Type: text/html; charset=utf-8</span><br><span class="line">Last-Modified: Tue, 13 Feb 2018 11:17:03 GMT</span><br><span class="line">Date: Tue, 25 Sep 2018 02:51:18 GMT</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 配置一个基于域名的 https , ingress</span><br><span class="line"></span><br><span class="line"># 创建一个 基于 自身域名的 证书</span><br><span class="line"></span><br><span class="line">[root@master1 dashboard-keys]# openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout dashboard.zhdya.cn-key.key -out dashboard.zhdya.cn.pem -subj &quot;/CN=dashboard.zhdya.cn&quot;</span><br><span class="line">Generating a 2048 bit RSA private key</span><br><span class="line">.......+++</span><br><span class="line">..............+++</span><br><span class="line">writing new private key to &apos;dashboard.zhdya.cn-key.key&apos;</span><br><span class="line">-----</span><br><span class="line"></span><br><span class="line">[root@master1 dashboard-keys]# kubectl create secret tls dashboard-secret --namespace=kube-system --cert dashboard.zhdya.cn.pem --key dashboard.zhdya.cn-key.key</span><br><span class="line">secret/dashboard-secret created</span><br><span class="line"></span><br><span class="line"># 查看 secret</span><br><span class="line"></span><br><span class="line">[root@master1 dashboard-keys]# kubectl get secret -n kube-system | grep dashboard</span><br><span class="line">dashboard-secret                      kubernetes.io/tls                     2         55s</span><br><span class="line">kubernetes-dashboard-certs            Opaque                                0         2d</span><br><span class="line">kubernetes-dashboard-key-holder       Opaque                                2         2d</span><br><span class="line">kubernetes-dashboard-token-r98wk      kubernetes.io/service-account-token   3         2d</span><br><span class="line"></span><br><span class="line"># 创建一个 ingress</span><br><span class="line"></span><br><span class="line">vi dashboard-ingress.yaml</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: kubernetes-dashboard</span><br><span class="line">  namespace: kube-system</span><br><span class="line">  annotations:</span><br><span class="line">    ingress.kubernetes.io/ssl-passthrough: &quot;true&quot;</span><br><span class="line">    nginx.ingress.kubernetes.io/secure-backends: &quot;true&quot;</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    - dashboard.zhdya.cn</span><br><span class="line">    secretName: dashboard-secret</span><br><span class="line">  rules:</span><br><span class="line">  - host: dashboard.zhdya.cn</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: /</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: kubernetes-dashboard</span><br><span class="line">          servicePort: 443</span><br><span class="line"></span><br><span class="line"># 创建配置文件</span><br><span class="line">[root@master1 src]# kubectl apply -f dashboard-ingress.yaml</span><br><span class="line">ingress.extensions/kubernetes-dashboard created</span><br><span class="line"></span><br><span class="line">[root@master1 src]# kubectl get ingress -n kube-system</span><br><span class="line">NAME                   HOSTS                ADDRESS   PORTS     AGE</span><br><span class="line">kubernetes-dashboard   dashboard.zhdya.cn             80, 443   37s</span><br></pre></td></tr></table></figure>
-<h4 id="测试访问"><a href="#测试访问" class="headerlink" title="测试访问"></a>测试访问</h4><p><img src="http://myimage.okay686.cn/okay686cn/180925/laCAm1Jb43.png?imageslim" alt="mark"></p>
+<h4 id="测试访问"><a href="#测试访问" class="headerlink" title="测试访问"></a>测试访问</h4><p><img src="http://myimage.okay686.cn/okay686cn/180925/laCAm1Jb43.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 登录认证</span><br><span class="line"></span><br><span class="line"># 首先创建一个 dashboard rbac 超级用户</span><br><span class="line"></span><br><span class="line">vi dashboard-admin-rbac.yaml</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: kubernetes-dashboard</span><br><span class="line">  name: kubernetes-dashboard-admin</span><br><span class="line">  namespace: kube-system</span><br><span class="line">---</span><br><span class="line">apiVersion: rbac.authorization.k8s.io/v1</span><br><span class="line">kind: ClusterRoleBinding</span><br><span class="line">metadata:</span><br><span class="line">  name: kubernetes-dashboard-admin</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: kubernetes-dashboard</span><br><span class="line">roleRef:</span><br><span class="line">  apiGroup: rbac.authorization.k8s.io</span><br><span class="line">  kind: ClusterRole</span><br><span class="line">  name: cluster-admin</span><br><span class="line">subjects:</span><br><span class="line">- kind: ServiceAccount</span><br><span class="line">  name: kubernetes-dashboard-admin</span><br><span class="line">  namespace: kube-system</span><br><span class="line"></span><br><span class="line"># 导入配置文件</span><br><span class="line"></span><br><span class="line">[root@master1 src]# kubectl apply -f dashboard-admin-rbac.yaml</span><br><span class="line">serviceaccount/kubernetes-dashboard-admin created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard-admin created</span><br><span class="line"></span><br><span class="line"># 查看超级用户的 token 名称</span><br><span class="line"></span><br><span class="line">[root@master1 src]# kubectl -n kube-system get secret | grep kubernetes-dashboard-admin</span><br><span class="line">kubernetes-dashboard-admin-token-kq27d   kubernetes.io/service-account-token   3         38s</span><br><span class="line"></span><br><span class="line"># 查看 token 部分</span><br><span class="line"></span><br><span class="line">[root@master1 src]# kubectl describe -n kube-system secret/kubernetes-dashboard-admin-token-kq27d</span><br></pre></td></tr></table></figure>
 <h4 id="然后我们登录-web-ui-选择-令牌登录"><a href="#然后我们登录-web-ui-选择-令牌登录" class="headerlink" title="然后我们登录 web ui 选择 令牌登录"></a>然后我们登录 web ui 选择 令牌登录</h4><p>然后就发现了还是那熟悉的味道：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/180925/iaIfdiBega.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/180925/iaIfdiBega.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 
-            <div class="post-copyright">
-    <div class="content">
-        <p>最后更新： 2019年03月07日 08:55</p>
-        <p>原始链接： <a class="post-url" href="/2019/02/10/kubernetes 1.11.2整理Ⅲ/" title="kubernetes 1.11.2整理Ⅲ">http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/</a></p>
-        <footer>
-            <a href="http://zhdya.okay686.cn">
-                <img src="/images/logo.png" alt="Zhdya">
-                Zhdya
-            </a>
-        </footer>
-    </div>
-</div>
-
-      
-        
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
             
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;">赏</a>
-</div>
-
-<div id="reward" class="post-modal reward-lay">
-    <a class="close" href="javascript:;" id="reward-close">×</a>
-    <span class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        老板，中午饭可否加餐？
-        <i class="icon icon-quote-right"></i>
-    </span>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/K8s">K8s</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/Kubernets">Kubernets</a>
+                
+                  <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
         </div>
-        <div class="reward-select">
-            
-            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
-                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
-            </label>
-            
-            
-            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
-                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
-            </label>
-            
-        </div>
-    </div>
-</div>
-
-
-        
-    </div>
-    <footer class="article-footer">
-        
-        
-<div class="post-share">
-    <a href="javascript:;" id="share-sub" class="post-share-fab">
-        <i class="fa fa-share-alt"></i>
-    </a>
-    <div class="post-share-list" id="share-list">
-        <ul class="share-icons">
-          <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/&title=《kubernetes 1.11.2整理Ⅲ》 — 拼！就对了！&pic=/images/19.jpg" data-title="微博">
-              <i class="fa fa-weibo"></i>
-            </a>
-          </li>
-          <li>
-            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
-              <i class="fa fa-weixin"></i>
-            </a>
-          </li>
-          <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/&title=《kubernetes 1.11.2整理Ⅲ》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
-              <i class="fa fa-qq"></i>
-            </a>
-          </li>
-          <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/" data-title="Facebook">
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《kubernetes 1.11.2整理Ⅲ》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/&via=http://zhdya.okay686.cn" data-title="Twitter">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/" data-title="Google+">
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </li>
-        </ul>
-     </div>
-</div>
-<div class="post-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;" id="wxShare-close">×</a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/02/10/kubernetes 1.11.2整理Ⅲ/" alt="微信分享二维码">
-</div>
-
-<div class="mask"></div>
-
-        
-        <ul class="article-footer-menu">
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-    </footer>
-  </div>
-</article>
-
-
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试集群"><span class="post-toc-text">测试集群</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#在-安装了-calico-网络的node节点-里-curl"><span class="post-toc-text">在 安装了 calico 网络的node节点 里 curl</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看-ipvs-规则"><span class="post-toc-text">查看 ipvs 规则</span></a></li></ol></li></ol><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置-CoreDNS"><span class="post-toc-text">配置 CoreDNS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#下载-yaml-文件"><span class="post-toc-text">下载 yaml 文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置说明"><span class="post-toc-text">配置说明</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建coreDNS"><span class="post-toc-text">创建coreDNS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看创建："><span class="post-toc-text">查看创建：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#检查日志"><span class="post-toc-text">检查日志</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#验证-dns-服务"><span class="post-toc-text">验证 dns 服务</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建一个-pods-来测试一下-dns"><span class="post-toc-text">创建一个 pods 来测试一下 dns</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查看-创建的服务"><span class="post-toc-text">查看 创建的服务</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#测试"><span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署-DNS-自动伸缩"><span class="post-toc-text">部署 DNS 自动伸缩</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#导入文件"><span class="post-toc-text">导入文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署-Ingress-与-Dashboard"><span class="post-toc-text">部署 Ingress 与 Dashboard</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#部署-heapster"><span class="post-toc-text">部署 heapster</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#下载-heapster-相关-yaml-文件"><span class="post-toc-text">下载 heapster 相关 yaml 文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#下载-heapster-镜像下载"><span class="post-toc-text">下载 heapster 镜像下载</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#修改-yaml-文件"><span class="post-toc-text">修改 yaml 文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建："><span class="post-toc-text">创建：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查看部署情况"><span class="post-toc-text">查看部署情况</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署-dashboard"><span class="post-toc-text">部署 dashboard</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下载-dashboard-镜像"><span class="post-toc-text">下载 dashboard 镜像</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#部署-Nginx-Ingress"><span class="post-toc-text">部署 Nginx Ingress</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置-调度-node"><span class="post-toc-text">配置 调度 node</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下载镜像"><span class="post-toc-text">下载镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下载-yaml-文件-1"><span class="post-toc-text">下载 yaml 文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#部署-Nginx-backend-Nginx-backend-用于统一转发-没有的域名-到指定页面。"><span class="post-toc-text">部署 Nginx  backend , Nginx backend 用于统一转发 没有的域名 到指定页面。</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#导入-yaml-文件"><span class="post-toc-text">导入 yaml 文件</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建一个-基于-nginx-dm-的-ingress"><span class="post-toc-text">创建一个 基于 nginx-dm 的 ingress</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试访问"><span class="post-toc-text">测试访问</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#然后我们登录-web-ui-选择-令牌登录"><span class="post-toc-text">然后我们登录 web ui 选择 令牌登录</span></a></li></ol></li>
-        </nav>
-    </aside>
-    
-
-<nav id="article-nav">
-  
-    <a href="/2019/02/11/Django 基础学习Ⅰ/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          Django基础学习Ⅰ
-        
-      </span>
-    </a>
-  
-  
-    <a href="/2019/02/09/kubernetes 1.11.2整理Ⅱ/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">kubernetes 1.11.2整理Ⅱ</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
-  
-</nav>
-
-
-
-    
-        <div id="SOHUCS" sid="kubernetes 1.11.2整理Ⅲ"></div>
-<script type="text/javascript">
-    (function(){
-        var appid = 'cyu4TKmA0';
-        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
-        var width = window.innerWidth || document.documentElement.clientWidth;
-        if (width < 960) {
-            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
-    
-</section>
-        
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;ディレクトリ</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: false,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
-</div>
-<script src="/js/search.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
 
 
 
-
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
 
 
-  <script src="/js/pop-img.js"></script>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
   <script>
-     $(".article-entry p img").popImg();
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
   </script>
 
-  </div>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "kubernetes 1.11.2整理Ⅲ&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

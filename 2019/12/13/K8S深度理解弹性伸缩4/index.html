@@ -1,150 +1,172 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>K8S弹性伸缩之基于Prometheus QPS指标的HPA | 拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
-  
-  <meta name="description" content="基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-serve">
-<meta name="keywords" content="Kubernets,K8S">
-<meta property="og:type" content="article">
-<meta property="og:title" content="K8S弹性伸缩之基于Prometheus QPS指标的HPA">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-serve">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/spITPJoVOwoH.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/JotK1OzGMJpT.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191212/fo1z9VXaJWiH.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191212/9W3JdYyaEVcC.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191213/doMHytVNy9eS.png?imageslim">
-<meta property="og:updated_time" content="2020-01-07T13:22:58.621Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="K8S弹性伸缩之基于Prometheus QPS指标的HPA">
-<meta name="twitter:description" content="基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-serve">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191213/spITPJoVOwoH.png?imageslim">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+<html lang="">
 
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>K8S弹性伸缩之基于Prometheus QPS指标的HPA ~ 拼！就对了！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-K8S深度理解弹性伸缩4" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 class="post-title" itemprop="name">
-      K8S弹性伸缩之基于Prometheus QPS指标的HPA
-    </h1>
-    <div class="post-title-bar">
-      <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/K8s/">K8s</a>
-                  
-              </li>
           
-        <li>
-          <i class="fa fa-calendar"></i>  2019-12-13
-        </li>
-        <li>
-          <i class="fa fa-eye"></i>
-          <span id="busuanzi_value_page_pv"></span>
-        </li>
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
       </ul>
     </div>
-  
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Friday, December 13th 2019, 12:00 am
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3.8k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      20 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
 
           
-      </header>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
     
-    <div class="article-entry post-content" itemprop="articleBody">
       
-            
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
             <h3 id="基于Prometheus自定义指标缩放"><a href="#基于Prometheus自定义指标缩放" class="headerlink" title="基于Prometheus自定义指标缩放"></a>基于Prometheus自定义指标缩放</h3><p>资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-server)同样的效果。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/spITPJoVOwoH.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/spITPJoVOwoH.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <h5 id="1、部署Prometheus"><a href="#1、部署Prometheus" class="headerlink" title="1、部署Prometheus"></a>1、部署Prometheus</h5><p>Prometheus（普罗米修斯）是一个最初在SoundCloud上构建的监控系统。自2012年成为社区开源项目，拥有非常活跃的开发人员和用户社区。为强调开源及独立维护，Prometheus于2016年加入云原生云计算基金会（CNCF），成为继Kubernetes之后的第二个托管项目。</p>
 <p><strong>Prometheus</strong> <strong>特点：</strong></p>
 <ul>
@@ -166,7 +188,7 @@
 </li>
 </ul>
 <p><strong>Prometheus组成及架构：</strong></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/JotK1OzGMJpT.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/JotK1OzGMJpT.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <ul>
 <li><p>Prometheus Server：收集指标和存储时间序列数据，并提供查询接口</p>
 </li>
@@ -186,7 +208,7 @@
 <p>现在master上安装：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">链接：https://pan.baidu.com/s/1b4Fu8j4Flf2Lzd0naT_iRg  提取码：7l3z</span><br><span class="line">从分享包中导入nfs-client.zip</span><br><span class="line"></span><br><span class="line"># cd nfs-client</span><br><span class="line"># [root@k8s-master1 nfs-client]# cat deployment.yaml</span><br><span class="line">...省略</span><br><span class="line">serviceAccountName: nfs-client-provisioner</span><br><span class="line">containers:</span><br><span class="line">  - name: nfs-client-provisioner</span><br><span class="line">    image: quay.io/external_storage/nfs-client-provisioner:latest</span><br><span class="line">    volumeMounts:</span><br><span class="line">      - name: nfs-client-root</span><br><span class="line">        mountPath: /persistentvolumes</span><br><span class="line">    env:</span><br><span class="line">      - name: PROVISIONER_NAME</span><br><span class="line">        value: fuseim.pri/ifs</span><br><span class="line">      - name: NFS_SERVER</span><br><span class="line">        value: 192.168.171.12   ##nfs的server地址</span><br><span class="line">      - name: NFS_PATH</span><br><span class="line">        value: /opt/sharedata  ##暴露的目录</span><br><span class="line">volumes:</span><br><span class="line">  - name: nfs-client-root</span><br><span class="line">    nfs:</span><br><span class="line">      server: 192.168.171.12</span><br><span class="line">      path: /opt/sharedata</span><br><span class="line">...省略</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 nfs-client]# kubectl apply -f .</span><br><span class="line">storageclass.storage.k8s.io/managed-nfs-storage created</span><br><span class="line">serviceaccount/nfs-client-provisioner created</span><br><span class="line">deployment.apps/nfs-client-provisioner created</span><br><span class="line">serviceaccount/nfs-client-provisioner unchanged</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/nfs-client-provisioner-runner created</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/run-nfs-client-provisioner created</span><br><span class="line">role.rbac.authorization.k8s.io/leader-locking-nfs-client-provisioner created</span><br><span class="line">rolebinding.rbac.authorization.k8s.io/leader-locking-nfs-client-provisioner created</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 nfs-client]# kubectl get po</span><br><span class="line">NAME                                    READY   STATUS              RESTARTS   AGE</span><br><span class="line">nfs-client-provisioner-9c784f97-cqzhb   1/1     running   0          2m16s</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">链接：https://pan.baidu.com/s/1b4Fu8j4Flf2Lzd0naT_iRg  提取码：7l3z</span><br><span class="line"># cd prometheus</span><br><span class="line"># kubectl apply -f .</span><br><span class="line">[root@k8s-master1 nfs-client]# kubectl get po -o wide -n kube-system</span><br><span class="line">NAME                             READY   STATUS    RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">coredns-6d8cfdd59d-pbbbc         1/1     Running   2          2d1h    10.244.2.15      k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-q8g25      1/1     Running   3          2d1h    192.168.171.13   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-server-7dbbcf4c7-v5zpm   1/1     Running   3          47h     10.244.2.14      k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">prometheus-0                     2/2     Running   0          6m48s   10.244.3.15      k8s-node3     &lt;none&gt;           &lt;none&gt;</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 nfs-client]# kubectl get svc -n kube-system</span><br><span class="line">NAME             TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">kube-dns         ClusterIP   10.0.0.2     &lt;none&gt;        53/UDP,53/TCP    2d1h</span><br><span class="line">metrics-server   ClusterIP   10.0.0.5     &lt;none&gt;        443/TCP          47h</span><br><span class="line">prometheus       NodePort    10.0.0.147   &lt;none&gt;        9090:30090/TCP   7m46s</span><br></pre></td></tr></table></figure>
 <p>访问Prometheus UI：<a href="http://NdeIP:30090" target="_blank" rel="noopener">http://NdeIP:30090</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191212/fo1z9VXaJWiH.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191212/fo1z9VXaJWiH.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <h5 id="2、-部署-Custom-Metrics-Adapter"><a href="#2、-部署-Custom-Metrics-Adapter" class="headerlink" title="2、 部署 Custom Metrics Adapter"></a>2、 部署 Custom Metrics Adapter</h5><p>但是prometheus采集到的metrics并不能直接给k8s用，因为两者数据格式不兼容，还需要另外一个组件(k8s-prometheus-adpater)，将prometheus的metrics 数据格式转换成k8s API接口能识别的格式，转换以后，因为是自定义API，所以还需要用Kubernetes aggregator在主APIServer中注册，以便直接通过/apis/来访问。</p>
 <p> <a href="https://github.com/DirectXMan12/k8s-prometheus-adapter" target="_blank" rel="noopener">https://github.com/DirectXMan12/k8s-prometheus-adapter</a> </p>
 <p>该 PrometheusAdapter 有一个稳定的Helm Charts，我们直接使用。</p>
@@ -203,7 +225,7 @@
 <p>该metrics-app暴露了一个Prometheus指标接口，可以通过访问service看到：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 hpa]# curl 10.0.0.163/metrics</span><br><span class="line"># HELP http_requests_total The amount of requests in total</span><br><span class="line"># TYPE http_requests_total counter</span><br><span class="line">http_requests_total 20</span><br><span class="line"># HELP http_requests_per_second The amount of requests per second the latest ten seconds</span><br><span class="line"># TYPE http_requests_per_second gauge</span><br><span class="line">http_requests_per_second 0.5</span><br><span class="line"></span><br><span class="line">##顺带测试下负载均衡：</span><br><span class="line">[root@k8s-master1 hpa]# curl 10.0.0.163</span><br><span class="line">Hello! My name is metrics-app-7674cfb699-btch5. The last 10 seconds, the average QPS has been 0.5. Total requests served: 35</span><br><span class="line">[root@k8s-master1 hpa]# curl 10.0.0.163</span><br><span class="line">Hello! My name is metrics-app-7674cfb699-5l72f. The last 10 seconds, the average QPS has been 0.5. Total requests served: 38</span><br><span class="line">[root@k8s-master1 hpa]# curl 10.0.0.163</span><br><span class="line">Hello! My name is metrics-app-7674cfb699-kksjr. The last 10 seconds, the average QPS has been 0.5. Total requests served: 37</span><br></pre></td></tr></table></figure>
 <p>收集到的每个容器被访问的次数：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191212/9W3JdYyaEVcC.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191212/9W3JdYyaEVcC.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>创建HPA策略：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># vi app-hpa-v2.yml</span><br><span class="line">apiVersion: autoscaling/v2beta2</span><br><span class="line">kind: HorizontalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: metrics-app-hpa </span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  scaleTargetRef:</span><br><span class="line">    apiVersion: apps/v1</span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: metrics-app</span><br><span class="line">  minReplicas: 1</span><br><span class="line">  maxReplicas: 8</span><br><span class="line">  metrics:</span><br><span class="line">  - type: Pods</span><br><span class="line">    pods:</span><br><span class="line">      metric:</span><br><span class="line">        name: http_requests_per_second</span><br><span class="line">      target:</span><br><span class="line">        type: AverageValue</span><br><span class="line">        averageValue: 800m   # 800m 即0.8个/秒</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 hpa]# kubectl get hpa</span><br><span class="line">NAME              REFERENCE                TARGETS          MINPODS   MAXPODS   REPLICAS   AGE</span><br><span class="line">metrics-app-hpa   Deployment/metrics-app   &lt;unknown&gt;/800m   1         8         3          36s</span><br></pre></td></tr></table></figure>
@@ -220,307 +242,248 @@
 <p>查看容器扩容的情况：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 ~]# kubectl get po -o wide</span><br><span class="line">NAME                                     READY   STATUS              RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">metrics-app-7674cfb699-5l72f             1/1     Running             0          48m    10.244.1.13   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-6rht6             1/1     Running             0          16s    10.244.0.16   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-9ltvr             0/1     ContainerCreating   0          1s     &lt;none&gt;        k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-btch5             1/1     Running             0          48m    10.244.2.16   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-kft7p             1/1     Running             0          16s    10.244.3.16   k8s-node3     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-plhrp             0/1     ContainerCreating   0          1s     &lt;none&gt;        k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-sgvln             0/1     ContainerCreating   0          1s     &lt;none&gt;        k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-wr56r             0/1     ContainerCreating   0          1s     &lt;none&gt;        k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">nfs-client-provisioner-f9fdd5cc9-ffzbd   1/1     Running             0          8m7s   10.244.2.17   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">[root@k8s-master1 ~]# kubectl get po -o wide</span><br><span class="line">NAME                                     READY   STATUS    RESTARTS   AGE    IP            NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">metrics-app-7674cfb699-5l72f             1/1     Running   0          48m    10.244.1.13   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-6rht6             1/1     Running   0          18s    10.244.0.16   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-9ltvr             0/1     Running   0          3s     10.244.0.17   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-btch5             1/1     Running   0          48m    10.244.2.16   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-kft7p             1/1     Running   0          18s    10.244.3.16   k8s-node3     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-plhrp             0/1     Running   0          3s     10.244.2.18   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-sgvln             0/1     Running   0          3s     10.244.1.16   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-app-7674cfb699-wr56r             0/1     Running   0          3s     10.244.1.17   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">nfs-client-provisioner-f9fdd5cc9-ffzbd   1/1     Running   0          8m9s   10.244.2.17   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure></p>
 <p>查看HPA状态：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 ~]# kubectl get hpa</span><br><span class="line">NAME              REFERENCE                TARGETS        MINPODS   MAXPODS   REPLICAS   AGE</span><br><span class="line">metrics-app-hpa   Deployment/metrics-app   414345m/800m   1         8         8          21m</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 ~]# kubectl describe hpa metrics-app-hpa</span><br><span class="line">...省略</span><br><span class="line">Metrics:                               ( current / target )</span><br><span class="line">  &quot;http_requests_per_second&quot; on pods:  818994m / 800m</span><br><span class="line">Min replicas:                          1</span><br><span class="line">Max replicas:                          8</span><br><span class="line">Deployment pods:                       8 current / 8 desired</span><br><span class="line">Conditions:</span><br><span class="line">  Type            Status  Reason            Message</span><br><span class="line">  ----            ------  ------            -------</span><br><span class="line">  AbleToScale     True    ReadyForNewScale  recommended size matches current size</span><br><span class="line">  ScalingActive   True    ValidMetricFound  the HPA was able to successfully calculate a replica count from pods metric http_requests_per_second</span><br><span class="line">  ScalingLimited  True    TooManyReplicas   the desired replica count is more than the maximum replica count</span><br><span class="line">Events:</span><br><span class="line">  Type     Reason                        Age                   From                       Message</span><br><span class="line">  ----     ------                        ----                  ----                       -------</span><br><span class="line">  Warning  FailedComputeMetricsReplicas  19m (x12 over 22m)    horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get pods metric value: unable to get metric http_requests_per_second: unable to fetch metrics from custom metrics API: the server could not find the metric http_requests_per_second for pods</span><br><span class="line">  Warning  FailedGetPodsMetric           7m18s (x61 over 22m)  horizontal-pod-autoscaler  unable to get metric http_requests_per_second: unable to fetch metrics from custom metrics API: the server could not find the metric http_requests_per_second for pods</span><br><span class="line">  Normal   SuccessfulRescale             88s                   horizontal-pod-autoscaler  New size: 4; reason: pods metric http_requests_per_second above target</span><br></pre></td></tr></table></figure>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p><img src="http://myimage.okay686.cn/okay686cn/20191213/doMHytVNy9eS.png?imageslim" alt="mark"></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p><img src="http://myimage.okay686.cn/okay686cn/20191213/doMHytVNy9eS.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、应用程序暴露/metrics监控指标并且是prometheus数据格式；</span><br><span class="line"></span><br><span class="line">2、通过/metrics收集每个Pod的http_request_total指标；</span><br><span class="line"></span><br><span class="line">3、prometheus将收集到的信息汇总；</span><br><span class="line"></span><br><span class="line">4、APIServer定时从Prometheus查询，获取request_per_second的数据；</span><br><span class="line"></span><br><span class="line">5、HPA定期向APIServer查询以判断是否符合配置的autoscaler规则；</span><br><span class="line"></span><br><span class="line">6、如果符合autoscaler规则，则修改Deployment的ReplicaSet副本数量进行伸缩。</span><br></pre></td></tr></table></figure>
 
-            <div class="post-copyright">
-    <div class="content">
-        <p>最后更新： 2020年01月07日 21:22</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/13/K8S深度理解弹性伸缩4/" title="K8S弹性伸缩之基于Prometheus QPS指标的HPA">http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/</a></p>
-        <footer>
-            <a href="http://zhdya.okay686.cn">
-                <img src="/images/logo.png" alt="Zhdya">
-                Zhdya
-            </a>
-        </footer>
-    </div>
-</div>
-
-      
-        
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
             
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;">赏</a>
-</div>
-
-<div id="reward" class="post-modal reward-lay">
-    <a class="close" href="javascript:;" id="reward-close">×</a>
-    <span class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        老板，中午饭可否加餐？
-        <i class="icon icon-quote-right"></i>
-    </span>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/K8s">K8s</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/Kubernets">Kubernets</a>
+                
+                  <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
         </div>
-        <div class="reward-select">
-            
-            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
-                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
-            </label>
-            
-            
-            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
-                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
-            </label>
-            
-        </div>
-    </div>
-</div>
-
-
-        
-    </div>
-    <footer class="article-footer">
-        
-        
-<div class="post-share">
-    <a href="javascript:;" id="share-sub" class="post-share-fab">
-        <i class="fa fa-share-alt"></i>
-    </a>
-    <div class="post-share-list" id="share-list">
-        <ul class="share-icons">
-          <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/&title=《K8S弹性伸缩之基于Prometheus QPS指标的HPA》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
-              <i class="fa fa-weibo"></i>
-            </a>
-          </li>
-          <li>
-            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
-              <i class="fa fa-weixin"></i>
-            </a>
-          </li>
-          <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/&title=《K8S弹性伸缩之基于Prometheus QPS指标的HPA》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
-              <i class="fa fa-qq"></i>
-            </a>
-          </li>
-          <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/" data-title="Facebook">
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S弹性伸缩之基于Prometheus QPS指标的HPA》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/&via=http://zhdya.okay686.cn" data-title="Twitter">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/" data-title="Google+">
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </li>
-        </ul>
-     </div>
-</div>
-<div class="post-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;" id="wxShare-close">×</a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/13/K8S深度理解弹性伸缩4/" alt="微信分享二维码">
-</div>
-
-<div class="mask"></div>
-
-        
-        <ul class="article-footer-menu">
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-    </footer>
-  </div>
-</article>
-
-
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于Prometheus自定义指标缩放"><span class="post-toc-text">基于Prometheus自定义指标缩放</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、部署Prometheus"><span class="post-toc-text">1、部署Prometheus</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、-部署-Custom-Metrics-Adapter"><span class="post-toc-text">2、 部署 Custom Metrics Adapter</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基于QPS指标实践"><span class="post-toc-text">基于QPS指标实践</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#4、配置适配器收集特定的指标"><span class="post-toc-text">4、配置适配器收集特定的指标</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#小结"><span class="post-toc-text">小结</span></a></li></ol>
-        </nav>
-    </aside>
-    
-
-<nav id="article-nav">
-  
-    <a href="/2019/12/13/K8S深度理解弹性伸缩/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）
-        
-      </span>
-    </a>
-  
-  
-    <a href="/2019/12/13/K8S深度理解弹性伸缩3/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
-  
-</nav>
-
-
-
-    
-        <div id="SOHUCS" sid="K8S深度理解弹性伸缩4"></div>
-<script type="text/javascript">
-    (function(){
-        var appid = 'cyu4TKmA0';
-        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
-        var width = window.innerWidth || document.documentElement.clientWidth;
-        if (width < 960) {
-            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
-    
-</section>
-        
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;ディレクトリ</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: false,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
-</div>
-<script src="/js/search.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
 
 
 
-
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
 
 
-  <script src="/js/pop-img.js"></script>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
   <script>
-     $(".article-entry p img").popImg();
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
   </script>
 
-  </div>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "K8S弹性伸缩之基于Prometheus QPS指标的HPA&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

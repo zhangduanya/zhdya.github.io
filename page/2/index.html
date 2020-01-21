@@ -1,1321 +1,1007 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="description" content="Tough times never last, but tough people do.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="拼！就对了！">
-<meta property="og:url" content="http://zhdya.okay686.cn/page/2/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="Tough times never last, but tough people do.">
-<meta property="og:locale" content="default">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="拼！就对了！">
-<meta name="twitter:description" content="Tough times never last, but tough people do.">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>拼！就对了！</title>
 
-  
-  
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap">
-  
-    <article id="post-K8S深度理解弹性伸缩" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/13/K8S深度理解弹性伸缩/">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</a>
-    </h1>
-  
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+          </div>
 
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
+            <div class="scroll-down-bar">
+              <i class="fas fa-angle-down scroll-down-arrow"></i>
+            </div>
           
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/13/K8S深度理解弹性伸缩/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）" title="K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）">
-                
-            </a>
         </div>
-        <div class="article-feed">
-            <p>
-                弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-md">
+        <div class="py-5 z-depth-3" id="board">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
+        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
 
 蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
-弹性伸缩就是要解决当实际负载增大，而集群资源容量没...
-            </p>
+弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
+1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
+
+机器规格不统一造成机器利用率百分比碎片化
+在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
+
+
+
+特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
+
+机器利用率不单纯依靠宿主机计算
+在大部分生产</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-13</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/13/K8S深度理解弹性伸缩/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-K8S深度理解弹性伸缩4" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/13/K8S深度理解弹性伸缩4/">K8S弹性伸缩之基于Prometheus QPS指标的HPA</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/13/K8S深度理解弹性伸缩4/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S弹性伸缩之基于Prometheus QPS指标的HPA" title="K8S弹性伸缩之基于Prometheus QPS指标的HPA">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Met...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
+        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
+
+1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+
+在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-13</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/13/K8S深度理解弹性伸缩4/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-K8S深度理解弹性伸缩3" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/13/K8S深度理解弹性伸缩3/">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S弹性伸缩之基于Metrics Server CPU指标的HPA" title="K8S弹性伸缩之基于Metrics Server CPU指标的HPA">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/13/K8S深度理解弹性伸缩4/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Prometheus QPS指标的HPA</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-server)同样的效果。
+
+1、部署PrometheusPrometheus（普罗米修斯）是一个最初在SoundCloud上构建的监控系统。自2012年成为社区开源项目，拥有非常活跃的开发人员和用户社区。为强调开源及独立维护，Prometheus于2016年加入云原生云计算基金会（CNCF），成为继Kubernetes之后的第二个托管项目。
+Prometheus 特点：
+
+自动采集，服务发现；
+
+多维数据模型：由度量名称和键值对标识的时间序列数据；
+
+PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的查询；
+
+不依赖分布式存储，单个服务器节点可直接工作；
+
+基于HTTP的pull方式采集时</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-13</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/13/K8S深度理解弹性伸缩3/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-K8S之Ingress-Nginx实现高可用" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/10/K8S之Ingress-Nginx实现高可用/">K8S之Ingress-Nginx实现高可用</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/10/K8S之Ingress-Nginx实现高可用/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S之Ingress-Nginx实现高可用" title="K8S之Ingress-Nginx实现高可用">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用：
-假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/10/K8S之Ingress-Nginx实现高可用/">
+        <p class="h4 index-header">K8S之Ingress-Nginx实现高可用</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用：
+假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。
+
+首先我们要先确保有两个worker节点部署了ingress nginx
+在本实验中，环境如下：
+
+
+
+IP地址
+主机名
+描述
+
+
+
+
+10.0.0.31
+k8s-master01    
+
+
+10.0.0.34
+k8s-node02
+ingress nginx、keepalived
+
+
+10.0.0.35
+k8s-node03
+ingress nginx、keepalived
+
+
+
+1、查看ingress nginx状态[root@k8s-master01 Ingress]# kubectl get pod -n ingress-nginx -o wideNAME                                 </div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-10&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-10</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/10/K8S之Ingress-Nginx实现高可用/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-k8s之存储卷及pvc" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/09/k8s之存储卷及pvc/">k8s之存储卷及pvc</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/09/k8s之存储卷及pvc/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="k8s之存储卷及pvc" title="k8s之存储卷及pvc">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、概述因为pod是有生命周期的,pod一重启,里面的数据就没了,所以我们需要数据持久化存储,在k8s中,存储卷不属于容器,而是属于pod,也就是说同一个pod中的容器可以共享一个存储卷,存储卷可以是宿主机上的目录,也可以是挂载在宿主...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/09/k8s之存储卷及pvc/">
+        <p class="h4 index-header">k8s之存储卷及pvc</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、概述因为pod是有生命周期的,pod一重启,里面的数据就没了,所以我们需要数据持久化存储,在k8s中,存储卷不属于容器,而是属于pod,也就是说同一个pod中的容器可以共享一个存储卷,存储卷可以是宿主机上的目录,也可以是挂载在宿主机上的外部设备。
+1.1、存储卷类型：
+emptyDIR存储卷：pod一重启,存储卷也删除,这叫emptyDir存储卷,一般用于当做临时空间或缓存关系;
+
+hostPath存储卷：宿主机上目录作为存储卷,这种也不是真正意义实现了数据持久性;
+
+SAN(iscsi)或NAS(nfs、cifs)：网络存储设备;
+
+分布式存储：ceph,glusterfs,cephfs,rbd；
+
+云存储：亚马逊的EBS,Azure Disk,阿里云,关键数据一定要有异地备份；
+
+
+emptyDIR存储卷：vim podtest/pod-vol-demo.yamlapiVersion: v1kind: Podmetadata:  name: pod-demo  namespace: default  labels:    app: myapp    tier: frontend</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-09&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-09</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/09/k8s之存储卷及pvc/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-K8S负载均衡之nginx-ingress" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/07/K8S负载均衡之nginx-ingress/">K8S负载均衡之nginx-ingress</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/07/K8S负载均衡之nginx-ingress/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S负载均衡之nginx-ingress" title="K8S负载均衡之nginx-ingress">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                ++本篇引自多篇大佬文档整合而来，加上自己所理解整理如下：++
-一、目前状况：k8s有了coreDNS解决了k8s集群内部通过dns域名的方式相互访问容器服务，但是集群内部的域名无法在外部被访问，也没有解决域名7层负载均衡的问题，而n...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/07/K8S负载均衡之nginx-ingress/">
+        <p class="h4 index-header">K8S负载均衡之nginx-ingress</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">++本篇引自多篇大佬文档整合而来，加上自己所理解整理如下：++
+一、目前状况：k8s有了coreDNS解决了k8s集群内部通过dns域名的方式相互访问容器服务，但是集群内部的域名无法在外部被访问，也没有解决域名7层负载均衡的问题，而nginx-ingress就是为了解决基于k8s的7层负载均衡，nginx-ingress也是已addon方式加入k8s集群，以pod的方式运行，多个副本，高可用。
+二、Nginx Ingress 一般有三个组件组成：
+1）ingress是kubernetes的一个资源对象，用于编写定义规则。
+2）反向代理负载均衡器，通常以Service的Port方式运行，接收并按照ingress定义的规则进行转发，通常为nginx，haproxy，traefik等，本文使用nginx。
+3）ingress-controller，监听apiserver，获取服务新增，删除等变化，并结合ingress规则动态更新到反向代理负载均衡器上，并重载配置使其生效。
+
+以上三者有机的协调配合起来，就可以完成 Kubernetes 集群服务的暴露。
+来看个图例：
+
+Nginx 对后端运行</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-07&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-07</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/07/K8S负载均衡之nginx-ingress/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-K8S集群优化之路由转发：使用IPVS替代iptables" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/">K8S集群优化之路由转发：使用IPVS替代iptables</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="K8S集群优化之路由转发：使用IPVS替代iptables" title="K8S集群优化之路由转发：使用IPVS替代iptables">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/">
+        <p class="h4 index-header">K8S集群优化之路由转发：使用IPVS替代iptables</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、为什么要使用IPVS从k8s的1.8版本开始，kube-proxy引入了IPVS模式，IPVS模式与iptables同样基于Netfilter，但是采用的hash表，因此当service数量达到一定规模时，hash查表的速度优势就会显现出来，从而提高service的服务性能。
+二、具体步骤2.1、开启内核参数cat &gt;&gt; /etc/sysctl.conf &lt;&lt; EOFnet.ipv4.ip_forward = 1net.bridge.bridge-nf-call-iptables = 1net.bridge.bridge-nf-call-ip6tables = 1EOFsysctl -p
+2.2、开启ipvs支持yum -y install ipvsadm  ipset# 临时生效modprobe -- ip_vsmodprobe -- ip_vs_rrmodprobe -- ip_vs_wrrmodprobe -- ip_vs_shmodprobe -- nf_conntrack_ipv4# 永久生效cat &gt; /etc/sysconfig/modu</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-06&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-06</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/06/K8S集群优化之路由转发：使用IPVS替代iptables/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-ansible自动化部署kubernetes-1.16" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/05/ansible自动化部署kubernetes-1.16/">
+        <p class="h4 index-header">ansible自动化部署kubernetes-1.16</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/05/ansible自动化部署kubernetes-1.16/">ansible自动化部署kubernetes-1.16</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/05/ansible自动化部署kubernetes-1.16/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="ansible自动化部署kubernetes-1.16" title="ansible自动化部署kubernetes-1.16">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">概述：集群包含coreDNS、cni、nginx-ingress、HA、flanneld
 百度网盘链接：https://pan.baidu.com/s/1KYbpshhpTu62DnQwF1LUnQ 提取码：vi5e
-一、单maste...
-            </p>
+一、单master部署[root@k8s-ansible1 ~]# tree ansible-install-k8s-masteransible-install-k8s-master├── add-node.yml├── ansible.cfg├── group_vars│   └── all.yml├── hosts├── multi-master-deploy.yml├── multi-master.jpg├── README.md├── roles│   ├── addons│   │   ├── files│   │   │   ├── coredns.yaml│   │   │   ├── ingress-controller.yaml│   │   │   ├── kube-flannel.yaml│   │   │   └── kubernetes-dash</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-05&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-05</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/05/ansible自动化部署kubernetes-1.16/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-搭建一个生产级K8S高可用集群（2）" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/01/搭建一个生产级K8S高可用集群（2）/">
+        <p class="h4 index-header">搭建一个生产级K8S高可用集群（2）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/01/搭建一个生产级K8S高可用集群（2）/">搭建一个生产级K8S高可用集群（2）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/12/01/搭建一个生产级K8S高可用集群（2）/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="搭建一个生产级K8S高可用集群（2）" title="搭建一个生产级K8S高可用集群（2）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                写在前面：此次为了贴合线上的真实情况，此次K8S搭建将不会和咱们网路上的一气呵成相媲美，更多的表现在：
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">写在前面：此次为了贴合线上的真实情况，此次K8S搭建将不会和咱们网路上的一气呵成相媲美，更多的表现在：
 
 最新版K8S_1.16；
-完全基于离线模式的二进制HA搭建（政企）《链接：https://pan.baidu.com/s/1aC...
-            </p>
+完全基于离线模式的二进制HA搭建（政企）《链接：https://pan.baidu.com/s/1aCmiYdfn5gujnyMutVdaVw提取码：m39k》；
+全部组件均采用二进制部署（包含Docker）；
+逐一摸索每个组件的配置文件，做到线上有故障能清楚的定位到问题；
+既然是分布式，本次安装完全基于：
+先单Master到双Master高可用；
+新Node如何加到集群；
+
+
+
+服务器硬件配置推荐：
+生产环境K8S平台规划 – 单Master集群
+生产环境K8S平台规划 – 多Master集群（HA）
+一、服务器规划
+
+
+角色
+IP
+组件
+
+
+
+
+k8s-master1
+192.168.171.134
+kube-apiserver，kube-controller-manager，kube-scheduler，etcd
+
+
+k8s-master2
+192.168.171.135
+kube-apiserver，kube-controller-manager，</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-01&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-12-01</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/12/01/搭建一个生产级K8S高可用集群（2）/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-搭建一个生产级K8S高可用集群（1）" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/">
+        <p class="h4 index-header">搭建一个生产级K8S高可用集群（1）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/">搭建一个生产级K8S高可用集群（1）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="搭建一个生产级K8S高可用集群（1）" title="搭建一个生产级K8S高可用集群（1）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                不多说了，2019年底再开始~~
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">不多说了，2019年底再开始~~
 一、K8S特性①自我修复在节点故障时重新启动失败的容器，替换和重新部署，保证预期的副本数量；杀死健康检查失败的容器，并且在未准备好之前不会处理客户端的请求，确保服务不中断。
-②弹性伸缩使用命令、UI管...
-            </p>
+②弹性伸缩使用命令、UI管控或者基于CPU使用情况自动快速扩容和缩容应用程序实例，保证应用业务高峰并发时的高可用性；业务低峰时回收资源，以最小成本运行业务。
+③自动部署和回滚K8S采用滚动更新策略更新应用，一次更新一个Pod，而不是同时删除所有Pod，如果更新过程中出现问题，将回滚更改，确保升级不影响业务。
+④服务发现和负载均衡K8S为多个容器提供一个统一的访问入口（内部IP地址和一个DNS名称），并且负载均衡关联的所有容器，使得用户无需考虑容器IP问题。
+⑤机密和配置管理管理机密数据和应用程序配置，而不需要把敏感数据暴露在镜像里，提高敏感数据安全性。并可以将一些常用的配置存储在K8S中，方便应用程序使用。
+⑥存储编排挂载外部存储系统，无论是来自本地存储，公有云（如AWS），还是网路存储（如NFS，ClusterFS，Ceph）都作为集群资源的一部分使用，极大提高存储使用灵活性。
+</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-26&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-11-26</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/11/26/搭建一个生产级K8S高可用集群（1）/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-生产级k8s二进制v14.1高可用部署" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/生产级k8s二进制v14.1高可用部署/">生产级k8s二进制v14.1高可用部署</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/06/18/生产级k8s二进制v14.1高可用部署/">
-                
-                <img src="http://zhdya.okay686.cn//images/k8s.jpg" alt="生产级k8s二进制v14.1高可用部署" title="生产级k8s二进制v14.1高可用部署">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、环境准备1.1、角色划分10.8.13.80   vip  10.8.13.81   master01  haproxy、keepalived、etcd、kube-apiserver、kube-controller-manager...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/06/18/生产级k8s二进制v14.1高可用部署/">
+        <p class="h4 index-header">生产级k8s二进制v14.1高可用部署</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、环境准备1.1、角色划分10.8.13.80   vip  10.8.13.81   master01  haproxy、keepalived、etcd、kube-apiserver、kube-controller-manager、kube-scheduler10.8.13.82   master02  haproxy、keepalived、etcd、kube-apiserver、kube-controller-manager、kube-scheduler10.8.13.83   master03  haproxy、keepalived、etcd、kube-apiserver、kube-controller-manager、kube-scheduler10.8.13.84   node01    kubelet、docker、kube_proxy、flanneld10.8.13.85   node02    kubelet、docker、kube_proxy、flanneld
+1.2、各主机ssh互通#ssh-keygen#ssh-copy-id 10.8.13.82(83-85)</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-18&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-06-18</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/06/18/生产级k8s二进制v14.1高可用部署/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-容器网络 calico 基本原理和模拟" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/容器网络 calico 基本原理和模拟/">容器网络 calico 基本原理和模拟</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8S/">K8S</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/22/容器网络 calico 基本原理和模拟/">
-                
-                <img src="http://zhdya.okay686.cn//images/save.jpg" alt="容器网络 calico 基本原理和模拟" title="容器网络 calico 基本原理和模拟">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/22/容器网络 calico 基本原理和模拟/">
+        <p class="h4 index-header">容器网络 calico 基本原理和模拟</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。
+简介Calico 官方定义如下：Calico provides secure network connectivity for containers and virtual machine workloads.Calico creates and manages a flat layer 3 network, assigning each workload a fully routable IP address. Workloads can communicate without IP encapsulation or network address translation for bare metal performance, e</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/calico">calico</a>&nbsp;
+          
+            <a href="/tags/k8s">k8s</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-22</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/calico/" class="color2">calico</a>
-      
-    <a href="/tags/k8s/" class="color4">k8s</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/22/容器网络 calico 基本原理和模拟/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-九、URL与视图函数" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/九、URL与视图函数/">Django博客开发：URL与视图函数（九）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/13/九、URL与视图函数/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：URL与视图函数（九）" title="Django博客开发：URL与视图函数（九）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/13/九、URL与视图函数/">
+        <p class="h4 index-header">Django博客开发：URL与视图函数（九）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做出一个响应，这个响应就是把对应的内容通过浏览器渲染出来，呈现给我们看++。这个过程就是请求与响应。
+下图，就是请求响应的过程。
+
+上面我们提到了URL，这个URL在我们的Django中，其实是由我们自己构造的。(这个说法不太严谨，但为了方便大家理解之后的内容，先当这说辞是正确的。)
+Django中，我们约定URL是在项目同名目录下的urls.py文件里urlpatterns列表构造的。
+myblog/myblog/urls.py
+
+表现形式如下：
+urlpatterns = [    path(正则表达式, views视图函数，参数，别名),]括号里的参数说明：1、一个正则表达式字符串2、一个</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-13</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/13/九、URL与视图函数/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-八、使用富文本编辑器添加数据" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/12/八、使用富文本编辑器添加数据/">Django博客开发：使用富文本编辑器（八）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/12/八、使用富文本编辑器添加数据/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：使用富文本编辑器（八）" title="Django博客开发：使用富文本编辑器（八）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                在Django admin后台添加数据的时候，文章内容文本框想发布一篇图文并茂的文章需就得手写Html代码，这十分吃力，也没法上传图片和文件。这显然不是我等高大上程序猿想要的。
-
-为提升效率，我们可以使用富文本编辑器添加数据。支持Dj...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/12/八、使用富文本编辑器添加数据/">
+        <p class="h4 index-header">Django博客开发：使用富文本编辑器（八）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">在Django admin后台添加数据的时候，文章内容文本框想发布一篇图文并茂的文章需就得手写Html代码，这十分吃力，也没法上传图片和文件。这显然不是我等高大上程序猿想要的。
+
+为提升效率，我们可以使用富文本编辑器添加数据。支持Django的富文本编辑器很多，这里我推荐使用DjangoUeditor，Ueditor是百度开发的一个富文本编辑器，功能强大。下面教大家安装如何使用DjangoUeditor。
+1、首先我们先下载DjangoUeditor包点击下面的链接进行下载！下载完成然后解压到项目根目录里。
+https://www.django.cn/media/upfile/DjangoUeditor_20181010013851_248.zip
+2、settings.py里注册APP在INSTALLED_APPS里添加’DjangoUeditor’
+myblog/settings.yINSTALLED_APPS = [    &apos;django.contrib.admin&apos;,    ....    &apos;DjangoUeditor&apos;, #注册APP应</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-12&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-12</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/12/八、使用富文本编辑器添加数据/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-七、用Admin管理后台管理数据" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/11/七、用Admin管理后台管理数据/">Django博客开发：用Admin管理后台数据（七）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/11/七、用Admin管理后台管理数据/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：用Admin管理后台数据（七）" title="Django博客开发：用Admin管理后台数据（七）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_AP...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/11/七、用Admin管理后台管理数据/">
+        <p class="h4 index-header">Django博客开发：用Admin管理后台数据（七）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。
+注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们的APP应用是blog，所以我们需要在blog/admin.py文件里进行注册：
+blog/admin.pyfrom django.contrib import adminfrom .models import Banner, Category, Tag, Tui, Article, Link #导入需要管理的数据库表@admin.register(Article)class ArticleAdmin(admin.ModelAdmin):    list_display = (&apos;id&apos;, &apos;category&apos;, &apos;title&apos;, &a</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-11</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/11/七、用Admin管理后台管理数据/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-六、创建数据库模型" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/10/六、创建数据库模型/">Django博客开发：创建数据库模型（六）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/10/六、创建数据库模型/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：创建数据库模型（六）" title="Django博客开发：创建数据库模型（六）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                Django是通过Model操作数据库，不管你数据库的类型是MySql或者Sqlite，Django它自动帮你生成相应数据库类型的SQL语句，所以不需要关注SQL语句和类型，对数据的操作Django帮我们自动完成。只要回写Model就...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/10/六、创建数据库模型/">
+        <p class="h4 index-header">Django博客开发：创建数据库模型（六）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Django是通过Model操作数据库，不管你数据库的类型是MySql或者Sqlite，Django它自动帮你生成相应数据库类型的SQL语句，所以不需要关注SQL语句和类型，对数据的操作Django帮我们自动完成。只要回写Model就可以了！
+django根据代码中定义的类来自动生成数据库表。我们写的类表示数据库的表，如果根据这个类创建的对象是数据库表里的一行数据，对象.id 对象.value是每一行里的数据。
+基本的原则如下：
+
+每个模型在Django中的存在形式为一个Python类
+每个模型都是django.db.models.Model的子类
+模型里的每个类代表数据库中的一个表
+模型的每个字段（属性）代表数据表的某一列
+Django将自动为你生成数据库访问API
+
+完成博客，我们需要存储六种数据：文章分类、文章、文章标签、幻灯图、推荐位、友情链接。每种数据一个表。
+分类表结构设计：
+表名：Category、分类名：name
+标签表设计：
+表名：Tag、标签名：name
+文章表结构设计：
+表名：Article、标题：title、摘要：excerpt、分类：category、标签：t</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-10&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-10</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/10/六、创建数据库模型/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-五、欢迎页面" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/09/五、欢迎页面/">
+        <p class="h4 index-header">Django博客开发：欢迎页面（五）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/09/五、欢迎页面/">Django博客开发：欢迎页面（五）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/09/五、欢迎页面/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：欢迎页面（五）" title="Django博客开发：欢迎页面（五）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。
 python manage.py makemigrationspython manage.py migrate
-迁移数据之后，网站目录里自...
-            </p>
+迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。
+之后输入下面命令创建管理帐号和密码：
+python manage.py createsuperuser
+最后，我们设置下启动命令，启动我们的Django项目：
+
+启动后登陆 http://0.0.0.0:8000/ 就可以看到我们的欢迎页。
+
+另外一点，我们当然也可以设置自定义的主页：
+首先，打开打开bolg目录下的views.py文件，在里面输入：
+myblog/blog/views.pyfrom django.http import HttpResponsedef hello(request):    return HttpResponse(&apos;Welcome to Django Zone！&apos;)
+再打开myblog目录下的urls.py文件，在文件里添加两行代码：
+m</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-09&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-09</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/09/五、欢迎页面/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-四、基础配置" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/四、基础配置/">Django博客开发：基础配置（四）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/08/四、基础配置/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：基础配置（四）" title="Django博客开发：基础配置（四）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                打开myblog目录下的settings.py文件：
-一、设置域名访问权限myblog/settings.pyALLOWED_HOSTS = []      #修改前ALLOWED_HOSTS = [&apos;*&apos;]#修改...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/08/四、基础配置/">
+        <p class="h4 index-header">Django博客开发：基础配置（四）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">打开myblog目录下的settings.py文件：
+一、设置域名访问权限myblog/settings.pyALLOWED_HOSTS = []      #修改前ALLOWED_HOSTS = [&apos;*&apos;]#修改后，表示任何域名都能访问。如果指定域名的话，在&apos;&apos;里放入指定的域名即可
+二、设置TEMPLATES里的’DIRS’添加模板目录templates的路径，后面我们做网站模板的时候用得着。
+myblog/settings.py#修改前&apos;DIRS&apos;: []#修改后&apos;DIRS&apos;: [os.path.join(BASE_DIR, &apos;templates&apos;)]注：使用pycharm创建的话会自动添加
+三、找到DATABASES设置网站数据库类型。这里使用默认的sqlite3。四、在INSTALLED_APPS添加APP应用名称。myblog/settings.pyINSTALLED_APPS = [    &apos;django.contrib.admin&apos;,    ....  </div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-08&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-08</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/08/四、基础配置/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-三、创建项目" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/07/三、创建项目/">
+        <p class="h4 index-header">Django博客开发：创建项目（三）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/07/三、创建项目/">Django博客开发：创建项目（三）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/07/三、创建项目/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：创建项目（三）" title="Django博客开发：创建项目（三）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                基础环境：
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">基础环境：
 Python3.6
 django2.1.1
 开发工具为Pycharm
@@ -1323,234 +1009,318 @@ django2.1.1
 
 说明：1、为项目保存路径，myblog为项目名。
 2、为选择使用的虚拟环境软件，这里选virtualenv。
-3、为虚拟环境保存目录，我把它保存在项...
-            </p>
+3、为虚拟环境保存目录，我把它保存在项目里，虚拟环境默认名为env，我系统里有多个项目为了区分出来命名为myblogenv
+4、为使用的模板语言，我们默认用django模板语言。
+5、为创建项目的时候建立一个模板文件目录，用来存放模板文件。用CMD命令创建项目的话，模板目录需要自己手动创建。
+6、为创建一个名为blog的APP应用。同样的用CMD命令创建的话，需要手动通过python manage.py startapp blog命令来进行创建。
+点击创建之后，Pycharm自动帮我们完成Django软件下载安装和Django的项目创建。
+注意：如果对需要指定Django版本的话，不能直接使用这个方法，这个方法会直接下载最新版本的Django。指定版本的话，请使用CMD通过命令如：pip install django==2.0.1
+
+第一个黑色的 myblog 为项目文件夹目录。
+blog为A</div>
         </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-07</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
+      </a>
 
-        </ul>
+      <div>
         
-            <a href="/2019/04/07/三、创建项目/#more" class="article-more-link">more&gt;&gt;</a>
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-07&nbsp;&nbsp;
         
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-二、数据库设计分析" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/06/二、数据库设计分析/">Django博客开发：数据库设计分析（二）</a>
-    </h1>
-  
-
+          <i class="iconfont icon-inbox"></i>
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
           
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/06/二、数据库设计分析/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：数据库设计分析（二）" title="Django博客开发：数据库设计分析（二）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                ++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++
-从如下图片中可以看到，文章有标题、分类、作者、浏览次数...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-06</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/06/二、数据库设计分析/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/"><< Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next >></a>
-  </nav>
-</section>
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
         
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
   </div>
-</footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: true,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/06/二、数据库设计分析/">
+        <p class="h4 index-header">Django博客开发：数据库设计分析（二）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++
+从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。
+
+这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多的关系，多对多简单理解就是，一篇文章可以有多个标签，一个标签里同样可以有多篇文章。
+我们将文章表命名为Article，通过前面的分析得出文章信息表Article的数据库结构如下：
+
+
+
+表字段
+字段类型
+备注
+
+
+
+
+id
+int类型，长度为11
+主键，由系统自动生成
+
+
+title
+CharField类型，长度为100
+文章标题
+
+
+category
+ForeignKey
+外键，关联文章分类表
+
+
+tags
+ManyToManyField
+多对多，关联标签列表
+
+
+body
+TextField
+文章内容
+
+
+user
+ForeignKey
+外键，文章作者关联用户模型，系统自带的
+
+
+view</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-06&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <a class="extend prev" rel="prev" href="/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fas fa-angle-double-right"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
+      ele.href += '#board';
+    }
+  </script>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
 </div>
-<script src="/js/search.js"></script>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
+
+
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
 
 
 
@@ -1558,11 +1328,9 @@ django2.1.1
 
 
 
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
 
 
-  </div>
+
+
 </body>
 </html>

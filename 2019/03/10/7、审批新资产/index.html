@@ -1,151 +1,174 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>CMDB-审批新资产（七） | 拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
-  
-  <meta name="description" content="一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。 批准上线这一操作是通过admin的自定义actions来实现的。 Django的admin默认有一个delete操作的action，所有在admin中的模型都有这个action，更多的就需要我们自己编写了。  修改/assets/admin.py的代">
-<meta name="keywords" content="django,python,CMDB">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CMDB-审批新资产（七）">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/03/10/7、审批新资产/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。 批准上线这一操作是通过admin的自定义actions来实现的。 Django的admin默认有一个delete操作的action，所有在admin中的模型都有这个action，更多的就需要我们自己编写了。  修改/assets/admin.py的代">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190309/jWxSrz7t4V7C.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190314/iViha1pfEX92.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190314/3e6pBv80JgwC.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20190314/uA2Gi5FKPKsG.png?imageslim">
-<meta property="og:updated_time" content="2019-04-20T07:01:13.348Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CMDB-审批新资产（七）">
-<meta name="twitter:description" content="一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。 批准上线这一操作是通过admin的自定义actions来实现的。 Django的admin默认有一个delete操作的action，所有在admin中的模型都有这个action，更多的就需要我们自己编写了。  修改/assets/admin.py的代">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20190309/jWxSrz7t4V7C.png?imageslim">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+<html lang="">
 
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>CMDB-审批新资产（七） ~ 拼！就对了！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-7、审批新资产" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 class="post-title" itemprop="name">
-      CMDB-审批新资产（七）
-    </h1>
-    <div class="post-title-bar">
-      <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/Python3/">Python3</a>
-                  
-              </li>
           
-        <li>
-          <i class="fa fa-calendar"></i>  2019-03-10
-        </li>
-        <li>
-          <i class="fa fa-eye"></i>
-          <span id="busuanzi_value_page_pv"></span>
-        </li>
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
       </ul>
     </div>
-  
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Sunday, March 10th 2019, 12:00 am
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    3.9k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      18 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
 
           
-      </header>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
     
-    <div class="article-entry post-content" itemprop="articleBody">
       
-            
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
             <h3 id="一、自定义admin的actions"><a href="#一、自定义admin的actions" class="headerlink" title="一、自定义admin的actions"></a>一、自定义admin的actions</h3><p>需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。</p>
 <p>批准上线这一操作是通过admin的自定义actions来实现的。</p>
 <p>Django的admin默认有一个delete操作的action，所有在admin中的模型都有这个action，更多的就需要我们自己编写了。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190309/jWxSrz7t4V7C.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190309/jWxSrz7t4V7C.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>修改/assets/admin.py的代码，新的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">from django.contrib import admin</span><br><span class="line"></span><br><span class="line"># Register your models here.</span><br><span class="line">from assets import models</span><br><span class="line">from . import asset_handler</span><br><span class="line"></span><br><span class="line">class NewAssetAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = [&apos;asset_type&apos;, &apos;sn&apos;, &apos;model&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;, &apos;m_time&apos;]</span><br><span class="line">    list_filter = [&apos;asset_type&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;]</span><br><span class="line">    search_fields = (&apos;sn&apos;,)</span><br><span class="line"></span><br><span class="line">    actions = [&apos;approve_selected_new_assets&apos;]</span><br><span class="line"></span><br><span class="line">    def approve_selected_new_assets(self, request, queryset):</span><br><span class="line">        # 获得被打钩的checkbox对应的资产</span><br><span class="line">        selected = request.POST.getlist(admin.ACTION_CHECKBOX_NAME)</span><br><span class="line">        success_upline_number = 0</span><br><span class="line">        for asset_id in selected:</span><br><span class="line">            obj = asset_handler.ApproveAsset(request, asset_id)</span><br><span class="line">            ret = obj.asset_upline()</span><br><span class="line">            if ret:</span><br><span class="line">                success_upline_number += 1</span><br><span class="line">        # 顶部绿色提示信息</span><br><span class="line">        self.message_user(request, &quot;成功批准  %s  条新资产上线！&quot; % success_upline_number)</span><br><span class="line">    approve_selected_new_assets.short_description = &quot;批准选择的新资产&quot;</span><br><span class="line"></span><br><span class="line">class AssetAdmin(admin.ModelAdmin):</span><br><span class="line">    list_display = [&apos;asset_type&apos;, &apos;name&apos;, &apos;status&apos;, &apos;approved_by&apos;, &apos;c_time&apos;, &quot;m_time&quot;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">admin.site.register(models.Asset, AssetAdmin)</span><br><span class="line">admin.site.register(models.Server)</span><br><span class="line">admin.site.register(models.StorageDevice)</span><br><span class="line">admin.site.register(models.SecurityDevice)</span><br><span class="line">admin.site.register(models.BusinessUnit)</span><br><span class="line">admin.site.register(models.Contract)</span><br><span class="line">admin.site.register(models.CPU)</span><br><span class="line">admin.site.register(models.Disk)</span><br><span class="line">admin.site.register(models.EventLog)</span><br><span class="line">admin.site.register(models.IDC)</span><br><span class="line">admin.site.register(models.Manufacturer)</span><br><span class="line">admin.site.register(models.NetworkDevice)</span><br><span class="line">admin.site.register(models.NIC)</span><br><span class="line">admin.site.register(models.RAM)</span><br><span class="line">admin.site.register(models.Software)</span><br><span class="line">admin.site.register(models.Tag)</span><br><span class="line">admin.site.register(models.NewAssetApprovalZone, NewAssetAdmin)</span><br></pre></td></tr></table></figure>
 <h4 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h4><ul>
@@ -160,7 +183,7 @@
 <li>approve_selected_new_assets.short_description = “批准选择的新资产”用于在admin界面中为action提供中文显示。你可以尝试去掉这条，看看效果。</li>
 </ul>
 <p>重新启动CMDB，进入admin的待审批资产区，查看上方的acitons动作条，如下所示：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190314/iViha1pfEX92.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190314/iViha1pfEX92.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <h3 id="二、创建测试用例"><a href="#二、创建测试用例" class="headerlink" title="二、创建测试用例"></a>二、创建测试用例</h3><p>由于没有真实的服务器供测试，这里需要<strong>手动创建一些虚假的服务器用例</strong>，方便后面的使用和展示。</p>
 <p>首先，将先前的所有资产条目全部从admin中删除，确保数据库内没有任何数据。</p>
 <p>然后，在Client/bin/目录下新建一个report_assets脚本，其内容如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"># @Time    : 2019-3-8 07:49</span><br><span class="line"># @Author  : zhdya@zhdya.cn</span><br><span class="line"># @File    : asset_handler.py</span><br><span class="line"></span><br><span class="line">import json</span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import urllib.request</span><br><span class="line">import urllib.parse</span><br><span class="line"></span><br><span class="line">BASE_DIR = os.path.dirname(os.getcwd())</span><br><span class="line"># 设置工作目录，使得包和模块能够正常导入</span><br><span class="line">sys.path.append(BASE_DIR)</span><br><span class="line">from conf import settings</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def update_test(data):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    创建测试用例</span><br><span class="line">    :return:</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # 将数据打包到一个字典内，并转换为json格式</span><br><span class="line">    data = &#123;&quot;asset_data&quot;: json.dumps(data)&#125;</span><br><span class="line">    # 根据settings中的配置，构造url</span><br><span class="line">    url = &quot;http://%s:%s%s&quot; % (settings.Params[&apos;server&apos;], settings.Params[&apos;port&apos;], settings.Params[&apos;url&apos;])</span><br><span class="line">    print(&apos;正在将数据发送至： [%s]  ......&apos; % url)</span><br><span class="line">    try:</span><br><span class="line">        # 使用Python内置的urllib.request库，发送post请求。</span><br><span class="line">        # 需要先将数据进行封装，并转换成bytes类型</span><br><span class="line">        data_encode = urllib.parse.urlencode(data).encode()     ##转码</span><br><span class="line">        response = urllib.request.urlopen(url=url, data=data_encode, timeout=settings.Params[&apos;request_timeout&apos;])</span><br><span class="line">        print(&quot;\033[31;1m发送完毕！\033[0m &quot;)</span><br><span class="line">        message = response.read().decode()</span><br><span class="line">        print(&quot;返回结果：%s&quot; % message)</span><br><span class="line">    except Exception as e:</span><br><span class="line">        message = &quot;发送失败&quot;</span><br><span class="line">        print(&quot;\033[31;1m发送失败，%s\033[0m&quot; % e)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    windows_data = &#123;</span><br><span class="line">        &quot;os_type&quot;: &quot;Windows&quot;,</span><br><span class="line">        &quot;os_release&quot;: &quot;7 64bit  6.1.7601 &quot;,</span><br><span class="line">        &quot;os_distribution&quot;: &quot;Microsoft&quot;,</span><br><span class="line">        &quot;asset_type&quot;: &quot;server&quot;,</span><br><span class="line">        &quot;cpu_count&quot;: 2,</span><br><span class="line">        &quot;cpu_model&quot;: &quot;Intel(R) Core(TM) i5-2300 CPU @ 2.80GHz&quot;,</span><br><span class="line">        &quot;cpu_core_count&quot;: 8,</span><br><span class="line">        &quot;ram&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;slot&quot;: &quot;A1&quot;,</span><br><span class="line">                &quot;capacity&quot;: 8,</span><br><span class="line">                &quot;model&quot;: &quot;Physical Memory&quot;,</span><br><span class="line">                &quot;manufacturer&quot;: &quot;kingstone &quot;,</span><br><span class="line">                &quot;sn&quot;: &quot;456&quot;</span><br><span class="line">            &#125;,</span><br><span class="line"></span><br><span class="line">        ],</span><br><span class="line">        &quot;manufacturer&quot;: &quot;Intel&quot;,</span><br><span class="line">        &quot;model&quot;: &quot;P67X-UD3R-B3&quot;,</span><br><span class="line">        &quot;wake_up_type&quot;: 6,</span><br><span class="line">        &quot;sn&quot;: &quot;00426-OEM-8992662-111111&quot;,</span><br><span class="line">        &quot;physical_disk_driver&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;iface_type&quot;: &quot;unknown&quot;,</span><br><span class="line">                &quot;slot&quot;: 0,</span><br><span class="line">                &quot;sn&quot;: &quot;3830414130423230343234362020202020202020&quot;,</span><br><span class="line">                &quot;model&quot;: &quot;KINGSTON SV100S264G ATA Device&quot;,</span><br><span class="line">                &quot;manufacturer&quot;: &quot;(标准磁盘驱动器)&quot;,</span><br><span class="line">                &quot;capacity&quot;: 128</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;iface_type&quot;: &quot;SATA&quot;,</span><br><span class="line">                &quot;slot&quot;: 1,</span><br><span class="line">                &quot;sn&quot;: &quot;383041413042323023234362020102020202020&quot;,</span><br><span class="line">                &quot;model&quot;: &quot;KINGSTON SV100S264G ATA Device&quot;,</span><br><span class="line">                &quot;manufacturer&quot;: &quot;(标准磁盘驱动器)&quot;,</span><br><span class="line">                &quot;capacity&quot;: 2048</span><br><span class="line">            &#125;,</span><br><span class="line"></span><br><span class="line">        ],</span><br><span class="line">        &quot;nic&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;mac&quot;: &quot;14:CF:22:FF:48:34&quot;,</span><br><span class="line">                &quot;model&quot;: &quot;[00000011] Realtek RTL8192CU Wireless LAN 802.11n USB 2.0 Network Adapter&quot;,</span><br><span class="line">                &quot;name&quot;: 11,</span><br><span class="line">                &quot;ip_address&quot;: &quot;192.168.1.110&quot;,</span><br><span class="line">                &quot;net_mask&quot;: [</span><br><span class="line">                    &quot;255.255.255.0&quot;,</span><br><span class="line">                    &quot;64&quot;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;mac&quot;: &quot;0A:01:27:00:00:00&quot;,</span><br><span class="line">                &quot;model&quot;: &quot;[00000013] VirtualBox Host-Only Ethernet Adapter&quot;,</span><br><span class="line">                &quot;name&quot;: 13,</span><br><span class="line">                &quot;ip_address&quot;: &quot;192.168.56.1&quot;,</span><br><span class="line">                &quot;net_mask&quot;: [</span><br><span class="line">                    &quot;255.255.255.0&quot;,</span><br><span class="line">                    &quot;64&quot;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;mac&quot;: &quot;14:CF:22:FF:48:34&quot;,</span><br><span class="line">                &quot;model&quot;: &quot;[00000017] Microsoft Virtual WiFi Miniport Adapter&quot;,</span><br><span class="line">                &quot;name&quot;: 17,</span><br><span class="line">                &quot;ip_address&quot;: &quot;&quot;,</span><br><span class="line">                &quot;net_mask&quot;: &quot;&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;mac&quot;: &quot;14:CF:22:FF:48:34&quot;,</span><br><span class="line">                &quot;model&quot;: &quot;Intel Adapter&quot;,</span><br><span class="line">                &quot;name&quot;: 17,</span><br><span class="line">                &quot;ip_address&quot;: &quot;192.1.1.1&quot;,</span><br><span class="line">                &quot;net_mask&quot;: &quot;&quot;</span><br><span class="line">            &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    linux_data = &#123;</span><br><span class="line">        &quot;asset_type&quot;: &quot;server&quot;,</span><br><span class="line">        &quot;manufacturer&quot;: &quot;innotek GmbH&quot;,</span><br><span class="line">        &quot;sn&quot;: &quot;00001&quot;,</span><br><span class="line">        &quot;model&quot;: &quot;VirtualBox&quot;,</span><br><span class="line">        &quot;uuid&quot;: &quot;E8DE611C-4279-495C-9B58-502B6FCED076&quot;,</span><br><span class="line">        &quot;wake_up_type&quot;: &quot;Power Switch&quot;,</span><br><span class="line">        &quot;os_distribution&quot;: &quot;Ubuntu&quot;,</span><br><span class="line">        &quot;os_release&quot;: &quot;Ubuntu 16.04.3 LTS&quot;,</span><br><span class="line">        &quot;os_type&quot;: &quot;Linux&quot;,</span><br><span class="line">        &quot;cpu_count&quot;: &quot;2&quot;,</span><br><span class="line">        &quot;cpu_core_count&quot;: &quot;4&quot;,</span><br><span class="line">        &quot;cpu_model&quot;: &quot;Intel(R) Core(TM) i5-2300 CPU @ 2.80GHz&quot;,</span><br><span class="line">        &quot;ram&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;slot&quot;: &quot;A1&quot;,</span><br><span class="line">                &quot;capacity&quot;: 8,</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;ram_size&quot;: 3.858997344970703,</span><br><span class="line">        &quot;nic&quot;: [],</span><br><span class="line">        &quot;physical_disk_driver&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;model&quot;: &quot;VBOX HARDDISK&quot;,</span><br><span class="line">                &quot;size&quot;: &quot;50&quot;,</span><br><span class="line">                &quot;sn&quot;: &quot;VBeee1ba73-09085302&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    update_test(linux_data)</span><br><span class="line">    update_test(windows_data)</span><br></pre></td></tr></table></figure></p>
@@ -189,311 +212,252 @@
 <p>对于_create_CPU(self, asset)等方法，教程这里对数据采取了最大限度的容忍，实际情况下你可能还要对数据的完整性、合法性、数据类型进行检测，根据不同的检测情况，是被动接收，还是打回去要求重新收集，请自行决定。这里的业务逻辑非常复杂，不可能面面俱到。后面的内存、硬盘和网卡也是一样的。</p>
 <p>对于_delete_original_asset(self)方法，这里的逻辑是已经审批上线的资产，就从待审批区删除。也可以设置为修改成已审批状态但不删除，只是在管理界面特别处理，不让再次审批，灰色显示，不过这样可能导致待审批区越来越大。</p>
 <h3 id="四、测试资产上线功能"><a href="#四、测试资产上线功能" class="headerlink" title="四、测试资产上线功能"></a>四、测试资产上线功能</h3><p>运行 report_assets.py 脚本：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190314/3e6pBv80JgwC.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190314/3e6pBv80JgwC.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>在admin的新资产待审批区选择刚才的3条资产，然后选择上线action并点击‘执行’按钮，稍等片刻，显示成功批准 3 条新资产上线！的绿色提示信息，同时新资产也从待审批区被删除了，如下图所示：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190314/uA2Gi5FKPKsG.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190314/uA2Gi5FKPKsG.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>往后，如果我们再次发送这3个服务器资产的信息，那就不是在待审批区了，而是已上线资产了。</p>
 
-            <div class="post-copyright">
-    <div class="content">
-        <p>最后更新： 2019年04月20日 15:01</p>
-        <p>原始链接： <a class="post-url" href="/2019/03/10/7、审批新资产/" title="CMDB-审批新资产（七）">http://zhdya.okay686.cn/2019/03/10/7、审批新资产/</a></p>
-        <footer>
-            <a href="http://zhdya.okay686.cn">
-                <img src="/images/logo.png" alt="Zhdya">
-                Zhdya
-            </a>
-        </footer>
-    </div>
-</div>
-
-      
-        
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
             
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;">赏</a>
-</div>
-
-<div id="reward" class="post-modal reward-lay">
-    <a class="close" href="javascript:;" id="reward-close">×</a>
-    <span class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        老板，中午饭可否加餐？
-        <i class="icon icon-quote-right"></i>
-    </span>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/Python3">Python3</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/django">django</a>
+                
+                  <a class="hover-with-bg" href="/tags/python">python</a>
+                
+                  <a class="hover-with-bg" href="/tags/CMDB">CMDB</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
         </div>
-        <div class="reward-select">
-            
-            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
-                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
-            </label>
-            
-            
-            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
-                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
-            </label>
-            
-        </div>
-    </div>
-</div>
-
-
-        
-    </div>
-    <footer class="article-footer">
-        
-        
-<div class="post-share">
-    <a href="javascript:;" id="share-sub" class="post-share-fab">
-        <i class="fa fa-share-alt"></i>
-    </a>
-    <div class="post-share-list" id="share-list">
-        <ul class="share-icons">
-          <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/03/10/7、审批新资产/&title=《CMDB-审批新资产（七）》 — 拼！就对了！&pic=/images/django.jpg" data-title="微博">
-              <i class="fa fa-weibo"></i>
-            </a>
-          </li>
-          <li>
-            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
-              <i class="fa fa-weixin"></i>
-            </a>
-          </li>
-          <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/03/10/7、审批新资产/&title=《CMDB-审批新资产（七）》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
-              <i class="fa fa-qq"></i>
-            </a>
-          </li>
-          <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/03/10/7、审批新资产/" data-title="Facebook">
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CMDB-审批新资产（七）》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/03/10/7、审批新资产/&via=http://zhdya.okay686.cn" data-title="Twitter">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/03/10/7、审批新资产/" data-title="Google+">
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </li>
-        </ul>
-     </div>
-</div>
-<div class="post-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;" id="wxShare-close">×</a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/03/10/7、审批新资产/" alt="微信分享二维码">
-</div>
-
-<div class="mask"></div>
-
-        
-        <ul class="article-footer-menu">
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-    </footer>
-  </div>
-</article>
-
-
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一、自定义admin的actions"><span class="post-toc-text">一、自定义admin的actions</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#说明："><span class="post-toc-text">说明：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#二、创建测试用例"><span class="post-toc-text">二、创建测试用例</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三、批准资产上线"><span class="post-toc-text">三、批准资产上线</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四、测试资产上线功能"><span class="post-toc-text">四、测试资产上线功能</span></a></li></ol>
-        </nav>
-    </aside>
-    
-
-<nav id="article-nav">
-  
-    <a href="/2019/03/11/8、已上线资产信息更新/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          CMDB-已上线资产信息更新（八）
-        
-      </span>
-    </a>
-  
-  
-    <a href="/2019/03/09/6、新资产待审批区/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">CMDB-新资产待审批区（六）</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
-  
-</nav>
-
-
-
-    
-        <div id="SOHUCS" sid="7、审批新资产"></div>
-<script type="text/javascript">
-    (function(){
-        var appid = 'cyu4TKmA0';
-        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
-        var width = window.innerWidth || document.documentElement.clientWidth;
-        if (width < 960) {
-            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
-    
-</section>
-        
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;ディレクトリ</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: false,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
-</div>
-<script src="/js/search.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
 
 
 
-
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
 
 
-  <script src="/js/pop-img.js"></script>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
   <script>
-     $(".article-entry p img").popImg();
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
   </script>
 
-  </div>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "CMDB-审批新资产（七）&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

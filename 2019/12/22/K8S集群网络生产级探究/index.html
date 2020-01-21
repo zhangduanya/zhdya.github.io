@@ -1,152 +1,171 @@
 <!DOCTYPE html>
-<html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>K8S集群网络生产级探究 | 拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
-  
-  <meta name="description" content="K8S集群网络网络基础知识1、公司网络架构  路由器：网络出口 核心层：主要完成数据高效转发、链路备份等 汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能 接入层：工作站的接入  1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，">
-<meta name="keywords" content="Kubernets,K8S">
-<meta property="og:type" content="article">
-<meta property="og:title" content="K8S集群网络生产级探究">
-<meta property="og:url" content="http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="K8S集群网络网络基础知识1、公司网络架构  路由器：网络出口 核心层：主要完成数据高效转发、链路备份等 汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能 接入层：工作站的接入  1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191223/xOKekoVNmr2K.png?imageslim">
-<meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/switch.png">
-<meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/router.png">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191223/EAoHcLQudsD1.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191223/0Nq3u2ItmoPq.png?imageslim">
-<meta property="og:image" content="http://myimage.okay686.cn/okay686cn/20191223/ENnBVpuenmME.png?imageslim">
-<meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/pod-to-pod-2.gif">
-<meta property="og:image" content="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/pod-to-pod-3.gif">
-<meta property="og:updated_time" content="2020-01-07T12:55:14.128Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="K8S集群网络生产级探究">
-<meta name="twitter:description" content="K8S集群网络网络基础知识1、公司网络架构  路由器：网络出口 核心层：主要完成数据高效转发、链路备份等 汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能 接入层：工作站的接入  1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，">
-<meta name="twitter:image" content="http://myimage.okay686.cn/okay686cn/20191223/xOKekoVNmr2K.png?imageslim">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+<html lang="">
 
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>K8S集群网络生产级探究 ~ 拼！就对了！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-K8S集群网络生产级探究" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 class="post-title" itemprop="name">
-      K8S集群网络生产级探究
-    </h1>
-    <div class="post-title-bar">
-      <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/K8s/">K8s</a>
-                  
-              </li>
           
-        <li>
-          <i class="fa fa-calendar"></i>  2019-12-22
-        </li>
-        <li>
-          <i class="fa fa-eye"></i>
-          <span id="busuanzi_value_page_pv"></span>
-        </li>
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
       </ul>
     </div>
-  
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  Sunday, December 22nd 2019, 12:00 am
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    2.5k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      9 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
 
           
-      </header>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
     
-    <div class="article-entry post-content" itemprop="articleBody">
       
-            
-            <h3 id="K8S集群网络"><a href="#K8S集群网络" class="headerlink" title="K8S集群网络"></a>K8S集群网络</h3><h4 id="网络基础知识"><a href="#网络基础知识" class="headerlink" title="网络基础知识"></a>网络基础知识</h4><h5 id="1、公司网络架构"><a href="#1、公司网络架构" class="headerlink" title="1、公司网络架构"></a>1、公司网络架构</h5><p><img src="http://myimage.okay686.cn/okay686cn/20191223/xOKekoVNmr2K.png?imageslim" alt="mark"></p>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h3 id="K8S集群网络"><a href="#K8S集群网络" class="headerlink" title="K8S集群网络"></a>K8S集群网络</h3><h4 id="网络基础知识"><a href="#网络基础知识" class="headerlink" title="网络基础知识"></a>网络基础知识</h4><h5 id="1、公司网络架构"><a href="#1、公司网络架构" class="headerlink" title="1、公司网络架构"></a>1、公司网络架构</h5><p><img src="http://myimage.okay686.cn/okay686cn/20191223/xOKekoVNmr2K.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <ul>
 <li><strong>路由器</strong>：网络出口</li>
 <li><strong>核心层</strong>：主要完成数据高效转发、链路备份等</li>
@@ -156,7 +175,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、一个局域网内主机A（10）和主机B（20）之间通讯流程：</span><br><span class="line">网段：192.168.31.0/24</span><br><span class="line">源IP和目的IP均在同一子网下。</span><br><span class="line">四元组：源IP 源MAC 目的IP 目的MAC</span><br><span class="line"></span><br><span class="line">- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 </span><br><span class="line"></span><br><span class="line">2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：</span><br><span class="line">VLAN1:192.168.31.0/24</span><br><span class="line">VLAN2:192.168.32.0/24</span><br><span class="line"></span><br><span class="line">- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。</span><br></pre></td></tr></table></figure>
 <h5 id="2、交换技术"><a href="#2、交换技术" class="headerlink" title="2、交换技术"></a>2、交换技术</h5><p>有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？</p>
 <p>想要搞懂这些问题得从交换机、路由器讲起。</p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/switch.png" alt=""></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/switch.png" srcset="/img/loading.gif" alt=""></p>
 <p>交换机工作在OSI参考模型的第二次，即数据链路层。交换机拥有一条高带宽的背部总线交换矩阵，在同一时间可进行多个端口对之间的数据传输。</p>
 <p><strong>交换技术分为2层和3层：</strong></p>
 <ul>
@@ -180,7 +199,7 @@
 <li>分割广播域，减少广播风暴影响范围。</li>
 <li>提高网络安全性，根据不同的部门、用途、应用划分不同网段</li>
 </ul>
-<h5 id="3、路由技术"><a href="#3、路由技术" class="headerlink" title="3、路由技术"></a>3、路由技术</h5><p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/router.png" alt=""></p>
+<h5 id="3、路由技术"><a href="#3、路由技术" class="headerlink" title="3、路由技术"></a>3、路由技术</h5><p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/router.png" srcset="/img/loading.gif" alt=""></p>
 <p>路由器主要分为两个端口类型：LAN口和WAN口</p>
 <ul>
 <li><p>WAN口：配置公网IP，接入到互联网，转发来自LAN口的IP数据包。</p>
@@ -271,7 +290,7 @@
 </tr>
 </tbody>
 </table>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191223/EAoHcLQudsD1.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191223/EAoHcLQudsD1.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <h5 id="5、TCP-UDP协议"><a href="#5、TCP-UDP协议" class="headerlink" title="5、TCP/UDP协议"></a>5、TCP/UDP协议</h5><p>TCP（Transmission Control Protocol，传输控制协议），面向连接协议，双方先建立可靠的连接，再发送数据。适用于传输数据量大，可靠性要求高的应用场景。</p>
 <p>UDP（User Data Protocol，用户数据报协议），面向非连接协议，不与对方建立连接，直接将数据包发送给对方。适用于一次只传输少量的数据，可靠性要求低的应用场景。相对TCP传输速度快。</p>
 <h4 id="4-2-Kubernetes网络模型"><a href="#4-2-Kubernetes网络模型" class="headerlink" title="4.2 Kubernetes网络模型"></a>4.2 Kubernetes网络模型</h4><p>Kubernetes 要求所有的网络插件实现必须满足如下要求：</p>
@@ -295,10 +314,10 @@
 </li>
 </ul>
 <p>Docker容器网络示意图如下：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191223/0Nq3u2ItmoPq.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191223/0Nq3u2ItmoPq.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <h5 id="2、Pod-网络"><a href="#2、Pod-网络" class="headerlink" title="2、Pod 网络"></a>2、Pod 网络</h5><p><strong>问题</strong>：Pod是K8S最小调度单元，一个Pod由一个容器或多个容器组成，当多个容器时，怎么都用这一个Pod IP？</p>
 <p><strong>实现</strong>：k8s会在每个Pod里先启动一个infra container小容器，然后让其他的容器连接进来这个网络命名空间，然后其他容器看到的网络试图就完全一样了。即网络设备、IP地址、Mac地址等。这就是解决网络共享的一种解法。在Pod的IP地址就是infra container的IP地址。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191223/ENnBVpuenmME.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191223/ENnBVpuenmME.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
 <p>在 Kubernetes 中，每一个 Pod 都有一个真实的 IP 地址，并且每一个 Pod 都可以使用此 IP 地址与 其他 Pod 通信。</p>
 <p>Pod之间通信会有两种情况：</p>
 <ul>
@@ -307,7 +326,7 @@
 </ul>
 <p><strong>先看下第一种情况：两个Pod在同一个Node上</strong></p>
 <p>同节点Pod之间通信道理与Docker网络一样的，如下图：</p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/pod-to-pod-2.gif" style="zoom:50%;"></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/pod-to-pod-2.gif" srcset="/img/loading.gif" style="zoom:50%;"></p>
 <ol>
 <li>对 Pod1 来说，eth0 通过虚拟以太网设备（veth0）连接到 root namespace；</li>
 <li>网桥 cbr0 中为 veth0 配置了一个网段。一旦数据包到达网桥，网桥使用ARP 协议解析出其正确的目标网段 veth1；</li>
@@ -316,7 +335,7 @@
 </ol>
 <p><strong>再看下第二种情况：两个Pod在不同Node上</strong></p>
 <p>K8S网络模型要求Pod IP在整个网络中都可访问，这种需求是由第三方网络组件实现。</p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/pod-to-pod-3.gif" style="zoom:50%;"></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/pod-to-pod-3.gif" srcset="/img/loading.gif" style="zoom:50%;"></p>
 <h5 id="3、CNI（容器网络接口）"><a href="#3、CNI（容器网络接口）" class="headerlink" title="3、CNI（容器网络接口）"></a>3、CNI（容器网络接口）</h5><p>CNI（Container Network Interface，容器网络接口)：是一个容器网络规范，Kubernetes网络采用的就是这个CNI规范，CNI实现依赖两种插件，一种CNI Plugin是负责容器连接到主机，另一种是IPAM负责配置容器网络命名空间的网络。</p>
 <p>CNI插件默认路径：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ls /opt/cni/bin/</span><br></pre></td></tr></table></figure>
@@ -327,304 +346,245 @@
 <p>当 kubelet 组件需要创建 Pod 的时候，先调用dockershim它先创建一个 Infra 容器。然后调用 CNI 插件为 Infra 容器配置网络。</p>
 <p>这两个路径在kubelet启动参数中定义： </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--network-plugin=cni \</span><br><span class="line">--cni-conf-dir=/etc/cni/net.d \</span><br><span class="line">--cni-bin-dir=/opt/cni/bin</span><br></pre></td></tr></table></figure>
-            <div class="post-copyright">
-    <div class="content">
-        <p>最后更新： 2020年01月07日 20:55</p>
-        <p>原始链接： <a class="post-url" href="/2019/12/22/K8S集群网络生产级探究/" title="K8S集群网络生产级探究">http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/</a></p>
-        <footer>
-            <a href="http://zhdya.okay686.cn">
-                <img src="/images/logo.png" alt="Zhdya">
-                Zhdya
-            </a>
-        </footer>
-    </div>
-</div>
-
-      
-        
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
             
-<div class="page-reward">
-    <a id="rewardBtn" href="javascript:;">赏</a>
-</div>
-
-<div id="reward" class="post-modal reward-lay">
-    <a class="close" href="javascript:;" id="reward-close">×</a>
-    <span class="reward-title">
-        <i class="icon icon-quote-left"></i>
-        老板，中午饭可否加餐？
-        <i class="icon icon-quote-right"></i>
-    </span>
-    <div class="reward-content">
-        
-        <div class="reward-code">
-            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+              <span>
+                <i class="iconfont icon-inbox"></i>
+                
+                  <a class="hover-with-bg" href="/categories/K8s">K8s</a>
+                  &nbsp;
+                
+              </span>&nbsp;&nbsp;
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/Kubernets">Kubernets</a>
+                
+                  <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
         </div>
-        <div class="reward-select">
-            
-            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
-                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
-            </label>
-            
-            
-            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
-                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
-            </label>
-            
-        </div>
-    </div>
-</div>
-
-
-        
-    </div>
-    <footer class="article-footer">
-        
-        
-<div class="post-share">
-    <a href="javascript:;" id="share-sub" class="post-share-fab">
-        <i class="fa fa-share-alt"></i>
-    </a>
-    <div class="post-share-list" id="share-list">
-        <ul class="share-icons">
-          <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/&title=《K8S集群网络生产级探究》 — 拼！就对了！&pic=/images/k8s.jpg" data-title="微博">
-              <i class="fa fa-weibo"></i>
-            </a>
-          </li>
-          <li>
-            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
-              <i class="fa fa-weixin"></i>
-            </a>
-          </li>
-          <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/&title=《K8S集群网络生产级探究》 — 拼！就对了！&source=Tough times never last, but tough people do." data-title="QQ">
-              <i class="fa fa-qq"></i>
-            </a>
-          </li>
-          <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/" data-title="Facebook">
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《K8S集群网络生产级探究》 — 拼！就对了！&url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/&via=http://zhdya.okay686.cn" data-title="Twitter">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/" data-title="Google+">
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </li>
-        </ul>
-     </div>
-</div>
-<div class="post-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;" id="wxShare-close">×</a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://zhdya.okay686.cn/2019/12/22/K8S集群网络生产级探究/" alt="微信分享二维码">
-</div>
-
-<div class="mask"></div>
-
-        
-        <ul class="article-footer-menu">
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-    </footer>
-  </div>
-</article>
-
-
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#K8S集群网络"><span class="post-toc-text">K8S集群网络</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网络基础知识"><span class="post-toc-text">网络基础知识</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、公司网络架构"><span class="post-toc-text">1、公司网络架构</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、交换技术"><span class="post-toc-text">2、交换技术</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3、路由技术"><span class="post-toc-text">3、路由技术</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#4、OSI七层模型"><span class="post-toc-text">4、OSI七层模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#5、TCP-UDP协议"><span class="post-toc-text">5、TCP/UDP协议</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4-2-Kubernetes网络模型"><span class="post-toc-text">4.2 Kubernetes网络模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、Docker容器网络模型"><span class="post-toc-text">1、Docker容器网络模型</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、Pod-网络"><span class="post-toc-text">2、Pod 网络</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3、CNI（容器网络接口）"><span class="post-toc-text">3、CNI（容器网络接口）</span></a></li></ol></li></ol></li></ol>
-        </nav>
-    </aside>
-    
-
-<nav id="article-nav">
-  
-    <a href="/2019/12/23/一、Ceph介绍/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          一、Ceph介绍
-        
-      </span>
-    </a>
-  
-  
-    <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Flannel网络组件实践(vxlan、host-gw)</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
-  
-</nav>
-
-
-
-    
-        <div id="SOHUCS" sid="K8S集群网络生产级探究"></div>
-<script type="text/javascript">
-    (function(){
-        var appid = 'cyu4TKmA0';
-        var conf = '6f0306692caa6c8b75d928a4fc3595c4';
-        var width = window.innerWidth || document.documentElement.clientWidth;
-        if (width < 960) {
-            window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
-    
-</section>
-        
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;ディレクトリ</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
   </div>
 </footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: false,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
-</div>
-<script src="/js/search.js"></script>
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
 
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
 
 
 
-
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
 
 
-  <script src="/js/pop-img.js"></script>
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
   <script>
-     $(".article-entry p img").popImg();
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
   </script>
 
-  </div>
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "K8S集群网络生产级探究&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

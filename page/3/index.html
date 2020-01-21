@@ -1,1578 +1,1227 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>拼！就对了！</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="laoqi,laoqi's Blog">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="description" content="Tough times never last, but tough people do.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="拼！就对了！">
-<meta property="og:url" content="http://zhdya.okay686.cn/page/3/index.html">
-<meta property="og:site_name" content="拼！就对了！">
-<meta property="og:description" content="Tough times never last, but tough people do.">
-<meta property="og:locale" content="default">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="拼！就对了！">
-<meta name="twitter:description" content="Tough times never last, but tough people do.">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>拼！就对了！</title>
 
-  
-  
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
 
 </head>
-</html>
+
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">五谷杂粮，百味人生。</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>主页</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>归档</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>关于</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        五谷杂粮，百味人生。
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                    <h3>
-                        K8S生态，Django，python专列！
-                    </h3>
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="Github" target="_blank" href="//github.com/zhangduanya">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap">
-  
-    <article id="post-一、项目需求分析" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/05/一、项目需求分析/">Django博客开发：项目需求分析（一）</a>
-    </h1>
-  
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">アーカイブ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">カテゴリー</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">タグ</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">本ブログ情報　</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/default.png')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+          </div>
 
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Django2/">Django2</a>
-                  
-              </span>
+            <div class="scroll-down-bar">
+              <i class="fas fa-angle-down scroll-down-arrow"></i>
+            </div>
           
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/05/一、项目需求分析/">
-                
-                <img src="http://zhdya.okay686.cn//images/d47.jpg" alt="Django博客开发：项目需求分析（一）" title="Django博客开发：项目需求分析（一）">
-                
-            </a>
         </div>
-        <div class="article-feed">
-            <p>
-                当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      <div class="container nopadding-md">
+        <div class="py-5 z-depth-3" id="board">
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/05/一、项目需求分析/">
+        <p class="h4 index-header">Django博客开发：项目需求分析（一）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">当我们要开发一个项目的时候，首先需要了解我们项目的具体需求，根据需求类型划分网站功能，并详细了解这些需求的业务流程。然后更具需求和业务流程进行数据库设计。
 blog的功能相对比较简单，主要以文章为主。
-==从功能需求来看==，这个Bl...
-            </p>
+==从功能需求来看==，这个Blog的功能分为：网站首页、文章分类、文章内容、幻灯图片、文章推荐、文章排行、热门推荐、文章搜索、友情链接。
+1、网站首页：网站首页是整个网站的主界面，也是网站入口界面，里面主要展示Blog的动态信息及Blog功能导。网站动态信息以文章为主，如最新文章、幻灯图片、推荐阅读、文章排行、热门推荐、友情链接等。导航栏主要是将文章的分类的链接展示在首页，方便用户浏览。
+2、文章分类：主要展示文章分类信息及链接，方便用户按需查看。文章分类可以在后台添加删除。
+3、文章内容：主要展示文章所属分类、文章所属标签、文章内容、作者信息，发布时间信息。可以通过后台增、删、改。
+4、幻灯图片：在网站首页，通过图片和文字展示一些重要信息，可以通过后台添加图片、图片描述、图片链接。
+5、文章推荐：推荐一些重要的文章，可以在后台进行推荐。
+6、文章排行：可根据文章浏览数，按时间段进行查</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-05&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django2">Django2</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/django2-0">django2.0</a>&nbsp;
+          
+            <a href="/tags/django_blog">django_blog</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-05</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/django2.0/" class="color5">django2.0</a>
-      
-    <a href="/tags/django_blog/" class="color2">django_blog</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/05/一、项目需求分析/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-BeautifulSoup中find和find_all的用法" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/BeautifulSoup中find和find_all的用法/">BeautifulSoup中find和find_all的用法</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/04/BeautifulSoup中find和find_all的用法/">
-                
-                <img src="http://zhdya.okay686.cn//images/16.jpg" alt="BeautifulSoup中find和find_all的用法" title="BeautifulSoup中find和find_all的用法">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                在爬取网页中有用的信息时，通常是对存在于网页中的文本或各种不同标签的属性值进行查找，Beautiful Soup中内置了一些查找方式，最常用的是 find() 和 find_all() 函数。
-同时通过soup.find_all()得...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/04/BeautifulSoup中find和find_all的用法/">
+        <p class="h4 index-header">BeautifulSoup中find和find_all的用法</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">在爬取网页中有用的信息时，通常是对存在于网页中的文本或各种不同标签的属性值进行查找，Beautiful Soup中内置了一些查找方式，最常用的是 find() 和 find_all() 函数。
+同时通过soup.find_all()得到的所有符合条件的结果和soup.select()一样都是列表list，而soup.find()只返回第一个符合条件的结果，所以soup.find()后面可以直接接.text或者get_text()来获得标签中的文本。
+一、find()用法find(name,attrs,recursive,text,**wargs)
+例子：&lt;ul id=&quot;producers&quot;&gt;          &lt;li class=&quot;producerlist&quot;&gt;              &lt;div class=&quot;name&quot;&gt;plants&lt;/div&gt;              &lt;div class=&quot;number&quot;&gt;100000&lt;/div&gt;</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-04&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python3">python3</a>&nbsp;
+          
+            <a href="/tags/BeautifulSoup">BeautifulSoup</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-04</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python3/" class="color3">python3</a>
-      
-    <a href="/tags/BeautifulSoup/" class="color4">BeautifulSoup</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/04/BeautifulSoup中find和find_all的用法/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-python3爬取墨迹天气并发送给微信好友" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/03/python3爬取墨迹天气并发送给微信好友/">
+        <p class="h4 index-header">python3爬取墨迹天气并发送给微信好友</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/03/python3爬取墨迹天气并发送给微信好友/">python3爬取墨迹天气并发送给微信好友</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/04/03/python3爬取墨迹天气并发送给微信好友/">
-                
-                <img src="http://zhdya.okay686.cn//images/13.jpg" alt="python3爬取墨迹天气并发送给微信好友" title="python3爬取墨迹天气并发送给微信好友">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                需求：
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">需求：
 
 爬取墨迹天气的信息，包括温湿度、风速，生活tips等信息；
 可选输入需要查询的城市，自动爬取相应信息；
 链接微信，发送给指定好友或群；
 
 思路比较清晰，主要分两块，一是爬虫，二是用python链接微信（非企业版微信）
-先随便...
-            </p>
+先随便观察一个城市的墨迹天气，例如苏州市的url
+https://tianqi.moji.com/weather/china/jiangsu/suzhou
+多观察几个城市的url可发现共同点就是，前面的都一样，后面的是以省拼音/市拼音结尾的。当然直辖市两者拼音一样。当然还有一些额外情况，比如山西和陕西，后者的拼音是Shaanxi，这个用户输入的时候注意一下；
+第一部分：
+将汉字转换为拼音；
+安装了第三方库xpinyin；# prov = input(&quot;请输入省份：&quot;)# city = input(&quot;请输入城市：&quot;)prov = &quot;江苏&quot;city = &quot;苏州&quot;pin = Pinyin()prov_pin = pin.get_pinyin(prov,&apos;&apos;)      </div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-03&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python3">python3</a>&nbsp;
+          
+            <a href="/tags/BeautifulSoup">BeautifulSoup</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-04-03</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python3/" class="color3">python3</a>
-      
-    <a href="/tags/BeautifulSoup/" class="color4">BeautifulSoup</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/04/03/python3爬取墨迹天气并发送给微信好友/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-【Python3爬虫】常见反爬虫措施及解决办法" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/">【Python3爬虫】常见反爬虫措施及解决办法</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/">
-                
-                <img src="http://zhdya.okay686.cn//images/21.jpg" alt="【Python3爬虫】常见反爬虫措施及解决办法" title="【Python3爬虫】常见反爬虫措施及解决办法">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/">
+        <p class="h4 index-header">【Python3爬虫】常见反爬虫措施及解决办法</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、UserAgentUserAgent中文名为用户代理，它使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本等信息。对于一些网站来说，它会检查我们发送的请求中所携带的UserAgent字段，如果非浏览器，就会被识别为爬虫，一旦被识别出来， 我们的爬虫也就无法正常爬取数据了。这里先看一下在不设置UserAgent字段时该字段的值会是什么：import requestsurl = &quot;http://www.baidu.com&quot;res = requests.get(url)
+解决办法：1、收集整理常见的UserAgent以供使用ua_list =     [&quot;Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_2 like Mac OS X; zh-cn) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5&quot;,    &quot;Mozilla/5.0 (iPhone; U; CPU iPho</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-31&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/%E7%88%AC%E8%99%AB">爬虫</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-31</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/爬虫/" class="color3">爬虫</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/31/【Python3爬虫】常见反爬虫措施及解决办法/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-urllib.parse.urlencode转换get请求参数" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/22/urllib.parse.urlencode转换get请求参数/">urllib.parse.urlencode转换get请求参数</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/22/urllib.parse.urlencode转换get请求参数/">
-                
-                <img src="http://zhdya.okay686.cn//images/22.jpg" alt="urllib.parse.urlencode转换get请求参数" title="urllib.parse.urlencode转换get请求参数">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                浏览器地址栏搜索 刘若英https://www.baidu.com/s?word=刘若英&amp;tn=71069079_1_hao_pg&amp;ie=utf-8
-但是复制到文件中是这样的：https://www.baidu.com...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/22/urllib.parse.urlencode转换get请求参数/">
+        <p class="h4 index-header">urllib.parse.urlencode转换get请求参数</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">浏览器地址栏搜索 刘若英https://www.baidu.com/s?word=刘若英&amp;tn=71069079_1_hao_pg&amp;ie=utf-8
+但是复制到文件中是这样的：https://www.baidu.com/s?word=%E5%88%98%E8%8B%A5%E8%8B%B1&amp;tn=71069079_1_hao_pg&amp;ie=utf-8
+这是因为浏览器对中文请求参数进行了转码用代码访问网站所发的请求中如果有中文也必须是转码之后的。这里需要用到urllib.parse.urlencode
+ 方法。这个方法的作用就是将字典里面所有的键值转化为query-string格式（key=value&amp;key=value），并且将中文转码。
+import urllib.requestimport urllib.parseimport osurl = &apos;http://www.baidu.com/s?&apos;wd = input(&apos;请输入要搜索关键字： &apos;)&quot;&quot;&quot;word=刘若英&amp;tn</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-22</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/22/urllib.parse.urlencode转换get请求参数/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-12、dashboard仪表盘" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/15/12、dashboard仪表盘/">
+        <p class="h4 index-header">CMDB-dashboard仪表盘（十二）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/12、dashboard仪表盘/">CMDB-dashboard仪表盘（十二）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/15/12、dashboard仪表盘/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-dashboard仪表盘（十二）" title="CMDB-dashboard仪表盘（十二）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">对于运维管理平台，一个总览的dashboard仪表盘界面是必须有的，不但提升整体格调，也有利于向老板‘邀功请赏’。
 dashboard页面必须酷炫吊炸天，所以界面元素应当美观、丰富、富有冲击力。
-完整的dashboard.html文件...
-            </p>
+完整的dashboard.html文件代码如下：dashboard.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/assets/dashboard.html
+一、资产状态占比图首先，制作一个资产状态百分比表盘，用于显示上线、下线、未知、故障和备用五种资产在总资产中的占比。注意是占比，不是数量！
+按照AdminLTE中提供的示例，在HTML中添加相应的标签，在script中添加相应的JS代码（jQueryKnob）。JS代码基本照抄，不需要改动。对于显示的圆圈，可以修改其颜色、大小、形态、是否只读等属性，可以参照AdminLTE中的范例。
+最重要的是，需要从数据库中获取相应的数据，修改assets/views.py中的dashboard视图，最终如下：def dashboard(request):    total</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-15&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-15</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/15/12、dashboard仪表盘/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-11、资产详细页面" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/14/11、资产详细页面/">
+        <p class="h4 index-header">CMDB-资产详细页面（十一）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/14/11、资产详细页面/">CMDB-资产详细页面（十一）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/14/11、资产详细页面/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-资产详细页面（十一）" title="CMDB-资产详细页面（十一）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">在资产的详细页面，我们将尽可能地将所有的信息都显示出来，并保持美观、整齐。
 教程中实现了主要的服务器资产页面，对于其它类型的资产详细页面，可参照完成，并不复杂。
-完整的detail.html页面代码如下：detail.htmlhttp...
-            </p>
+完整的detail.html页面代码如下：detail.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/assets/detail.html
+主要代码全部集中在：&lt;section class=&quot;content&quot;&gt;
+分别用几个表格将概览、服务器、CPU、内存、硬盘和网卡的信息展示出来了。并且，AdminLTE为我们提供了一个折叠的功能，也是非常酷的。
+这个HTML文件没有太多需要额外解释的内容，都是一些很基础的模板语言，构造&lt;table&gt;
+然后插入数据。如果没有数据，就以‘N/A’代替。最后在底部添加一个返回资产总表的链接。
+下面是一个展示图：
+
+</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-14&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-14</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/14/11、资产详细页面/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-10、资产总表" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/13/10、资产总表/">
+        <p class="h4 index-header">CMDB-资产总表（十）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/13/10、资产总表/">CMDB-资产总表（十）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/13/10、资产总表/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-资产总表（十）" title="CMDB-资产总表（十）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                当前，我们的资产总表如下图所示，还没有任何数据：
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">当前，我们的资产总表如下图所示，还没有任何数据：
 
 这需要我们从数据库中查询数据，然后渲染到前端页面中。
 数据的获取很简单，一句：assets = models.Asset.objects.all()
-就搞定。当然，你也可以设置过滤条...
-            </p>
+就搞定。当然，你也可以设置过滤条件，添加分页等等。
+而在前端，我们往往需要以表格的形式，规整、美观、可排序的展示出来。这里推荐一个前端插件 datatables，是一个非常好的表格插件，功能强大、配置简单。
+其官网为：https://datatables.net/ 中文网站：http://datatables.club/
+在AdminLTE中，集成了datatables插件，无需额外下载和安装，直接引入使用就可以。
+下面给出一个完整的index.html模板代码：index.htmlhttps://github.com/zhangduanya/mycmdb/blob/master/templates/assets/index.html
+主要是新增了表格相关的html代码和初始化表格的js代码。
+&lt;table id=&quot;assets_table&quot; class=&qu</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-13</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/13/10、资产总表/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-9、前端框架AdminLTE" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/12/9、前端框架AdminLTE/">
+        <p class="h4 index-header">CMDB-前端框架AdminLTE（九）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/12/9、前端框架AdminLTE/">CMDB-前端框架AdminLTE（九）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/12/9、前端框架AdminLTE/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-前端框架AdminLTE（九）" title="CMDB-前端框架AdminLTE（九）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                作为CMDB资产管理项目，必须有一个丰富、直观、酷炫的前端页面。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">作为CMDB资产管理项目，必须有一个丰富、直观、酷炫的前端页面。
 适合运维平台的前端框架有很多，开源的也不少，这里选用的是AdminLTE。
 
 AdminLTE托管在GitHub上，可以通过下面的地址下载：
-https://githu...
-            </p>
+https://github.com/almasaeed2010/AdminLTE/releases
+AdminLTE自带JQuery和Bootstrap3框架，无需另外下载。
+AdminLTE自带多种配色皮肤，可根据需要实时调整。
+AdminLTE是移动端自适应的，无需单独考虑。
+AdminLTE自带大量插件，比如表格、Charts等等，可根据需要载入。
+但是AdminLTE的源文件包内，缺少font-awesome-4.6.3和ionicons-2.0.1这两个图标插件，它是通过CDN的形式加载的，如果网络不太好，加载可能比较困难或者缓慢，最好用本地静态文件的形式。教程在Github的包内附带上了这两个插件，可以直接使用，当然你自己下载安装也行。
+一、创建base.htmlAdminLTE源文件包里有个index.html页面文件，可以利用它修改出我们CMDB项目需要的基本框架</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-12&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-12</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/12/9、前端框架AdminLTE/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-8、已上线资产信息更新" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/11/8、已上线资产信息更新/">CMDB-已上线资产信息更新（八）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/11/8、已上线资产信息更新/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-已上线资产信息更新（八）" title="CMDB-已上线资产信息更新（八）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                前面，我们已经实现了资产进入待审批区、更新待审批区的资产信息以及审批资产上线三个主要功能，还剩下一个最主要的实时更新已上线资产信息的功能。
-在assets/views.py中的report视图，目前是把已上线资产的数据更新流程‘pas...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/11/8、已上线资产信息更新/">
+        <p class="h4 index-header">CMDB-已上线资产信息更新（八）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">前面，我们已经实现了资产进入待审批区、更新待审批区的资产信息以及审批资产上线三个主要功能，还剩下一个最主要的实时更新已上线资产信息的功能。
+在assets/views.py中的report视图，目前是把已上线资产的数据更新流程‘pass’了，现在将其替换成下面的语句：
+update_asset = asset_handler.UpdateAsset(request, asset_obj[0], data)
+report视图变成了下面的样子：views.py
+from django.shortcuts import render, HttpResponsefrom django.views.decorators.csrf import csrf_exemptimport jsonfrom . import modelsfrom . import asset_handler# Create your views here.@csrf_exemptdef report(request):    &quot;&quot;&quot;    通过csrf_exempt装饰器，跳过Django的c</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-11</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/11/8、已上线资产信息更新/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-7、审批新资产" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/10/7、审批新资产/">
+        <p class="h4 index-header">CMDB-审批新资产（七）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/10/7、审批新资产/">CMDB-审批新资产（七）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/10/7、审批新资产/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-审批新资产（七）" title="CMDB-审批新资产（七）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。
 批准上线这一操作是通过admin的自定义actions来实现的。
-Django的ad...
-            </p>
+Django的admin默认有一个delete操作的action，所有在admin中的模型都有这个action，更多的就需要我们自己编写了。
+
+修改/assets/admin.py的代码，新的代码如下：
+from django.contrib import admin# Register your models here.from assets import modelsfrom . import asset_handlerclass NewAssetAdmin(admin.ModelAdmin):    list_display = [&apos;asset_type&apos;, &apos;sn&apos;, &apos;model&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;, &apos;m_time&ap</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-10&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-10</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/10/7、审批新资产/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-6、新资产待审批区" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/09/6、新资产待审批区/">
+        <p class="h4 index-header">CMDB-新资产待审批区（六）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/09/6、新资产待审批区/">CMDB-新资产待审批区（六）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/09/6、新资产待审批区/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-新资产待审批区（六）" title="CMDB-新资产待审批区（六）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、启用admin前面，我们已经完成了数据收集客户端的编写和测试，下面我们就可以在admin中展示和管理资产数据了。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、启用admin前面，我们已经完成了数据收集客户端的编写和测试，下面我们就可以在admin中展示和管理资产数据了。
 首先，通过python manage.py createsuperuser
 创建一个管理员账户。
-然后，进入/ass...
-            </p>
+然后，进入/assets/admin.py文件，写入下面的代码：from django.contrib import admin# Register your models here.from assets import modelsclass NewAssetAdmin(admin.ModelAdmin):    list_display = [&apos;asset_type&apos;, &apos;sn&apos;, &apos;model&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;, &apos;m_time&apos;]    list_filter = [&apos;asset_type&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;]    s</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-09&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-09</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/09/6、新资产待审批区/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-5、Linux下收集数据" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/04/5、Linux下收集数据/">
+        <p class="h4 index-header">CMDB-Linux下收集数据（五）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/04/5、Linux下收集数据/">CMDB-Linux下收集数据（五）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/04/5、Linux下收集数据/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-Linux下收集数据（五）" title="CMDB-Linux下收集数据（五）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                Linux下收集数据就有很多命令和工具了，比Windows方便多了。
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Linux下收集数据就有很多命令和工具了，比Windows方便多了。
 但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。
-下面，我...
-            </p>
+下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码：
+前提需要现在被收集的虚机上面安装必须的组件：yum install -y lsb
+关于disk的获取与原著有差别，更容易理解：##获取厂商：[root@python_master pythontest]# dmidecode -s system-manufacturerVMware, Inc.##获取型号：[root@python_master pythontest]# dmidecode -s system-product-nameVMware Virtual Platform##获取sn：[root@python_master pythontest]# dmidecode -s system-serial-numberVMware-56</div>
         </div>
-      
+      </a>
+
+      <div>
         
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-04&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-04</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/04/5、Linux下收集数据/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-4、Windows下收集数据" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/03/4、Windows下收集数据/">CMDB-Windows下收集数据（四）</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
     
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/03/4、Windows下收集数据/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB-Windows下收集数据（四）" title="CMDB-Windows下收集数据（四）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。
-在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py...
-            </p>
-        </div>
-      
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/03/4、Windows下收集数据/">
+        <p class="h4 index-header">CMDB-Windows下收集数据（四）</p>
         
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。
+在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件，写入下面的代码：
+==&lt;如下打印data的语句，是为了调试查看输出，可以去掉&gt;==#!/usr/bin/env python# -*- coding: utf-8 -*-# @Time    : 2019-3-2 16:41# @Author  : zhdya@zhdya.cn# @File    : sys_info.pyimport platformimport win32comimport wmi&quot;&quot;&quot;本模块基于windows操作系统，依赖wmi和win32com库，需要提前使用pip进行安装，或者下载安装包手动安装。&quot;&quot;&quot;def collect():    data = &#123;        &apos;os_type&apos;: platform.system(</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-03&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
     </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-03</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/03/4、Windows下收集数据/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
   </div>
-</article>
 
-
-  
-    <article id="post-3、数据收集客户端" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
+  <div class="row mb-4 mx-auto">
     
-      <header class="article-header">
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/02/3、数据收集客户端/">
+        <p class="h4 index-header">CMDB数据收集客户端（三）</p>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/02/3、数据收集客户端/">CMDB数据收集客户端（三）</a>
-    </h1>
-  
-
+        
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/02/3、数据收集客户端/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB数据收集客户端（三）" title="CMDB数据收集客户端（三）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">
 CMDB最主要的管理对象：服务器，其数据信息自然不可能通过手工收集，必须以客户端的方式，定时自动收集并报告给远程的服务器。
 
 下面，让我们暂时忘掉Django，进入Python运维的世界……
-一、客户端程序组织编写客户端，不能一个p...
-            </p>
+一、客户端程序组织编写客户端，不能一个py脚本包打天下，要有组织有目的，通常我们会采取下面的结构：
+
+在Pycharm下，创建一个Client文件夹，作为客户端的根目录。
+在Client下，创建上面的包。注意是包，不是文件夹：
+
+bin是客户端启动脚本的所在目录
+conf是配置文件目录
+core是核心代码目录
+log是日志文件保存目录
+plugins是插件或工具目录
+
+二、开发数据收集客户端1.程序入口脚本++在bin目录中新建main.py文件++，写入下面的代码：
+#!/usr/bin/env python# -*- coding:utf-8 -*-import osimport sysBASE_DIR = os.path.dirname(os.getcwd())# 设置工作目录，使得包和模块能够正常导入sys.path.append(BASE_DIR)from core import ha</div>
         </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-02</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
+      </a>
 
-        </ul>
+      <div>
         
-            <a href="/2019/03/02/3、数据收集客户端/#more" class="article-more-link">more&gt;&gt;</a>
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-02&nbsp;&nbsp;
         
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-2、模型设计" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/01/2、模型设计/">CMDB模型设计（二）</a>
-    </h1>
-  
-
+          <i class="iconfont icon-inbox"></i>
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
           
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/03/01/2、模型设计/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB模型设计（二）" title="CMDB模型设计（二）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、创建项目创建Django项目cmdb，配置好settings中的语言和时区，最后新建一个app，名字就叫做assets。这些基本过程以后就不再赘述了，不熟悉的请参考教程的前面部分。
-django版本：1.11.11
-创建成功后，初...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-03-01</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/03/01/2、模型设计/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-1、项目需求分析" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/28/1、项目需求分析/">CMDB项目需求分析（一）</a>
-    </h1>
-  
-
+            <a href="/tags/django">django</a>&nbsp;
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
+            <a href="/tags/python">python</a>&nbsp;
           
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/02/28/1、项目需求分析/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="CMDB项目需求分析（一）" title="CMDB项目需求分析（一）">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、CMDB简介CMDB (Configuration Management Database)配置管理数据库:
-CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-02-28</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-    <a href="/tags/CMDB/" class="color5">CMDB</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/02/28/1、项目需求分析/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-Django 基础学习Ⅰ" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/11/Django 基础学习Ⅰ/">Django基础学习Ⅰ</a>
-    </h1>
-  
-
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
           
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/Python3/">Python3</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/02/11/Django 基础学习Ⅰ/">
-                
-                <img src="http://zhdya.okay686.cn//images/django.jpg" alt="Django基础学习Ⅰ" title="Django基础学习Ⅰ">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                一、Django简介
-Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-02-11</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/django/" class="color2">django</a>
-      
-    <a href="/tags/python/" class="color2">python</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/02/11/Django 基础学习Ⅰ/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-kubernetes 1.11.2整理Ⅲ" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/10/kubernetes 1.11.2整理Ⅲ/">kubernetes 1.11.2整理Ⅲ</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/02/10/kubernetes 1.11.2整理Ⅲ/">
-                
-                <img src="http://zhdya.okay686.cn//images/19.jpg" alt="kubernetes 1.11.2整理Ⅲ" title="kubernetes 1.11.2整理Ⅲ">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                测试集群# 创建一个 nginx deplymentapiVersion: extensions/v1beta1 kind: Deployment metadata:   name: nginx-dmspec:   replicas:...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-02-10</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/02/10/kubernetes 1.11.2整理Ⅲ/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-    <article id="post-kubernetes 1.11.2整理Ⅱ" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/09/kubernetes 1.11.2整理Ⅱ/">kubernetes 1.11.2整理Ⅱ</a>
-    </h1>
-  
-
-          
-              <span class="header-cate">
-                <i class="fa fa-map-marker"></i>
-                  
-                  <a href="/categories/K8s/">K8s</a>
-                  
-              </span>
-          
-      </header>
-    
-    <div class="article-entry " itemprop="articleBody">
-      
-        <div class="article-img">
-            <a href="/2019/02/09/kubernetes 1.11.2整理Ⅱ/">
-                
-                <img src="http://zhdya.okay686.cn//images/19.jpg" alt="kubernetes 1.11.2整理Ⅱ" title="kubernetes 1.11.2整理Ⅱ">
-                
-            </a>
-        </div>
-        <div class="article-feed">
-            <p>
-                配置 kubelet 认证kubelet 授权 kube-apiserver 的一些操作 exec run logs 等
-# RBAC 只需创建一次就可以kubectl create clusterrolebinding kube-a...
-            </p>
-        </div>
-      
-        
-    </div>
-    <footer class="article-footer">
-        
-        <ul class="article-footer-menu">
-            
-                <li><i class="fa fa-calendar"></i>2019-02-09</li>
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/Kubernets/" class="color5">Kubernets</a>
-      
-    <a href="/tags/K8S/" class="color4">K8S</a>
-      
-  </li>
-
-        </ul>
-        
-            <a href="/2019/02/09/kubernetes 1.11.2整理Ⅱ/#more" class="article-more-link">more&gt;&gt;</a>
-        
-    </footer>
-  </div>
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/2/"><< Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next >></a>
-  </nav>
-</section>
         
       </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2020 Zhdya<br>
-      </p>
     </div>
   </div>
-</footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://zhdya.okay686.cn",
-      animate: true,
-      isHome: true,
-      share: true,
-      reward: 1
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/Django2/">Django2</a><a class="category-link" href="/categories/JAVA/">JAVA</a><a class="category-link" href="/categories/K8S/">K8S</a><a class="category-link" href="/categories/K8s/">K8s</a><a class="category-link" href="/categories/K8s-ceph/">K8s, ceph</a><a class="category-link" href="/categories/Python3/">Python3</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>主页</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>归档</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>关于</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/BeautifulSoup/" style="font-size: 11.43px;">BeautifulSoup</a> <a href="/tags/CMDB/" style="font-size: 14.29px;">CMDB</a> <a href="/tags/K8S/" style="font-size: 20px;">K8S</a> <a href="/tags/Kubernets/" style="font-size: 18.57px;">Kubernets</a> <a href="/tags/calico/" style="font-size: 10px;">calico</a> <a href="/tags/django/" style="font-size: 15.71px;">django</a> <a href="/tags/django2-0/" style="font-size: 12.86px;">django2.0</a> <a href="/tags/django-blog/" style="font-size: 12.86px;">django_blog</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/python/" style="font-size: 17.14px;">python</a> <a href="/tags/python3/" style="font-size: 11.43px;">python3</a> <a href="/tags/爬虫/" style="font-size: 10px;">爬虫</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/01/2、模型设计/">
+        <p class="h4 index-header">CMDB模型设计（二）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、创建项目创建Django项目cmdb，配置好settings中的语言和时区，最后新建一个app，名字就叫做assets。这些基本过程以后就不再赘述了，不熟悉的请参考教程的前面部分。
+django版本：1.11.11
+创建成功后，初始状态如下图所示：
+
+二、模型设计说明：本项目依然采用SQLite数据库，等下一个项目再使用Mysql。
+模型设计是整个项目的重中之重，其它所有的内容其实都是围绕它展开的。
+而我们设计数据模型的原则和参考依据是前一节分析的项目需求和数据分类表。
+1.资产共有数据模型打开assets/models.py文件，首先我们要设计一张资产表：
+from django.db import modelsfrom django.contrib.auth.models import User# Create your models here.class Asset(models.Model):    &quot;&quot;&quot;    所有资产的共有数据表    &quot;&quot;&quot;    asset_type_choice = (        (</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-01&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/02/28/1、项目需求分析/">
+        <p class="h4 index-header">CMDB项目需求分析（一）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、CMDB简介CMDB (Configuration Management Database)配置管理数据库:
+CMDB用于存储与管理企业IT架构中设备的各种配置信息，它与所有服务支持和服务交付流程都紧密相联，支持这些流程的运转、发挥配置信息的价值，同时依赖于相关流程保证数据的准确性。
+CMDB是ITIL(Information Technology Infrastructure Library，信息技术基础架构库)的基础，常常被认为是构建其它ITIL流程的先决条件而优先考虑，ITIL项目的成败与是否成功建立CMDB有非常大的关系。
+CMDB的核心是对整个公司的IT硬件/软件资源进行自动/手动收集、变更操作，说白了也就是对IT资产进行自动化管理，这也是本项目的重点。
+二、项目需求分析本项目不是一个完整的的CMDB系统，重点针对服务器资产的自动数据收集、报告、接收、审批、更新和展示，搭建一个基础的面向运维的主机管理平台。
+下面是项目需求的总结：
+
+尽可能存储所有的IT资产数据，但不包括外设、优盘、显示器这种属于行政部门管理的设备；
+硬件信息可自动收集、报告、分析、存储和展示；
+具有后台</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-02-28&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/02/11/Django 基础学习Ⅰ/">
+        <p class="h4 index-header">Django基础学习Ⅰ</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、Django简介
+Django是一个开放源代码的Web应用框架，由Python写成。采用了MVC的框架模式，即模型M，视图V和控制器C。它最初是被开发来用于管理劳伦斯出版集团旗下的一些以新闻内容为主的网站的，即是CMS（内容管理系统）软件。并于2005年7月在BSD许可证下发布。这套框架是以比利时的吉普赛爵士吉他手Django Reinhardt来命名的。
+
+
+Django是一个处理网络请求的webweb应用框架
+Django是开源的
+
+Django有四个核心组件：
+
+1.数据模型和数据库之间的媒介ORM
+2.基于正则表达式的URL分发器
+3.视图处理系统
+4.模板系统
+
+MVC：
+m modules 模型， 和数据库字段对应v views 视图 用来展示给用户的，就是我们所学到的前端c controll url控制， 一个url，对应一个方法或者类
+二、Django特点1) 强大的数据库功能：用python的类继承，几行代码就可以拥有一个动态的数据库操作API，如果需要也能执行SQL语句。2) 自带的强大的后台功能：几行代码就让网站拥有一个强大的后台，轻松管理内容。3) 优雅的网</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-02-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/django">django</a>&nbsp;
+          
+            <a href="/tags/python">python</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/02/10/kubernetes 1.11.2整理Ⅲ/">
+        <p class="h4 index-header">kubernetes 1.11.2整理Ⅲ</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">测试集群# 创建一个 nginx deplymentapiVersion: extensions/v1beta1 kind: Deployment metadata:   name: nginx-dmspec:   replicas: 2  template:     metadata:       labels:         name: nginx     spec:       containers:         - name: nginx           image: nginx:alpine           imagePullPolicy: IfNotPresent          ports:             - containerPort: 80            ---apiVersion: v1 kind: Servicemetadata:   name: nginx-svc spec:   ports:     - port: 80      targetPort: 80      protocol: TCP   selector:   </div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-02-10&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/02/09/kubernetes 1.11.2整理Ⅱ/">
+        <p class="h4 index-header">kubernetes 1.11.2整理Ⅱ</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">配置 kubelet 认证kubelet 授权 kube-apiserver 的一些操作 exec run logs 等
+# RBAC 只需创建一次就可以kubectl create clusterrolebinding kube-apiserver:kubelet-apis --clusterrole=system:kubelet-api-admin --user kubernetes
+创建 bootstrap kubeconfig 文件++注意: token 生效时间为 1day , 超过时间未创建自动失效，需要重新创建 token++
+创建 集群所有 kubelet 的 token==注意修改hostname==[root@master1 kubernetes]# kubeadm token create --description kubelet-bootstrap-token --groups system:bootstrappers:master1 --kubeconfig ~/.kube/configof2phx.v39lq3ofeh0w6f3m[root@master1</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-02-09&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <nav aria-label="index posts navigation">
+    <span class="pagination pg-blue justify-content-center mt-5" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/2/"><i class="fas fa-angle-double-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fas fa-angle-double-right"></i></a>
+    </span>
+  </nav>
+  
+  <script>
+    for (ele of document.getElementById("pagination").getElementsByClassName("page-number")) {
+      ele.href += '#board';
+    }
+  </script>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
 </div>
-<script src="/js/search.js"></script>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
 
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
+  <script src="/js/lazyload.js"></script>
+
+
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
 
 
 
@@ -1580,11 +1229,9 @@ Django是一个开放源代码的Web应用框架，由Python写成。采用了MV
 
 
 
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
 
 
-  </div>
+
+
 </body>
 </html>
