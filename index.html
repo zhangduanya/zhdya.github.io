@@ -736,25 +736,21 @@ Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络生产级探究/">
-        <p class="h4 index-header">K8S集群网络生产级探究</p>
+      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
+        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
+          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
+Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
+此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
+1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
+BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
+为了能让你更清楚理解BGP，举个例子：
 
-路由器：网络出口
-核心层：主要完成数据高效转发、链路备份等
-汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
-接入层：工作站的接入
-
-1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
-2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
-想要搞懂这些问题得从交换机、路由器讲起。
-
-交换机工作在OSI参考模型的第二</div>
+在</div>
         </div>
       </a>
 
@@ -784,21 +780,25 @@ Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
-        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
+      <a href="/2019/12/22/K8S集群网络生产级探究/">
+        <p class="h4 index-header">K8S集群网络生产级探究</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
-1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
-BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
-为了能让你更清楚理解BGP，举个例子：
+          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
 
-在</div>
+路由器：网络出口
+核心层：主要完成数据高效转发、链路备份等
+汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
+接入层：工作站的接入
+
+1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
+2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
+想要搞懂这些问题得从交换机、路由器讲起。
+
+交换机工作在OSI参考模型的第二</div>
         </div>
       </a>
 
@@ -1003,18 +1003,28 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
-        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
+        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
+          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
 
-1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
+弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
+1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
 
-在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
+机器规格不统一造成机器利用率百分比碎片化
+在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
+
+
+
+特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
+
+机器利用率不单纯依靠宿主机计算
+在大部分生产</div>
         </div>
       </a>
 
