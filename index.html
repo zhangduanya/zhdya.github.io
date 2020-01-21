@@ -36,7 +36,7 @@
 
 
 <body>
-  <header style="height: 68vh;">
+  <header style="height: 77vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
@@ -691,6 +691,50 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
+        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
+1、Flannel 部署https://github.com/coreos/flannel 
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
+
+UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
+VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
+Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8s">K8s</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
         <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
         
@@ -754,50 +798,6 @@ BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种
 想要搞懂这些问题得从交换机、路由器讲起。
 
 交换机工作在OSI参考模型的第二</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8s">K8s</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
-        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
-1、Flannel 部署https://github.com/coreos/flannel 
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
-
-UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
-VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
-Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
         </div>
       </a>
 
@@ -1002,19 +1002,18 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
+        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
 
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+
+在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
         </div>
       </a>
 
