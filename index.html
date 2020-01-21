@@ -735,25 +735,21 @@ BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络生产级探究/">
-        <p class="h4 index-header">K8S集群网络生产级探究</p>
+      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
+        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
+          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
+1、Flannel 部署https://github.com/coreos/flannel 
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
 
-路由器：网络出口
-核心层：主要完成数据高效转发、链路备份等
-汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
-接入层：工作站的接入
-
-1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
-2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
-想要搞懂这些问题得从交换机、路由器讲起。
-
-交换机工作在OSI参考模型的第二</div>
+UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
+VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
+Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
         </div>
       </a>
 
@@ -783,21 +779,25 @@ BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
-        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
+      <a href="/2019/12/22/K8S集群网络生产级探究/">
+        <p class="h4 index-header">K8S集群网络生产级探究</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
-1、Flannel 部署https://github.com/coreos/flannel 
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
+          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
 
-UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
-VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
-Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
+路由器：网络出口
+核心层：主要完成数据高效转发、链路备份等
+汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
+接入层：工作站的接入
+
+1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
+2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
+想要搞懂这些问题得从交换机、路由器讲起。
+
+交换机工作在OSI参考模型的第二</div>
         </div>
       </a>
 
@@ -1002,19 +1002,27 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩4/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Prometheus QPS指标的HPA</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+          <div class="index-text mb-1">基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-server)同样的效果。
 
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+1、部署PrometheusPrometheus（普罗米修斯）是一个最初在SoundCloud上构建的监控系统。自2012年成为社区开源项目，拥有非常活跃的开发人员和用户社区。为强调开源及独立维护，Prometheus于2016年加入云原生云计算基金会（CNCF），成为继Kubernetes之后的第二个托管项目。
+Prometheus 特点：
+
+自动采集，服务发现；
+
+多维数据模型：由度量名称和键值对标识的时间序列数据；
+
+PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的查询；
+
+不依赖分布式存储，单个服务器节点可直接工作；
+
+基于HTTP的pull方式采集时</div>
         </div>
       </a>
 
@@ -1293,6 +1301,26 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
   
 
 
+
+  <script>(function (i, s, o, g, r, a, m) {
+      i['DaoVoiceObject'] = r;
+      i[r] = i[r] ||
+        function () {
+          (i[r].q = i[r].q || []).push(arguments);
+        };
+      i[r].l = 1 * new Date();
+      a = s.createElement(o);
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      a.charset = 'utf-8';
+      m.parentNode.insertBefore(a, m);
+    })(window, document, 'script', ('https:' === document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/f304979b.js", 'daovoice');
+    daovoice('init', {
+      app_id: "f304979b",
+    });
+    daovoice('update');
+  </script>
 
 
 
