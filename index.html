@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="zh-CN">
 
 
 
@@ -54,7 +54,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/">ホーム</a>
+            <a class="nav-link" href="/">首页</a>
           </li>
         
           
@@ -62,7 +62,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/archives/">アーカイブ</a>
+            <a class="nav-link" href="/archives/">归档</a>
           </li>
         
           
@@ -70,7 +70,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/categories/">カテゴリー</a>
+            <a class="nav-link" href="/categories/">分类</a>
           </li>
         
           
@@ -78,7 +78,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/tags/">タグ</a>
+            <a class="nav-link" href="/tags/">标签</a>
           </li>
         
           
@@ -86,7 +86,7 @@
           
           
           <li class="nav-item">
-            <a class="nav-link" href="/about/">本ブログ情報　</a>
+            <a class="nav-link" href="/about/">关于</a>
           </li>
         
         
@@ -743,21 +743,21 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
-        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
+      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
+        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
-1、Flannel 部署https://github.com/coreos/flannel 
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
+          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
+Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
+此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
+1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
+BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
+为了能让你更清楚理解BGP，举个例子：
 
-UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
-VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
-Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
+在</div>
         </div>
       </a>
 
@@ -787,21 +787,21 @@ Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
-        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
+      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
+        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
-1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
-BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
-为了能让你更清楚理解BGP，举个例子：
+          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
+1、Flannel 部署https://github.com/coreos/flannel 
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
 
-在</div>
+UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
+VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
+Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
         </div>
       </a>
 
@@ -1079,7 +1079,7 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">検索</h4>
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
         <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -1087,7 +1087,7 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">キーワード</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
