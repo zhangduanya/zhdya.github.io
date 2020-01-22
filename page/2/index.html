@@ -134,27 +134,19 @@
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩4/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Prometheus QPS指标的HPA</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-server)同样的效果。
+          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
+它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
+当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
+在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
 
-1、部署PrometheusPrometheus（普罗米修斯）是一个最初在SoundCloud上构建的监控系统。自2012年成为社区开源项目，拥有非常活跃的开发人员和用户社区。为强调开源及独立维护，Prometheus于2016年加入云原生云计算基金会（CNCF），成为继Kubernetes之后的第二个托管项目。
-Prometheus 特点：
-
-自动采集，服务发现；
-
-多维数据模型：由度量名称和键值对标识的时间序列数据；
-
-PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的查询；
-
-不依赖分布式存储，单个服务器节点可直接工作；
-
-基于HTTP的pull方式采集时</div>
+当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
         </div>
       </a>
 
@@ -235,18 +227,27 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
-        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩4/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Prometheus QPS指标的HPA</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
+          <div class="index-text mb-1">基于Prometheus自定义指标缩放资源指标只包含CPU、内存，一般来说也够了。但如果想根据自定义指标:如请求qps/5xx错误数来实现HPA，就需要使用自定义指标了，目前比较成熟的实现是 Prometheus Custom Metrics。自定义指标由Prometheus来提供，再利用k8s-prometheus-adpater聚合到apiserver，实现和核心指标（metric-server)同样的效果。
 
-1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+1、部署PrometheusPrometheus（普罗米修斯）是一个最初在SoundCloud上构建的监控系统。自2012年成为社区开源项目，拥有非常活跃的开发人员和用户社区。为强调开源及独立维护，Prometheus于2016年加入云原生云计算基金会（CNCF），成为继Kubernetes之后的第二个托管项目。
+Prometheus 特点：
 
-在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
+自动采集，服务发现；
+
+多维数据模型：由度量名称和键值对标识的时间序列数据；
+
+PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的查询；
+
+不依赖分布式存储，单个服务器节点可直接工作；
+
+基于HTTP的pull方式采集时</div>
         </div>
       </a>
 

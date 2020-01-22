@@ -261,9 +261,9 @@ APM组件服务的影响应该做到足够小，数据分析要快，性能占�
         
           <i class="iconfont icon-tag"></i>
           
-            <a href="/tags/K8s">K8s</a>&nbsp;
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
           
-            <a href="/tags/Kubernets">Kubernets</a>&nbsp;
+            <a href="/tags/K8S">K8S</a>&nbsp;
           
         
       </div>
@@ -686,6 +686,50 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
+        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
+Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
+此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
+1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
+BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
+为了能让你更清楚理解BGP，举个例子：
+
+在</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
         <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
         
@@ -749,50 +793,6 @@ Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路�
 想要搞懂这些问题得从交换机、路由器讲起。
 
 交换机工作在OSI参考模型的第二</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S">K8S</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
-        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
-1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
-BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
-为了能让你更清楚理解BGP，举个例子：
-
-在</div>
         </div>
       </a>
 
@@ -997,19 +997,18 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
+        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
 
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+
+在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
         </div>
       </a>
 
