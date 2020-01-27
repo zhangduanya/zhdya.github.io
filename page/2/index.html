@@ -15,7 +15,7 @@
   <meta name="description" content="Tough times never last, but tough people do.">
   <meta name="author" content="Zhdya">
   <meta name="keywords" content="">
-  <title>拼！就对了！</title>
+  <title>不认命？就拼命！</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
@@ -39,7 +39,7 @@
   <header style="height: 77vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">&nbsp;<strong>拼！就对了！</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">&nbsp;<strong>不认命？就拼命！</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <div class="animated-icon"><span></span><span></span><span></span></div>
@@ -134,25 +134,25 @@
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+      <a href="/2019/12/17/k8s二进制安装环境下证书过期问题/">
+        <p class="h4 index-header">k8s二进制安装环境下证书过期问题</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
-
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+          <div class="index-text mb-1">k8s配置信息的工作目录一般为/etc/kubernetes，证书目录一般为/etc/kubernetes/ssl
+一、重新生成证书当你的kubernetes报错：certificate has expired or is not yet valid，可以通过命令：openssl x509 -in [证书全路径] -noout -text查看证书详情。
+1、备份[root@zhdya]# cd /etc/kubernetes;[root@zhdya]# cp kubelet.kubeconfig kubelet.kubeconfig.bak;[root@zhdya]# mkdir sslbak &amp;&amp; cp ssl/ sslbak;
+2、清理[root@zhdya]# rm -f kubelet.kubeconfig;[root@zhdya]# rm ssl/kubelet.*;
+3. 重启kubelete[root@zhdya]# systemctl  restart kubelet &amp;&amp; systemctl  status  kubelet
+4. 使用</div>
         </div>
       </a>
 
       <div>
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-17&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
@@ -166,6 +166,102 @@
             <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
           
             <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/16/Helm应用包管理器（上）/">
+        <p class="h4 index-header">Helm应用包管理器（上）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">三、Helm应用包管理器3.1 为什么需要Helm？K8S上的应用对象，都是由特定的资源描述组成，包括deployment、service等。都保存各自文件中或者集中写到一个配置文件。然后kubectl apply –f 部署。
+
+如果应用只由一个或几个这样的服务组成，上面部署方式足够了。
+而对于一个复杂的应用，会有很多类似上面的资源描述文件，例如微服务架构应用，组成应用的服务可能多达十个，几十个。如果有更新或回滚应用的需求，可能要修改和维护所涉及的大量资源文件，而这种组织和管理应用的方式就显得力不从心了。
+且由于缺少对发布过的应用版本管理和控制，使Kubernetes上的应用维护和更新等面临诸多的挑战，主要面临以下问题：
+
+如何将这些服务作为一个整体管理
+这些资源文件如何高效复用
+不支持应用级别的版本管理
+
+3.2 Helm 介绍Helm是一个Kubernetes的包管理工具，就像Linux下的包管理器，如yum/apt等，可以很方便的将之前打包好的yaml文件部署到kubernetes上。
+Helm有两个重要概念：
+
+helm：一个命令行客户端工具，主要用于Kubernetes应用</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-16&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/15/Java参数深入分析/">
+        <p class="h4 index-header">记一次java_MetaspaceSize设置不当导致的问题</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">先来了解下：
+内存的分配及回收–堆中的新生代和老年代：java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的比例通常为 1：2
+
+一、堆（新生代、老年代）与元空间。1.1、新生代：主要是用来存放新生的对象。一般占据堆空间的1/3，由于频繁创建对象，所以新生代会频繁触发MinorGC进行垃圾回收。新生代分为Eden区、ServivorFrom、ServivorTo三个区，==比例为 8：1：1==。
+
+Eden区：Java新对象的出生地(如果新创建的对象占用内存很大则直接分配给老年代)。
+1.1.1、MinorGC 触发机制：
+当Eden区内存不够的时候就会触发一次MinorGc，对新生代区进行一次垃圾回收。
+
+ServivorTo：保留了一次MinorGc过程中的幸存者。
+ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JVM无法为新建对象分配内存空间的时候(Eden区满的时候)，JVM触发MinorGc。因此新生代空间占用越低，MinorGc越频繁。
+每次对象会存在于Eden区和一个Survivor区， 当内存不够时，触发GC，然后把依</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-15&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/JAVA">JAVA</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Java">Java</a>&nbsp;
           
         
       </div>
@@ -248,6 +344,89 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
 不依赖分布式存储，单个服务器节点可直接工作；
 
 基于HTTP的pull方式采集时</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
+它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
+当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
+在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+
+当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
+        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
+
+1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+
+在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
         </div>
       </a>
 
@@ -871,240 +1050,6 @@ Django将自动为你生成数据库访问API
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-10&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Django">Django</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/04/09/五、欢迎页面/">
-        <p class="h4 index-header">Django博客开发：欢迎页面（五）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">基础配置做好了之后，我们就可以先迁移数据到数据库，然后启动我们的项目，感受Django的魅力。
-python manage.py makemigrationspython manage.py migrate
-迁移数据之后，网站目录里自动会创建一个数据库文件db.sqlite3，里面存放着我们的数据。
-之后输入下面命令创建管理帐号和密码：
-python manage.py createsuperuser
-最后，我们设置下启动命令，启动我们的Django项目：
-
-启动后登陆 http://0.0.0.0:8000/ 就可以看到我们的欢迎页。
-
-另外一点，我们当然也可以设置自定义的主页：
-首先，打开打开bolg目录下的views.py文件，在里面输入：
-myblog/blog/views.pyfrom django.http import HttpResponsedef hello(request):    return HttpResponse(&apos;Welcome to Django Zone！&apos;)
-再打开myblog目录下的urls.py文件，在文件里添加两行代码：
-m</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-09&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Django">Django</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/04/08/四、基础配置/">
-        <p class="h4 index-header">Django博客开发：基础配置（四）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">打开myblog目录下的settings.py文件：
-一、设置域名访问权限myblog/settings.pyALLOWED_HOSTS = []      #修改前ALLOWED_HOSTS = [&apos;*&apos;]#修改后，表示任何域名都能访问。如果指定域名的话，在&apos;&apos;里放入指定的域名即可
-二、设置TEMPLATES里的’DIRS’添加模板目录templates的路径，后面我们做网站模板的时候用得着。
-myblog/settings.py#修改前&apos;DIRS&apos;: []#修改后&apos;DIRS&apos;: [os.path.join(BASE_DIR, &apos;templates&apos;)]注：使用pycharm创建的话会自动添加
-三、找到DATABASES设置网站数据库类型。这里使用默认的sqlite3。四、在INSTALLED_APPS添加APP应用名称。myblog/settings.pyINSTALLED_APPS = [    &apos;django.contrib.admin&apos;,    ....  </div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-08&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Django">Django</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/04/07/三、创建项目/">
-        <p class="h4 index-header">Django博客开发：创建项目（三）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">基础环境：
-Python3.6
-django2.1.1
-开发工具为Pycharm
-
-
-说明：1、为项目保存路径，myblog为项目名。
-2、为选择使用的虚拟环境软件，这里选virtualenv。
-3、为虚拟环境保存目录，我把它保存在项目里，虚拟环境默认名为env，我系统里有多个项目为了区分出来命名为myblogenv
-4、为使用的模板语言，我们默认用django模板语言。
-5、为创建项目的时候建立一个模板文件目录，用来存放模板文件。用CMD命令创建项目的话，模板目录需要自己手动创建。
-6、为创建一个名为blog的APP应用。同样的用CMD命令创建的话，需要手动通过python manage.py startapp blog命令来进行创建。
-点击创建之后，Pycharm自动帮我们完成Django软件下载安装和Django的项目创建。
-注意：如果对需要指定Django版本的话，不能直接使用这个方法，这个方法会直接下载最新版本的Django。指定版本的话，请使用CMD通过命令如：pip install django==2.0.1
-
-第一个黑色的 myblog 为项目文件夹目录。
-blog为A</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-07&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Django">Django</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/04/06/二、数据库设计分析/">
-        <p class="h4 index-header">Django博客开发：数据库设计分析（二）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">++从网站需求分析及网站功能、页面设计可以知道，我们的Blog主要以文章内容为主。所以我们在设计数据库的时候，我们主要以文章信息为核心数据，然后逐步向外扩展相关联的数据信息。++
-从如下图片中可以看到，文章有标题、分类、作者、浏览次数、发布时间、文章标签等信息。
-
-这其中，文章与分类的关系是一对多的关系，什么是一对多？就是一篇文章只能有一个分类，而一个分类里可以有多篇文章。文章与标签的关系是多对多的关系，多对多简单理解就是，一篇文章可以有多个标签，一个标签里同样可以有多篇文章。
-我们将文章表命名为Article，通过前面的分析得出文章信息表Article的数据库结构如下：
-
-
-
-表字段
-字段类型
-备注
-
-
-
-
-id
-int类型，长度为11
-主键，由系统自动生成
-
-
-title
-CharField类型，长度为100
-文章标题
-
-
-category
-ForeignKey
-外键，关联文章分类表
-
-
-tags
-ManyToManyField
-多对多，关联标签列表
-
-
-body
-TextField
-文章内容
-
-
-user
-ForeignKey
-外键，文章作者关联用户模型，系统自带的
-
-
-view</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-06&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
