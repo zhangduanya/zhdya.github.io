@@ -134,6 +134,53 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/01/2、模型设计/">
+        <p class="h4 index-header">CMDB模型设计（二）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、创建项目创建Django项目cmdb，配置好settings中的语言和时区，最后新建一个app，名字就叫做assets。这些基本过程以后就不再赘述了，不熟悉的请参考教程的前面部分。
+django版本：1.11.11
+创建成功后，初始状态如下图所示：
+
+二、模型设计说明：本项目依然采用SQLite数据库，等下一个项目再使用Mysql。
+模型设计是整个项目的重中之重，其它所有的内容其实都是围绕它展开的。
+而我们设计数据模型的原则和参考依据是前一节分析的项目需求和数据分类表。
+1.资产共有数据模型打开assets/models.py文件，首先我们要设计一张资产表：
+from django.db import modelsfrom django.contrib.auth.models import User# Create your models here.class Asset(models.Model):    &quot;&quot;&quot;    所有资产的共有数据表    &quot;&quot;&quot;    asset_type_choice = (        (</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-01&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/02/28/1、项目需求分析/">
         <p class="h4 index-header">CMDB项目需求分析（一）</p>
         
