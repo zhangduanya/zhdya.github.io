@@ -134,22 +134,23 @@
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/09/Jenkins基于k8s的Master_Slave模式实现CI_CD/">
-        <p class="h4 index-header">Jenkins基于k8s的Master/Slave模式实现CI/CD</p>
+      <a href="/2020/01/09/Pipeline 集成 Helm 发布微服务项目/">
+        <p class="h4 index-header">Pipeline 集成 Helm 发布微服务项目</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Jenkins在Kubernetes中动态创建代理一、前言就类似于我们公司 目前每天的jenkins构建测试基本上平稳在2300+左右，也就是可能同时并发的构建我见过一次120+，只是这一个jenkins节点是不可以完成这么大的任务量的！所以jenkins-slave的接入就很大程度上提高了性能！
+          <div class="index-text mb-1">一、Helm部署到K8S
+通过刚刚的配置，如上4个阶段已经完成；
+接下来：
+二、推送代码到gitlab# git clone http://192.168.171.10:9999/root/ms.git      # 拉取代码# cp simple-microservice-dev4/* ms/ -rf     # copy代码# cd ms# git add .# git commit -m &quot;all&quot;# git push origin master
 
-
-Master/Slave相当于Server/agent。Master提供web接口让用户来管理job和slave，job可以运行在master本机或者被分配到slave上运行。一个master可以关联多个slave用来为不同的job或相同的job的不同配置来服务。
-如何添加jenkins-slave节点？
-“Manage Jenkins” ==&gt; “Manage Nodes” ==&gt; “New Node”
-二、如何实现？2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理插件介绍： https://github.com/jenkinsci/kubernetes-plugin
-在jenkins的组件中搜索并安装：“kubernetes”
-“</div>
+三、jenkins配置3.1、安装组件jenkins 组件搜索：- Git Parameter- Git- Config File Provider- Extended Choice Parameter
+3.2、添加凭据
+添加凭据后保存，然后再次点击进入复制ID即可；
+另外还需要添加一个kubeconfig配置文件：
+“Manage Jenkins” ==&gt; “Managed files” ==&gt; “Add a new Config” ==&gt; “Custom file” ==&gt; 复制ID =</div>
         </div>
       </a>
 
@@ -174,16 +175,22 @@ Master/Slave相当于Server/agent。Master提供web接口让用户来管理job�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/08/Jenkins Pipeline基本使用 & 参数化构建/">
-        <p class="h4 index-header">Jenkins Pipeline基本使用 &amp; 参数化构建</p>
+      <a href="/2020/01/08/Jenkins基于k8s的Master_Slave模式实现CI_CD/">
+        <p class="h4 index-header">Jenkins基于k8s的Master/Slave模式实现CI/CD</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、持续集成Jenkins部署在K8S中部署jenkins首先我们需要考虑到的是持久化存储，因为产生的一些插件和job都需要存储起来。当然部署的pod也是不固定的，也可能在node1也可能在其它节点，这就需要在任何节点都可以读取到这部分数据！
+          <div class="index-text mb-1">Jenkins在Kubernetes中动态创建代理一、前言就类似于我们公司 目前每天的jenkins构建测试基本上平稳在2300+左右，也就是可能同时并发的构建我见过一次120+，只是这一个jenkins节点是不可以完成这么大的任务量的！所以jenkins-slave的接入就很大程度上提高了性能！
 
-[root@k8s-master1 ~]# cd jenkins[root@k8s-master1 jenkins]# lsdeployment.yml  ingress.yml  rbac.yml  service-account.yml  service.yml先来看下deployment文件中的几个参数：volumeMounts:  - name: jenkins-home    mountPath: /var/jenkins_home    # 持久化数据的目录    kind: PersistentVolumeClaimmetadata:  name: jenkins-homespec:  storageClassName: &quot;managed-nfs-storage&quot;       # 上章节讲到的nfs的stora</div>
+
+Master/Slave相当于Server/agent。Master提供web接口让用户来管理job和slave，job可以运行在master本机或者被分配到slave上运行。一个master可以关联多个slave用来为不同的job或相同的job的不同配置来服务。
+如何添加jenkins-slave节点？
+“Manage Jenkins” ==&gt; “Manage Nodes” ==&gt; “New Node”
+二、如何实现？2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理插件介绍： https://github.com/jenkinsci/kubernetes-plugin
+在jenkins的组件中搜索并安装：“kubernetes”
+“</div>
         </div>
       </a>
 
@@ -208,23 +215,16 @@ Master/Slave相当于Server/agent。Master提供web接口让用户来管理job�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/07/Pipeline 集成 Helm 发布微服务项目/">
-        <p class="h4 index-header">Pipeline 集成 Helm 发布微服务项目</p>
+      <a href="/2020/01/07/Jenkins Pipeline基本使用 & 参数化构建/">
+        <p class="h4 index-header">Jenkins Pipeline基本使用 &amp; 参数化构建</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、Helm部署到K8S
-通过刚刚的配置，如上4个阶段已经完成；
-接下来：
-二、推送代码到gitlab# git clone http://192.168.171.10:9999/root/ms.git      # 拉取代码# cp simple-microservice-dev4/* ms/ -rf     # copy代码# cd ms# git add .# git commit -m &quot;all&quot;# git push origin master
+          <div class="index-text mb-1">一、持续集成Jenkins部署在K8S中部署jenkins首先我们需要考虑到的是持久化存储，因为产生的一些插件和job都需要存储起来。当然部署的pod也是不固定的，也可能在node1也可能在其它节点，这就需要在任何节点都可以读取到这部分数据！
 
-三、jenkins配置3.1、安装组件jenkins 组件搜索：- Git Parameter- Git- Config File Provider- Extended Choice Parameter
-3.2、添加凭据
-添加凭据后保存，然后再次点击进入复制ID即可；
-另外还需要添加一个kubeconfig配置文件：
-“Manage Jenkins” ==&gt; “Managed files” ==&gt; “Add a new Config” ==&gt; “Custom file” ==&gt; 复制ID =</div>
+[root@k8s-master1 ~]# cd jenkins[root@k8s-master1 jenkins]# lsdeployment.yml  ingress.yml  rbac.yml  service-account.yml  service.yml先来看下deployment文件中的几个参数：volumeMounts:  - name: jenkins-home    mountPath: /var/jenkins_home    # 持久化数据的目录    kind: PersistentVolumeClaimmetadata:  name: jenkins-homespec:  storageClassName: &quot;managed-nfs-storage&quot;       # 上章节讲到的nfs的stora</div>
         </div>
       </a>
 
@@ -686,15 +686,24 @@ PersistentVolumeClaim（PVC）是用户存储的请求。 它类似于pod。Pod�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/26/五、Ceph Dashboard（1）/">
-        <p class="h4 index-header">五、Ceph Dashboard（1）</p>
+      <a href="/2019/12/26/四、Ceph 文件系统 CephFS 的介绍与配置/">
+        <p class="h4 index-header">四、Ceph 文件系统 CephFS 的介绍与配置</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、Ceph Dashboard介绍Ceph 的监控可视化界面方案很多—-grafana、Kraken。但是从Luminous开始，Ceph 提供了原生的Dashboard功能，通过Dashboard可以获取Ceph集群的各种基本状态信息。mimic版  (nautilus版)  dashboard 安装。如果是  (nautilus版) 需要安装 ceph-mgr-dashboard 
-二、配置Ceph Dashboard配置yum源：# cat &gt; /etc/yum.repos.d/cephbak.repo &lt;&lt; EOF[ceph]name=cephbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/x86_64/gpgcheck=0priority=1 [ceph-noarch]name=cephnoarchbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/noarch/gpgcheck=0priority=1 [ceph-source]na</div>
+          <div class="index-text mb-1">一、CephFs介绍
+Ceph File System (CephFS) 是与 POSIX 标准兼容的文件系统, 能够提供对 Ceph 存储集群上的文件访问. Jewel 版本 (10.2.0) 是第一个包含稳定 CephFS 的 Ceph 版本. CephFS 需要至少一个元数据服务器 (Metadata Server - MDS) daemon (ceph-mds) 运行, MDS daemon 管理着与存储在 CephFS 上的文件相关的元数据, 并且协调着对 Ceph 存储系统的访问。  
+
+对象存储的成本比起普通的文件存储还是较高，需要购买专门的对象存储软件以及大容量硬盘。如果对数据量要求不是海量，只是为了做文件共享的时候，直接用文件存储的形式好了，性价比高。
+
+
+二、CephFS 架构 底层是核心集群所依赖的, 包括:
+
+OSDs (ceph-osd): CephFS 的数据和元数据就存储在 OSDs 上
+MDS (ceph-mds): Metadata Servers, 管理着 CephFS 的元数据
+Mons (ceph-mon): Monitors 管理着集群 Map</div>
         </div>
       </a>
 
@@ -722,24 +731,15 @@ PersistentVolumeClaim（PVC）是用户存储的请求。 它类似于pod。Pod�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/26/四、Ceph 文件系统 CephFS 的介绍与配置/">
-        <p class="h4 index-header">四、Ceph 文件系统 CephFS 的介绍与配置</p>
+      <a href="/2019/12/26/五、Ceph Dashboard（1）/">
+        <p class="h4 index-header">五、Ceph Dashboard（1）</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、CephFs介绍
-Ceph File System (CephFS) 是与 POSIX 标准兼容的文件系统, 能够提供对 Ceph 存储集群上的文件访问. Jewel 版本 (10.2.0) 是第一个包含稳定 CephFS 的 Ceph 版本. CephFS 需要至少一个元数据服务器 (Metadata Server - MDS) daemon (ceph-mds) 运行, MDS daemon 管理着与存储在 CephFS 上的文件相关的元数据, 并且协调着对 Ceph 存储系统的访问。  
-
-对象存储的成本比起普通的文件存储还是较高，需要购买专门的对象存储软件以及大容量硬盘。如果对数据量要求不是海量，只是为了做文件共享的时候，直接用文件存储的形式好了，性价比高。
-
-
-二、CephFS 架构 底层是核心集群所依赖的, 包括:
-
-OSDs (ceph-osd): CephFS 的数据和元数据就存储在 OSDs 上
-MDS (ceph-mds): Metadata Servers, 管理着 CephFS 的元数据
-Mons (ceph-mon): Monitors 管理着集群 Map</div>
+          <div class="index-text mb-1">一、Ceph Dashboard介绍Ceph 的监控可视化界面方案很多—-grafana、Kraken。但是从Luminous开始，Ceph 提供了原生的Dashboard功能，通过Dashboard可以获取Ceph集群的各种基本状态信息。mimic版  (nautilus版)  dashboard 安装。如果是  (nautilus版) 需要安装 ceph-mgr-dashboard 
+二、配置Ceph Dashboard配置yum源：# cat &gt; /etc/yum.repos.d/cephbak.repo &lt;&lt; EOF[ceph]name=cephbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/x86_64/gpgcheck=0priority=1 [ceph-noarch]name=cephnoarchbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/noarch/gpgcheck=0priority=1 [ceph-source]na</div>
         </div>
       </a>
 
@@ -937,21 +937,25 @@ Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
-        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
+      <a href="/2019/12/22/K8S集群网络生产级探究/">
+        <p class="h4 index-header">K8S集群网络生产级探究</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
-1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
-BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
-为了能让你更清楚理解BGP，举个例子：
+          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
 
-在</div>
+路由器：网络出口
+核心层：主要完成数据高效转发、链路备份等
+汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
+接入层：工作站的接入
+
+1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
+2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
+想要搞懂这些问题得从交换机、路由器讲起。
+
+交换机工作在OSI参考模型的第二</div>
         </div>
       </a>
 
@@ -981,25 +985,21 @@ BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络生产级探究/">
-        <p class="h4 index-header">K8S集群网络生产级探究</p>
+      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
+        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
+          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
+Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
+此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
+1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
+BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
+为了能让你更清楚理解BGP，举个例子：
 
-路由器：网络出口
-核心层：主要完成数据高效转发、链路备份等
-汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
-接入层：工作站的接入
-
-1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
-2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
-想要搞懂这些问题得从交换机、路由器讲起。
-
-交换机工作在OSI参考模型的第二</div>
+在</div>
         </div>
       </a>
 

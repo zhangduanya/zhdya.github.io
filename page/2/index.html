@@ -309,28 +309,18 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
-        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
+        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
+          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
 
-蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
-弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
-1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
+1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
 
-机器规格不统一造成机器利用率百分比碎片化
-在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
-
-
-
-特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
-
-机器利用率不单纯依靠宿主机计算
-在大部分生产</div>
+在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
         </div>
       </a>
 
@@ -360,18 +350,28 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
-        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
+        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
+          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
 
-1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
+蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
+弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
+1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
 
-在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
+机器规格不统一造成机器利用率百分比碎片化
+在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
+
+
+
+特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
+
+机器利用率不单纯依靠宿主机计算
+在大部分生产</div>
         </div>
       </a>
 
