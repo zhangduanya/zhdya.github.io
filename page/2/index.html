@@ -272,6 +272,48 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
+它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
+当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
+在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+
+当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/12/13/K8S深度理解弹性伸缩/">
         <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
         
@@ -344,48 +386,6 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
 不依赖分布式存储，单个服务器节点可直接工作；
 
 基于HTTP的pull方式采集时</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-13&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S">K8S</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
-
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
         </div>
       </a>
 

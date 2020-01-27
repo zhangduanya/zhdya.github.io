@@ -134,7 +134,7 @@
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/08/Jenkins基于k8s的Master_Slave模式实现CI_CD/">
+      <a href="/2020/01/09/Jenkins基于k8s的Master_Slave模式实现CI_CD/">
         <p class="h4 index-header">Jenkins基于k8s的Master_Slave模式实现CI_CD</p>
         
         
@@ -150,6 +150,40 @@ Master/Slave相当于Server/agent。Master提供web接口让用户来管理job�
 二、如何实现？2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理插件介绍： https://github.com/jenkinsci/kubernetes-plugin
 在jenkins的组件中搜索并安装：“kubernetes”
 “</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-09&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/01/08/Jenkins Pipeline基本使用 & 参数化构建/">
+        <p class="h4 index-header">Jenkins Pipeline基本使用 &amp; 参数化构建</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、持续集成Jenkins部署在K8S中部署jenkins首先我们需要考虑到的是持久化存储，因为产生的一些插件和job都需要存储起来。当然部署的pod也是不固定的，也可能在node1也可能在其它节点，这就需要在任何节点都可以读取到这部分数据！
+
+[root@k8s-master1 ~]# cd jenkins[root@k8s-master1 jenkins]# lsdeployment.yml  ingress.yml  rbac.yml  service-account.yml  service.yml先来看下deployment文件中的几个参数：volumeMounts:  - name: jenkins-home    mountPath: /var/jenkins_home    # 持久化数据的目录    kind: PersistentVolumeClaimmetadata:  name: jenkins-homespec:  storageClassName: &quot;managed-nfs-storage&quot;       # 上章节讲到的nfs的stora</div>
         </div>
       </a>
 
@@ -174,41 +208,7 @@ Master/Slave相当于Server/agent。Master提供web接口让用户来管理job�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/07/Jenkins Pipeline基本使用 & 参数化构建/">
-        <p class="h4 index-header">Jenkins Pipeline基本使用 &amp; 参数化构建</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">一、持续集成Jenkins部署在K8S中部署jenkins首先我们需要考虑到的是持久化存储，因为产生的一些插件和job都需要存储起来。当然部署的pod也是不固定的，也可能在node1也可能在其它节点，这就需要在任何节点都可以读取到这部分数据！
-
-[root@k8s-master1 ~]# cd jenkins[root@k8s-master1 jenkins]# lsdeployment.yml  ingress.yml  rbac.yml  service-account.yml  service.yml先来看下deployment文件中的几个参数：volumeMounts:  - name: jenkins-home    mountPath: /var/jenkins_home    # 持久化数据的目录    kind: PersistentVolumeClaimmetadata:  name: jenkins-homespec:  storageClassName: &quot;managed-nfs-storage&quot;       # 上章节讲到的nfs的stora</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-07&nbsp;&nbsp;
-        
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2020/01/06/Pipeline 集成 Helm 发布微服务项目/">
+      <a href="/2020/01/07/Pipeline 集成 Helm 发布微服务项目/">
         <p class="h4 index-header">Pipeline 集成 Helm 发布微服务项目</p>
         
         
@@ -230,7 +230,7 @@ Master/Slave相当于Server/agent。Master提供web接口让用户来管理job�
 
       <div>
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-06&nbsp;&nbsp;
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-07&nbsp;&nbsp;
         
         
         
@@ -848,25 +848,21 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络生产级探究/">
-        <p class="h4 index-header">K8S集群网络生产级探究</p>
+      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
+        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
+          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
+1、Flannel 部署https://github.com/coreos/flannel 
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
 
-路由器：网络出口
-核心层：主要完成数据高效转发、链路备份等
-汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
-接入层：工作站的接入
-
-1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
-2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
-想要搞懂这些问题得从交换机、路由器讲起。
-
-交换机工作在OSI参考模型的第二</div>
+UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
+VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
+Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
         </div>
       </a>
 
@@ -940,21 +936,25 @@ BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
-        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
+      <a href="/2019/12/22/K8S集群网络生产级探究/">
+        <p class="h4 index-header">K8S集群网络生产级探究</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
-1、Flannel 部署https://github.com/coreos/flannel 
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
+          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
 
-UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
-VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
-Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
+路由器：网络出口
+核心层：主要完成数据高效转发、链路备份等
+汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
+接入层：工作站的接入
+
+1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
+2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
+想要搞懂这些问题得从交换机、路由器讲起。
+
+交换机工作在OSI参考模型的第二</div>
         </div>
       </a>
 
