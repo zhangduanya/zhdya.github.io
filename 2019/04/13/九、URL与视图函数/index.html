@@ -167,11 +167,11 @@
           <div class="markdown-body">
             <p>在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做出一个响应，这个响应就是把对应的内容通过浏览器渲染出来，呈现给我们看++。这个过程就是请求与响应。</p>
 <p>下图，就是请求响应的过程。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/ceRYC42787YO.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/ceRYC42787YO.png?imageslim" alt="mark"></p>
 <p>上面我们提到了URL，这个URL在我们的Django中，其实是由我们自己构造的。(这个说法不太严谨，但为了方便大家理解之后的内容，先当这说辞是正确的。)</p>
 <p>Django中，我们约定URL是在项目同名目录下的urls.py文件里urlpatterns列表构造的。</p>
 <p>myblog/myblog/urls.py</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/06SOp1CAFwPa.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/06SOp1CAFwPa.png?imageslim" alt="mark"></p>
 <p>表现形式如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    path(正则表达式, views视图函数，参数，别名),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">括号里的参数说明：</span><br><span class="line">1、一个正则表达式字符串</span><br><span class="line">2、一个可调用对象，通常为一个视图函数或一个指定视图函数路径的字符串</span><br><span class="line">3、可选的要传递给视图函数的默认参数（字典形式）</span><br><span class="line">4、一个可选的name参数(别名)</span><br></pre></td></tr></table></figure>
 <p>完整的URL应该要这么写：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">path(正则表达式, views视图函数，参数，别名)</span><br><span class="line">：</span><br><span class="line">里面的正则表达式, views视图函数，是必须要写的，而参数，别名是可选的。我们在有特殊需要的时候才写。</span><br></pre></td></tr></table></figure></p>
@@ -369,8 +369,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

@@ -167,7 +167,7 @@
           <div class="markdown-body">
             <h3 id="一、全链路监控"><a href="#一、全链路监控" class="headerlink" title="一、全链路监控"></a>一、全链路监控</h3><h4 id="1-1、全链路监控是什么"><a href="#1-1、全链路监控是什么" class="headerlink" title="1.1、全链路监控是什么"></a>1.1、全链路监控是什么</h4><p>随着微服务架构的流行，<strong>服务按照不同的维度进行拆分</strong>，一次请求往往需要涉及到多个服务。这些服务可能不同编程语言开发，不同团队开发，可能部署很多副本。因此，就需要一些可以帮助理解系统行为、用于分析性能问题的工具，以便发生故障的时候，能够快速定位和解决问题。全链路监控组件就在这样的问题背景下产生了。</p>
 <p>全链路性能监控<strong>从整体维度到局部维度展示各项指标</strong>，将跨应用的所有调用链性能信息集中展现，可方便度量整体和局部性能，并且方便找到故障产生的源头，生产上可极大缩短故障排除时间。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200113/esMg9n7qFBpt.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200113/esMg9n7qFBpt.png?imageslim" alt="mark"></p>
 <h4 id="1-2、全链路监控解决什么问题"><a href="#1-2、全链路监控解决什么问题" class="headerlink" title="1.2、全链路监控解决什么问题"></a>1.2、全链路监控解决什么问题</h4><ul>
 <li><strong>请求链路追踪，故障快速定位</strong>：可以通过调用链结合业务日志快速定位错误信息。</li>
 <li><strong>可视化</strong>： 各个阶段耗时，进行性能分析。</li>
@@ -205,16 +205,16 @@
 <li><p>检查器（Inspector ） ：查看应用上的其他详细信息，比如CPU使用率，内存/垃圾回收，TPS，和JVM参数。</p>
 </li>
 </ul>
-<h4 id="2-2、Pinpoint-部署"><a href="#2-2、Pinpoint-部署" class="headerlink" title="2.2、Pinpoint 部署"></a>2.2、Pinpoint 部署</h4><p><img src="http://myimage.okay686.cn/okay686cn/20200113/qDBEPfku09Ht.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<h4 id="2-2、Pinpoint-部署"><a href="#2-2、Pinpoint-部署" class="headerlink" title="2.2、Pinpoint 部署"></a>2.2、Pinpoint 部署</h4><p><img src="http://myimage.okay686.cn/okay686cn/20200113/qDBEPfku09Ht.png?imageslim" alt="mark"></p>
 <p>如上就是pinpoint一个整体架构，也是基于c/s。所有的应用在启动的时候通过JVM参数或者jar的方式启动，服务端的collector采集器通过agent采集各个指标并写入到HBase中，然后进行数据分析和展示。</p>
 <p>Docker部署：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/naver/pinpoint-docker.git</span><br><span class="line">cd pinpoint-docker</span><br><span class="line">docker-compose pull &amp;&amp; docker-compose up -d</span><br><span class="line"></span><br><span class="line">docker-compose ps #查看启动的服务</span><br></pre></td></tr></table></figure></p>
 <p>通过安装服务端的IP:8079 访问：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200114/cexf1UUmcA6Y.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200114/cexf1UUmcA6Y.png?imageslim" alt="mark"></p>
 <p>当然启动后官方会给我们启动一个简单的quickapp的一个demon示例；</p>
 <p>如果需要将现有的业务接入咱们的pinpoint就需要按照如下方式：</p>
 <h4 id="2-3、Pinpoint-Agent部署"><a href="#2-3、Pinpoint-Agent部署" class="headerlink" title="2.3、Pinpoint Agent部署"></a>2.3、Pinpoint Agent部署</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Tomcat：</span><br><span class="line"># catalina.sh</span><br><span class="line">CATALINA_OPTS=&quot;$CATALINA_OPTS -javaagent:$AGENT_PATH/pinpoint-bootstrap-$VERSION.jar&quot;</span><br><span class="line">CATALINA_OPTS=&quot;$CATALINA_OPTS -Dpinpoint.agentId=$AGENT_ID&quot;</span><br><span class="line">CATALINA_OPTS=&quot;$CATALINA_OPTS -Dpinpoint.applicationName=$APPLICATION_NAME&quot;</span><br><span class="line"></span><br><span class="line">Jar：</span><br><span class="line">java -jar -javaagent:$AGENT_PATH/pinpoint-bootstrap-$VERSION.jar -Dpinpoint.agentId=$AGENT_ID -Dpinpoint.applicationName=$APPLICATION_NAME xxx.jar</span><br></pre></td></tr></table></figure>
 <p>如上agent 在我们安装好pinpoint后会提供一个下载连接：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200114/uXHEfo5rHyMG.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200114/uXHEfo5rHyMG.png?imageslim" alt="mark"></p>
 <p>下载完成后，2种目前我们在用的方式接入：</p>
 <ul>
 <li>①将下载好的jar文件打入应用的基础镜像；</li>
@@ -225,7 +225,7 @@
 <p>先看一个典型的前端portal示例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># pwd</span><br><span class="line">/root/microservic-code/simple-microservice-dev4/portal-service</span><br><span class="line"></span><br><span class="line"># cat Dockerfile</span><br><span class="line">FROM java:8-jdk-alpine</span><br><span class="line">RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">COPY ./target/portal-service.jar ./</span><br><span class="line">COPY pinpoint /pinpoint</span><br><span class="line">EXPOSE 8080</span><br><span class="line">CMD java -jar -javaagent:/pinpoint/pinpoint-bootstrap-1.8.3.jar -Dpinpoint.agentId=$&#123;HOSTNAME&#125; -Dpinpoint.applicationName=ms-protal /portal-service.jar</span><br><span class="line"></span><br><span class="line"># ll</span><br><span class="line">总用量 8</span><br><span class="line">-rw-r--r-- 1 root root  379 8月   3 23:03 Dockerfile</span><br><span class="line">drwxr-xr-x 7 root root  129 8月   3 23:03 pinpoint  ##组件所在的位置</span><br><span class="line">-rw-r--r-- 1 root root 1154 8月   3 23:03 pom.xml</span><br><span class="line">drwxr-xr-x 3 root root   18 8月   3 23:03 src</span><br><span class="line"></span><br><span class="line">### 进入pinpoint目录配置pinpoint.config（**每个微服都需要修改下**）</span><br><span class="line"></span><br><span class="line"># vim pinpoint.config</span><br><span class="line"></span><br><span class="line">profiler.collector.ip=192.168.171.10    ##指定采集端的server_IP</span><br></pre></td></tr></table></figure></p>
 <p>然后只需要按照我之前修改的docker_build.sh <strong>重新部署</strong> 即可：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 k8s]# cat docker_build.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">docker_registry=192.168.171.10</span><br><span class="line">kubectl create secret docker-registry registry-pull-secret --docker-server=$docker_registry --docker-username=admin --docker-password=XXXX --docker-email=zhdya@zhdya.cn -n ms</span><br><span class="line"></span><br><span class="line">service_list=&quot;gateway-service order-service product-service stock-service portal-service&quot;</span><br><span class="line">service_list=$&#123;1:-$&#123;service_list&#125;&#125;</span><br><span class="line">work_dir=$(dirname $PWD)</span><br><span class="line">current_dir=$PWD</span><br><span class="line"></span><br><span class="line">cd $work_dir</span><br><span class="line">mvn clean package -Dmaven.test.skip=true</span><br><span class="line"></span><br><span class="line">for service in $service_list; do</span><br><span class="line">   cd $work_dir/$service</span><br><span class="line">   if ls |grep biz &amp;&gt;/dev/null; then</span><br><span class="line">      cd $&#123;service&#125;-biz</span><br><span class="line">   fi</span><br><span class="line">   service=$&#123;service%-*&#125;</span><br><span class="line">   image_name=$docker_registry/microservice/$&#123;service&#125;:$(date +%F-%H-%M-%S)</span><br><span class="line">   docker build -t $&#123;image_name&#125; .</span><br><span class="line">   docker push $&#123;image_name&#125;</span><br><span class="line">  sed -i -r &quot;s#(image: )(.*)#\1$image_name#&quot; $&#123;current_dir&#125;/$&#123;service&#125;.yaml</span><br><span class="line">  kubectl apply -f $&#123;current_dir&#125;/$&#123;service&#125;.yaml</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
 <p>最后在dashboard中查看各个应用的调用关系（其中ms-portal）：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200118/nuUbLhuWHmMJ.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200118/nuUbLhuWHmMJ.png?imageslim" alt="mark"></p>
 <hr>
 <h4 id="写在最后："><a href="#写在最后：" class="headerlink" title="写在最后："></a>写在最后：</h4><ul>
 <li>线上应用主要监控哪些指标？<ul>
@@ -415,8 +415,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

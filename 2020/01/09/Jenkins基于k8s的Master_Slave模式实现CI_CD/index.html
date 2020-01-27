@@ -166,8 +166,8 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h2 id="Jenkins在Kubernetes中动态创建代理"><a href="#Jenkins在Kubernetes中动态创建代理" class="headerlink" title="Jenkins在Kubernetes中动态创建代理"></a>Jenkins在Kubernetes中动态创建代理</h2><h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>就类似于我们公司 目前每天的jenkins构建测试基本上平稳在2300+左右，也就是可能同时并发的构建我见过一次120+，只是这一个jenkins节点是不可以完成这么大的任务量的！所以jenkins-slave的接入就很大程度上提高了性能！</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/RSbqBjzstx8X.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/cBdQUIyxx7kp.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/RSbqBjzstx8X.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/cBdQUIyxx7kp.png?imageslim" alt="mark"></p>
 <p>Master/Slave相当于Server/agent。Master提供web接口让用户来管理job和slave，job可以运行在master本机或者被分配到slave上运行。一个master可以关联多个slave用来为不同的job或相同的job的不同配置来服务。</p>
 <p>如何添加jenkins-slave节点？</p>
 <p>“Manage Jenkins” ==&gt; “Manage Nodes” ==&gt; “New Node”</p>
@@ -175,7 +175,7 @@
 <p>在jenkins的组件中搜索并安装：“kubernetes”</p>
 <p>“Manage Jenkins” ==&gt; “Configure System” ==&gt; “Cloud” ==&gt; “add kubernetes”</p>
 <p>因为我们的jenkins已经在K8S集群中以pod的形式去运行，所以Kubernetes的地址就可以直接填写servicename：<a href="https://kubernetes.default" target="_blank" rel="noopener">https://kubernetes.default</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/Ueygq6p1XLSN.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/Ueygq6p1XLSN.png?imageslim" alt="mark"></p>
 <p>当然如果jenkins服务是单独部署在K8S集群外部，我们就需要填写可以联调的地址、证书及证书；</p>
 <h4 id="2-2、自定义构建Jenkins-Slave镜像"><a href="#2-2、自定义构建Jenkins-Slave镜像" class="headerlink" title="2.2、自定义构建Jenkins Slave镜像"></a>2.2、自定义构建Jenkins Slave镜像</h4><p>当然我虽然已经在K8S上部署了master节点，但是所以的编译都在slave节点运行的，我们需要考虑到：</p>
 <ul>
@@ -360,8 +360,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

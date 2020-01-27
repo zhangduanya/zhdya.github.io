@@ -165,11 +165,11 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h3 id="先来了解下："><a href="#先来了解下：" class="headerlink" title="先来了解下："></a>先来了解下：</h3><p><img src="http://myimage.okay686.cn/okay686cn/20191217/5zSS59967ry9.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+            <h3 id="先来了解下："><a href="#先来了解下：" class="headerlink" title="先来了解下："></a>先来了解下：</h3><p><img src="http://myimage.okay686.cn/okay686cn/20191217/5zSS59967ry9.png?imageslim" alt="mark"></p>
 <h4 id="内存的分配及回收–堆中的新生代和老年代："><a href="#内存的分配及回收–堆中的新生代和老年代：" class="headerlink" title="内存的分配及回收–堆中的新生代和老年代："></a>内存的分配及回收–堆中的新生代和老年代：</h4><p>java堆被分为两部分， 一部分被称为新生代， 一部分称为老年代， 他们的<strong>比例通常为 1：2</strong></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191218/pWuA7RQLJGVA.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/pWuA7RQLJGVA.png?imageslim" alt="mark"></p>
 <h3 id="一、堆（新生代、老年代）与元空间。"><a href="#一、堆（新生代、老年代）与元空间。" class="headerlink" title="一、堆（新生代、老年代）与元空间。"></a>一、堆（新生代、老年代）与元空间。</h3><h4 id="1-1、新生代："><a href="#1-1、新生代：" class="headerlink" title="1.1、新生代："></a>1.1、新生代：</h4><p>主要是用来存放新生的对象。一般占据堆空间的1/3，由于频繁创建对象，所以新生代会频繁触发MinorGC进行垃圾回收。<br>新生代分为<strong>Eden</strong>区、<strong>ServivorFrom</strong>、<strong>ServivorTo</strong>三个区，==比例为 8：1：1==。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191217/aSadpXMNvKXL.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191217/aSadpXMNvKXL.png?imageslim" alt="mark"></p>
 <p><strong>Eden区</strong>：Java新对象的出生地(如果新创建的对象占用内存很大则直接分配给老年代)。</p>
 <h5 id="1-1-1、MinorGC-触发机制："><a href="#1-1-1、MinorGC-触发机制：" class="headerlink" title="1.1.1、MinorGC 触发机制："></a>1.1.1、MinorGC 触发机制：</h5><ul>
 <li>当Eden区内存不够的时候就会触发一次MinorGc，对新生代区进行一次垃圾回收。</li>
@@ -209,11 +209,11 @@
 <p>另外，标记-清除算法收集垃圾的时候会产生许多的内存碎片 ( 即不连续的内存空间 )，此后需要为较大的对象</p>
 <p>分配内存空间时，若无法找到足够的连续的内存空间，就会提前触发一次 GC 的收集动作。</p>
 <h3 id="三、故障重现"><a href="#三、故障重现" class="headerlink" title="三、故障重现"></a>三、故障重现</h3><p>某开发负责的其中一个业务其中1台容器无故gg了，已知不是核心应用，且目前线上1台虚机也可以扛住目前的量，赶紧一起同开发分析问题：<br>- 先看虚机和宿主机的负载，正常；<br>- 进入容器看下进程还在；<br>- 业务日志已经停止写入；<br>- 查看是否有gclog；</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191218/PsY75q3oyKLg.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/PsY75q3oyKLg.png?imageslim" alt="mark"></p>
 <p>再次看下大盘：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191218/zEU4HwRh09jm.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/zEU4HwRh09jm.png?imageslim" alt="mark"></p>
 <p>gc问题，有异常了，节点被下掉了；</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191218/iDq0cFbYf9aO.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/iDq0cFbYf9aO.png?imageslim" alt="mark"></p>
 <p>先问下开发此业务当然有没有什么其它动作？经查看业务日志发现，刚刚那一阵在跑job，为什么metadata区会爆掉呢？</p>
 <p>开发给的答案：</p>
 <p>类加载器创建过多，带来的一个问题是，在类加载器第一次加载类的时候，会在Metaspace里会给它分配内存块，为了分配高效，每个类加载器用来存放类信息的内存块都是独立的，所以哪怕你这个类加载器只加载一个类，也会为之分配一块空的内存给这个类加载器，其实是至少两个内存块，于是你有可能会发现Metaspace的内存使用率非常低，但是committed的内存已经达到了阈值，从而触发了Full GC，如果这种只加载很少类的类加载器非常多，那造成的后果就是很多碎片化的内存！</p>
@@ -231,8 +231,8 @@
 <li>具体设置多大，建议稳定运行一段时间后通过jstat -gc pid确认且这个值大一些，对于大部分项目256m即可。</li>
 </ul>
 <p>写这篇日志已经是第二天了 暂时没有发现异常：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191218/AHxpwnr3vKBy.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191218/SLo0txoUUzBJ.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/AHxpwnr3vKBy.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191218/SLo0txoUUzBJ.png?imageslim" alt="mark"></p>
 
             <hr>
           </div>
@@ -408,8 +408,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

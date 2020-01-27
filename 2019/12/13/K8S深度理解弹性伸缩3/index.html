@@ -169,7 +169,7 @@
 <pre><code>它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
 </code></pre><p>当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。</p>
 <p>在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/4ltOHHqMSpAC.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/4ltOHHqMSpAC.png?imageslim" alt="mark"></p>
 <p>当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apiserver，正是这个代理的一个后端；而 Metrics Server，则是另一个后端 。通过这种方式，我们就可以很方便地扩展 Kubernetes 的 API 了。</p>
 <p>如果你使用kubeadm部署的，默认已开启。<strong>如果你使用==二进制方式部署==的话，需要在kube-APIServer中添加启动参数</strong>，增加以下配置：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># vi /opt/kubernetes/cfg/kube-apiserver.conf</span><br><span class="line">...</span><br><span class="line">--requestheader-client-ca-file=/opt/kubernetes/ssl/ca.pem \</span><br><span class="line">--proxy-client-cert-file=/opt/kubernetes/ssl/server.pem \</span><br><span class="line">--proxy-client-key-file=/opt/kubernetes/ssl/server-key.pem \</span><br><span class="line">--requestheader-allowed-names=kubernetes \</span><br><span class="line">--requestheader-extra-headers-prefix=X-Remote-Extra- \</span><br><span class="line">--requestheader-group-headers=X-Remote-Group \</span><br><span class="line">--requestheader-username-headers=X-Remote-User \</span><br><span class="line">--enable-aggregator-routing=true \</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
@@ -177,7 +177,7 @@
 <h5 id="2、部署-Metrics-Server"><a href="#2、部署-Metrics-Server" class="headerlink" title="2、部署 Metrics Server"></a>2、部署 Metrics Server</h5><p>Metrics Server是一个集群范围的资源使用情况的数据聚合器。作为一个应用部署在集群中。</p>
 <p>Metric server从每个节点上Kubelet公开的摘要API收集指标。 </p>
 <p>Metrics server通过Kubernetes聚合器注册在Master APIServer中。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/zvXGP2D8wtDk.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/zvXGP2D8wtDk.png?imageslim" alt="mark"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># git clone https://github.com/kubernetes-incubator/metrics-server</span><br><span class="line"># cd metrics-server/deploy/1.8+/</span><br><span class="line"># vi metrics-server-deployment.yaml   # 添加2条启动参数   </span><br><span class="line">...</span><br><span class="line">      containers:</span><br><span class="line">      - name: metrics-server</span><br><span class="line">        image: zhdya/metrics-server-amd64:v0.3.1</span><br><span class="line">        command:</span><br><span class="line">        - /metrics-server</span><br><span class="line">        - --kubelet-insecure-tls        ##忽略证书的验证</span><br><span class="line">        - --kubelet-preferred-address-types=InternalIP      ##一般node都是用主机名注册的，但是metricserver是通过pod启动的，解析不到hostname，所以需要采集节点的IP</span><br><span class="line">...</span><br><span class="line"># kubectl create -f .</span><br></pre></td></tr></table></figure>
 <p>可通过Metrics API在Kubernetes中获得资源使用率指标，例如容器CPU和内存使用率。这些度量标准既可以由用户直接访问（例如，通过使用<code>kubectl top</code>命令），也可以由集群中的控制器（例如，Horizontal Pod Autoscaler）用于进行决策。 </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 metrics-server]# kubectl get po -n kube-system -o wide</span><br><span class="line">NAME                             READY   STATUS    RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES</span><br><span class="line">coredns-6d8cfdd59d-pbbbc         1/1     Running   0          131m   10.244.2.2       k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-4gj8p      1/1     Running   1          142m   192.168.171.11   k8s-master1   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-k5lfh      1/1     Running   1          75m    192.168.171.14   k8s-node3     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-kddhv      1/1     Running   1          142m   192.168.171.12   k8s-node1     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-q8g25      1/1     Running   1          141m   192.168.171.13   k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br><span class="line">metrics-server-7dbbcf4c7-v5zpm   1/1     Running   0          49s    10.244.2.4       k8s-node2     &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
@@ -396,8 +396,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

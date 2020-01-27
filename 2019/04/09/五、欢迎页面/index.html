@@ -171,9 +171,9 @@
 <p>之后输入下面命令创建管理帐号和密码：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python manage.py createsuperuser</span><br></pre></td></tr></table></figure>
 <p>最后，我们设置下启动命令，启动我们的Django项目：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ha3OxK80ofwV.png?imageslim" alt="mark"></p>
 <p>启动后登陆 <a href="http://0.0.0.0:8000/" target="_blank" rel="noopener">http://0.0.0.0:8000/</a> 就可以看到我们的欢迎页。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190417/EfVJ0Ar9T6Tt.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190417/EfVJ0Ar9T6Tt.png?imageslim" alt="mark"></p>
 <p>另外一点，我们当然也可以设置自定义的主页：</p>
 <p>首先，打开打开bolg目录下的views.py文件，在里面输入：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/blog/views.py</span><br><span class="line"></span><br><span class="line">from django.http import HttpResponse</span><br><span class="line"></span><br><span class="line">def hello(request):</span><br><span class="line">    return HttpResponse(&apos;Welcome to Django Zone！&apos;)</span><br></pre></td></tr></table></figure>
@@ -360,8 +360,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

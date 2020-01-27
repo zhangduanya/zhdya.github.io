@@ -166,7 +166,7 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h3 id="一、持续集成Jenkins部署"><a href="#一、持续集成Jenkins部署" class="headerlink" title="一、持续集成Jenkins部署"></a>一、持续集成Jenkins部署</h3><p>在K8S中部署jenkins首先我们需要考虑到的是持久化存储，因为产生的一些插件和job都需要存储起来。当然部署的pod也是不固定的，也可能在node1也可能在其它节点，这就需要在任何节点都可以读取到这部分数据！</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200122/aXHsUocfi4G7.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200122/aXHsUocfi4G7.png?imageslim" alt="mark"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 ~]# cd jenkins</span><br><span class="line">[root@k8s-master1 jenkins]# ls</span><br><span class="line">deployment.yml  ingress.yml  rbac.yml  service-account.yml  service.yml</span><br><span class="line"></span><br><span class="line">先来看下deployment文件中的几个参数：</span><br><span class="line">volumeMounts:</span><br><span class="line">  - name: jenkins-home</span><br><span class="line">    mountPath: /var/jenkins_home    # 持久化数据的目录</span><br><span class="line">    </span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-home</span><br><span class="line">spec:</span><br><span class="line">  storageClassName: &quot;managed-nfs-storage&quot;       # 上章节讲到的nfs的storage名字</span><br><span class="line">  accessModes: [&quot;ReadWriteOnce&quot;]</span><br><span class="line"></span><br><span class="line">再将ingress.yaml文件中的域名修改下即可！</span><br></pre></td></tr></table></figure>
 <p><u>如果遇到启动有问题的，可以先把资源限制的提升下！！</u><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 jenkins]# kubectl get ing</span><br><span class="line">NAME      HOSTS              ADDRESS   PORTS   AGE</span><br><span class="line">jenkins   jenkins.zhdya.cn             80      19s</span><br><span class="line">[root@k8s-master1 jenkins]# kubectl get po</span><br><span class="line">NAME                                     READY   STATUS              RESTARTS   AGE</span><br><span class="line">jenkins-557cf6fd7f-k8975                 1/1     Running             0          26s</span><br><span class="line">nfs-client-provisioner-f9fdd5cc9-m2f62   1/1     Running             0          118m</span><br><span class="line">[root@k8s-master1 jenkins]# kubectl get pv</span><br><span class="line">NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM                    STORAGECLASS          REASON   AGE</span><br><span class="line">pvc-3af37069-0834-4b41-94aa-8305935dbb08   5Gi        RWO            Delete           Bound      default/jenkins-home     managed-nfs-storage            2m8s</span><br></pre></td></tr></table></figure></p>
 <h3 id="二、Pipeline安装和配置"><a href="#二、Pipeline安装和配置" class="headerlink" title="二、Pipeline安装和配置"></a>二、Pipeline安装和配置</h3><p>Jenkins Pipeline是一套插件，支持在Jenkins中实现集成和持续交付管道；</p>
@@ -190,7 +190,7 @@
 <li>脚本式</li>
 </ul>
 <p>我们主要用的是声明式，先来个简单的例子吧：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">   agent any</span><br><span class="line">   stages &#123;</span><br><span class="line">      stage(&apos;1、拉取代码&apos;) &#123;</span><br><span class="line">         steps &#123;</span><br><span class="line">		 echo &quot;拉取代码~&quot;</span><br><span class="line">         &#125;</span><br><span class="line">         &#125;</span><br><span class="line">	  stage(&apos;2、编译&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;编译~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	  stage(&apos;1、发布&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;发布~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/JoGs9jhJP8Ix.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/JoGs9jhJP8Ix.png?imageslim" alt="mark"></p>
 <p>如上的构建步骤就是和如上图片所表达出来的就是一个意思，开发提交代码到git，jenkins配置仓库地址，拉取代码进行编译，经过test和stage环境最后上线！</p>
 <p>当然针对不同的应用我们线上全部是1套pipelinefile具体只需要修改不同的参数即可：</p>
 <ul>
@@ -207,15 +207,15 @@
 <li>副本数</li>
 <li>chart模板</li>
 </ul>
-<p>点击如下，可使用pipeline自动生成一些基础语法：<br><img src="http://myimage.okay686.cn/okay686cn/20200126/HMUAHgNop46v.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/2T2xvmquFz18.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p>点击如下，可使用pipeline自动生成一些基础语法：<br><img src="http://myimage.okay686.cn/okay686cn/20200126/HMUAHgNop46v.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/2T2xvmquFz18.png?imageslim" alt="mark"></p>
 <p>发布选择（先发布一次，然后返回再次选择如下）：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/mGlSlloB6hxa.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/nCsFjsLKoMgS.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/mGlSlloB6hxa.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/nCsFjsLKoMgS.png?imageslim" alt="mark"></p>
 <p>当然我们目前全部选用的K8S部署，有些前端业务也是单台物理机去部署的，我们也可以按照如上步骤，增加后端RS选择：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">   agent any</span><br><span class="line">   parameters &#123;</span><br><span class="line">  choice choices: [&apos;192.168.171.10:9999/root/a.git&apos;, &apos;192.168.171.10:9999/root/b.git&apos;, &apos;192.168.171.10:9999/root/c.git&apos;], description: &apos;【请选择所需要发布项目的Git地址】&apos;, name: &apos;Git&apos;</span><br><span class="line">  choice choices: [&apos;192.168.171.11&apos;, &apos;192.168.171.12&apos;, &apos;192.168.171.13&apos;], description: &apos;【请选择所需要发布项目的RS后端负载】&apos;, name: &apos;RS&apos;</span><br><span class="line">   &#125;</span><br><span class="line">   stages &#123;</span><br><span class="line">      stage(&apos;1、相关信息&apos;) &#123;</span><br><span class="line">         steps &#123;</span><br><span class="line">		 echo &quot;Git分支是：$&#123;Git&#125;&quot;</span><br><span class="line">		 echo &quot;后端负载是：$&#123;RS&#125;&quot;</span><br><span class="line">         &#125;</span><br><span class="line">         &#125;</span><br><span class="line">	  stage(&apos;2、编译&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;编译~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	  stage(&apos;1、发布&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;发布~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/B7Q1aTKT42MI.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/uEkwPwwQ4i21.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/B7Q1aTKT42MI.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200126/uEkwPwwQ4i21.png?imageslim" alt="mark"></p>
 
             <hr>
           </div>
@@ -385,8 +385,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

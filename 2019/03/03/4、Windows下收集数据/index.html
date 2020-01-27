@@ -194,7 +194,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALLOWED_HOSTS = [&quot;*&quot;]</span><br></pre></td></tr></table></figure>
 <p>这表示接收所有同一局域网内的网络访问。</p>
 <p>然后以<strong>0.0.0.0:8000的参数启动CMDB</strong>，表示对局域网内所有ip开放服务。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190303/wNHqtOQNReIs.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190303/wNHqtOQNReIs.png?imageslim" alt="mark"></p>
 <p>回到客户端，进入Client/bin目录，运行<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python main.py report_data</span><br></pre></td></tr></table></figure></p>
 <p>可以看到如下结果：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">正在将数据发送至： [http://10.10.7.26:8000/assets/report/]  ......</span><br><span class="line">handler_data_encode--&gt;&gt; b&apos;asset_data=%7B%22cpu_core_count%22%3A+4%2C+%22cpu_model%22%3A+%22Intel%28R%29+Core%28TM%29+i5-7300HQ+CPU+%40+2.50GHz%22%2C+%22wake_up</span><br><span class="line">...&lt;中间信息省略&gt;...</span><br><span class="line">71b+M.2+2280+256GB%22%2C+%22capacity%22%3A+238%7D%5D%2C+%22cpu_count%22%3A+1%2C+%22os_distribution%22%3A+%22Microsoft%22%2C+%22asset_type%22%3A+%22server%22%7D</span><br><span class="line">&apos;</span><br><span class="line">?[31;1m发送失败，HTTP Error 404: Not Found?[0m</span><br><span class="line">日志记录成功！</span><br></pre></td></tr></table></figure></p>
 <p>这是一个404错误，表示服务器地址没找到，这是因为我们还没有为Django编写接收数据的视图和路由。</p>
@@ -396,8 +396,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

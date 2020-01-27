@@ -199,7 +199,7 @@
 <p>数据库设置好之后，我们就依次输入下面的命令进行数据库迁移：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python manage.py makemigrations</span><br><span class="line">python manage.py migrate</span><br></pre></td></tr></table></figure>
 <p>迁移的时候，会有如下提示：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/YLckQShHEkFH.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/YLckQShHEkFH.png?imageslim" alt="mark"></p>
 <p>出现这个原因是因为我们的幻灯图使用到图片字段，我们需要引入图片处理包。提示里也给了我们处理方案，输入如下命令，安装Pillow模块即可：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip install Pillow</span><br></pre></td></tr></table></figure></p>
 <p>然后再次迁移即可；</p>
 
@@ -381,8 +381,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

@@ -168,7 +168,7 @@
             <h3 id="为什么要用Ceph"><a href="#为什么要用Ceph" class="headerlink" title="为什么要用Ceph"></a>为什么要用Ceph</h3><blockquote>
 <p>Ceph是当前非常流行的开源分布式存储系统，具有高扩展性、高性能、高可靠性等优点，同时提供块存储服务(rbd)、对象存储服务(rgw)以及文件系统存储服务(cephfs)，Ceph在存储的时候充分利用存储节点的计算能力，在存储每一个数据时都会通过计算得出该数据的位置，尽量的分布均衡。。目前也是OpenStack的主流后端存储，随着OpenStack在云计算领域的广泛使用，ceph也变得更加炙手可热。国内目前使用ceph搭建分布式存储系统较为成功的企业有x-sky,深圳元核云，上海UCloud等三家企业。</p>
 </blockquote>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191229/mmd9867JuV5R.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191229/mmd9867JuV5R.png?imageslim" alt="mark"></p>
 <h3 id="Ceph架构介绍"><a href="#Ceph架构介绍" class="headerlink" title="Ceph架构介绍"></a>Ceph架构介绍</h3><blockquote>
 <p>Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方式的文件和对象转换。外层通过RGW（Object，有原生的API，而且也兼容Swift和S3的API，适合单客户端使用）、RBD（Block，支持精简配置、快照、克隆，适合多客户端有目录结构）、CephFS（File，Posix接口，支持快照，社会和更新变动少的数据，没有目录结构不能直接打开）将数据写入存储。</p>
 <ul>
@@ -177,8 +177,8 @@
 <li>特性丰富<br>a. 支持三种存储接口：块存储、文件存储、对象存储<br>b. 支持自定义接口，支持多种语言驱动  </li>
 </ul>
 </blockquote>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191229/UzRMtUDwgiVm.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<h3 id="Ceph核心概念"><a href="#Ceph核心概念" class="headerlink" title="Ceph核心概念"></a>Ceph核心概念</h3><p>ceph架构介绍：<br><img src="http://myimage.okay686.cn/okay686cn/20191229/V5moUrMU10wr.png?imageslim" srcset="/img/loading.gif" alt="mark"><br>目前多数公司选择的是RGW模式；</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191229/UzRMtUDwgiVm.png?imageslim" alt="mark"></p>
+<h3 id="Ceph核心概念"><a href="#Ceph核心概念" class="headerlink" title="Ceph核心概念"></a>Ceph核心概念</h3><p>ceph架构介绍：<br><img src="http://myimage.okay686.cn/okay686cn/20191229/V5moUrMU10wr.png?imageslim" alt="mark"><br>目前多数公司选择的是RGW模式；</p>
 <h5 id="RADOS"><a href="#RADOS" class="headerlink" title="RADOS"></a>RADOS</h5><blockquote>
 <p>全称Reliable Autonomic Distributed Object Store，即可靠的、自动化的、分布式对象存储系统。RADOS是Ceph集群的精华，用户实现数据分配、Failover等集群操作。《场景：坏盘的数据迁移；新盘的数据一致性》</p>
 </blockquote>
@@ -197,21 +197,21 @@
 <h5 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h5><blockquote>
 <p>简单来说块存储读写快，不利于共享，文件存储读写慢，利于共享。能否弄一个读写快，利 于共享的出来呢。于是就有了对象存储。最底层的存储单元，包含元数据和原始数据。</p>
 </blockquote>
-<p>ceph资源划分：<br><img src="http://myimage.okay686.cn/okay686cn/20191229/glU5lK6aJkVX.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p>ceph资源划分：<br><img src="http://myimage.okay686.cn/okay686cn/20191229/glU5lK6aJkVX.png?imageslim" alt="mark"></p>
 <hr>
-<p>ceph各层级架构：<br><img src="http://myimage.okay686.cn/okay686cn/20191229/04f3mpLC8uEf.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p>ceph各层级架构：<br><img src="http://myimage.okay686.cn/okay686cn/20191229/04f3mpLC8uEf.png?imageslim" alt="mark"></p>
 <hr>
 <h3 id="Ceph核心组件"><a href="#Ceph核心组件" class="headerlink" title="Ceph核心组件"></a>Ceph核心组件</h3><h5 id="OSD"><a href="#OSD" class="headerlink" title="OSD"></a>OSD</h5><blockquote>
 <p>OSD是负责物理存储的进程，一般配置成和磁盘一一对应，一块磁盘启动一个OSD进程。主要功能是：==存储数据、复制数据、平衡数据、恢复数据，以及与其它OSD间进行心跳检查，负责响应客户端请求返回具体数据的进程等==；  </p>
 </blockquote>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191229/D9bwx8eRsRgz.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191229/D9bwx8eRsRgz.png?imageslim" alt="mark"></p>
 <p>Pool、PG和OSD的关系：</p>
 <ul>
 <li>一个Pool里有很多PG；  </li>
 <li>一个PG里包含一堆对象，一个对象只能属于一个PG；  </li>
 <li>PG有主从之分，一个PG分布在不同的OSD上（针对三副本类型）;  </li>
 </ul>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191229/pa1iR766mGfJ.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191229/pa1iR766mGfJ.png?imageslim" alt="mark"></p>
 <h5 id="Monitor（生产：至少要用3个monitor，使用奇数的monitor组成一个分布式高可用的monitor集群）"><a href="#Monitor（生产：至少要用3个monitor，使用奇数的monitor组成一个分布式高可用的monitor集群）" class="headerlink" title="Monitor（生产：至少要用3个monitor，使用奇数的monitor组成一个分布式高可用的monitor集群）"></a>Monitor（<strong>生产</strong>：至少要用3个monitor，使用奇数的monitor组成一个分布式高可用的monitor集群）</h5><blockquote>
 <p>一个Ceph集群需要多个Monitor组成的小集群，它们通过Paxos同步数据，用来保存OSD的元数据。负责==监视整个Ceph集群运行的Map视图（如OSD Map、Monitor Map、PG Map和CRUSH Map），维护集群的健康状态，维护展示集群状态的各种图表，管理集群客户端认证与授权==；</p>
 </blockquote>
@@ -459,8 +459,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

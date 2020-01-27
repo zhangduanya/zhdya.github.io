@@ -166,9 +166,9 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h3 id="Pod自动扩容-缩容（HPA）"><a href="#Pod自动扩容-缩容（HPA）" class="headerlink" title="Pod自动扩容/缩容（HPA）"></a>Pod自动扩容/缩容（HPA）</h3><p>Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/q08Axxe9Bt3p.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/q08Axxe9Bt3p.png?imageslim" alt="mark"></p>
 <h5 id="1、HPA基本原理"><a href="#1、HPA基本原理" class="headerlink" title="1、HPA基本原理"></a>1、HPA基本原理</h5><p>Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191213/jIal8CEvNnLr.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191213/jIal8CEvNnLr.png?imageslim" alt="mark"></p>
 <p>在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸， 所以在每次做出扩容缩容后，冷却时间是多少。</p>
 <p>在 HPA 中，<strong>默认的扩容冷却周期是 3 分钟，缩容冷却周期是 5 分钟。</strong></p>
 <p>可以通过调整kube-controller-manager组件启动参数设置冷却时间：</p>
@@ -361,8 +361,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

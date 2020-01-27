@@ -167,7 +167,7 @@
           <div class="markdown-body">
             <p>承接上文，我们部署好了ingress，为了达到生产级的阈值，我们必须要要配置ingress的高可用：</p>
 <p>假定我们在Kubernetes 指定两个worker节点中部署了ingress nginx来为后端的pod做proxy，这时候我们就需要通过keepalived实现高可用，提供对外的VIP，也就是externalLB的upstream只需要绑定此VIP即可。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191210/QiuFxjwJq4x7.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191210/QiuFxjwJq4x7.png?imageslim" alt="mark"></p>
 <p>首先我们要先确保有两个worker节点部署了ingress nginx</p>
 <p>在本实验中，环境如下：</p>
 <table>
@@ -390,8 +390,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

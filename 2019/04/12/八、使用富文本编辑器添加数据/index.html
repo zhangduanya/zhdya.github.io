@@ -166,7 +166,7 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>在Django admin后台添加数据的时候，文章内容文本框想发布一篇图文并茂的文章需就得手写Html代码，这十分吃力，也没法上传图片和文件。这显然不是我等高大上程序猿想要的。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/5aJX93PN8acE.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/5aJX93PN8acE.png?imageslim" alt="mark"></p>
 <p>为提升效率，我们可以使用富文本编辑器添加数据。支持Django的富文本编辑器很多，这里我推荐使用DjangoUeditor，Ueditor是百度开发的一个富文本编辑器，功能强大。下面教大家安装如何使用DjangoUeditor。</p>
 <h4 id="1、首先我们先下载DjangoUeditor包"><a href="#1、首先我们先下载DjangoUeditor包" class="headerlink" title="1、首先我们先下载DjangoUeditor包"></a>1、首先我们先下载DjangoUeditor包</h4><p>点击下面的链接进行下载！下载完成然后解压到项目根目录里。</p>
 <p><a href="https://www.django.cn/media/upfile/DjangoUeditor_20181010013851_248.zip" target="_blank" rel="noopener">https://www.django.cn/media/upfile/DjangoUeditor_20181010013851_248.zip</a></p>
@@ -183,15 +183,15 @@
 <h4 id="错误一："><a href="#错误一：" class="headerlink" title="错误一："></a>错误一：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">File &quot;C:\Python37\lib\site-packages\django\views\debug.py&quot;, line 332, in get_traceback_html</span><br><span class="line">    t = DEBUG_ENGINE.from_string(fh.read())</span><br><span class="line">UnicodeDecodeError: &apos;gbk&apos; codec can&apos;t decode byte 0xa6 in position 9737: illegal multibyte sequence</span><br></pre></td></tr></table></figure>
 <p>查看错误栈最后一行发现是 编码问题<br>找到django 源码 “C:\Python37\lib\site-packages\django\views\debug.py” 332行位置 ,增加utf-8编码  open( encoding=’utf-8’)，问题解决：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def get_traceback_html(self):</span><br><span class="line">  &quot;&quot;&quot;Return HTML version of debug 500 HTTP error page.&quot;&quot;&quot;</span><br><span class="line">  with Path(CURRENT_DIR, &apos;templates&apos;, &apos;technical_500.html&apos;).open( encoding=&apos;utf-8&apos;) as fh:</span><br><span class="line">      t = DEBUG_ENGINE.from_string(fh.read())</span><br><span class="line">  c = Context(self.get_traceback_data(), use_l10n=False)</span><br><span class="line">  return t.render(c)</span><br></pre></td></tr></table></figure></p>
 <h4 id="错误二："><a href="#错误二：" class="headerlink" title="错误二："></a>错误二：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">render() got an unexpected keyword argument &apos;renderer&apos;</span><br></pre></td></tr></table></figure>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ki7f1qbrNjSm.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Ki7f1qbrNjSm.png?imageslim" alt="mark"></p>
 <p>我这里使用的是最新版本的Django2.1.1所以报错，解决办法很简单。打开这个文件的93行，注释这行即可。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/HjUJX4IaD9Tq.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/HjUJX4IaD9Tq.png?imageslim" alt="mark"></p>
 <p>修改成之后，重新刷新页面，就可以看到我们的富文本编辑器正常显示。</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/jdjuTJ862k5u.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/jdjuTJ862k5u.png?imageslim" alt="mark"></p>
 <p>留意，如果我们在富文本编辑器里，上传图片，在编辑器内容里不显示上传的图片。那我们还需要进行如下设置，打开myblog/urls.py文件，在里面输入如下代码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">myblog/urls.py</span><br><span class="line">....</span><br><span class="line">from django.urls import path, include, re_path</span><br><span class="line">#上面这行多加了一个re_path</span><br><span class="line">from django.views.static import serve</span><br><span class="line">#导入静态文件模块</span><br><span class="line">from django.conf import settings</span><br><span class="line">#导入配置文件里的文件上传配置</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(&apos;admin/&apos;, admin.site.urls),</span><br><span class="line">    ....</span><br><span class="line">    re_path(&apos;^media/(?P&lt;path&gt;.*)$&apos;, serve, &#123;&apos;document_root&apos;: settings.MEDIA_ROOT&#125;),#增加此行</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <p>设置好了之后，图片就会正常显示。这样我们就可以用DjangoUeditor富文本编辑器发布图文并茂的文章了。</p>
 <p>随便测试了一篇文章：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Jw8Tpj1Ht24P.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190420/Jw8Tpj1Ht24P.png?imageslim" alt="mark"></p>
 
             <hr>
           </div>
@@ -371,8 +371,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

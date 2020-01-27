@@ -166,7 +166,7 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <h3 id="三、Helm应用包管理器"><a href="#三、Helm应用包管理器" class="headerlink" title="三、Helm应用包管理器"></a>三、Helm应用包管理器</h3><h4 id="3-1-为什么需要Helm？"><a href="#3-1-为什么需要Helm？" class="headerlink" title="3.1 为什么需要Helm？"></a>3.1 为什么需要Helm？</h4><p>K8S上的应用对象，都是由特定的资源描述组成，包括deployment、service等。都保存各自文件中或者集中写到一个配置文件。然后kubectl apply –f 部署。</p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/yaml-all.png" srcset="/img/loading.gif" alt=""></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/yaml-all.png" alt=""></p>
 <p>如果应用只由一个或几个这样的服务组成，上面部署方式足够了。</p>
 <p>而对于一个复杂的应用，会有很多类似上面的资源描述文件，例如微服务架构应用，组成应用的服务可能多达十个，几十个。如果有更新或回滚应用的需求，可能要修改和维护所涉及的大量资源文件，而这种组织和管理应用的方式就显得力不从心了。</p>
 <p>且由于缺少对发布过的应用版本管理和控制，使Kubernetes上的应用维护和更新等面临诸多的挑战，主要面临以下问题：</p>
@@ -187,7 +187,7 @@
 <h4 id="3-3-Helm-v3-变化"><a href="#3-3-Helm-v3-变化" class="headerlink" title="3.3 Helm v3 变化"></a>3.3 Helm v3 变化</h4><p><strong>2019年11月13日，</strong> Helm团队发布 <code>Helm v3</code>的第一个稳定版本。</p>
 <p><strong>该版本主要变化如下：</strong></p>
 <h5 id="1、-架构变化"><a href="#1、-架构变化" class="headerlink" title="1、 架构变化"></a>1、 架构变化</h5><p><strong>最明显的变化是 <code>Tiller</code>的删除</strong></p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/helm-arch.png" srcset="/img/loading.gif" alt=""></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/helm-arch.png" alt=""></p>
 <h5 id="2、Release名称可以在不同命名空间重用"><a href="#2、Release名称可以在不同命名空间重用" class="headerlink" title="2、Release名称可以在不同命名空间重用"></a>2、<code>Release</code>名称可以在不同命名空间重用</h5><h5 id="3、支持将-Chart-推送至-Docker-镜像仓库中"><a href="#3、支持将-Chart-推送至-Docker-镜像仓库中" class="headerlink" title="3、支持将 Chart 推送至 Docker 镜像仓库中"></a>3、支持将 Chart 推送至 Docker 镜像仓库中</h5><h5 id="4、使用JSONSchema验证chart-values"><a href="#4、使用JSONSchema验证chart-values" class="headerlink" title="4、使用JSONSchema验证chart values"></a>4、使用JSONSchema验证chart values</h5><h5 id="5、其他"><a href="#5、其他" class="headerlink" title="5、其他"></a>5、其他</h5><p>1）为了更好地协调其他包管理者的措辞 <code>Helm CLI</code>个别更名</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">helm delete` 更名为 `helm uninstall</span><br><span class="line">helm inspect` 更名为 `helm show</span><br><span class="line">helm fetch` 更名为 `helm pull</span><br></pre></td></tr></table></figure>
 <p>但以上旧的命令当前仍能使用。</p>
@@ -321,7 +321,7 @@
 <p>也可以把chart包下载下来查看详情：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># helm pull stable/mysql --untar</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 ~]# cd mysql</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 mysql]# ls</span><br><span class="line">Chart.yaml  README.md  templates  values.yaml</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 mysql]# cd templates/</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 templates]# ls</span><br><span class="line">configurationFiles-configmap.yaml  _helpers.tpl                        NOTES.txt  secrets.yaml         servicemonitor.yaml  tests</span><br><span class="line">deployment.yaml                    initializationFiles-configmap.yaml  pvc.yaml   serviceaccount.yaml  svc.yaml</span><br></pre></td></tr></table></figure>
 <hr>
-<h4 id="values-yaml与set使用："><a href="#values-yaml与set使用：" class="headerlink" title="values yaml与set使用："></a>values yaml与set使用：</h4><p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/yaml-set.png" srcset="/img/loading.gif" alt=""></p>
+<h4 id="values-yaml与set使用："><a href="#values-yaml与set使用：" class="headerlink" title="values yaml与set使用："></a>values yaml与set使用：</h4><p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/yaml-set.png" alt=""></p>
 <p><strong>该helm install命令可以从多个来源安装：</strong></p>
 <ul>
 <li>chart存储库</li>
@@ -528,8 +528,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

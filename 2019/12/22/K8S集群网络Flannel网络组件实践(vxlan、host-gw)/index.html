@@ -179,7 +179,7 @@
 <h5 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubeadm部署指定Pod网段</span><br><span class="line">kubeadm init --pod-network-cidr=10.244.0.0/16</span><br><span class="line"></span><br><span class="line"># 二进制部署指定（启用cni）</span><br><span class="line">cat /opt/kubernetes/cfg/kube-controller-manager.conf</span><br><span class="line">--allocate-node-cidrs=true \</span><br><span class="line">--cluster-cidr=10.244.0.0/16 \</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kube-flannel.yml</span><br><span class="line">net-conf.json: |</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">      &quot;Backend&quot;: &#123;</span><br><span class="line">        &quot;Type&quot;: &quot;vxlan&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>为了能够在二层网络上打通“隧道”，VXLAN 会在宿主机上设置一个特殊的网络设备作为“隧道”的两端。这个设备就叫作 VTEP，即：VXLAN Tunnel End Point（虚拟隧道端点）。下图flannel.1的设备就是VXLAN所需的VTEP设备。示意图如下：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191223/ogSxtUBuvNax.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191223/ogSxtUBuvNax.png?imageslim" alt="mark"></p>
 <p>如果Pod 1访问Pod 2，源地址10.244.1.10，目的地址10.244.2.10 ，数据包传输流程如下：</p>
 <ol>
 <li><p><strong>容器路由</strong>：容器根据路由表从eth0发出</p>
@@ -194,7 +194,7 @@
 </ol>
 </li>
 <li><p><strong>二次封包</strong>：知道了目的MAC地址，封装二层数据帧（容器源IP和目的IP）后，对于宿主机网络来说这个帧并没有什么实际意义。接下来，Linux内核还要把这个数据帧进一步封装成为宿主机网络的一个普通数据帧，好让它载着内部数据帧，通过宿主机的eth0网卡进行传输。</p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/vxlan-pkg.png" srcset="/img/loading.gif" alt=""></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/vxlan-pkg.png" alt=""></p>
 </li>
 <li><p><strong>封装到UDP包发出去</strong>：现在能直接发UDP包嘛？到目前为止，我们只知道另一端的flannel.1设备的MAC地址，却不知道对应的宿主机地址是什么。</p>
 <p>flanneld进程也维护着一个叫做FDB的转发数据库，可以通过bridge fdb命令查看：</p>
@@ -206,7 +206,7 @@
 </ol>
 <h5 id="Host-GW"><a href="#Host-GW" class="headerlink" title="Host-GW"></a>Host-GW</h5><p><u>host-gw模式相比vxlan简单了许多， 直接添加路由，将目的主机当做网关，直接路由原始封包。</u> </p>
 <p>下面是示意图：</p>
-<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/flanneld-hostgw.png" srcset="/img/loading.gif" alt=""></p>
+<p><img src="https://k8s-1252881505.cos.ap-beijing.myqcloud.com/k8s-2/flanneld-hostgw.png" alt=""></p>
 <p>==线上更改网路模式一定要放在夜深人静去变更！！==<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># more /tmp/k8s/kube-flannel.yaml</span><br><span class="line"></span><br><span class="line">net-conf.json: |</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">      &quot;Backend&quot;: &#123;</span><br><span class="line">        &quot;Type&quot;: &quot;host-gw&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">修改如上为host-gw然后应用：</span><br><span class="line">[root@k8s-master1 ~]# kubectl apply -f kube-flannel.yml</span><br><span class="line">podsecuritypolicy.policy/psp.flannel.unprivileged configured</span><br><span class="line">clusterrole.rbac.authorization.k8s.io/flannel unchanged</span><br><span class="line">clusterrolebinding.rbac.authorization.k8s.io/flannel unchanged</span><br><span class="line">serviceaccount/flannel unchanged</span><br><span class="line">configmap/kube-flannel-cfg configured</span><br><span class="line">daemonset.apps/kube-flannel-ds-amd64 configured</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm64 created</span><br><span class="line">daemonset.apps/kube-flannel-ds-arm created</span><br><span class="line">daemonset.apps/kube-flannel-ds-ppc64le created</span><br><span class="line">daemonset.apps/kube-flannel-ds-s390x created</span><br><span class="line"></span><br><span class="line">###如上如果未生效，评估下风险，可删除后再次重建</span><br><span class="line">[root@k8s-master1 ~]# kubectl delete -f kube-flannel.yml</span><br><span class="line">[root@k8s-master1 ~]# kubectl apply -f kube-flannel.yml</span><br></pre></td></tr></table></figure></p>
 <p>当你设置flannel使用host-gw模式,flanneld会在宿主机上创建节点的路由表：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># ip route  ##这样我们就看到了如上host-gw的特色，将目的主机当做网关。</span><br><span class="line"></span><br><span class="line">default via 192.168.31.1 dev ens33 proto static metric 100 </span><br><span class="line">10.244.0.0/24 dev cni0 proto kernel scope link src 10.244.0.1 </span><br><span class="line">10.244.1.0/24 via 192.168.31.63 dev ens33   ##集群另外两台node的路由</span><br><span class="line">10.244.2.0/24 via 192.168.31.61 dev ens33   ##集群另外两台node的路由</span><br><span class="line">192.168.31.0/24 dev ens33 proto kernel scope link src 192.168.31.62 metric 100</span><br></pre></td></tr></table></figure>
@@ -390,8 +390,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

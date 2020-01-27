@@ -174,11 +174,11 @@
 </ul>
 <p>以上三者有机的协调配合起来，就可以完成 Kubernetes 集群服务的暴露。</p>
 <p>来看个图例：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191205/7PokLaEqGsMN.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191205/7PokLaEqGsMN.png?imageslim" alt="mark"></p>
 <p>Nginx 对后端运行的服务（Service1、Service2）提供反向代理，在配置文件中配置了域名与后端服务 Endpoints 的对应关系。客户端通过使用 DNS 服务或者直接配置本地的 hosts 文件，将域名都映射到 Nginx 代理服务器。当客户端访问 service1.com 时，浏览器会把包含域名的请求发送给 nginx 服务器，nginx 服务器根据传来的域名，选择对应的 Service，这里就是选择 Service 1 后端服务，然后根据一定的负载均衡策略，选择 Service1 中的某个容器接收来自客户端的请求并作出响应。过程很简单，nginx 在整个过程中仿佛是一台根据域名进行请求转发的“路由器”，这也就是7层代理的整体工作流程了！</p>
 <p>对于 Nginx 反向代理做了什么，我们已经大概了解了。在 k8s 系统中，后端服务的变化是十分频繁的，单纯依靠人工来更新nginx 的配置文件几乎不可能，nginx-ingress 由此应运而生。Nginx-ingress 通过监视 k8s 的资源状态变化实现对 nginx 配置文件的自动更新，下面本文就来分析下其工作原理。</p>
 <h4 id="2-1、nginx-ingress-工作流程分析"><a href="#2-1、nginx-ingress-工作流程分析" class="headerlink" title="2.1、nginx-ingress 工作流程分析"></a>2.1、nginx-ingress 工作流程分析</h4><p>首先，上一张整体工作模式架构图（只关注配置同步更新）：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191205/WUbRrLEOqYWx.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191205/WUbRrLEOqYWx.png?imageslim" alt="mark"></p>
 <p> 不考虑 nginx 状态收集等附件功能，nginx-ingress 模块在运行时主要包括三个主体：<strong>NginxController</strong>、<strong>Store</strong>、<strong>SyncQueue</strong>。</p>
 <ul>
 <li>Store 主要负责从 kubernetes APIServer 收集运行时信息，感知各类资源（如 ingress、service等）的变化，并及时将更新事件消息（event）写入一个环形管道；</li>
@@ -197,12 +197,12 @@
 <h4 id="2-3、Pod与Ingress的关系"><a href="#2-3、Pod与Ingress的关系" class="headerlink" title="2.3、Pod与Ingress的关系"></a>2.3、Pod与Ingress的关系</h4><ul>
 <li>通过Ingress Controller实现Pod的负载均衡, 支持TCP/UDP 4层和HTTP 7层<br>Ingress 只是定义规则，具体的负载均衡服务是由Ingress controller控制器完成。</li>
 </ul>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191209/LznJshJLip1I.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191209/ChWibWNlOiH1.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191209/LznJshJLip1I.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191209/ChWibWNlOiH1.png?imageslim" alt="mark"></p>
 <p><strong>访问流程</strong>：用户—&gt; Ingress Controller(Node) —&gt;service —&gt; Pod</p>
 <h3 id="三、部署nginx-ingress-controller以及定义ingress策略"><a href="#三、部署nginx-ingress-controller以及定义ingress策略" class="headerlink" title="三、部署nginx-ingress-controller以及定义ingress策略"></a>三、部署nginx-ingress-controller以及定义ingress策略</h3><p>20191205最新版目前：</p>
 <p>获取配置文件位置: <a href="https://github.com/kubernetes/ingress-nginx/tree/nginx-0.26.1/deploy" target="_blank" rel="noopener">https://github.com/kubernetes/ingress-nginx/tree/nginx-0.26.1/deploy</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191205/DNO7ddhKvUXT.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191205/DNO7ddhKvUXT.png?imageslim" alt="mark"></p>
 <h4 id="3-1、下载部署文件"><a href="#3-1、下载部署文件" class="headerlink" title="3.1、下载部署文件"></a>3.1、下载部署文件</h4><p>提供了两种方式 ：</p>
 <ul>
 <li><p>默认下载最新的yaml：</p>
@@ -242,14 +242,14 @@
 <h4 id="3-4、部署一个tomcat用于测试ingress转发功能"><a href="#3-4、部署一个tomcat用于测试ingress转发功能" class="headerlink" title="3.4、部署一个tomcat用于测试ingress转发功能"></a>3.4、部署一个tomcat用于测试ingress转发功能</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim k8s-tomcat-test.yaml</span><br><span class="line"></span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: tomcat</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">   app: tomcat</span><br><span class="line">   release: canary</span><br><span class="line">  ports:</span><br><span class="line">  - name: http</span><br><span class="line">    targetPort: 8080</span><br><span class="line">    port: 8080</span><br><span class="line">  - name: ajp</span><br><span class="line">    targetPort: 8009</span><br><span class="line">    port: 8009</span><br><span class="line"> </span><br><span class="line">---</span><br><span class="line"> </span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: tomcat-deploy</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">   matchLabels:</span><br><span class="line">     app: tomcat</span><br><span class="line">     release: canary</span><br><span class="line">  template:</span><br><span class="line">   metadata:</span><br><span class="line">     labels:</span><br><span class="line">       app: tomcat</span><br><span class="line">       release: canary</span><br><span class="line">   spec:</span><br><span class="line">     containers:</span><br><span class="line">     - name: tomcat</span><br><span class="line">       image: tomcat</span><br><span class="line">       ports:</span><br><span class="line">       - name: http</span><br><span class="line">         containerPort: 8080</span><br></pre></td></tr></table></figure>
 <h4 id="3-5、定义ingress策略"><a href="#3-5、定义ingress策略" class="headerlink" title="3.5、定义ingress策略"></a>3.5、定义ingress策略</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim k8s-tomcat-test-ingress.yaml</span><br><span class="line"></span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress-tomcat</span><br><span class="line">  annotations:</span><br><span class="line">    kubernets.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">spec:</span><br><span class="line">  rules:</span><br><span class="line">  - host: myapp.zhdya.com</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path:</span><br><span class="line">        backend:</span><br><span class="line">          serviceName: tomcat</span><br><span class="line">          servicePort: 8080</span><br></pre></td></tr></table></figure>
 <p>手动绑定hosts测试：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">192.168.171.188 myapp.zhdya.com</span><br></pre></td></tr></table></figure></p>
-<p>把tomcat service通过ingress发布出去：<br><img src="http://myimage.okay686.cn/okay686cn/20191209/9Xaas32hkhyg.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p>把tomcat service通过ingress发布出去：<br><img src="http://myimage.okay686.cn/okay686cn/20191209/9Xaas32hkhyg.png?imageslim" alt="mark"></p>
 <p>在浏览器输入：<a href="http://myapp.zhdya.com:30080/" target="_blank" rel="noopener">http://myapp.zhdya.com:30080/</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191207/ImaETDuVh832.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191207/ImaETDuVh832.png?imageslim" alt="mark"></p>
 <h4 id="3-6、下面我们对tomcat服务添加https服务"><a href="#3-6、下面我们对tomcat服务添加https服务" class="headerlink" title="3.6、下面我们对tomcat服务添加https服务"></a>3.6、下面我们对tomcat服务添加https服务</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master ingress-nginx]# openssl genrsa -out tls.key 2048</span><br><span class="line">Generating RSA private key, 2048 bit long modulus</span><br><span class="line">.......+++</span><br><span class="line">..............................+++</span><br><span class="line">e is 65537 (0x10001)</span><br><span class="line">[root@k8s-master ingress-nginx]# openssl req -new -x509 -key tls.key -out tls.crt -subj /C=CN/ST=Beijing/L=Beijing/O=DevOps/CN=myapp.zhdya.com #注意域名要和服务的域名一致 </span><br><span class="line">[root@k8s-master ingress-nginx]# kubectl create secret tls tomcat-ingress-secret --cert=tls.crt --key=tls.key #创建secret</span><br><span class="line">secret &quot;tomcat-ingress-secret&quot; created</span><br><span class="line">[root@k8s-master ingress-nginx]# kubectl get secret</span><br><span class="line">NAME                    TYPE                                  DATA      AGE</span><br><span class="line">default-token-bf52l     kubernetes.io/service-account-token   3         9d</span><br><span class="line">tomcat-ingress-secret   kubernetes.io/tls                     2         7s</span><br><span class="line">[root@k8s-master ingress-nginx]# kubectl describe secret tomcat-ingress-secret</span><br><span class="line">Name:         tomcat-ingress-secret</span><br><span class="line">Namespace:    default</span><br><span class="line">Labels:       &lt;none&gt;</span><br><span class="line">Annotations:  &lt;none&gt;</span><br><span class="line"></span><br><span class="line">Type:  kubernetes.io/tls</span><br><span class="line"></span><br><span class="line">Data</span><br><span class="line">====</span><br><span class="line">tls.crt:  1294 bytes  #base64加密</span><br><span class="line">tls.key:  1679 bytes</span><br></pre></td></tr></table></figure>
 <p>将证书应用至tomcat服务中<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master01 ingress]# vim k8s-tomcat-test-ingress-tls.yaml</span><br><span class="line">apiVersion: extensions/v1beta1</span><br><span class="line">kind: Ingress</span><br><span class="line">metadata:</span><br><span class="line">  name: ingress-tomcat-tls</span><br><span class="line">  annotations: </span><br><span class="line">    kubernets.io/ingress.class: &quot;nginx&quot;</span><br><span class="line">spec:</span><br><span class="line">  tls:</span><br><span class="line">  - hosts:</span><br><span class="line">    - myapp.zhdya.com        #与secret证书的域名需要保持一致</span><br><span class="line">    secretName: tomcat-ingress-secret   #secret证书的名称</span><br><span class="line">  rules:</span><br><span class="line">  - host: myapp.zhdya.com</span><br><span class="line">    http:</span><br><span class="line">      paths:</span><br><span class="line">      - path: </span><br><span class="line">        backend:</span><br><span class="line">          serviceName: tomcat</span><br><span class="line">          servicePort: 8080</span><br><span class="line">[root@k8s-master01 ingress]#  kubectl apply -f k8s-tomcat-test-ingress-tls.yaml</span><br></pre></td></tr></table></figure></p>
 <p>再次访问服务：</p>
 <p><a href="https://myapp.zhdya.com:30443/" target="_blank" rel="noopener">https://myapp.zhdya.com:30443/</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191207/6z3WmSMi3hMK.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191207/6z3WmSMi3hMK.png?imageslim" alt="mark"></p>
 <h4 id="文末彩蛋："><a href="#文末彩蛋：" class="headerlink" title="文末彩蛋："></a>文末彩蛋：</h4><p>从3.3-3.6大家有没有发现，我在测试tomcat的容器的时候手动创建了一个service-nodeport.yaml 这个文件，这个文件刚刚也讲到了，就是为了把容器内部的服务暴露出来，当然我们自己也测试了手动绑定了tomcat pod容器所在node节点的IP<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">192.168.171.188 myapp.zhdya.com</span><br></pre></td></tr></table></figure></p>
 <p>之前我是为了给大家证明，内部pod是如何把service从pod中暴露出来，但是细心的人肯定发现了，在3.1章节，我们明明已经创建了一个nginx-ingress-controller 这个就完全可以帮我们完成服务暴露啊。对的，非常对！！！</p>
 <p>nginx-ingress-controller这个重要的组件具体实现了什么功能看文首！！</p>
@@ -258,7 +258,7 @@
 <p>建议大家一定要把这个nginx.conf文件细细的看下你就会证实nginx-ingress-controller 这个组件的功劳是多么的强大！！</p>
 <p>然后我们换掉之前手动绑定的hosts，变更为 ingress-nginx pod所在的节点：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">192.168.171.136 myapp.zhdya.com</span><br></pre></td></tr></table></figure></p>
 <p>再次访问 是不是就不需要所谓的 30443端口了呢？？？</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20191209/GRSGRKWqWgYA.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20191209/GRSGRKWqWgYA.png?imageslim" alt="mark"></p>
 <p>再然后，小伙伴们也知道了外层的externalLB改如何操作和绑定了吧？当然还有我文中的重点！！</p>
 <hr>
 
@@ -438,8 +438,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 

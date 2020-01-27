@@ -166,7 +166,7 @@
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
             <p>当前，我们的资产总表如下图所示，还没有任何数据：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/qovlrK6JVV9c.png?imageslim" alt="mark"></p>
 <p>这需要我们从数据库中查询数据，然后渲染到前端页面中。</p>
 <p>数据的获取很简单，一句：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">assets = models.Asset.objects.all()</span><br></pre></td></tr></table></figure></p>
 <p>就搞定。当然，你也可以设置过滤条件，添加分页等等。</p>
@@ -192,7 +192,7 @@
 <p>表格的初始化JS代码如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  $(function () &#123;</span><br><span class="line">    $(&apos;#assets_table&apos;).DataTable(&#123;</span><br><span class="line">      &quot;paging&quot;: true,       &lt;!-- 允许分页 --&gt;</span><br><span class="line">      &quot;lengthChange&quot;: true, &lt;!-- 允许改变每页显示的行数 --&gt;</span><br><span class="line">      &quot;searching&quot;: true,    &lt;!-- 允许内容搜索 --&gt;</span><br><span class="line">      &quot;ordering&quot;: true,     &lt;!-- 允许排序 --&gt;</span><br><span class="line">      &quot;info&quot;: true,         &lt;!-- 显示信息 --&gt;</span><br><span class="line">      &quot;autoWidth&quot;: false    &lt;!-- 固定宽度 --&gt;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
 <p>其中可定义是否允许分页、改变显示的行数、搜索、排序、显示信息、固定宽度等等，通过表格的id进行关联。</p>
 <p>下面，我们通过后台admin界面，多增加几个服务器实例，并修改其类型、业务线、状态、厂商、机房、标签，再刷新资产总表，可以看到效果如下：</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20190331/m7x7woCSatFa.png?imageslim" srcset="/img/loading.gif" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20190331/m7x7woCSatFa.png?imageslim" alt="mark"></p>
 <p>试着使用一下排序和搜索功能吧！datatables还是相当强大的！</p>
 <p>现在点击资产名称，可以链接到资产详细页面，但没有任何数据显示，在下一节中，我们来实现它。</p>
 
@@ -374,8 +374,6 @@
 <script src="/lib/mdbootstrap/js/mdb.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-  <script src="/js/lazyload.js"></script>
 
 
 
