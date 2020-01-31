@@ -134,6 +134,176 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/01/27/Istio可视化监控（网格可视化、调用链）/">
+        <p class="h4 index-header">Istio可视化监控（网格可视化、调用链）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、前言今天着重总结下istio微服务调用链关系展示，以及微服务工作状态监测，涉及组件有：prometheus \ grafana \ jaeger \ Kiali 等。
+
+监控指标（Grafana）
+网格可视化（Kiali）
+调用链跟踪（Jaeger）
+
+昨天我写了篇文章，关于通过gateway暴露内部微服务的示例，本章由于istio的如上内部组件全部都是内部访问，所以我们需要通过istio的gateway服务全部暴露出来：
+[root@k8s-master1 ~]# kubectl get svc -n istio-systemNAME                     TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)                         AGEgrafana                  ClusterIP      10.0.0.42    &lt;none&gt;        3000/TCPkiali                    ClusterIP      10.0.0.1</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-27&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+            <a href="/tags/Istio">Istio</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/01/26/Istio 实现灰度发布/">
+        <p class="h4 index-header">Istio 实现灰度发布</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、部署bookinfo微服务示例
+Bookinfo 应用分为四个单独的微服务：
+
+productpage ： productpage 微服务会调用 details 和 reviews 两个微服务，用来生成页面。
+details ：这个微服务包含了书籍的信息。
+reviews ：这个微服务包含了书籍相关的评论。它还会调用ratings 微服务。
+ratings ： ratings 微服务中包含了由书籍评价组成的评级信息。
+
+reviews 微服务有 3 个版本：
+
+v1 版本不会调用 ratings 服务。
+v2 版本会调用 ratings 服务，并使用 5个黑色五角星来显示评分信息。
+v3 版本会调用 ratings 服务，并使用5个红色五角星 来显示评分信息。
+
+1.1、部署kubectl create ns bookinfokubectl label namespace bookinfo istio-injection=enabled    # 针对命名空间注入cd istio-1.4.2/samples/bookinfokubectl apply -f platform/kub</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-26&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+            <a href="/tags/Istio">Istio</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/01/25/K8S中Istio应用（sidecar注入，Ingress Gateway）/">
+        <p class="h4 index-header">K8S中Istio应用（sidecar注入，Ingress Gateway）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、部署# wget https://github.com/istio/istio/releases/download/1.4.2/istio-1.4.2-linux.tar.gz# tar zxvf istio-1.4.2-linux.tar.gz# cd istio-1.4.2# mv bin/istioctl /usr/bin# istioctl manifest apply --set profile=demo# kubectl get pods -n istio-system# kubectl get svc -n istio-system# kubectl get gateway -n istio-system卸载：# istioctl manifest generate --set profile=demo | kubectl delete -f -
+1.1、初识部署组件[root@k8s-master1 httpbin]# kubectl get po -n istio-systemNAME                                      RE</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-25&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+            <a href="/tags/Istio">Istio</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2020/01/24/微服务治理Istio初探/">
+        <p class="h4 index-header">微服务治理Istio初探</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、Service MeshService Mesh 的中文译为“服务网格”，是一个用于 处理服务和服务之间通信的基础设施层 ，它负责为构建复杂的云原生应用 传递可靠的网络请求 ，并为服务通信实现了微服务所需的基本组件功能，例如服务发现、负载均衡、监控、流量管理、访问控制等。在实践中， 服务网格通常实现为一组和应用程序部署在一起的轻量级的网络代理 ，但对应用程序来说是透明的。
+
+二、微服务 VS 服务网格微服务架构的优点很多，比如它解耦业务，提供更高的灵活性，允许在服务频繁发版的同时保持系统其它部分的可用性与稳定性;解耦编程语言，针对不同业务可以使用更加合适的语言进行开发;解耦开发团队，不同团队各自负责一个微服务，互不影响，加速交付。
+以spring cloud微服务核心组件包括以下几个组件：
+
+Config：配置中心
+Eureka：服务治理组件，包含服务注册与发现
+Hystrix：容错管理组件，实现了熔断器
+Ribbon：客户端负载均衡的服务调用组件
+Feign：基于Ribbon和Hystrix的声明式服务调用组件
+Zuul：网关组件，提供智能路由、访问过滤等功能
+
+Service </div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-01-24&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+            <a href="/tags/Istio">Istio</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2020/01/09/Pipeline 集成 Helm 发布微服务项目/">
         <p class="h4 index-header">Pipeline 集成 Helm 发布微服务项目</p>
         
@@ -176,7 +346,7 @@
     
     <div class="col-12 col-md-8 m-auto">
       <a href="/2020/01/08/Jenkins基于k8s的Master_Slave模式实现CI_CD/">
-        <p class="h4 index-header">Jenkins基于k8s的Master/Slave模式实现CI/CD</p>
+        <p class="h4 index-header">基于Jenkins的Master/Slave模式实现CI/CD</p>
         
         
           
@@ -839,184 +1009,6 @@ x 将从 9 算起，它代表 Infernalis （ I 是第九个字母），这样第
         
         
           <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/23/一、Ceph介绍/">
-        <p class="h4 index-header">一、Ceph介绍</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">为什么要用Ceph
-Ceph是当前非常流行的开源分布式存储系统，具有高扩展性、高性能、高可靠性等优点，同时提供块存储服务(rbd)、对象存储服务(rgw)以及文件系统存储服务(cephfs)，Ceph在存储的时候充分利用存储节点的计算能力，在存储每一个数据时都会通过计算得出该数据的位置，尽量的分布均衡。。目前也是OpenStack的主流后端存储，随着OpenStack在云计算领域的广泛使用，ceph也变得更加炙手可热。国内目前使用ceph搭建分布式存储系统较为成功的企业有x-sky,深圳元核云，上海UCloud等三家企业。
-
-
-Ceph架构介绍
-Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方式的文件和对象转换。外层通过RGW（Object，有原生的API，而且也兼容Swift和S3的API，适合单客户端使用）、RBD（Block，支持精简配置、快照、克隆，适合多客户端有目录结构）、CephFS（File，Posix接口，支持快照，社会和更新变动少的数据，没有目录结构不能直接打开）将数据写入存储。
-
-高性能a. 摒弃了传统的集中式存储元数据寻址的方案，采用C</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-23&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S,%20ceph">K8S, ceph</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
-        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
-1、Flannel 部署https://github.com/coreos/flannel 
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
-
-UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
-VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
-Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S">K8S</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络生产级探究/">
-        <p class="h4 index-header">K8S集群网络生产级探究</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
-
-路由器：网络出口
-核心层：主要完成数据高效转发、链路备份等
-汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
-接入层：工作站的接入
-
-1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
-2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
-想要搞懂这些问题得从交换机、路由器讲起。
-
-交换机工作在OSI参考模型的第二</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S">K8S</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
-        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
-1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
-BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
-为了能让你更清楚理解BGP，举个例子：
-
-在</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S">K8S</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
           
             <a href="/tags/K8S">K8S</a>&nbsp;
           

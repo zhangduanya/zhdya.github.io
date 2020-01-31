@@ -15,7 +15,7 @@
   <meta name="description" content="Tough times never last, but tough people do.">
   <meta name="author" content="Zhdya">
   <meta name="keywords" content="">
-  <title>基于Jenkins的Master/Slave模式实现CI/CD ~ 不认命？就拼命！</title>
+  <title>K8S中Istio应用（sidecar注入，Ingress Gateway） ~ 不认命？就拼命！</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
@@ -115,7 +115,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期三, 一月 8日 2020, 9:00 晚上
+                  星期六, 一月 25日 2020, 12:00 凌晨
                 </p>
               
 
@@ -124,7 +124,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    988 字
+                    1.7k 字
                   </span>&nbsp;
                 
 
@@ -132,7 +132,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      4 分钟
+                      7 分钟
                   </span>&nbsp;
                 
 
@@ -165,32 +165,36 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h2 id="Jenkins在Kubernetes中动态创建代理"><a href="#Jenkins在Kubernetes中动态创建代理" class="headerlink" title="Jenkins在Kubernetes中动态创建代理"></a>Jenkins在Kubernetes中动态创建代理</h2><h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>就类似于我们公司 目前每天的jenkins构建测试基本上平稳在2300+左右，也就是可能同时并发的构建我见过一次120+，只是这一个jenkins节点是不可以完成这么大的任务量的！所以jenkins-slave的接入就很大程度上提高了性能！</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/RSbqBjzstx8X.png?imageslim" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/cBdQUIyxx7kp.png?imageslim" alt="mark"></p>
-<p>Master/Slave相当于Server/agent。Master提供web接口让用户来管理job和slave，job可以运行在master本机或者被分配到slave上运行。一个master可以关联多个slave用来为不同的job或相同的job的不同配置来服务。</p>
-<p>如何添加jenkins-slave节点？</p>
-<p>“Manage Jenkins” ==&gt; “Manage Nodes” ==&gt; “New Node”</p>
-<h3 id="二、如何实现？"><a href="#二、如何实现？" class="headerlink" title="二、如何实现？"></a>二、如何实现？</h3><h4 id="2-1、Kubernetes插件：-Jenkins在Kubernetes集群中运行动态代理"><a href="#2-1、Kubernetes插件：-Jenkins在Kubernetes集群中运行动态代理" class="headerlink" title="2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理"></a>2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理</h4><p>插件介绍： <a href="https://github.com/jenkinsci/kubernetes-plugin" target="_blank" rel="noopener">https://github.com/jenkinsci/kubernetes-plugin</a></p>
-<p>在jenkins的组件中搜索并安装：“kubernetes”</p>
-<p>“Manage Jenkins” ==&gt; “Configure System” ==&gt; “Cloud” ==&gt; “add kubernetes”</p>
-<p>因为我们的jenkins已经在K8S集群中以pod的形式去运行，所以Kubernetes的地址就可以直接填写servicename：<a href="https://kubernetes.default" target="_blank" rel="noopener">https://kubernetes.default</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/Ueygq6p1XLSN.png?imageslim" alt="mark"></p>
-<p>当然如果jenkins服务是单独部署在K8S集群外部，我们就需要填写可以联调的地址、证书及证书；</p>
-<h4 id="2-2、自定义构建Jenkins-Slave镜像"><a href="#2-2、自定义构建Jenkins-Slave镜像" class="headerlink" title="2.2、自定义构建Jenkins Slave镜像"></a>2.2、自定义构建Jenkins Slave镜像</h4><p>当然我虽然已经在K8S上部署了master节点，但是所以的编译都在slave节点运行的，我们需要考虑到：</p>
+            <h3 id="一、部署"><a href="#一、部署" class="headerlink" title="一、部署"></a>一、部署</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># wget https://github.com/istio/istio/releases/download/1.4.2/istio-1.4.2-linux.tar.gz</span><br><span class="line"># tar zxvf istio-1.4.2-linux.tar.gz</span><br><span class="line"># cd istio-1.4.2</span><br><span class="line"># mv bin/istioctl /usr/bin</span><br><span class="line"># istioctl manifest apply --set profile=demo</span><br><span class="line"># kubectl get pods -n istio-system</span><br><span class="line"># kubectl get svc -n istio-system</span><br><span class="line"># kubectl get gateway -n istio-system</span><br><span class="line"></span><br><span class="line">卸载：</span><br><span class="line"># istioctl manifest generate --set profile=demo | kubectl delete -f -</span><br></pre></td></tr></table></figure>
+<h4 id="1-1、初识部署组件"><a href="#1-1、初识部署组件" class="headerlink" title="1.1、初识部署组件"></a>1.1、初识部署组件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 httpbin]# kubectl get po -n istio-system</span><br><span class="line">NAME                                      READY   STATUS    RESTARTS   AGE</span><br><span class="line">grafana-6b65874977-64667                  # 提供了istio中的一些监控指标</span><br><span class="line">istio-citadel-86dcf4c6b-lvw4h             # istio安全相关配置</span><br><span class="line">istio-egressgateway-68f754ccdd-brhzm      # 出口gateway</span><br><span class="line">istio-galley-5fc6d6c45b-bz7mr             # 配置管理</span><br><span class="line">istio-ingressgateway-6d759478d8-69jht     # 进口gateway</span><br><span class="line">istio-pilot-5c4995d687-b2qq4              # 管理所有代理的策略配置</span><br><span class="line">istio-policy-57b99968f-cwkmr              # 对某个组件中的功能进行解耦</span><br><span class="line">istio-sidecar-injector-746f7c7bbb-k92gn   # 对现行的pod注册一个代理</span><br><span class="line">istio-telemetry-854d8556d5-jtp2k          # 收集遥测数据的Mixer服务组件</span><br><span class="line">istio-tracing-c66d67cd9-466qg             # 连路追踪</span><br><span class="line">kiali-8559969566-zr77t                    # 可视化网格</span><br><span class="line">prometheus-66c5887c86-plbxs               # 数据指标采集</span><br></pre></td></tr></table></figure>
+<h3 id="二、Sidercar-注入"><a href="#二、Sidercar-注入" class="headerlink" title="二、Sidercar 注入"></a>二、Sidercar 注入</h3><p>如题目，假如目前我们线上已经运行了大量微服务，如何将sidercar服务在不影响当前服务运行的情况下直接注入到istio呢？<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">部署httpbin Web示例：</span><br><span class="line"># ls    # 官方给出了很多个不同类型的案例测试</span><br><span class="line">bookinfo  custom-bootstrap  fortio        helloworld  https            multicluster  rawvm      security  tcp-echo</span><br><span class="line">certs     external          health-check  httpbin     kubernetes-blog  operator      README.md  sleep     websockets</span><br><span class="line"></span><br><span class="line"># cd istio-1.4.2/samples/httpbin</span><br><span class="line"># kubectl apply -f httpbin-nodeport.yaml    # 部署一个测试的应用</span><br><span class="line"># kubectl get svc</span><br><span class="line">NAME          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                        AGE</span><br><span class="line">httpbin       NodePort    10.0.0.217   &lt;none&gt;        8000:31631/TCP                 2m42s</span><br></pre></td></tr></table></figure></p>
+<p>这样一个测试的应用就启动了 具体的部署方式大家可以自己去看其中的yaml文件，然后我就可以通过31631去访问这个服务：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/ohTe9MuRjAuT.png?imageslim" alt="mark"></p>
+<h4 id="2-1、手动注入sidercar"><a href="#2-1、手动注入sidercar" class="headerlink" title="2.1、手动注入sidercar"></a>2.1、手动注入sidercar</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">先来看下这个组件实现的方法（httpbin当前目录下执行）：</span><br><span class="line">istioctl kube-inject -f httpbin-nodeport.yaml | more</span><br><span class="line">···</span><br><span class="line">        image: docker.io/istio/proxyv2:1.4.2    # 也就是说会再次启动一个以这个proxy作为基础镜像的容器</span><br><span class="line">        imagePullPolicy: IfNotPresent</span><br><span class="line">···</span><br><span class="line"></span><br><span class="line">kubectl apply -f &lt;(istioctl kube-inject -f httpbin-nodeport.yaml)</span><br><span class="line">或者</span><br><span class="line">istioctl kube-inject -f httpbin-nodeport.yaml |kubectl apply -f -</span><br><span class="line"></span><br><span class="line">然后再来看下pod的信息：</span><br><span class="line">[root@k8s-master1 httpbin]# kubectl get po  # 默认就变成2个容器了，这样这个服务就加入到了istio中</span><br><span class="line">NAME                                     READY   STATUS     RESTARTS   AGE</span><br><span class="line">httpbin-768b999cb5-hfs5z                 2/2     Running    0          19m</span><br></pre></td></tr></table></figure>
+<h4 id="2-2、自动注入sidercar"><a href="#2-2、自动注入sidercar" class="headerlink" title="2.2、自动注入sidercar"></a>2.2、自动注入sidercar</h4><p>当然如上仅仅是用来测试，一旦线上有成千上万个微服务，如上手动注入肯定不现实，所以如下会选择根据namespace 来选择需要接入istio的微服务。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl label namespace default istio-injection=enabled     # 代表着default命名空间所有的应用都会被注入sidecar（多数会选择这种方式）</span><br></pre></td></tr></table></figure></p>
+<p>下面 我就通过istio的gateway去访问如上测试的demo<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl apply -f httpbin-gateway.yaml</span><br><span class="line"></span><br><span class="line">如上http-gateway.yaml中分为两部分一个是Gateway，一个是VirtualSservice</span><br><span class="line">- Gateway：就是外部流量访问服务网格内部的应用；</span><br><span class="line">- VitrulService：就是类似于nginx中的server虚拟主机一个意思，可以创建多个；</span><br><span class="line">其中virtualservice绑定应用是通过host参数来绑定service：</span><br><span class="line">    - destination:</span><br><span class="line">        host: httpbin</span><br><span class="line">        port:</span><br><span class="line">          number: 8000</span><br><span class="line"></span><br><span class="line"># kubectl get gateway        # 查看应用</span><br><span class="line">NAME              AGE</span><br><span class="line">httpbin-gateway   14s</span><br><span class="line"></span><br><span class="line"># kubectl get svc -n istio-system   # 查看istio系统中的svc</span><br><span class="line">NAME                     TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)                         AGE</span><br><span class="line">grafana                  ClusterIP      10.0.0.42    &lt;none&gt;        3000/TCP                         20h</span><br><span class="line">istio-citadel            ClusterIP      10.0.0.73    &lt;none&gt;        8060/TCP,15014/TCP                         20h</span><br><span class="line">istio-egressgateway      ClusterIP      10.0.0.146   &lt;none&gt;        80/TCP,443/TCP,15443/TCP                         20h</span><br><span class="line">istio-galley             ClusterIP      10.0.0.248   &lt;none&gt;        443/TCP,15014/TCP,9901/TCP,15019/TCP                         20h</span><br><span class="line">istio-ingressgateway     LoadBalancer   10.0.0.15    &lt;pending&gt;     15020:30950/TCP,80:32217/TCP,443:30902/TCP,15029:31530/TCP,15030:31832/TCP,15031:32291/TCP,15032:30809/TCP,15443:30490/TCP   20h</span><br><span class="line"></span><br><span class="line">如果 EXTERNAL-IP 有值（IP 地址或主机名），则说明您的环境具有可用于 Ingress 网关的外部负载均衡器。如果 EXTERNAL-IP 值是 &lt;none&gt;（或一直是 &lt;pending&gt; ），则说明可能您的环境并没有为 Ingress 网关提供外部负载均衡器的功能。</span><br><span class="line"></span><br><span class="line">如上istio-egressgateway，是以LoadBalancer 类型来暴露的服务，LoadBalancer多数用在公有云，然后对接后端的LB产品，自动的创建一个负载均衡，当然这边pending的原因就是因为没有自动创建；当然他也会自动创建一些对应的nodeport；</span><br><span class="line"></span><br><span class="line">所以通过istio的gateway也可以访问我们的httpbin服务，找到80对应的nodeport是32217；</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>额外小知识（和本篇总结内容没关系）：==start==<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">当然可以通过以下方法添加外部IP</span><br><span class="line"></span><br><span class="line">kubectl edit  service istio-ingressgateway -n istio-system</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200130/UGCh4UEUJ3UM.png?imageslim" alt="mark"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl get  service istio-ingressgateway -n istio-system</span><br></pre></td></tr></table></figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200130/bp3wkuoThc3h.png?imageslim" alt="mark"><br>额外小知识（和本篇总结内容没关系）：==end==</p>
+<hr>
+<p>NodePort访问地址： <a href="http://192.168.171.12:32217" target="_blank" rel="noopener">http://192.168.171.12:32217</a></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/knraYRxecQSI.png?imageslim" alt="mark"></p>
+<p>查看下ingress-gateway产生的访问日志：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubectl logs istio-ingressgateway-6d759478d8-69jht -n istio-system -f</span><br><span class="line"></span><br><span class="line">[2020-01-29T05:31:32.070Z] &quot;GET / HTTP/1.1&quot; 200 - &quot;-&quot; &quot;-&quot; 0 9593 5 4 &quot;192.168.171.12&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&quot; &quot;51fd99ec-fbb9-955f-9d4b-c8feaf2c90ad&quot; &quot;192.168.171.12:32217&quot; &quot;10.244.159.149:80&quot; outbound|8000||httpbin.default.svc.cluster.local - 10.244.36.114:80 192.168.171.12:55129 - -</span><br><span class="line">[2020-01-29T05:31:32.404Z] &quot;GET /spec.json HTTP/1.1&quot; 200 - &quot;-&quot; &quot;-&quot; 0 41019 9 7 &quot;192.168.171.12&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&quot; &quot;3d83a68e-b7ba-9093-8bce-4134a9b30b53&quot; &quot;192.168.171.12:32217&quot; &quot;10.244.159.149:80&quot; outbound|8000||httpbin.default.svc.cluster.local - 10.244.36.114:80 192.168.171.12:55129 - -</span><br><span class="line">[2020-01-29T05:31:32.405Z] &quot;GET /static/favicon.ico HTTP/1.1&quot; 200 - &quot;-&quot; &quot;-&quot; 0 22382 27 26 &quot;192.168.171.12&quot; &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36&quot; &quot;a4e5e85a-dcfc-916a-a278-6ec03e000e2e&quot; &quot;192.168.171.12:32217&quot; &quot;10.244.159.149:80&quot; outbound|8000||httpbin.default.svc.cluster.local - 10.244.36.114:80 192.168.171.12:55125 - -</span><br></pre></td></tr></table></figure></p>
+<p>如上实现的方式其实和ingress是一致的，只不过istio耦合到了自己平台中，为了就是更好的和内部组件的一个交互；</p>
+<p>具体是怎么实现的？</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/u1YIiF28eM6R.png?imageslim" alt="mark"></p>
+<p>当用户发起请求时，最外层的external_LB会绑定刚刚的nodeport，流量会直接到达边缘的服务网格ingressGateway的pod，然后通过内部的负载均衡器将流量转发到其中一组pod的istio-proxy（sidecar），然后就到了真正的业务后端逻辑；</p>
+<p>再具体拆分下：</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/s9YdRAgPlWgX.png?imageslim" alt="mark"></p>
+<p>Gateway为网格内服务提供负载均衡器，提供以下功能：</p>
 <ul>
-<li>编译所涉及的开发语言（java，go，node，python等）；</li>
-<li>额外底层环境（docker&lt;推镜像&gt;，helm&lt;打包发布&gt;）</li>
+<li>L4-L7的负载均衡</li>
+<li>对外的mTLS（双向认证），默认https仅是单向的客户端验证；<br>Gateway根据流入流出方向分为：</li>
+<li>IngressGateway：接收外部访问，并将流量转发到网格内的服务。</li>
+<li>EgressGateway：网格内服务访问外部应用。</li>
 </ul>
-<p>参考： <a href="https://github.com/jenkinsci/docker-jnlp-slave" target="_blank" rel="noopener">https://github.com/jenkinsci/docker-jnlp-slave</a></p>
-<p>我这边以java语言为例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">LABEL maintainer zhdya</span><br><span class="line">RUN yum install -y java-1.8.0-openjdk maven curl git libtool-ltdl-devel &amp;&amp; \</span><br><span class="line">yum clean all &amp;&amp; \</span><br><span class="line">rm -rf /var/cache/yum/* &amp;&amp; \</span><br><span class="line">mkdir -p /usr/share/jenkins</span><br><span class="line">COPY slave.jar /usr/share/jenkins/slave.jar</span><br><span class="line">COPY jenkins-slave /usr/bin/jenkins-slave</span><br><span class="line">COPY settings.xml /etc/maven/settings.xml</span><br><span class="line">RUN chmod +x /usr/bin/jenkins-slave</span><br><span class="line">COPY helm kubectl /usr/bin/</span><br><span class="line">ENTRYPOINT [&quot;jenkins-slave&quot;]</span><br></pre></td></tr></table></figure></p>
-<p>我突然想到一个事情，如上底层的事情已经考虑的差不多了，但是这个镜像如何能作为slave存在呢？</p>
-<p>熟悉jenkins的应该不难回答，Jenkins_Master的所有交互都是与Slave的agent（slave.jar）通信，通过agent执行一系列的动作！</p>
-<p>安装包下载地址：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">链接：https://pan.baidu.com/s/1ktc8HzDvXaJeYf0xWBaI_A </span><br><span class="line">提取码：pxrc</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 ~]# unzip jenkins-slave.zip</span><br><span class="line">Archive:  jenkins-slave.zip</span><br><span class="line">   creating: jenkins-slave/</span><br><span class="line">  inflating: jenkins-slave/jenkins-slave</span><br><span class="line">  inflating: jenkins-slave/settings.xml</span><br><span class="line">  inflating: jenkins-slave/slave.jar</span><br><span class="line">  inflating: jenkins-slave/kubectl</span><br><span class="line">  inflating: jenkins-slave/Dockerfile</span><br><span class="line">  inflating: jenkins-slave/helm</span><br><span class="line">  </span><br><span class="line">helm和kubectl均是可执行文件，放到可执行目录下即可，kubectl需要考虑到鉴权！关于docker，只需要挂载数据卷即可！</span><br><span class="line"></span><br><span class="line"># docker build -t jenkins-slave:jdk-1.8 .</span><br><span class="line"># docker tag jenkins-slave:jdk-1.8 192.168.171.10/library/jenkins-slave:jdk-1.8</span><br><span class="line"># docker push 192.168.171.10/library/jenkins-slave:jdk-1.8</span><br></pre></td></tr></table></figure></p>
-<p>然后我们配置下刚刚创建的任务：</p>
-<p>参考：<a href="https://plugins.jenkins.io/kubernetes" target="_blank" rel="noopener">https://plugins.jenkins.io/kubernetes</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent &#123;</span><br><span class="line">    kubernetes &#123;</span><br><span class="line">	  label &apos;jenkins-slave&apos;</span><br><span class="line">      yaml &quot;&quot;&quot;</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-slave</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: jnlp</span><br><span class="line">    image: 192.168.171.10/library/jenkins-slave:jdk-1.8</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">   parameters &#123;</span><br><span class="line">  choice choices: [&apos;192.168.171.10:9999/root/a.git&apos;, &apos;192.168.171.10:9999/root/b.git&apos;, &apos;192.168.171.10:9999/root/c.git&apos;], description: &apos;【请选择所需要发布项目的Git地址】&apos;, name: &apos;Git&apos;</span><br><span class="line">  choice choices: [&apos;192.168.171.11&apos;, &apos;192.168.171.12&apos;, &apos;192.168.171.13&apos;], description: &apos;【请选择所需要发布项目的RS后端负载】&apos;, name: &apos;RS&apos;</span><br><span class="line">   &#125;</span><br><span class="line">   stages &#123;</span><br><span class="line">      stage(&apos;1、相关信息&apos;) &#123;</span><br><span class="line">         steps &#123;</span><br><span class="line">		 echo &quot;Git分支是：$&#123;Git&#125;&quot;</span><br><span class="line">		 echo &quot;后端负载是：$&#123;RS&#125;&quot;</span><br><span class="line">         &#125;</span><br><span class="line">         &#125;</span><br><span class="line">	  stage(&apos;2、编译&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;编译~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	  stage(&apos;1、发布&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;发布~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>查看是否创建了jenkins-slave节点：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 jenkins-slave]# kubectl get po</span><br><span class="line">NAME                                     READY   STATUS              RESTARTS   AGE</span><br><span class="line">client1                                  1/1     Running             24         30d</span><br><span class="line">jenkins-7c989dfd84-fgjbk                 1/1     Running             1          3d16h</span><br><span class="line">jenkins-slave-swj7c-bqjd0                0/1     ContainerCreating   0          3s</span><br></pre></td></tr></table></figure></p>
-<p>注意观察你会发现，当我们启动一个slave的pod去执行这个job，一旦job完成，pod节点就会马上销毁！</p>
 
             <hr>
           </div>
@@ -205,6 +209,8 @@
                   <a class="hover-with-bg" href="/tags/Kubernetes">Kubernetes</a>
                 
                   <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+                  <a class="hover-with-bg" href="/tags/Istio">Istio</a>
                 
               </span>
             
@@ -238,7 +244,7 @@
       
       
   <!--PC和WAP自适应版-->
-  <div id="SOHUCS" sid="https://zhdya.okay686.cn/2020/01/08/Jenkins基于k8s的Master_Slave模式实现CI_CD/"></div>
+  <div id="SOHUCS" sid="https://zhdya.okay686.cn/2020/01/25/K8S中Istio应用（sidecar注入，Ingress Gateway）/"></div>
   <script type="text/javascript">
     (function () {
       var appid = 'cyu4TKmA0';
@@ -408,7 +414,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "基于Jenkins的Master/Slave模式实现CI/CD&nbsp;",
+        "K8S中Istio应用（sidecar注入，Ingress Gateway）&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 50,

@@ -134,6 +134,177 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/22/容器网络 calico 基本原理和模拟/">
+        <p class="h4 index-header">容器网络 calico 基本原理和模拟</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">摘要在容器网络跨 Host 互联方案中，除了 Flannel 的隧道实现方案，还有一种比较主流的纯三层路由的方案 Calico ，与 Flannel 不同的是 Calico 不使用隧道或 NAT 来实现转发，而是巧妙的把所有二三层流量转换成三层流量，并通过 host 上路由配置完成跨 Host 转发，本文对 Calico 的方案进行基本原理分析和模拟验证。
+简介Calico 官方定义如下：Calico provides secure network connectivity for containers and virtual machine workloads.Calico creates and manages a flat layer 3 network, assigning each workload a fully routable IP address. Workloads can communicate without IP encapsulation or network address translation for bare metal performance, e</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+            <a href="/tags/Calico">Calico</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/13/九、URL与视图函数/">
+        <p class="h4 index-header">Django博客开发：URL与视图函数（九）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">在讲URL与视图函数之前我们先给大家简单介绍一下用户访问网站的流程。我们访问一个网站的时候，一般先打开浏览器，然后在浏览器的地址栏里输入一个网址，也就是URL，然后回车，我们就可以在浏览器里看到这个网址返回的内容。这是我们能看得见的过程，还有一些我们看不见的过程，那就是：++当我们在浏览器里输入网址（URL）时，回车，然后浏览器就会向目标网址发送一个HTTP请求，服务器收到请求之后就会给这个请求做出一个响应，这个响应就是把对应的内容通过浏览器渲染出来，呈现给我们看++。这个过程就是请求与响应。
+下图，就是请求响应的过程。
+
+上面我们提到了URL，这个URL在我们的Django中，其实是由我们自己构造的。(这个说法不太严谨，但为了方便大家理解之后的内容，先当这说辞是正确的。)
+Django中，我们约定URL是在项目同名目录下的urls.py文件里urlpatterns列表构造的。
+myblog/myblog/urls.py
+
+表现形式如下：
+urlpatterns = [    path(正则表达式, views视图函数，参数，别名),]括号里的参数说明：1、一个正则表达式字符串2、一个</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-13&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django">Django</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/12/八、使用富文本编辑器添加数据/">
+        <p class="h4 index-header">Django博客开发：使用富文本编辑器（八）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">在Django admin后台添加数据的时候，文章内容文本框想发布一篇图文并茂的文章需就得手写Html代码，这十分吃力，也没法上传图片和文件。这显然不是我等高大上程序猿想要的。
+
+为提升效率，我们可以使用富文本编辑器添加数据。支持Django的富文本编辑器很多，这里我推荐使用DjangoUeditor，Ueditor是百度开发的一个富文本编辑器，功能强大。下面教大家安装如何使用DjangoUeditor。
+1、首先我们先下载DjangoUeditor包点击下面的链接进行下载！下载完成然后解压到项目根目录里。
+https://www.django.cn/media/upfile/DjangoUeditor_20181010013851_248.zip
+2、settings.py里注册APP在INSTALLED_APPS里添加’DjangoUeditor’
+myblog/settings.yINSTALLED_APPS = [    &apos;django.contrib.admin&apos;,    ....    &apos;DjangoUeditor&apos;, #注册APP应</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-12&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django">Django</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/04/11/七、用Admin管理后台管理数据/">
+        <p class="h4 index-header">Django博客开发：用Admin管理后台数据（七）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">django的admin后台管理它可以让我们快速便捷管理数据，我们可以在各个app目录下的admin.py文件中对其进行控制。想要对APP应用进行管理，最基本的前提是要先在settings里对其进行注册，就是在INSTALLED_APPS里把APP名添加进去。
+注册APP应用之后，我们想要在admin后台里对数据库表进行操作，我们还得在应用APP下的admin.py文件里对数据库表先进行注册。我们的APP应用是blog，所以我们需要在blog/admin.py文件里进行注册：
+blog/admin.pyfrom django.contrib import adminfrom .models import Banner, Category, Tag, Tui, Article, Link #导入需要管理的数据库表@admin.register(Article)class ArticleAdmin(admin.ModelAdmin):    list_display = (&apos;id&apos;, &apos;category&apos;, &apos;title&apos;, &a</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Django">Django</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/Django_blog">Django_blog</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/04/10/六、创建数据库模型/">
         <p class="h4 index-header">Django博客开发：创建数据库模型（六）</p>
         
@@ -883,187 +1054,6 @@ from django.contrib import admin# Register your models here.from assets import m
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-10&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python3">Python3</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/CMDB">CMDB</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/09/6、新资产待审批区/">
-        <p class="h4 index-header">CMDB-新资产待审批区（六）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">一、启用admin前面，我们已经完成了数据收集客户端的编写和测试，下面我们就可以在admin中展示和管理资产数据了。
-首先，通过python manage.py createsuperuser
-创建一个管理员账户。
-然后，进入/assets/admin.py文件，写入下面的代码：from django.contrib import admin# Register your models here.from assets import modelsclass NewAssetAdmin(admin.ModelAdmin):    list_display = [&apos;asset_type&apos;, &apos;sn&apos;, &apos;model&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;, &apos;m_time&apos;]    list_filter = [&apos;asset_type&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;]    s</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-09&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python3">Python3</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/CMDB">CMDB</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/04/5、Linux下收集数据/">
-        <p class="h4 index-header">CMDB-Linux下收集数据（五）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Linux下收集数据就有很多命令和工具了，比Windows方便多了。
-但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。
-下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码：
-前提需要现在被收集的虚机上面安装必须的组件：yum install -y lsb
-关于disk的获取与原著有差别，更容易理解：##获取厂商：[root@python_master pythontest]# dmidecode -s system-manufacturerVMware, Inc.##获取型号：[root@python_master pythontest]# dmidecode -s system-product-nameVMware Virtual Platform##获取sn：[root@python_master pythontest]# dmidecode -s system-serial-numberVMware-56</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-04&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python3">Python3</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/CMDB">CMDB</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/03/4、Windows下收集数据/">
-        <p class="h4 index-header">CMDB-Windows下收集数据（四）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。
-在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件，写入下面的代码：
-==&lt;如下打印data的语句，是为了调试查看输出，可以去掉&gt;==#!/usr/bin/env python# -*- coding: utf-8 -*-# @Time    : 2019-3-2 16:41# @Author  : zhdya@zhdya.cn# @File    : sys_info.pyimport platformimport win32comimport wmi&quot;&quot;&quot;本模块基于windows操作系统，依赖wmi和win32com库，需要提前使用pip进行安装，或者下载安装包手动安装。&quot;&quot;&quot;def collect():    data = &#123;        &apos;os_type&apos;: platform.system(</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-03&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python3">Python3</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/CMDB">CMDB</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/02/3、数据收集客户端/">
-        <p class="h4 index-header">CMDB数据收集客户端（三）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">
-CMDB最主要的管理对象：服务器，其数据信息自然不可能通过手工收集，必须以客户端的方式，定时自动收集并报告给远程的服务器。
-
-下面，让我们暂时忘掉Django，进入Python运维的世界……
-一、客户端程序组织编写客户端，不能一个py脚本包打天下，要有组织有目的，通常我们会采取下面的结构：
-
-在Pycharm下，创建一个Client文件夹，作为客户端的根目录。
-在Client下，创建上面的包。注意是包，不是文件夹：
-
-bin是客户端启动脚本的所在目录
-conf是配置文件目录
-core是核心代码目录
-log是日志文件保存目录
-plugins是插件或工具目录
-
-二、开发数据收集客户端1.程序入口脚本++在bin目录中新建main.py文件++，写入下面的代码：
-#!/usr/bin/env python# -*- coding:utf-8 -*-import osimport sysBASE_DIR = os.path.dirname(os.getcwd())# 设置工作目录，使得包和模块能够正常导入sys.path.append(BASE_DIR)from core import ha</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-02&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>

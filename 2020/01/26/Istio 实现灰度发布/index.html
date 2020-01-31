@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>Istio 实现灰度发布 ~ 不认命？就拼命！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 60vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>不认命？就拼命！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('/img/post.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期日, 一月 26日 2020, 12:00 凌晨
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    1.9k 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      8 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h3 id="一、部署bookinfo微服务示例"><a href="#一、部署bookinfo微服务示例" class="headerlink" title="一、部署bookinfo微服务示例"></a>一、部署bookinfo微服务示例</h3><p><img src="http://myimage.okay686.cn/okay686cn/20200129/4lvFqFLrTr9L.png?imageslim" alt="mark"></p>
+<p><strong>Bookinfo 应用分为四个单独的微服务</strong>：</p>
+<ul>
+<li>productpage ： productpage 微服务会调用 details 和 reviews 两个微服务，用来生成页面。</li>
+<li>details ：这个微服务包含了书籍的信息。</li>
+<li>reviews ：这个微服务包含了书籍相关的评论。它还会调用ratings 微服务。</li>
+<li>ratings ： ratings 微服务中包含了由书籍评价组成的评级信息。</li>
+</ul>
+<p><strong>reviews 微服务有 3 个版本</strong>：</p>
+<ul>
+<li>v1 版本不会调用 ratings 服务。</li>
+<li>v2 版本会调用 ratings 服务，并使用 5个黑色五角星来显示评分信息。</li>
+<li>v3 版本会调用 ratings 服务，并使用5个红色五角星 来显示评分信息。</li>
+</ul>
+<h4 id="1-1、部署"><a href="#1-1、部署" class="headerlink" title="1.1、部署"></a>1.1、部署</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl create ns bookinfo</span><br><span class="line"></span><br><span class="line">kubectl label namespace bookinfo istio-injection=enabled    # 针对命名空间注入</span><br><span class="line"></span><br><span class="line">cd istio-1.4.2/samples/bookinfo</span><br><span class="line"></span><br><span class="line">kubectl apply -f platform/kube/bookinfo.yaml -n bookinfo</span><br><span class="line"></span><br><span class="line">kubectl get pod -n bookinfo     # 等待正常启动后会有2个pod（一个服务，一个sidecar的注入）</span><br><span class="line"></span><br><span class="line">kubectl apply -f networking/bookinfo-gateway.yaml -n bookinfo       # 两个服务Gateway和VirtualService</span><br></pre></td></tr></table></figure>
+<p>访问地址： <a href="http://192.168.171.12:32217/productpage" target="_blank" rel="noopener">http://192.168.171.12:32217/productpage</a></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/suFenN5xgzV4.png?imageslim" alt="mark"></p>
+<p>一旦部署完毕，刷新前端就可以看到3个版本是一直在轮训被展示的！</p>
+<p>为了模拟现实工作的场景，我这边nginx的虚机IP是：192.168.171.10</p>
+<p><strong>nginx.conf</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">    upstream ingressgateway &#123;</span><br><span class="line">          server 192.168.171.12:32217;</span><br><span class="line">          server 192.168.171.13:32217;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80 default_server;</span><br><span class="line">        listen       [::]:80 default_server;</span><br><span class="line">        server_name  _;</span><br><span class="line">        root         /usr/share/nginx/html;</span><br><span class="line"></span><br><span class="line">        # Load configuration files for the default server block.</span><br><span class="line">        include /etc/nginx/default.d/*.conf;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">                proxy_pass http://ingressgateway;</span><br><span class="line">                proxy_set_header Host $Host;    # 使用请求头来分流</span><br><span class="line">                proxy_http_version 1.1;     # nginx默认是1.0</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/iB3fywIlgzyu.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/4v2cyXD3VmKm.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/05BK4nn50e3u.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/hQF4M9Be3E1j.png?imageslim" alt="mark"></p>
+<p>如上这种方式虽然是都可以访问，但是不是我们最终的目的，必须要实现不同的域名访问不同的后端；</p>
+<p>更改httbin这个服务的http-gateway.yaml<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: httpbin</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">  - &quot;httpbin.zhdya.cn&quot;      # * 修改为域名</span><br></pre></td></tr></table></figure></p>
+<p>同理修改bookinfo的bookinfo-gateway.yaml<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: bookinfo</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">  - &quot;bookinfo.zhdya.cn&quot;</span><br></pre></td></tr></table></figure></p>
+<p>修改好之后 再次应用下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl apply -f bookinfo-gateway.yaml -n bookinfo</span><br><span class="line">kubectl apply -f http-gateway.yaml</span><br></pre></td></tr></table></figure></p>
+<p>再次访问就实现了httpbin访问的就是httpbin应用，bookinfo同理；</p>
+<h3 id="二、发布方案"><a href="#二、发布方案" class="headerlink" title="二、发布方案"></a>二、发布方案</h3><p>主流发布方案：</p>
+<ul>
+<li>蓝绿发布</li>
+<li>滚动发布</li>
+<li>灰度发布（金丝雀发布）</li>
+<li>A/B Test</li>
+</ul>
+<h4 id="2-1、蓝绿发布-早期用的比较广泛"><a href="#2-1、蓝绿发布-早期用的比较广泛" class="headerlink" title="2.1、蓝绿发布(早期用的比较广泛)"></a>2.1、蓝绿发布(早期用的比较广泛)</h4><p>项目逻辑上分为AB组，在项目升级时，首先把A组从负载均衡中摘除，进行新版本的部署。 B组仍然继续提供服务。 A组升级完成上线， B组从负载均衡中摘除。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>策略简单</li>
+<li>升级/回滚速度快</li>
+<li>用户无感知，平滑过渡</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>需要 <strong>两倍以上服务器资源</strong></li>
+<li>短时间内浪费一定资源成本</li>
+<li>故障影响范围大</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/HmDbtCSMcMVh.png?imageslim" alt="mark"></p>
+<h4 id="2-2、滚动发布-K8S默认更新策略"><a href="#2-2、滚动发布-K8S默认更新策略" class="headerlink" title="2.2、滚动发布(K8S默认更新策略)"></a>2.2、滚动发布(K8S默认更新策略)</h4><p>每次只升级一个或多个服务，升级完成后加入生产环境，不断执行这个过程，直到集群中的全部旧版升级新版本。 Kubernetes的默认发布策略。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>用户无感知，平滑过渡</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>部署周期长</li>
+<li>发布策略较复杂</li>
+<li>不易回滚</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/bHWAsCOz9yyE.png?imageslim" alt="mark"></p>
+<h4 id="2-3、灰度发布（金丝雀发布）-lt-当前主流方式-gt"><a href="#2-3、灰度发布（金丝雀发布）-lt-当前主流方式-gt" class="headerlink" title="2.3、灰度发布（金丝雀发布）&lt;当前主流方式&gt;"></a>2.3、灰度发布（金丝雀发布）&lt;当前主流方式&gt;</h4><p>只升级部分服务，即让一部分用户继续用老版本，一部分用户开始用新版本，如果用户对新版本没有什么意见，那么逐步扩大范围，把所有用户都迁移到新版本上面来。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>保证整体系统稳定性</li>
+<li>用户无感知，平滑过渡</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>自动化要求高</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/PXxIUe23Cgl8.png?imageslim" alt="mark"></p>
+<h4 id="2-4、A-B-Test（灰度发布的一种）"><a href="#2-4、A-B-Test（灰度发布的一种）" class="headerlink" title="2.4、A/B Test（灰度发布的一种）"></a>2.4、A/B Test（灰度发布的一种）</h4><p>灰度发布的一种方式，主要对特定用户采样后，对收集到的反馈数据做相关对比，然后根据比对结果作出决策。用来测试应用功能表现的方法，侧重应用的可用性，受欢迎程度等， 最后决定是否升级。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/lazz21AYEgys.png?imageslim" alt="mark"></p>
+<h3 id="三、Istio实现灰度发布"><a href="#三、Istio实现灰度发布" class="headerlink" title="三、Istio实现灰度发布"></a>三、Istio实现灰度发布</h3><h4 id="3-1、基于权重的路由（灰度发布）"><a href="#3-1、基于权重的路由（灰度发布）" class="headerlink" title="3.1、基于权重的路由（灰度发布）"></a>3.1、基于权重的路由（灰度发布）</h4><p><strong>需求</strong>：</p>
+<p>1、流量全部发送到reviews v1版本（不带五角星）； # virtual-service-all-v1.yaml</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/SwuqExlDrg5v.png?imageslim" alt="mark"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat networking/virtual-service-all-v1.yaml</span><br><span class="line">···省略</span><br><span class="line">---</span><br><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">  - reviews     # 后端的svc</span><br><span class="line">  http:</span><br><span class="line">  - route:</span><br><span class="line">    - destination:  # 流量的转发</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v1</span><br><span class="line">···省略</span><br><span class="line"></span><br><span class="line">kubectl apply -f networking/virtual-service-all-v1.yaml -n bookinfo</span><br><span class="line"></span><br><span class="line">------------</span><br><span class="line"></span><br><span class="line">cat networking/destination-rule-all.yaml</span><br><span class="line">···省略</span><br><span class="line">---</span><br><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: DestinationRule</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">spec:</span><br><span class="line">  host: reviews</span><br><span class="line">  subsets:</span><br><span class="line">  - name: v1</span><br><span class="line">    labels:</span><br><span class="line">      version: v1   # 选择的标签是v1</span><br><span class="line">  - name: v2</span><br><span class="line">    labels:</span><br><span class="line">      version: v2</span><br><span class="line">  - name: v3</span><br><span class="line">    labels:</span><br><span class="line">      version: v3</span><br><span class="line">···省略</span><br><span class="line"></span><br><span class="line">kubectl apply -f networking/destination-rule-all.yaml -n bookinfo</span><br><span class="line"></span><br><span class="line">再来看下，刚刚我们线上部署了3套不同版本的应用:</span><br><span class="line">cat platform/kube/bookinfo.yaml</span><br><span class="line">···省略</span><br><span class="line">---</span><br><span class="line">##################################################################################################</span><br><span class="line"># Reviews service</span><br><span class="line">##################################################################################################</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">  labels:</span><br><span class="line">    app: reviews</span><br><span class="line">    service: reviews</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - port: 9080</span><br><span class="line">    name: http</span><br><span class="line">  selector:</span><br><span class="line">    app: reviews</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: ServiceAccount</span><br><span class="line">metadata:</span><br><span class="line">  name: bookinfo-reviews</span><br><span class="line">  labels:</span><br><span class="line">    account: reviews</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews-v1</span><br><span class="line">  labels:</span><br><span class="line">    app: reviews</span><br><span class="line">    version: v1</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: reviews</span><br><span class="line">      version: v1</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: reviews</span><br><span class="line">        version: v1</span><br><span class="line">    spec:</span><br><span class="line">      serviceAccountName: bookinfo-reviews</span><br><span class="line">      containers:</span><br><span class="line">      - name: reviews</span><br><span class="line">        image: docker.io/istio/examples-bookinfo-reviews-v1:1.15.0</span><br><span class="line">        imagePullPolicy: IfNotPresent</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 9080</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews-v2</span><br><span class="line">  labels:</span><br><span class="line">    app: reviews</span><br><span class="line">    version: v2</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: reviews</span><br><span class="line">      version: v2</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: reviews</span><br><span class="line">        version: v2</span><br><span class="line">    spec:</span><br><span class="line">      serviceAccountName: bookinfo-reviews</span><br><span class="line">      containers:</span><br><span class="line">      - name: reviews</span><br><span class="line">        image: docker.io/istio/examples-bookinfo-reviews-v2:1.15.0</span><br><span class="line">        imagePullPolicy: IfNotPresent</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 9080</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews-v3</span><br><span class="line">  labels:</span><br><span class="line">    app: reviews</span><br><span class="line">    version: v3</span><br><span class="line">spec:</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: reviews</span><br><span class="line">      version: v3</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: reviews</span><br><span class="line">        version: v3</span><br><span class="line">    spec:</span><br><span class="line">      serviceAccountName: bookinfo-reviews</span><br><span class="line">      containers:</span><br><span class="line">      - name: reviews</span><br><span class="line">        image: docker.io/istio/examples-bookinfo-reviews-v3:1.15.0</span><br><span class="line">        imagePullPolicy: IfNotPresent</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 9080</span><br><span class="line">---</span><br><span class="line">···省略</span><br><span class="line"></span><br><span class="line">再次刷新前端页面就会发现，所有的流量一直停留在V1版本！</span><br><span class="line">-----------------</span><br></pre></td></tr></table></figure>
+<p>2、将90%的流量发送到reviewsv1版本，另外10%的流量发送到reviewsv2版本（5个黑色五角星），最后完全切换到v2版本。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cat networking/virtual-service-reviews-90-10.yaml</span><br><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">    - reviews</span><br><span class="line">  http:</span><br><span class="line">  - route:</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v1</span><br><span class="line">      weight: 90    # 90%权重</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v2</span><br><span class="line">      weight: 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">kubectl apply -f networking/virtual-service-reviews-90-10.yaml -n bookinfo</span><br></pre></td></tr></table></figure></p>
+<p>3、将50%的流量发送到v2版本，另外50%的流量发送到v3版本（5个红色五角星）。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cat networking/virtual-service-reviews-v2-v3.yaml</span><br><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">    - reviews</span><br><span class="line">  http:</span><br><span class="line">  - route:</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v2</span><br><span class="line">      weight: 50</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v3</span><br><span class="line">      weight: 50</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">kubectl apply -f networking/virtual-service-reviews-v2-v3.yaml -n bookinfo</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">假如测试没有任何问题，这样我们就可以通过权重调整全部切为V3版本</span><br><span class="line"></span><br><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">    - reviews</span><br><span class="line">  http:</span><br><span class="line">  - route:</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v2</span><br><span class="line">      weight: 0</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v3</span><br><span class="line">      weight: 100</span><br><span class="line"></span><br><span class="line">或者一旦有任何异常，我们可以通过权重直接修改，apply即可！</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-2、基于请求内容的路由（A-B-Test）"><a href="#3-2、基于请求内容的路由（A-B-Test）" class="headerlink" title="3.2、基于请求内容的路由（A/B Test）"></a>3.2、基于请求内容的路由（A/B Test）</h4><p><strong>需求</strong>：</p>
+<ol>
+<li>将特定用户的请求发送到reviews v2版本（5个黑色五角星），其他用户则不受影响（v3）</li>
+</ol>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/sVDJG8hWlRsG.png?imageslim" alt="mark"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># cat networking/virtual-service-reviews-jason-v2-v3.yaml</span><br><span class="line">apiVersion: networking.istio.io/v1alpha3</span><br><span class="line">kind: VirtualService</span><br><span class="line">metadata:</span><br><span class="line">  name: reviews</span><br><span class="line">spec:</span><br><span class="line">  hosts:</span><br><span class="line">  - reviews</span><br><span class="line">  http:</span><br><span class="line">  - match:</span><br><span class="line">    - headers:</span><br><span class="line">        end-user:</span><br><span class="line">          exact: jason      # 只要是jason这个用户登录就会显示V2版本，其余均是V3版本</span><br><span class="line">    route:</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v2</span><br><span class="line">  - route:</span><br><span class="line">    - destination:</span><br><span class="line">        host: reviews</span><br><span class="line">        subset: v3</span><br><span class="line"></span><br><span class="line"># kubectl apply -f networking/virtual-service-reviews-jason-v2-v3.yaml -n bookinfo</span><br></pre></td></tr></table></figure>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/0t2hmDI19yIY.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/RAmx5S2dWbqx.png?imageslim" alt="mark"></p>
+<h3 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h3><p>实现灰度发布：</p>
+<ul>
+<li>引入服务版本标签（version：v3）；<ul>
+<li>使用deployment部署，pod标签加上version；</li>
+<li>创建istio资源；</li>
+<li>创建一个灰度版本，version；</li>
+<li>创建DestinationRule规则，关联所有版本（在用版本和灰度版本）；</li>
+<li>创建VirtualService规则，路由策略（请求内容，百分比？）</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200129/isN1tWCiFvAr.png?imageslim" alt="mark"></p>
+<p>之所以没有被大量应用的主要原因，就是人工修改量太大，误操作概率高，如果把如上全部自动化后，我相信这简直就是和K8S的珠联璧合！！</p>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/Kubernetes">Kubernetes</a>
+                
+                  <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+                  <a class="hover-with-bg" href="/tags/Istio">Istio</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <!--PC和WAP自适应版-->
+  <div id="SOHUCS" sid="https://zhdya.okay686.cn/2020/01/26/Istio 实现灰度发布/"></div>
+  <script type="text/javascript">
+    (function () {
+      var appid = 'cyu4TKmA0';
+      var conf = '';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+        var head = document.getElementsByTagName('head')[0] || document.head || document.documentElement;
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.charset = 'utf-8';
+        script.id = 'changyan_mobile_js';
+        script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+        head.appendChild(script);
+      } else {
+        var loadJs = function (d, a) {
+          var c = document.getElementsByTagName('head')[0] || document.head || document.documentElement;
+          var b = document.createElement('script');
+          b.setAttribute('type', 'text/javascript');
+          b.setAttribute('charset', 'UTF-8');
+          b.setAttribute('src', d);
+          if (typeof a === 'function') {
+            if (window.attachEvent) {
+              b.onreadystatechange = function () {
+                var e = b.readyState;
+                if (e === 'loaded' || e === 'complete') {
+                  b.onreadystatechange = null;
+                  a();
+                }
+              };
+            } else {
+              b.onload = a;
+            }
+          }
+          c.appendChild(b);
+        };
+        loadJs('https://changyan.sohu.com/upload/changyan.js', function () {
+          window.changyan.api.config({ appid: appid, conf: conf });
+        });
+      }
+    })(); </script>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+  <!-- 备案信息 -->
+  <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">苏ICP备16041225号-2</a>
+  
+
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Istio 实现灰度发布&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 50,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+  
+    <script>
+      !function (e, t, a) {
+        function r() {
+          for (var e = 0; e < s.length; e++) s[e].alpha <= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = "left:" + s[e].x + "px;top:" + s[e].y + "px;opacity:" + s[e].alpha + ";transform:scale(" + s[e].scale + "," + s[e].scale + ") rotate(45deg);background:" + s[e].color + ";z-index:99999");
+          requestAnimationFrame(r)
+        }
+
+        function n() {
+          var t = "function" == typeof e.onclick && e.onclick;
+          e.onclick = function (e) {
+            t && t(), o(e)
+          }
+        }
+
+        function o(e) {
+          var a = t.createElement("div");
+          a.className = "heart", s.push({
+            el: a,
+            x: e.clientX - 5,
+            y: e.clientY - 5,
+            scale: 1,
+            alpha: 1,
+            color: c()
+          }), t.body.appendChild(a)
+        }
+
+        function i(e) {
+          var a = t.createElement("style");
+          a.type = "text/css";
+          try {
+            a.appendChild(t.createTextNode(e))
+          } catch (t) {
+            a.styleSheet.cssText = e
+          }
+          t.getElementsByTagName("head")[0].appendChild(a)
+        }
+
+        function c() {
+          return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+        }
+
+        var s = [];
+        e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) {
+          setTimeout(e, 1e3 / 60)
+        }, i(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"), n(), r()
+      }(window, document);
+    </script>
+  
+
+
+
+  <script>(function (i, s, o, g, r, a, m) {
+      i['DaoVoiceObject'] = r;
+      i[r] = i[r] ||
+        function () {
+          (i[r].q = i[r].q || []).push(arguments);
+        };
+      i[r].l = 1 * new Date();
+      a = s.createElement(o);
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      a.charset = 'utf-8';
+      m.parentNode.insertBefore(a, m);
+    })(window, document, 'script', ('https:' === document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/f304979b.js", 'daovoice');
+    daovoice('init', {
+      app_id: "f304979b",
+    });
+    daovoice('update');
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -134,6 +134,187 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/09/6、新资产待审批区/">
+        <p class="h4 index-header">CMDB-新资产待审批区（六）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、启用admin前面，我们已经完成了数据收集客户端的编写和测试，下面我们就可以在admin中展示和管理资产数据了。
+首先，通过python manage.py createsuperuser
+创建一个管理员账户。
+然后，进入/assets/admin.py文件，写入下面的代码：from django.contrib import admin# Register your models here.from assets import modelsclass NewAssetAdmin(admin.ModelAdmin):    list_display = [&apos;asset_type&apos;, &apos;sn&apos;, &apos;model&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;, &apos;m_time&apos;]    list_filter = [&apos;asset_type&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;]    s</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-09&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/04/5、Linux下收集数据/">
+        <p class="h4 index-header">CMDB-Linux下收集数据（五）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Linux下收集数据就有很多命令和工具了，比Windows方便多了。
+但是要在Python的进程中运行操作系统级别的命令，我们通常需要使用subprocess模块。这个模块的具体用法，请查看Python教程中相关部分的内容。
+下面，我们在Client/plugins下创建一个linux包，再到包里创建一个sys_info.py文件，写入下面的代码：
+前提需要现在被收集的虚机上面安装必须的组件：yum install -y lsb
+关于disk的获取与原著有差别，更容易理解：##获取厂商：[root@python_master pythontest]# dmidecode -s system-manufacturerVMware, Inc.##获取型号：[root@python_master pythontest]# dmidecode -s system-product-nameVMware Virtual Platform##获取sn：[root@python_master pythontest]# dmidecode -s system-serial-numberVMware-56</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-04&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/03/4、Windows下收集数据/">
+        <p class="h4 index-header">CMDB-Windows下收集数据（四）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、windows中收集硬件信息为了收集运行Windows操作系统的服务器的硬件信息，我们需要编写一个专门的脚本。
+在Pycharm的Client目录下的plugins包中，新建一个windows包，然后创建一个sys_info.py文件，写入下面的代码：
+==&lt;如下打印data的语句，是为了调试查看输出，可以去掉&gt;==#!/usr/bin/env python# -*- coding: utf-8 -*-# @Time    : 2019-3-2 16:41# @Author  : zhdya@zhdya.cn# @File    : sys_info.pyimport platformimport win32comimport wmi&quot;&quot;&quot;本模块基于windows操作系统，依赖wmi和win32com库，需要提前使用pip进行安装，或者下载安装包手动安装。&quot;&quot;&quot;def collect():    data = &#123;        &apos;os_type&apos;: platform.system(</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-03&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/02/3、数据收集客户端/">
+        <p class="h4 index-header">CMDB数据收集客户端（三）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">
+CMDB最主要的管理对象：服务器，其数据信息自然不可能通过手工收集，必须以客户端的方式，定时自动收集并报告给远程的服务器。
+
+下面，让我们暂时忘掉Django，进入Python运维的世界……
+一、客户端程序组织编写客户端，不能一个py脚本包打天下，要有组织有目的，通常我们会采取下面的结构：
+
+在Pycharm下，创建一个Client文件夹，作为客户端的根目录。
+在Client下，创建上面的包。注意是包，不是文件夹：
+
+bin是客户端启动脚本的所在目录
+conf是配置文件目录
+core是核心代码目录
+log是日志文件保存目录
+plugins是插件或工具目录
+
+二、开发数据收集客户端1.程序入口脚本++在bin目录中新建main.py文件++，写入下面的代码：
+#!/usr/bin/env python# -*- coding:utf-8 -*-import osimport sysBASE_DIR = os.path.dirname(os.getcwd())# 设置工作目录，使得包和模块能够正常导入sys.path.append(BASE_DIR)from core import ha</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-02&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/03/01/2、模型设计/">
         <p class="h4 index-header">CMDB模型设计（二）</p>
         

@@ -15,7 +15,7 @@
   <meta name="description" content="Tough times never last, but tough people do.">
   <meta name="author" content="Zhdya">
   <meta name="keywords" content="">
-  <title>基于Jenkins的Master/Slave模式实现CI/CD ~ 不认命？就拼命！</title>
+  <title>微服务治理Istio初探 ~ 不认命？就拼命！</title>
 
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
@@ -115,7 +115,7 @@
               
                 <p class="mt-3">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
-                  星期三, 一月 8日 2020, 9:00 晚上
+                  星期五, 一月 24日 2020, 12:00 凌晨
                 </p>
               
 
@@ -124,7 +124,7 @@
                   
                   &nbsp;<i class="far fa-chart-bar"></i>
                   <span class="post-count">
-                    988 字
+                    1.1k 字
                   </span>&nbsp;
                 
 
@@ -132,7 +132,7 @@
                   
                   &nbsp;<i class="far fa-clock"></i>
                   <span class="post-count">
-                      4 分钟
+                      3 分钟
                   </span>&nbsp;
                 
 
@@ -165,32 +165,84 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto" id="post">
           <div class="markdown-body">
-            <h2 id="Jenkins在Kubernetes中动态创建代理"><a href="#Jenkins在Kubernetes中动态创建代理" class="headerlink" title="Jenkins在Kubernetes中动态创建代理"></a>Jenkins在Kubernetes中动态创建代理</h2><h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>就类似于我们公司 目前每天的jenkins构建测试基本上平稳在2300+左右，也就是可能同时并发的构建我见过一次120+，只是这一个jenkins节点是不可以完成这么大的任务量的！所以jenkins-slave的接入就很大程度上提高了性能！</p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/RSbqBjzstx8X.png?imageslim" alt="mark"></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/cBdQUIyxx7kp.png?imageslim" alt="mark"></p>
-<p>Master/Slave相当于Server/agent。Master提供web接口让用户来管理job和slave，job可以运行在master本机或者被分配到slave上运行。一个master可以关联多个slave用来为不同的job或相同的job的不同配置来服务。</p>
-<p>如何添加jenkins-slave节点？</p>
-<p>“Manage Jenkins” ==&gt; “Manage Nodes” ==&gt; “New Node”</p>
-<h3 id="二、如何实现？"><a href="#二、如何实现？" class="headerlink" title="二、如何实现？"></a>二、如何实现？</h3><h4 id="2-1、Kubernetes插件：-Jenkins在Kubernetes集群中运行动态代理"><a href="#2-1、Kubernetes插件：-Jenkins在Kubernetes集群中运行动态代理" class="headerlink" title="2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理"></a>2.1、Kubernetes插件： Jenkins在Kubernetes集群中运行动态代理</h4><p>插件介绍： <a href="https://github.com/jenkinsci/kubernetes-plugin" target="_blank" rel="noopener">https://github.com/jenkinsci/kubernetes-plugin</a></p>
-<p>在jenkins的组件中搜索并安装：“kubernetes”</p>
-<p>“Manage Jenkins” ==&gt; “Configure System” ==&gt; “Cloud” ==&gt; “add kubernetes”</p>
-<p>因为我们的jenkins已经在K8S集群中以pod的形式去运行，所以Kubernetes的地址就可以直接填写servicename：<a href="https://kubernetes.default" target="_blank" rel="noopener">https://kubernetes.default</a></p>
-<p><img src="http://myimage.okay686.cn/okay686cn/20200126/Ueygq6p1XLSN.png?imageslim" alt="mark"></p>
-<p>当然如果jenkins服务是单独部署在K8S集群外部，我们就需要填写可以联调的地址、证书及证书；</p>
-<h4 id="2-2、自定义构建Jenkins-Slave镜像"><a href="#2-2、自定义构建Jenkins-Slave镜像" class="headerlink" title="2.2、自定义构建Jenkins Slave镜像"></a>2.2、自定义构建Jenkins Slave镜像</h4><p>当然我虽然已经在K8S上部署了master节点，但是所以的编译都在slave节点运行的，我们需要考虑到：</p>
+            <h3 id="一、Service-Mesh"><a href="#一、Service-Mesh" class="headerlink" title="一、Service Mesh"></a>一、Service Mesh</h3><p>Service Mesh 的中文译为“服务网格”，是一个用于 <strong>处理服务和服务之间通信的基础设施层</strong> ，它负责为构建复杂的云原生应用 <strong>传递可靠的网络请求</strong> ，并为服务通信实现了微服务所需的基本组件功能，例如服务发现、负载均衡、监控、流量管理、访问控制等。在实践中， <strong>服务网格通常实现为一组和应用程序部署在一起的轻量级的网络代理</strong> ，但对应用程序来说是透明的。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200128/2KbCbGPWb6TP.png?imageslim" alt="mark"></p>
+<h3 id="二、微服务-VS-服务网格"><a href="#二、微服务-VS-服务网格" class="headerlink" title="二、微服务 VS 服务网格"></a>二、微服务 VS 服务网格</h3><p>微服务架构的优点很多，比如它解耦业务，提供更高的灵活性，允许在服务频繁发版的同时保持系统其它部分的可用性与稳定性;解耦编程语言，针对不同业务可以使用更加合适的语言进行开发;解耦开发团队，不同团队各自负责一个微服务，互不影响，加速交付。</p>
+<p>以spring cloud微服务核心组件包括以下几个组件：</p>
 <ul>
-<li>编译所涉及的开发语言（java，go，node，python等）；</li>
-<li>额外底层环境（docker&lt;推镜像&gt;，helm&lt;打包发布&gt;）</li>
+<li>Config：配置中心</li>
+<li>Eureka：服务治理组件，包含服务注册与发现</li>
+<li>Hystrix：容错管理组件，实现了熔断器</li>
+<li>Ribbon：客户端负载均衡的服务调用组件</li>
+<li>Feign：基于Ribbon和Hystrix的声明式服务调用组件</li>
+<li>Zuul：网关组件，提供智能路由、访问过滤等功能</li>
 </ul>
-<p>参考： <a href="https://github.com/jenkinsci/docker-jnlp-slave" target="_blank" rel="noopener">https://github.com/jenkinsci/docker-jnlp-slave</a></p>
-<p>我这边以java语言为例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FROM centos:7</span><br><span class="line">LABEL maintainer zhdya</span><br><span class="line">RUN yum install -y java-1.8.0-openjdk maven curl git libtool-ltdl-devel &amp;&amp; \</span><br><span class="line">yum clean all &amp;&amp; \</span><br><span class="line">rm -rf /var/cache/yum/* &amp;&amp; \</span><br><span class="line">mkdir -p /usr/share/jenkins</span><br><span class="line">COPY slave.jar /usr/share/jenkins/slave.jar</span><br><span class="line">COPY jenkins-slave /usr/bin/jenkins-slave</span><br><span class="line">COPY settings.xml /etc/maven/settings.xml</span><br><span class="line">RUN chmod +x /usr/bin/jenkins-slave</span><br><span class="line">COPY helm kubectl /usr/bin/</span><br><span class="line">ENTRYPOINT [&quot;jenkins-slave&quot;]</span><br></pre></td></tr></table></figure></p>
-<p>我突然想到一个事情，如上底层的事情已经考虑的差不多了，但是这个镜像如何能作为slave存在呢？</p>
-<p>熟悉jenkins的应该不难回答，Jenkins_Master的所有交互都是与Slave的agent（slave.jar）通信，通过agent执行一系列的动作！</p>
-<p>安装包下载地址：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">链接：https://pan.baidu.com/s/1ktc8HzDvXaJeYf0xWBaI_A </span><br><span class="line">提取码：pxrc</span><br><span class="line"></span><br><span class="line">[root@k8s-master1 ~]# unzip jenkins-slave.zip</span><br><span class="line">Archive:  jenkins-slave.zip</span><br><span class="line">   creating: jenkins-slave/</span><br><span class="line">  inflating: jenkins-slave/jenkins-slave</span><br><span class="line">  inflating: jenkins-slave/settings.xml</span><br><span class="line">  inflating: jenkins-slave/slave.jar</span><br><span class="line">  inflating: jenkins-slave/kubectl</span><br><span class="line">  inflating: jenkins-slave/Dockerfile</span><br><span class="line">  inflating: jenkins-slave/helm</span><br><span class="line">  </span><br><span class="line">helm和kubectl均是可执行文件，放到可执行目录下即可，kubectl需要考虑到鉴权！关于docker，只需要挂载数据卷即可！</span><br><span class="line"></span><br><span class="line"># docker build -t jenkins-slave:jdk-1.8 .</span><br><span class="line"># docker tag jenkins-slave:jdk-1.8 192.168.171.10/library/jenkins-slave:jdk-1.8</span><br><span class="line"># docker push 192.168.171.10/library/jenkins-slave:jdk-1.8</span><br></pre></td></tr></table></figure></p>
-<p>然后我们配置下刚刚创建的任务：</p>
-<p>参考：<a href="https://plugins.jenkins.io/kubernetes" target="_blank" rel="noopener">https://plugins.jenkins.io/kubernetes</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent &#123;</span><br><span class="line">    kubernetes &#123;</span><br><span class="line">	  label &apos;jenkins-slave&apos;</span><br><span class="line">      yaml &quot;&quot;&quot;</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: jenkins-slave</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: jnlp</span><br><span class="line">    image: 192.168.171.10/library/jenkins-slave:jdk-1.8</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">   parameters &#123;</span><br><span class="line">  choice choices: [&apos;192.168.171.10:9999/root/a.git&apos;, &apos;192.168.171.10:9999/root/b.git&apos;, &apos;192.168.171.10:9999/root/c.git&apos;], description: &apos;【请选择所需要发布项目的Git地址】&apos;, name: &apos;Git&apos;</span><br><span class="line">  choice choices: [&apos;192.168.171.11&apos;, &apos;192.168.171.12&apos;, &apos;192.168.171.13&apos;], description: &apos;【请选择所需要发布项目的RS后端负载】&apos;, name: &apos;RS&apos;</span><br><span class="line">   &#125;</span><br><span class="line">   stages &#123;</span><br><span class="line">      stage(&apos;1、相关信息&apos;) &#123;</span><br><span class="line">         steps &#123;</span><br><span class="line">		 echo &quot;Git分支是：$&#123;Git&#125;&quot;</span><br><span class="line">		 echo &quot;后端负载是：$&#123;RS&#125;&quot;</span><br><span class="line">         &#125;</span><br><span class="line">         &#125;</span><br><span class="line">	  stage(&apos;2、编译&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;编译~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	  stage(&apos;1、发布&apos;) &#123;</span><br><span class="line">	     steps &#123;</span><br><span class="line">		echo &quot;发布~&quot;</span><br><span class="line">	 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>查看是否创建了jenkins-slave节点：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@k8s-master1 jenkins-slave]# kubectl get po</span><br><span class="line">NAME                                     READY   STATUS              RESTARTS   AGE</span><br><span class="line">client1                                  1/1     Running             24         30d</span><br><span class="line">jenkins-7c989dfd84-fgjbk                 1/1     Running             1          3d16h</span><br><span class="line">jenkins-slave-swj7c-bqjd0                0/1     ContainerCreating   0          3s</span><br></pre></td></tr></table></figure></p>
-<p>注意观察你会发现，当我们启动一个slave的pod去执行这个job，一旦job完成，pod节点就会马上销毁！</p>
+<p>Service Mesh 有如下几个特点：</p>
+<ul>
+<li>治理能力独立（Sidecar）</li>
+<li>应用程序间通讯的中间层</li>
+<li>应用程序无感知</li>
+<li>解耦应用程序的重试/超时、监控、追踪和服务发现</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200128/BA0b9z5bBBCN.png?imageslim" alt="mark"></p>
+<p>关于微服务和服务网格的区别:</p>
+<p>微服务更像是一个服务之间的生态，专注于服务治理等方面，而服务网格更专注于服务之间的通信，以及和 DevOps 更好的结合。</p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200128/Vj5QNxk4WARt.png?imageslim" alt="mark"></p>
+<p>如上可以看出Istio和K8S的结合巧妙的弥补了DEVOPS生态的不足之处；这也是为什么目前这么火热的原因了；</p>
+<h3 id="三、Istio"><a href="#三、Istio" class="headerlink" title="三、Istio"></a>三、Istio</h3><p>Isito是Service Mesh的产品化落地，是目前最受欢迎的服务网格，功能丰富、成熟度高。</p>
+<h4 id="3-1、为什么要使用-Istio？"><a href="#3-1、为什么要使用-Istio？" class="headerlink" title="3.1、为什么要使用 Istio？"></a>3.1、为什么要使用 Istio？</h4><p>Istio 提供一种简单的方式来为已部署的服务建立网络，该网络具有负载均衡、服务间认证、监控等功能，只需要对服务的代码进行一点或不需要做任何改动。想要让服务支持 Istio，只需要在您的环境中部署一个特殊的 sidecar 代理，使用 Istio 控制平面功能配置和管理代理，拦截微服务之间的所有网络通信：</p>
+<ul>
+<li>HTTP、gRPC、WebSocket 和 TCP 流量的自动负载均衡。</li>
+<li>通过丰富的路由规则、重试、故障转移和故障注入，可以对流量行为进行细粒度控制。</li>
+<li>可插入的策略层和配置 API，支持访问控制、速率限制和配额。</li>
+<li>对出入集群入口和出口中所有流量的自动度量指标、日志记录和追踪。</li>
+<li>通过强大的基于身份的验证和授权，在集群中实现安全的服务间通信。</li>
+</ul>
+<h4 id="3-2、总结四大特点："><a href="#3-2、总结四大特点：" class="headerlink" title="3.2、总结四大特点："></a>3.2、总结四大特点：</h4><ul>
+<li>连接（Connect）<ul>
+<li>流量管理</li>
+<li>负载均衡</li>
+<li>灰度发布</li>
+</ul>
+</li>
+<li>安全（Secure）<ul>
+<li>认证</li>
+<li>鉴权</li>
+</ul>
+</li>
+<li>控制（Control）<ul>
+<li>限流</li>
+<li>ACL</li>
+</ul>
+</li>
+<li>观察（Observe）<ul>
+<li>监控</li>
+<li>调用链</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200128/hVYS8l06wUtH.png?imageslim" alt="mark"></p>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200128/pwoXq8tfyhfe.png?imageslim" alt="mark"></p>
+<h4 id="3-3、Istio架构与组件"><a href="#3-3、Istio架构与组件" class="headerlink" title="3.3、Istio架构与组件"></a>3.3、Istio架构与组件</h4><p>Istio 服务网格逻辑上分为 ==数据平面== 和 ==控制平面== 。</p>
+<p><strong>数据平面</strong>： 由一组代理组成，这些代理微服务所有网络通信，并接收和实施来自Mixer的策略。</p>
+<ul>
+<li>Proxy：负责高效转发与策略实现（envoy）。</li>
+</ul>
+<p><strong>控制平面</strong>： 管理和配置代理来路由流量。此外，通过mixer实施策略与收集来自边车代理的数据。</p>
+<ul>
+<li>Mixer：适配组件，数据平面与控制平面通过它交互，为Proxy提供策略和数据上报。</li>
+<li>Pilot：策略配置组件，为Proxy提供服务发现、智能路由、错误处理等。</li>
+<li>Citadel：安全组件，提供证书生成下发、加密通信、访问控制。</li>
+<li>Galley：配置管理、验证、分发。</li>
+</ul>
+<p><img src="http://myimage.okay686.cn/okay686cn/20200128/NUP2jMO9wJM7.jpg?imageslim" alt="mark"></p>
+<p>Istio 有 4 个配置资源，实现落地所有流量管理需求：</p>
+<ul>
+<li>VirtualService：实现服务请求路由规则的功能。</li>
+<li>DestinationRule：实现目标服务的负载均衡、服务发现、故障处理和故障注入的功能。</li>
+<li>Gateway：让服务网格内的服务，可以被全世界看到。</li>
+<li>ServiceEntry ：让服务网格内的服务，可以看到外面的世界。</li>
+</ul>
 
             <hr>
           </div>
@@ -205,6 +257,8 @@
                   <a class="hover-with-bg" href="/tags/Kubernetes">Kubernetes</a>
                 
                   <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+                  <a class="hover-with-bg" href="/tags/Istio">Istio</a>
                 
               </span>
             
@@ -238,7 +292,7 @@
       
       
   <!--PC和WAP自适应版-->
-  <div id="SOHUCS" sid="https://zhdya.okay686.cn/2020/01/08/Jenkins基于k8s的Master_Slave模式实现CI_CD/"></div>
+  <div id="SOHUCS" sid="https://zhdya.okay686.cn/2020/01/24/微服务治理Istio初探/"></div>
   <script type="text/javascript">
     (function () {
       var appid = 'cyu4TKmA0';
@@ -408,7 +462,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "基于Jenkins的Master/Slave模式实现CI/CD&nbsp;",
+        "微服务治理Istio初探&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 50,
