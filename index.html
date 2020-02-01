@@ -856,24 +856,15 @@ PersistentVolumeClaim（PVC）是用户存储的请求。 它类似于pod。Pod�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/26/四、Ceph 文件系统 CephFS 的介绍与配置/">
-        <p class="h4 index-header">四、Ceph 文件系统 CephFS 的介绍与配置</p>
+      <a href="/2019/12/26/五、Ceph Dashboard（1）/">
+        <p class="h4 index-header">五、Ceph Dashboard（1）</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、CephFs介绍
-Ceph File System (CephFS) 是与 POSIX 标准兼容的文件系统, 能够提供对 Ceph 存储集群上的文件访问. Jewel 版本 (10.2.0) 是第一个包含稳定 CephFS 的 Ceph 版本. CephFS 需要至少一个元数据服务器 (Metadata Server - MDS) daemon (ceph-mds) 运行, MDS daemon 管理着与存储在 CephFS 上的文件相关的元数据, 并且协调着对 Ceph 存储系统的访问。  
-
-对象存储的成本比起普通的文件存储还是较高，需要购买专门的对象存储软件以及大容量硬盘。如果对数据量要求不是海量，只是为了做文件共享的时候，直接用文件存储的形式好了，性价比高。
-
-
-二、CephFS 架构 底层是核心集群所依赖的, 包括:
-
-OSDs (ceph-osd): CephFS 的数据和元数据就存储在 OSDs 上
-MDS (ceph-mds): Metadata Servers, 管理着 CephFS 的元数据
-Mons (ceph-mon): Monitors 管理着集群 Map</div>
+          <div class="index-text mb-1">一、Ceph Dashboard介绍Ceph 的监控可视化界面方案很多—-grafana、Kraken。但是从Luminous开始，Ceph 提供了原生的Dashboard功能，通过Dashboard可以获取Ceph集群的各种基本状态信息。mimic版  (nautilus版)  dashboard 安装。如果是  (nautilus版) 需要安装 ceph-mgr-dashboard 
+二、配置Ceph Dashboard配置yum源：# cat &gt; /etc/yum.repos.d/cephbak.repo &lt;&lt; EOF[ceph]name=cephbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/x86_64/gpgcheck=0priority=1 [ceph-noarch]name=cephnoarchbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/noarch/gpgcheck=0priority=1 [ceph-source]na</div>
         </div>
       </a>
 
@@ -901,15 +892,24 @@ Mons (ceph-mon): Monitors 管理着集群 Map</div>
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/26/五、Ceph Dashboard（1）/">
-        <p class="h4 index-header">五、Ceph Dashboard（1）</p>
+      <a href="/2019/12/26/四、Ceph 文件系统 CephFS 的介绍与配置/">
+        <p class="h4 index-header">四、Ceph 文件系统 CephFS 的介绍与配置</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、Ceph Dashboard介绍Ceph 的监控可视化界面方案很多—-grafana、Kraken。但是从Luminous开始，Ceph 提供了原生的Dashboard功能，通过Dashboard可以获取Ceph集群的各种基本状态信息。mimic版  (nautilus版)  dashboard 安装。如果是  (nautilus版) 需要安装 ceph-mgr-dashboard 
-二、配置Ceph Dashboard配置yum源：# cat &gt; /etc/yum.repos.d/cephbak.repo &lt;&lt; EOF[ceph]name=cephbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/x86_64/gpgcheck=0priority=1 [ceph-noarch]name=cephnoarchbaseurl=http://mirrors.aliyun.com/ceph/rpm-nautilus/el7/noarch/gpgcheck=0priority=1 [ceph-source]na</div>
+          <div class="index-text mb-1">一、CephFs介绍
+Ceph File System (CephFS) 是与 POSIX 标准兼容的文件系统, 能够提供对 Ceph 存储集群上的文件访问. Jewel 版本 (10.2.0) 是第一个包含稳定 CephFS 的 Ceph 版本. CephFS 需要至少一个元数据服务器 (Metadata Server - MDS) daemon (ceph-mds) 运行, MDS daemon 管理着与存储在 CephFS 上的文件相关的元数据, 并且协调着对 Ceph 存储系统的访问。  
+
+对象存储的成本比起普通的文件存储还是较高，需要购买专门的对象存储软件以及大容量硬盘。如果对数据量要求不是海量，只是为了做文件共享的时候，直接用文件存储的形式好了，性价比高。
+
+
+二、CephFS 架构 底层是核心集群所依赖的, 包括:
+
+OSDs (ceph-osd): CephFS 的数据和元数据就存储在 OSDs 上
+MDS (ceph-mds): Metadata Servers, 管理着 CephFS 的元数据
+Mons (ceph-mon): Monitors 管理着集群 Map</div>
         </div>
       </a>
 
