@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="description" content="Tough times never last, but tough people do.">
+  <meta name="author" content="Zhdya">
+  <meta name="keywords" content="">
+  <title>K8S集群的污点与容忍 ~ 不认命？就拼命！</title>
+
+  <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
+<link rel="stylesheet" href="/lib/github-markdown/github-markdown.min.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1067060_qzomjdt8bmp.css">
+
+
+  <link rel="stylesheet" href="/lib/prettify/tomorrow-night-eighties.min.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+  <link rel="stylesheet" href="/lib/fancybox/jquery.fancybox.min.css">
+
+
+</head>
+
+
+<body>
+  <header style="height: 60vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">&nbsp;<strong>不认命？就拼命！</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">归档</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">分类</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+          </li>
+        
+          
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">关于</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background"
+         style="background: url('http://myimage.okay686.cn/okay686cn/20200201/BjpXFVh2Ot4E.jpg')no-repeat center center;
+           background-size: cover;
+           background-attachment: fixed;">
+      <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              <br>
+              
+                <p class="mt-3">
+                  <i class="fas fa-calendar-alt" aria-hidden="true"></i>&nbsp;
+                  星期一, 十一月 11日 2019, 12:00 凌晨
+                </p>
+              
+
+              <p>
+                
+                  
+                  &nbsp;<i class="far fa-chart-bar"></i>
+                  <span class="post-count">
+                    918 字
+                  </span>&nbsp;
+                
+
+                
+                  
+                  &nbsp;<i class="far fa-clock"></i>
+                  <span class="post-count">
+                      4 分钟
+                  </span>&nbsp;
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  &nbsp;<i class="far fa-eye" aria-hidden="true"></i>&nbsp;
+                  <span id="busuanzi_container_page_pv">
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>&nbsp;
+                
+              </p>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto" id="post">
+          <div class="markdown-body">
+            <h3 id="一、Taint-和-Toleration"><a href="#一、Taint-和-Toleration" class="headerlink" title="一、Taint 和 Toleration"></a>一、Taint 和 Toleration</h3><p>节点亲和性，是pod的一种属性（偏好或硬性要求），它使pod被吸引到一类特定的节点。Taint 则相反，它使节点能够排斥一类特定的 pod</p>
+<p>Taint 和 toleration 相互配合，可以用来避免 pod 被分配到不合适的节点上。每个节点上都可以应用一个或多个taint ，这表示对于那些不能容忍这些 taint 的 pod，是不会被该节点接受的。如果将 toleration 应用于 pod上，则表示这些 pod 可以（但不要求）被调度到具有匹配 taint 的节点上。</p>
+<h3 id="二、污点-Taint"><a href="#二、污点-Taint" class="headerlink" title="二、污点(Taint)"></a>二、污点(Taint)</h3><p>使用kubectl taint命令可以给某个 Node 节点设置污点，Node 被设置上污点之后就和 Pod 之间存在了一种相斥的关系，可以让 Node 拒绝 Pod 的调度执行，甚至将 Node 已经存在的 Pod 驱逐出去：</p>
+<p>每个污点的组成如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">key=value:effect</span><br></pre></td></tr></table></figure>
+<p>每个污点有一个 key 和 value 作为污点的标签，其中 value 可以为空，effect 描述污点的作用。</p>
+<p>当前 tainteffect 支持如下三个选项：</p>
+<ul>
+<li><p>NoSchedule：表示 k8s 将不会将 Pod 调度到具有该污点的 Node 上；</p>
+</li>
+<li><p>PreferNoSchedule：表示 k8s 将尽量避免将 Pod 调度到具有该污点的 Node 上；</p>
+</li>
+<li><p>NoExecute：表示 k8s 将不会将 Pod 调度到具有该污点的 Node 上，同时会将 Node 上已经存在的 Pod 驱逐出去；</p>
+</li>
+</ul>
+<h4 id="2-1、污点的设置、查看和去除"><a href="#2-1、污点的设置、查看和去除" class="headerlink" title="2.1、污点的设置、查看和去除"></a>2.1、污点的设置、查看和去除</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 设置污点</span><br><span class="line"></span><br><span class="line">kubectl taint nodes node1 key1=value1:NoSchedule</span><br><span class="line"></span><br><span class="line"># 节点说明中，查找 Taints 字段</span><br><span class="line"></span><br><span class="line">kubectl describe node node-name</span><br><span class="line"></span><br><span class="line"># 去除污点</span><br><span class="line"></span><br><span class="line">kubectl taint nodes node1 key1:NoSchedule-</span><br></pre></td></tr></table></figure>
+<p>设置污点：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubectl taint nodes node01 check=node01:NoExecute      </span><br><span class="line">node/node01 tainted</span><br><span class="line"># kubectl taint nodes node02 check=node02:NoExecute</span><br><span class="line">node/node02 tainted</span><br></pre></td></tr></table></figure></p>
+<p>查看node节点Taints字段：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># kubectl get node</span><br><span class="line">NAME     STATUS   ROLES    AGE   VERSION</span><br><span class="line">matser   Ready    master   16d   v1.15.1</span><br><span class="line">node01   Ready    node     16d   v1.15.1</span><br><span class="line">node02   Ready    node     16d   v1.15.1</span><br><span class="line"></span><br><span class="line"># kubectl describe node matser|grep Taint       # master节点自带不调度污点</span><br><span class="line">Taints:             node-role.kubernetes.io/master:NoSchedule</span><br><span class="line"></span><br><span class="line"># kubectl describe node node01|grep Taints</span><br><span class="line">Taints:             check=node01:NoExecute</span><br></pre></td></tr></table></figure></p>
+<p>查看是否生效：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># vim nginx-deploy.yml</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-deployment</span><br><span class="line">spec:</span><br><span class="line">  replicas: 3</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.15</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line"></span><br><span class="line"># kubectl apply -f  nginx-deploy.yml</span><br><span class="line">deployment.extensions/nginx-deployment created</span><br><span class="line"></span><br><span class="line"># kubectl get pod</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">nginx-deployment-6f6d9b887f-9dddq   0/1     Pending   0          91s</span><br><span class="line">nginx-deployment-6f6d9b887f-f2hhk   0/1     Pending   0          91s</span><br><span class="line">nginx-deployment-6f6d9b887f-v7w54   0/1     Pending   0          91s</span><br><span class="line"></span><br><span class="line"># kubectl describe pod nginx-deployment-6f6d9b887f-9dddq</span><br><span class="line">Events:</span><br><span class="line">  Type     Reason            Age               From               Message</span><br><span class="line">  ----     ------            ----              ----               -------</span><br><span class="line">  Warning  FailedScheduling  1s (x3 over 69s)  default-scheduler  0/3 nodes are available: 3 node(s) had taints that the pod didn&apos;t tolerate</span><br></pre></td></tr></table></figure></p>
+<h3 id="三、容忍"><a href="#三、容忍" class="headerlink" title="三、容忍"></a>三、容忍</h3><p>设置了污点的 Node 将根据 taint 的 effect：NoSchedule、PreferNoSchedule、NoExecute 和 Pod 之间产生互斥的关系，Pod 将在一定程度上不会被调度到 Node 上。但我们可以在 Pod 上设置容忍 ( Toleration ) ，意思是设置了容忍的 Pod 将可以容忍污点的存在，可以被调度到存在污点的 Node 上</p>
+<ul>
+<li>key, vaule, effect 要与 Node 上设置的 taint 保持一致；</li>
+<li>operator 的值为 Exists 将会忽略 value 值；</li>
+<li>tolerationSeconds 用于描述当 Pod 需要被驱逐时可以在 Pod 上继续保留运行的时间；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># vim nginx-deploy.yml</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: nginx-deployment</span><br><span class="line">spec:</span><br><span class="line">  replicas: 3</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: nginx</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.15</span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line">      tolerations:</span><br><span class="line">      - key: &quot;check&quot;</span><br><span class="line">        operator: &quot;Equal&quot;</span><br><span class="line">        value: &quot;node01&quot;</span><br><span class="line">        effect: &quot;NoExecute&quot;</span><br><span class="line">        tolerationSeconds: 3600</span><br><span class="line">        </span><br><span class="line"># kubectl apply -f nginx-deploy.yml</span><br><span class="line">deployment.extensions/nginx-deployment configured</span><br><span class="line"></span><br><span class="line">[root@matser nginx]# kubectl get pod</span><br><span class="line">NAME                                READY   STATUS              RESTARTS   AGE</span><br><span class="line">nginx-deployment-77f8d88b85-9vzzb   0/1     ContainerCreating   0          1s</span><br><span class="line">nginx-deployment-77f8d88b85-d5kd8   1/1     Running             0          3s</span><br><span class="line">nginx-deployment-77f8d88b85-jgjst   1/1     Running             0          3s</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>当不指定 key 值时，表示容忍所有的污点 key</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tolerations:</span><br><span class="line">- operator: &quot;Exists&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当不指定 effect 值时，表示容忍所有的污点作用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tolerations:</span><br><span class="line">- key: &quot;key&quot;</span><br><span class="line"> operator: &quot;Exists&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>有多个 Master 存在时，防止资源浪费，可以如下设置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl taint nodes Node-Name node-role.kubernetes.io/master=:PreferNoSchedule</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            <p>
+            
+            
+              <span>
+                <i class="iconfont icon-tag"></i>
+                
+                  <a class="hover-with-bg" href="/tags/Kubernetes">Kubernetes</a>
+                
+                  <a class="hover-with-bg" href="/tags/K8S">K8S</a>
+                
+              </span>
+            
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+      <br><br>
+      
+      
+  <!--PC和WAP自适应版-->
+  <div id="SOHUCS" sid="https://zhdya.okay686.cn/2019/11/11/K8S集群的污点与容忍/"></div>
+  <script type="text/javascript">
+    (function () {
+      var appid = 'cyu4TKmA0';
+      var conf = '';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+        var head = document.getElementsByTagName('head')[0] || document.head || document.documentElement;
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.charset = 'utf-8';
+        script.id = 'changyan_mobile_js';
+        script.src = 'https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
+        head.appendChild(script);
+      } else {
+        var loadJs = function (d, a) {
+          var c = document.getElementsByTagName('head')[0] || document.head || document.documentElement;
+          var b = document.createElement('script');
+          b.setAttribute('type', 'text/javascript');
+          b.setAttribute('charset', 'UTF-8');
+          b.setAttribute('src', d);
+          if (typeof a === 'function') {
+            if (window.attachEvent) {
+              b.onreadystatechange = function () {
+                var e = b.readyState;
+                if (e === 'loaded' || e === 'complete') {
+                  b.onreadystatechange = null;
+                  a();
+                }
+              };
+            } else {
+              b.onload = a;
+            }
+          }
+          c.appendChild(b);
+        };
+        loadJs('https://changyan.sohu.com/upload/changyan.js', function () {
+          window.changyan.api.config({ appid: appid, conf: conf });
+        });
+      }
+    })(); </script>
+
+
+    
+  </div>
+</div>
+
+    
+  </main>
+
+  
+    <a class="z-depth-1" id="scroll-top-button" href="#" role="button">
+      <i class="fa fa-chevron-up scroll-top-arrow" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><b>Hexo</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
+    <br>
+
+    
+  
+    <!-- 不蒜子统计PV -->
+    
+    &nbsp;<span id="busuanzi_container_site_pv">总访问量 
+          <span id="busuanzi_value_site_pv"></span> 次</span>&nbsp;
+  
+  
+    <!-- 不蒜子统计UV -->
+    
+    &nbsp;<span id="busuanzi_container_site_uv">总访客数 
+            <span id="busuanzi_value_site_uv"></span> 人</span>&nbsp;
+  
+  <br>
+
+
+
+    
+  <!-- 备案信息 -->
+  <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">苏ICP备16041225号-2</a>
+  
+
+
+
+    <!-- cnzz Analytics icon -->
+    
+
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/popper/popper.min.js"></script>
+<script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="/lib/mdbootstrap/js/mdb.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+  
+    <script src="/lib/tocbot/tocbot.min.js"></script>
+  
+  <script src="/js/post.js"></script>
+
+
+
+  <script src="/lib/smooth-scroll/smooth-scroll.min.js"></script>
+
+
+
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+
+  
+
+  
+
+  <!-- cnzz Analytics -->
+  
+
+
+
+  <script src="/lib/prettify/prettify.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('pre').addClass('prettyprint  ');
+      prettyPrint();
+    })
+  </script>
+
+
+
+  <script src="/lib/typed/typed.min.js"></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "K8S集群的污点与容忍&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 50,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script src="/lib/anchor/anchor.min.js"></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "false",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script src="/js/local-search.js"></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script src="/lib/fancybox/jquery.fancybox.min.js"></script>
+  <script>
+    $("#post img:not(.no-zoom img, img[no-zoom])").each(
+      function () {
+        var element = document.createElement("a");
+        $(element).attr("data-fancybox", "images");
+        $(element).attr("href", $(this).attr("src"));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+  
+    <script>
+      !function (e, t, a) {
+        function r() {
+          for (var e = 0; e < s.length; e++) s[e].alpha <= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = "left:" + s[e].x + "px;top:" + s[e].y + "px;opacity:" + s[e].alpha + ";transform:scale(" + s[e].scale + "," + s[e].scale + ") rotate(45deg);background:" + s[e].color + ";z-index:99999");
+          requestAnimationFrame(r)
+        }
+
+        function n() {
+          var t = "function" == typeof e.onclick && e.onclick;
+          e.onclick = function (e) {
+            t && t(), o(e)
+          }
+        }
+
+        function o(e) {
+          var a = t.createElement("div");
+          a.className = "heart", s.push({
+            el: a,
+            x: e.clientX - 5,
+            y: e.clientY - 5,
+            scale: 1,
+            alpha: 1,
+            color: c()
+          }), t.body.appendChild(a)
+        }
+
+        function i(e) {
+          var a = t.createElement("style");
+          a.type = "text/css";
+          try {
+            a.appendChild(t.createTextNode(e))
+          } catch (t) {
+            a.styleSheet.cssText = e
+          }
+          t.getElementsByTagName("head")[0].appendChild(a)
+        }
+
+        function c() {
+          return "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + "," + ~~(255 * Math.random()) + ")"
+        }
+
+        var s = [];
+        e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) {
+          setTimeout(e, 1e3 / 60)
+        }, i(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"), n(), r()
+      }(window, document);
+    </script>
+  
+
+
+
+  <script>(function (i, s, o, g, r, a, m) {
+      i['DaoVoiceObject'] = r;
+      i[r] = i[r] ||
+        function () {
+          (i[r].q = i[r].q || []).push(arguments);
+        };
+      i[r].l = 1 * new Date();
+      a = s.createElement(o);
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      a.charset = 'utf-8';
+      m.parentNode.insertBefore(a, m);
+    })(window, document, 'script', ('https:' === document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/f304979b.js", 'daovoice');
+    daovoice('init', {
+      app_id: "f304979b",
+    });
+    daovoice('update');
+  </script>
+
+
+
+
+
+</body>
+</html>

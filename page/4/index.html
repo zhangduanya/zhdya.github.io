@@ -134,6 +134,50 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/10/7、审批新资产/">
+        <p class="h4 index-header">CMDB-审批新资产（七）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、自定义admin的actions需要有专门的审批员来审批新资产，对资产的合法性、健全性、可用性等更多方面进行审核，如果没有问题，那么就批准上线。
+批准上线这一操作是通过admin的自定义actions来实现的。
+Django的admin默认有一个delete操作的action，所有在admin中的模型都有这个action，更多的就需要我们自己编写了。
+
+修改/assets/admin.py的代码，新的代码如下：
+from django.contrib import admin# Register your models here.from assets import modelsfrom . import asset_handlerclass NewAssetAdmin(admin.ModelAdmin):    list_display = [&apos;asset_type&apos;, &apos;sn&apos;, &apos;model&apos;, &apos;manufacturer&apos;, &apos;c_time&apos;, &apos;m_time&ap</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-10&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/03/09/6、新资产待审批区/">
         <p class="h4 index-header">CMDB-新资产待审批区（六）</p>
         
