@@ -134,6 +134,49 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/03/11/8、已上线资产信息更新/">
+        <p class="h4 index-header">CMDB-已上线资产信息更新（八）</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">前面，我们已经实现了资产进入待审批区、更新待审批区的资产信息以及审批资产上线三个主要功能，还剩下一个最主要的实时更新已上线资产信息的功能。
+在assets/views.py中的report视图，目前是把已上线资产的数据更新流程‘pass’了，现在将其替换成下面的语句：
+update_asset = asset_handler.UpdateAsset(request, asset_obj[0], data)
+report视图变成了下面的样子：views.py
+from django.shortcuts import render, HttpResponsefrom django.views.decorators.csrf import csrf_exemptimport jsonfrom . import modelsfrom . import asset_handler# Create your views here.@csrf_exemptdef report(request):    &quot;&quot;&quot;    通过csrf_exempt装饰器，跳过Django的c</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-11&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/Python3">Python3</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Django">Django</a>&nbsp;
+          
+            <a href="/tags/Python">Python</a>&nbsp;
+          
+            <a href="/tags/CMDB">CMDB</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/03/10/7、审批新资产/">
         <p class="h4 index-header">CMDB-审批新资产（七）</p>
         

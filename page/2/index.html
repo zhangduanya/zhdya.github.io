@@ -176,25 +176,21 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络生产级探究/">
-        <p class="h4 index-header">K8S集群网络生产级探究</p>
+      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
+        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
+          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
+Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
+此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
+1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
+BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
+为了能让你更清楚理解BGP，举个例子：
 
-路由器：网络出口
-核心层：主要完成数据高效转发、链路备份等
-汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
-接入层：工作站的接入
-
-1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
-2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
-想要搞懂这些问题得从交换机、路由器讲起。
-
-交换机工作在OSI参考模型的第二</div>
+在</div>
         </div>
       </a>
 
@@ -224,21 +220,25 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网路Calico网络组件实践(BGP、RR、IPIP)/">
-        <p class="h4 index-header">Calico网络组件实践(BGP、RR、IPIP)</p>
+      <a href="/2019/12/22/K8S集群网络生产级探究/">
+        <p class="h4 index-header">K8S集群网络生产级探究</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络方案之 CalicoCalico是一个纯三层的数据中心网络方案，Calico支持广泛的平台，包括Kubernetes、OpenStack等。
-Calico 在每一个计算节点利用 Linux Kernel 实现了一个高效的虚拟路由器（ vRouter） 来负责数据转发，而每个 vRouter 通过 BGP 协议负责把自己上运行的 workload 的路由信息向整个 Calico 网络内传播。
-此外，Calico  项目还实现了 Kubernetes 网络策略，提供ACL功能。
-1、BGP概述实际上，Calico项目提供的网络解决方案，与Flannel的host-gw模式几乎一样。也就是说，Calico也是基于路由表实现容器数据包转发，但不同于Flannel使用flanneld进程来维护路由信息的做法，而Calico项目使用BGP协议来自动维护整个集群的路由信息。
-BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种自治系统间的动态路由发现协议，与其他 BGP 系统交换网络可达信息。 
-为了能让你更清楚理解BGP，举个例子：
+          <div class="index-text mb-1">K8S集群网络网络基础知识1、公司网络架构
 
-在</div>
+路由器：网络出口
+核心层：主要完成数据高效转发、链路备份等
+汇聚层：网络策略、安全、工作站交换机的接入、VLAN之间通信等功能
+接入层：工作站的接入
+
+1、一个局域网内主机A（10）和主机B（20）之间通讯流程：网段：192.168.31.0/24源IP和目的IP均在同一子网下。四元组：源IP 源MAC 目的IP 目的MAC- 在本机查找ARP缓存表，ARP广播包询问20的MAC地址是多少。 2、主机A（10）和主机B（20）不在同一个局域网内之间通讯流程：VLAN1:192.168.31.0/24VLAN2:192.168.32.0/24- 主机A自顶向下将数据封装成链路层帧，缓存在主机A的适配器缓存中，主机A通过查看适配器中ARP表对应的MAC地址，将链路层帧发送到与其连接的第一跳路由器上，当链路层帧到达该路由器后，路由器根据自身的路由器转发表转发到指定的出口IP再一层层转向目的VLAN。
+2、交换技术有想过局域网内主机怎么通信的？主机访问外网又是怎么通信的？
+想要搞懂这些问题得从交换机、路由器讲起。
+
+交换机工作在OSI参考模型的第二</div>
         </div>
       </a>
 
@@ -578,19 +578,28 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
+        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
 
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
+弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
+1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
+
+机器规格不统一造成机器利用率百分比碎片化
+在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
+
+
+
+特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
+
+机器利用率不单纯依靠宿主机计算
+在大部分生产</div>
         </div>
       </a>
 
@@ -620,28 +629,19 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
-        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
+          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
+它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
+当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
+在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
 
-蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
-弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
-1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
-
-机器规格不统一造成机器利用率百分比碎片化
-在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
-
-
-
-特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
-
-机器利用率不单纯依靠宿主机计算
-在大部分生产</div>
+当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
         </div>
       </a>
 
@@ -1026,28 +1026,30 @@ kube-apiserver，kube-controller-manager，</div>
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/11/11/K8S集群的污点与容忍/">
-        <p class="h4 index-header">K8S集群的污点与容忍</p>
+      <a href="/2019/11/14/Liveness, Readiness与Startup Probes/">
+        <p class="h4 index-header">Liveness, Readiness与Startup Probes</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">一、Taint 和 Toleration节点亲和性，是pod的一种属性（偏好或硬性要求），它使pod被吸引到一类特定的节点。Taint 则相反，它使节点能够排斥一类特定的 pod
-Taint 和 toleration 相互配合，可以用来避免 pod 被分配到不合适的节点上。每个节点上都可以应用一个或多个taint ，这表示对于那些不能容忍这些 taint 的 pod，是不会被该节点接受的。如果将 toleration 应用于 pod上，则表示这些 pod 可以（但不要求）被调度到具有匹配 taint 的节点上。
-二、污点(Taint)使用kubectl taint命令可以给某个 Node 节点设置污点，Node 被设置上污点之后就和 Pod 之间存在了一种相斥的关系，可以让 Node 拒绝 Pod 的调度执行，甚至将 Node 已经存在的 Pod 驱逐出去：
-每个污点的组成如下：
-key=value:effect
-每个污点有一个 key 和 value 作为污点的标签，其中 value 可以为空，effect 描述污点的作用。
-当前 tainteffect 支持如下三个选项：
+          <div class="index-text mb-1">一、探针的种类
+livenessProbe：健康状态检查，周期性检查服务是否存活，检查结果失败，将重启容器；
 
-NoS</div>
+readinessProbe：可用性检查，周期性检查服务是否可用，不可用将从service的endpoints中移除；
+
+startupProbe：启动探针，首次初始化时需要额外启动时间的应用程序，超过设定的启动时间，将被杀死；
+
+
+kubelet使用活跃度探针知道什么时候重新启动的容器。例如，活动性探针可能会陷入僵局，而应用程序正在运行，但无法取得进展。在这种状态下重新启动容器可以帮助使应用程序尽管存在错误也更可用。
+Kubelet使用就绪性探测器来了解何时Container准备开始接受流量。当Pod的所有容器都准备就绪时，即视为准备就绪。此信号的一种用法是控制将哪些Pod用作服务的后端。当Pod尚未就绪时，会将其从服务负载平衡器中删除。
+kubelet使用启动探针来了解何时启动Container应用程序。如果配置了这样的探针，它将禁用活动性和就绪性检查，直到成功为止，以确保这些探针不会干扰应用程序的启动。这可用于对启动缓慢的容器进行活动检查，避免它们在启动和运行之前被ku</div>
         </div>
       </a>
 
       <div>
         
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-11&nbsp;&nbsp;
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-14&nbsp;&nbsp;
         
         
         

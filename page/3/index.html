@@ -134,6 +134,46 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/11/11/K8S集群的污点与容忍/">
+        <p class="h4 index-header">K8S集群的污点与容忍</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、Taint 和 Toleration节点亲和性，是pod的一种属性（偏好或硬性要求），它使pod被吸引到一类特定的节点。Taint 则相反，它使节点能够排斥一类特定的 pod
+Taint 和 toleration 相互配合，可以用来避免 pod 被分配到不合适的节点上。每个节点上都可以应用一个或多个taint ，这表示对于那些不能容忍这些 taint 的 pod，是不会被该节点接受的。如果将 toleration 应用于 pod上，则表示这些 pod 可以（但不要求）被调度到具有匹配 taint 的节点上。
+二、污点(Taint)使用kubectl taint命令可以给某个 Node 节点设置污点，Node 被设置上污点之后就和 Pod 之间存在了一种相斥的关系，可以让 Node 拒绝 Pod 的调度执行，甚至将 Node 已经存在的 Pod 驱逐出去：
+每个污点的组成如下：
+key=value:effect
+每个污点有一个 key 和 value 作为污点的标签，其中 value 可以为空，effect 描述污点的作用。
+当前 tainteffect 支持如下三个选项：
+
+NoS</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-11&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/06/18/生产级k8s二进制v14.1高可用部署/">
         <p class="h4 index-header">生产级k8s二进制v14.1高可用部署</p>
         
@@ -1005,49 +1045,6 @@ AdminLTE自带大量插件，比如表格、Charts等等，可根据需要载入
       <div>
         
           <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-12&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/Python3">Python3</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Django">Django</a>&nbsp;
-          
-            <a href="/tags/Python">Python</a>&nbsp;
-          
-            <a href="/tags/CMDB">CMDB</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/03/11/8、已上线资产信息更新/">
-        <p class="h4 index-header">CMDB-已上线资产信息更新（八）</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">前面，我们已经实现了资产进入待审批区、更新待审批区的资产信息以及审批资产上线三个主要功能，还剩下一个最主要的实时更新已上线资产信息的功能。
-在assets/views.py中的report视图，目前是把已上线资产的数据更新流程‘pass’了，现在将其替换成下面的语句：
-update_asset = asset_handler.UpdateAsset(request, asset_obj[0], data)
-report视图变成了下面的样子：views.py
-from django.shortcuts import render, HttpResponsefrom django.views.decorators.csrf import csrf_exemptimport jsonfrom . import modelsfrom . import asset_handler# Create your views here.@csrf_exemptdef report(request):    &quot;&quot;&quot;    通过csrf_exempt装饰器，跳过Django的c</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-03-11&nbsp;&nbsp;
         
         
           <i class="iconfont icon-inbox"></i>
