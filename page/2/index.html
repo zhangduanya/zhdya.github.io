@@ -134,6 +134,45 @@
     
     
     <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/24/二、部署Ceph集群/">
+        <p class="h4 index-header">二、部署Ceph集群</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">一、Ceph版本选择Ceph版本来源介绍Ceph 社区最新版本是 14，而 Ceph 12 是市面用的最广的稳定版本。第一个 Ceph 版本是 0.1 ，要回溯到 2008 年 1 月。多年来，版本号方案一直没变，直到 2015 年 4 月 0.94.1 （ Hammer 的第一个修正版）发布后，为了避免 0.99 （以及 0.100 或 1.00 ？），制定了新策略。
+x.0.z - 开发版（给早期测试者和勇士们）
+x.1.z - 候选版（用于测试集群、高手们）
+x.2.z - 稳定、修正版（给用户们）
+x 将从 9 算起，它代表 Infernalis （ I 是第九个字母），这样第九个发布周期的第一个开发版就是 9.0.0 ；后续的开发版依次是 9.0.1 、 9.0.2 等等。| 版本名称 | 版本号 | 发布时间 || —— | —— | —— || Argonaut | 0.48版本(LTS) | 　　2012年6月3日 || Bobtail | 0.56版本(LTS) | 　2013年5月7日 || Cuttlefish | 0.61版本 | 　2013年1月1日 || D</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-24&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S,%20ceph">K8S, ceph</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
       <a href="/2019/12/23/一、Ceph介绍/">
         <p class="h4 index-header">一、Ceph介绍</p>
         
@@ -164,6 +203,50 @@ Ceph使用RADOS提供对象存储，通过librados封装库提供多种存储方
         
         
           <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/K8S">K8S</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4 mx-auto">
+    
+    
+    <div class="col-12 col-md-8 m-auto">
+      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
+        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
+        
+        
+          
+        
+        <div class="index-excerpt">
+          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
+1、Flannel 部署https://github.com/coreos/flannel 
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
+
+UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
+VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
+Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
+        </div>
+      </a>
+
+      <div>
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
+        
+        
+          <i class="iconfont icon-inbox"></i>
+          
+            <a href="/categories/K8S">K8S</a>&nbsp;
+          &nbsp;
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
           
             <a href="/tags/K8S">K8S</a>&nbsp;
           
@@ -239,50 +322,6 @@ BGP英文全称是Border Gateway Protocol，即边界网关协议，它是一种
 想要搞懂这些问题得从交换机、路由器讲起。
 
 交换机工作在OSI参考模型的第二</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-12-22&nbsp;&nbsp;
-        
-        
-          <i class="iconfont icon-inbox"></i>
-          
-            <a href="/categories/K8S">K8S</a>&nbsp;
-          &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/22/K8S集群网络Flannel网络组件实践(vxlan、host-gw)/">
-        <p class="h4 index-header">Flannel网络组件实践(vxlan、host-gw)</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">Kubernetes网络组件之 FlannelFlannel是CoreOS维护的一个网络组件，Flannel为每个Pod提供全局唯一的IP，Flannel使用ETCD来存储Pod子网与Node IP之间的关系。flanneld守护进程在每台主机上运行，并负责维护ETCD信息和路由数据包。
-1、Flannel 部署https://github.com/coreos/flannel 
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-2、 Flannel工作模式及原理Flannel支持多种数据转发方式：
-
-UDP：最早支持的一种方式，由于性能最差，目前已经弃用。
-VXLAN：Overlay Network方案，源数据包封装在另一种网络包里面进行路由转发和通信。==（100台左右node适用）==
-Host-GW：Flannel通过在各个节点上的Agent进程，将容器网络的路由信息刷到主机的路由表上，这样一来所有的主机都有整个容器网络的</div>
         </div>
       </a>
 
@@ -487,18 +526,19 @@ ServivorFrom: 上一次GC的幸存者，作为这一次GC的被扫描者。当JV
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
-        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
+        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
+          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
+它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
+当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
+在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
 
-1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
-
-在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
+当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
         </div>
       </a>
 
@@ -578,28 +618,18 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
-        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩2/">
+        <p class="h4 index-header">K8S弹性伸缩之Pods 资源扩容方案</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
+          <div class="index-text mb-1">Pod自动扩容/缩容（HPA）Horizontal Pod Autoscaler（HPA，Pod水平自动伸缩），根据资源利用率或者自定义指标自动调整replication controller, deployment 或 replica set，实现部署的自动扩展和缩减，让部署的规模接近于实际服务的负载。HPA不适于无法缩放的对象，例如DaemonSet。
 
-蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
-弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
-1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
+1、HPA基本原理Kubernetes 中的 Metrics Server 持续采集所有 Pod 副本的指标数据。HPA 控制器通过 Metrics Server 的 API（Heapster 的 API 或聚合 API）获取这些数据，基于用户定义的扩缩容规则进行计算，得到目标 Pod 副本数量。当目标 Pod 副本数量与当前副本数量不同时，HPA 控制器就向 Pod 的副本控制器（Deployment、RC 或 ReplicaSet）发起 scale 操作，调整 Pod 的副本数量，完成扩缩容操作。如图所示。
 
-机器规格不统一造成机器利用率百分比碎片化
-在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
-
-
-
-特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
-
-机器利用率不单纯依靠宿主机计算
-在大部分生产</div>
+在弹性伸缩中，冷却周期是不能逃避的一个话题， 由于评估的度量标准是动态特性，副本的数量可能会不断波动。有时被称为颠簸，</div>
         </div>
       </a>
 
@@ -629,19 +659,28 @@ PromSQL：一种灵活的查询语言，可以利用多维数据完成复杂的�
     
     
     <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/12/13/K8S深度理解弹性伸缩3/">
-        <p class="h4 index-header">K8S弹性伸缩之基于Metrics Server CPU指标的HPA</p>
+      <a href="/2019/12/13/K8S深度理解弹性伸缩/">
+        <p class="h4 index-header">K8S弹性伸缩之Nodes 资源扩容（CA，Ansible）</p>
         
         
           
         
         <div class="index-excerpt">
-          <div class="index-text mb-1">基于CPU指标缩放1、 Kubernetes API Aggregation什么是k8sapi聚合？
-它是允许k8s的开发人员编写一个自己的服务，可以把这个服务注册到k8s的api里面，这样，就像k8s自己的api一样，你的服务只要运行在k8s集群里面，k8s 的Aggregate通过service名称就可以转发到你写的service里面去了。
-当然看如下图↓：你也可以把agg当作一个nginx的反代，它就是代理层。
-在 Kubernetes 1.7 版本引入了聚合层，允许第三方应用程序通过将自己注册到kube-apiserver上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将扩展 API 的访问请求转发到用户服务的功能。
+          <div class="index-text mb-1">弹性伸缩1 传统弹性伸缩的困境从传统意义上，弹性伸缩主要解决的问题是容量规划与实际负载的矛盾。
 
-当你访问 apis/metrics.k8s.io/v1beta1 的时候，实际上访问到的是一个叫作 kube-aggregator 的代理。而 kube-apise</div>
+蓝色水位线表示集群资源容量随着负载的增加不断扩容，红色曲线表示集群资源实际负载变化。
+弹性伸缩就是要解决当实际负载增大，而集群资源容量没来得及反应的问题。
+1、Kubernetes中弹性伸缩存在的问题常规的做法是给集群资源预留保障集群可用，通常20%左右。这种方式看似没什么问题，但放到Kubernetes中，就会发现如下2个问题。
+
+机器规格不统一造成机器利用率百分比碎片化
+在一个Kubernetes集群中，通常不只包含一种规格的机器，假设集群中存在4C8G与16C32G两种规格的机器，对于10%的资源预留，这两种规格代表的意义是完全不同的。
+
+
+
+特别是在缩容的场景下，为了保证缩容后集群稳定性，我们一般会一个节点一个节点从集群中摘除，那么如何判断节点是否可以摘除其利用率百分比就是重要的指标。此时如果大规格机器有较低的利用率被判断缩容，那么很有可能会造成节点缩容后，容器重新调度后的争抢。如果优先缩容小规格机器，则可能造成缩容后资源的大量冗余。
+
+机器利用率不单纯依靠宿主机计算
+在大部分生产</div>
         </div>
       </a>
 
@@ -1009,48 +1048,6 @@ kube-apiserver，kube-controller-manager，</div>
           
             <a href="/categories/K8S">K8S</a>&nbsp;
           &nbsp;
-        
-        
-          <i class="iconfont icon-tag"></i>
-          
-            <a href="/tags/Kubernetes">Kubernetes</a>&nbsp;
-          
-            <a href="/tags/K8S">K8S</a>&nbsp;
-          
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-4 mx-auto">
-    
-    
-    <div class="col-12 col-md-8 m-auto">
-      <a href="/2019/11/14/Liveness, Readiness与Startup Probes/">
-        <p class="h4 index-header">Liveness, Readiness与Startup Probes</p>
-        
-        
-          
-        
-        <div class="index-excerpt">
-          <div class="index-text mb-1">一、探针的种类
-livenessProbe：健康状态检查，周期性检查服务是否存活，检查结果失败，将重启容器；
-
-readinessProbe：可用性检查，周期性检查服务是否可用，不可用将从service的endpoints中移除；
-
-startupProbe：启动探针，首次初始化时需要额外启动时间的应用程序，超过设定的启动时间，将被杀死；
-
-
-kubelet使用活跃度探针知道什么时候重新启动的容器。例如，活动性探针可能会陷入僵局，而应用程序正在运行，但无法取得进展。在这种状态下重新启动容器可以帮助使应用程序尽管存在错误也更可用。
-Kubelet使用就绪性探测器来了解何时Container准备开始接受流量。当Pod的所有容器都准备就绪时，即视为准备就绪。此信号的一种用法是控制将哪些Pod用作服务的后端。当Pod尚未就绪时，会将其从服务负载平衡器中删除。
-kubelet使用启动探针来了解何时启动Container应用程序。如果配置了这样的探针，它将禁用活动性和就绪性检查，直到成功为止，以确保这些探针不会干扰应用程序的启动。这可用于对启动缓慢的容器进行活动检查，避免它们在启动和运行之前被ku</div>
-        </div>
-      </a>
-
-      <div>
-        
-          <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-14&nbsp;&nbsp;
-        
         
         
           <i class="iconfont icon-tag"></i>
